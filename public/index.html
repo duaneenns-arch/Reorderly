@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReOrderly — Scan. List. Order.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Syne', sans-serif; background: #F5F4EF; min-height: 100vh; display: flex; justify-content: center; padding: 2rem 1rem; }
+  .app { width: 100%; max-width: 440px; }
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+  .logo { font-size: 24px; font-weight: 700; color: #1a1a18; letter-spacing: -0.5px; }
+  .logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1D9E75; margin-left: 3px; vertical-align: middle; position: relative; top: -2px; }
+  .version { font-size: 12px; color: #888; font-family: 'DM Mono', monospace; }
+
+  .scan-box { background: #eeede6; border: 1px solid #dddcd5; border-radius: 14px; padding: 1.25rem; margin-bottom: 1rem; }
+  .scan-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+  .scan-row { display: flex; gap: 8px; }
+  input[type=text] { flex: 1; font-family: 'DM Mono', monospace; font-size: 16px; padding: 0 14px; height: 46px; border: 1px solid #ccc; border-radius: 10px; background: #fff; color: #1a1a18; outline: none; transition: border-color .15s, box-shadow .15s; }
+  input[type=text]:focus { border-color: #1D9E75; box-shadow: 0 0 0 3px rgba(29,158,117,.15); }
+  .btn-add { height: 46px; padding: 0 20px; background: #1D9E75; color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; white-space: nowrap; }
+  .btn-add:hover { background: #0F6E56; }
+  .btn-add:active { transform: scale(.97); }
+  .btn-add:disabled { background: #ccc; cursor: not-allowed; }
+  .status { font-size: 13px; color: #888; margin-top: 9px; min-height: 18px; font-family: 'DM Mono', monospace; }
+  .status.loading { color: #1D9E75; }
+  .status.error { color: #c0392b; }
+  .status.success { color: #1D9E75; }
+
+  .list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .list-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #888; }
+  .item-count { font-size: 12px; font-weight: 700; background: #e0f0f8; color: #1a6fa8; padding: 3px 10px; border-radius: 99px; }
+
+  .empty { text-align: center; padding: 3rem 1rem; color: #aaa; font-size: 14px; border: 1.5px dashed #ddd; border-radius: 14px; }
+
+  .item { background: #fff; border: 1px solid #e8e7e0; border-radius: 12px; margin-bottom: 7px; overflow: hidden; animation: slideIn .2s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .item-main { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+  .item-img { width: 52px; height: 52px; border-radius: 10px; object-fit: contain; flex-shrink: 0; border: 1px solid #eee; background: #f9f9f9; }
+  .item-ph { width: 52px; height: 52px; border-radius: 10px; background: #f2f2ef; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid #e8e7e0; font-size: 24px; }
+  .item-info { flex: 1; min-width: 0; }
+  .item-name { font-size: 14px; font-weight: 600; color: #1a1a18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+  .item-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+  .item-price { font-size: 13px; font-weight: 700; color: #1D9E75; }
+  .item-upc { font-size: 11px; font-family: 'DM Mono', monospace; color: #aaa; }
+  .item-controls { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+  .qty-btn { width: 26px; height: 26px; border: 1px solid #ddd; border-radius: 8px; background: #f5f5f2; color: #333; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .1s; }
+  .qty-btn:hover { background: #e8e8e4; }
+  .qty-num { font-size: 15px; font-weight: 700; min-width: 18px; text-align: center; color: #1a1a18; }
+  .del-btn { width: 28px; height: 28px; border: none; background: none; color: #bbb; cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: color .15s, background .15s; font-size: 18px; }
+  .del-btn:hover { color: #c0392b; background: #fdecea; }
+
+  .item-walmart { display: flex; align-items: center; gap: 8px; padding: 8px 14px 10px; border-top: 1px solid #f0efe8; }
+  .btn-walmart { flex: 1; height: 34px; background: #0071CE; color: #fff; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .15s; }
+  .btn-walmart:hover { background: #005fa3; }
+  .walmart-badge { font-size: 11px; color: #aaa; font-family: 'DM Mono', monospace; }
+
+  .order-bar { margin-top: 1.25rem; display: flex; gap: 8px; }
+  .btn-order-all { flex: 1; height: 50px; background: #0071CE; color: #fff; border: none; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 9px; }
+  .btn-order-all:hover { background: #005fa3; }
+  .btn-order-all:active { transform: scale(.98); }
+  .btn-order-all:disabled { background: #ddd; color: #aaa; cursor: not-allowed; }
+  .btn-clear { height: 50px; padding: 0 18px; background: none; border: 1px solid #ccc; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: #888; cursor: pointer; transition: background .15s; }
+  .btn-clear:hover { background: #eeeee9; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1a1a18; color: #fff; font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="logo">ReOrderly<span class="logo-dot"></span></div>
+    <div class="version">v1.0</div>
+  </div>
+
+  <div class="scan-box">
+    <div class="scan-label">Scan or enter barcode</div>
+    <div class="scan-row">
+      <input type="text" id="upc-input" placeholder="e.g. 078742434032" autocomplete="off" />
+      <button class="btn-add" id="add-btn" onclick="handleScan()">Add</button>
+    </div>
+    <div class="status" id="status">Ready — scan with your Bluetooth scanner or type a UPC</div>
+  </div>
+
+  <div class="list-header">
+    <div class="list-title">Reorder list</div>
+    <div class="item-count" id="item-count" style="display:none"></div>
+  </div>
+
+  <div id="item-list">
+    <div class="empty" id="empty-state">
+      <div style="font-size:32px;margin-bottom:10px;opacity:.4">🛒</div>
+      <div>Scan an item to add it to your list</div>
+    </div>
+  </div>
+
+  <div class="order-bar">
+    <button class="btn-order-all" id="order-btn" disabled onclick="orderAllOnWalmart()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+        <circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/>
+        <circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/>
+        <circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/>
+        <circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/>
+      </svg>
+      Order all on Walmart
+    </button>
+    <button class="btn-clear" onclick="clearList()">Clear</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let items = [];
+const upcInput = document.getElementById('upc-input');
+const statusEl = document.getElementById('status');
+const itemList = document.getElementById('item-list');
+const itemCount = document.getElementById('item-count');
+const orderBtn = document.getElementById('order-btn');
+const addBtn = document.getElementById('add-btn');
+
+upcInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleScan(); });
+upcInput.focus();
+
+function setStatus(msg, type = '') {
+  statusEl.textContent = msg;
+  statusEl.className = 'status' + (type ? ' ' + type : '');
+}
+
+async function lookupProduct(upc) {
+  // Primary: our Netlify server function (calls BlueCart securely)
+  try {
+    const res = await fetch(`/api/lookup?upc=${upc}`, { signal: AbortSignal.timeout(10000) });
+    const data = await res.json();
+    if (data.found && data.name) return data;
+  } catch(e) {}
+
+  // Fallback: UPCitemdb trial
+  try {
+    const res = await fetch('https://api.upcitemdb.com/prod/trial/lookup?upc=' + upc, { signal: AbortSignal.timeout(8000) });
+    const data = await res.json();
+    if (data.items && data.items.length > 0) {
+      const p = data.items[0];
+      const name = p.title || p.brand;
+      if (name && name.trim()) return {
+        found: true,
+        name: name.trim(),
+        image: (p.images && p.images[0]) ? p.images[0] : null,
+        price: null,
+        walmartUrl: `https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`,
+        source: 'upcitemdb'
+      };
+    }
+  } catch(e) {}
+
+  // Fallback: Open Food Facts
+  try {
+    const res = await fetch('https://world.openfoodfacts.org/api/v0/product/' + upc + '.json', { signal: AbortSignal.timeout(7000) });
+    const data = await res.json();
+    if (data.status === 1 && data.product) {
+      const p = data.product;
+      const name = p.product_name || p.product_name_en || p.brands;
+      if (name && name.trim()) return {
+        found: true,
+        name: name.trim(),
+        image: p.image_front_small_url || null,
+        price: null,
+        walmartUrl: `https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`,
+        source: 'openfoodfacts'
+      };
+    }
+  } catch(e) {}
+
+  return null;
+}
+
+async function handleScan() {
+  const upc = upcInput.value.trim().replace(/\D/g, '');
+  if (!upc) return;
+
+  const existing = items.find(i => i.upc === upc);
+  if (existing) {
+    existing.qty++;
+    upcInput.value = '';
+    renderList();
+    setStatus('Quantity updated for existing item', 'success');
+    upcInput.focus();
+    return;
+  }
+
+  setStatus('Searching Walmart catalog...', 'loading');
+  addBtn.disabled = true;
+  upcInput.value = '';
+
+  const result = await lookupProduct(upc);
+
+  if (result) {
+    items.push({ upc, ...result, qty: 1 });
+    renderList();
+    const short = result.name.length > 45 ? result.name.substring(0, 45) + '...' : result.name;
+    setStatus('✓ Found: ' + short, 'success');
+    showToast('Added to list');
+  } else {
+    setStatus('Product not found — try a different item', 'error');
+  }
+
+  addBtn.disabled = false;
+  upcInput.focus();
+}
+
+function changeQty(upc, delta) {
+  const item = items.find(i => i.upc === upc);
+  if (item) { item.qty = Math.max(1, item.qty + delta); renderList(); }
+}
+
+function removeItem(upc) {
+  items = items.filter(i => i.upc !== upc);
+  renderList();
+  if (items.length === 0) setStatus('Ready — scan with your Bluetooth scanner or type a UPC');
+}
+
+function clearList() {
+  items = [];
+  renderList();
+  setStatus('Ready — scan with your Bluetooth scanner or type a UPC');
+}
+
+function orderAllOnWalmart() {
+  if (!items.length) return;
+  items.forEach((item, i) => {
+    setTimeout(() => window.open(item.walmartUrl || `https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`, '_blank'), i * 400);
+  });
+  showToast('Opening Walmart for each item...');
+}
+
+function renderList() {
+  const empty = items.length === 0;
+  orderBtn.disabled = empty;
+  itemCount.style.display = empty ? 'none' : 'inline-block';
+  itemCount.textContent = items.length + (items.length === 1 ? ' item' : ' items');
+  document.querySelectorAll('.item').forEach(el => el.remove());
+  document.getElementById('empty-state').style.display = empty ? '' : 'none';
+
+  items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'item';
+    const walmartUrl = item.walmartUrl || `https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`;
+    const badge = item.source === 'walmart_exact' ? '✓ exact match' : item.source === 'walmart_search' ? 'walmart match' : 'search match';
+    div.innerHTML = `
+      <div class="item-main">
+        ${item.image ? `<img class="item-img" src="${item.image}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
+        <div class="item-ph" style="${item.image ? 'display:none' : ''}">📦</div>
+        <div class="item-info">
+          <div class="item-name">${esc(item.name)}</div>
+          <div class="item-meta">
+            ${item.price ? `<span class="item-price">$${item.price}</span>` : ''}
+            <span class="item-upc">${item.upc}</span>
+          </div>
+        </div>
+        <div class="item-controls">
+          <button class="qty-btn" onclick="changeQty('${item.upc}', -1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.upc}', 1)">+</button>
+          <button class="del-btn" onclick="removeItem('${item.upc}')">×</button>
+        </div>
+      </div>
+      <div class="item-walmart">
+        <button class="btn-walmart" onclick="window.open('${walmartUrl}', '_blank')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
+          View on Walmart
+        </button>
+        <span class="walmart-badge">${badge}</span>
+      </div>
+    `;
+    itemList.appendChild(div);
+  });
+
+  if (!empty) setStatus(items.length + ' item' + (items.length > 1 ? 's' : '') + ' ready to order', 'success');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

@@ -1,68 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>ReOrderly</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {
-  font-family: Arial;
-  background: #0f172a;
-  color: white;
-  padding: 20px;
-}
-.card {
-  background: #1e293b;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 10px;
-}
-a {
-  display: block;
-  padding: 15px;
-  background: #22c55e;
-  color: black;
-  text-decoration: none;
-  margin: 10px 0;
-  border-radius: 10px;
-  font-weight: bold;
-}
-</style>
-</head>
+# ReOrderly
 
-<body>
+Scan household items as you run out → build a reorder list → order directly on Walmart.
 
-<h1>ReOrderly</h1>
+## Setup
 
-<a href="#business">Business Ideas</a>
-<a href="#shopping">Shopping</a>
-<a href="#investing">Investing</a>
-<a href="#food">Food Business</a>
-<a href="#decisions">Decisions</a>
+1. Deploy to Netlify
+2. Set environment variable: `BLUECART_API_KEY=your_key_here`
+3. Connect your custom domain (reorderlysolutions.com)
 
-<div id="business" class="card">
-<h2>Business Ideas</h2>
-<p>Scanner → Shopping Cart</p>
-</div>
+## How it works
 
-<div id="shopping" class="card">
-<h2>Shopping System</h2>
-<p>Scan → Auto add to cart</p>
-</div>
+- Scan any barcode with a Bluetooth scanner or phone camera
+- App looks up the product in Walmart's catalog via BlueCart API
+- Add items to your reorder list with quantity controls
+- Tap "Order all on Walmart" to shop everything at once
 
-<div id="investing" class="card">
-<h2>Investing</h2>
-<p>Mortgage payoff + 401k</p>
-</div>
+## Tech Stack
 
-<div id="food" class="card">
-<h2>Food Business</h2>
-<p>Maria’s Kitchen</p>
-</div>
-
-<div id="decisions" class="card">
-<h2>Decisions</h2>
-<p>Speed > Features</p>
-</div>
-
-</body>
-</html>
+- HTML/CSS/JS frontend
+- Netlify Functions (serverless backend)
+- BlueCart API (Walmart product data)
+- UPCitemdb + Open Food Facts (fallback databases)
