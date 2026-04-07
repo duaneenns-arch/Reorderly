@@ -1,56 +1,85 @@
 exports.handler = async function(event) {
   const upc = event.queryStringParameters && event.queryStringParameters.upc;
+  const name = event.queryStringParameters && event.queryStringParameters.name;
 
-  if (!upc) {
+  if (!upc && !name) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: 'UPC required' })
+      body: JSON.stringify({ error: 'UPC or name required' })
     };
   }
 
-  const apiKey = process.env.BLUECART_API_KEY;
+  const rapidApiKey = process.env.RAPIDAPI_KEY;
 
   try {
-    // First try exact product lookup by GTIN/UPC
-    const productRes = await fetch(
-      `https://api.bluecartapi.com/request?api_key=${apiKey}&type=product&gtin=${upc}`
-    );
-    const productData = await productRes.json();
+    // Step 1: First try UPCitemdb to get the product name
+    let productName = name;
+    let productImage = null;
 
-    if (productData.product) {
-      const p = productData.product;
-      return {
-        statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          found: true,
-          name: p.title,
-          image: p.main_image,
-          price: p.buybox_winner?.price ? p.buybox_winner.price.toFixed(2) : null,
-          walmartUrl: p.link || null,
-          source: 'walmart_exact'
-        })
-      };
+    if (upc && !productName) {
+      try {
+        const upcRes = await fetch(
+          `https://api.upcitemdb.com/prod/trial/lookup?upc=${upc}`
+        );
+        const upcData = await upcRes.json();
+        if (upcData.items && upcData.items.length > 0) {
+          const p = upcData.items[0];
+          productName = p.title || p.brand;
+          productImage = p.images && p.images[0] ? p.images[0] : null;
+        }
+      } catch(e) {}
     }
 
-    // Fallback: search Walmart by UPC as search term
-    const searchRes = await fetch(
-      `https://api.bluecartapi.com/request?api_key=${apiKey}&type=search&search_term=${upc}&walmart_domain=walmart.com`
-    );
-    const searchData = await searchRes.json();
+    // Step 2: Search Walmart via RapidAPI using product name
+    if (productName) {
+      const searchRes = await fetch(
+        `https://walmart-data.p.rapidapi.com/search?q=${encodeURIComponent(productName)}&page=1`,
+        {
+          headers: {
+            'x-rapidapi-host': 'walmart-data.p.rapidapi.com',
+            'x-rapidapi-key': rapidApiKey,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      const searchData = await searchRes.json();
 
-    if (searchData.search_results && searchData.search_results.length > 0) {
-      const p = searchData.search_results[0];
+      // Get first result from search
+      const results = searchData.searchResult && searchData.searchResult[0];
+      if (results && results.length > 0) {
+        const item = results[0];
+        const itemId = item.id || item.usItemId;
+        const walmartUrl = itemId
+          ? `https://www.walmart.com/ip/${itemId}`
+          : `https://www.walmart.com/search?q=${encodeURIComponent(productName)}`;
+
+        return {
+          statusCode: 200,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            found: true,
+            name: item.name || productName,
+            image: item.image || productImage,
+            price: item.price ? item.price.toString() : null,
+            walmartUrl: walmartUrl,
+            source: 'walmart'
+          })
+        };
+      }
+    }
+
+    // Fallback: return name/image from UPCitemdb with Walmart search link
+    if (productName) {
       return {
         statusCode: 200,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           found: true,
-          name: p.product?.title,
-          image: p.product?.main_image,
-          price: p.offers?.primary?.price ? p.offers.primary.price.toFixed(2) : null,
-          walmartUrl: p.product?.link || null,
-          source: 'walmart_search'
+          name: productName,
+          image: productImage,
+          price: null,
+          walmartUrl: `https://www.walmart.com/search?q=${encodeURIComponent(productName)}`,
+          source: 'search'
         })
       };
     }
