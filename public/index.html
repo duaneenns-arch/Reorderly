@@ -428,7 +428,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.0</span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.1</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="shared-indicator" id="shared-indicator">
@@ -596,7 +596,6 @@ const firebaseConfig = {
   messagingSenderId: "690816543799",
   appId: "1:690816543799:web:5c0d7573ab04cc009d23b2"
 };
-
 // ─────────────────────────────────────
 
 const app = initializeApp(firebaseConfig);
@@ -1522,6 +1521,18 @@ window.processRecipe = async function() {
       signal: AbortSignal.timeout(30000)
     });
     const result = await response.json();
+    if (result.error === 'url_blocked') {
+      // Site blocked our fetch — switch to text tab with helpful message
+      showRecipeInput();
+      switchRecipeTab('text');
+      showToast('That site blocked the fetch — paste the recipe text instead');
+      const ta = document.getElementById('recipe-text');
+      if (ta) {
+        ta.placeholder = 'This site blocked automatic fetching.\n\nGo to the recipe page, select all the text (Ctrl+A), copy it (Ctrl+C), then paste it here.';
+        ta.focus();
+      }
+      return;
+    }
     if (result.error) throw new Error(result.error);
     currentRecipe = result;
     recipeIngredients = result.ingredients || [];
