@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReOrderly</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1D9E75">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ReOrderly">
+<link rel="apple-touch-icon" href="/icon.png">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,15 +36,15 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 /* ── SPLASH ── */
 .splash-screen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity .5s ease; }
 .splash-screen.fade-out { opacity: 0; pointer-events: none; }
-.splash-logo { font-size: 48px; font-weight: 800; color: var(--text); letter-spacing: -2px; opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease; }
+.splash-logo { font-size: 52px; font-weight: 800; color: var(--text); letter-spacing: -2px; opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
 .splash-logo.show { opacity: 1; transform: translateY(0); }
-.splash-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--green); margin-left: 4px; vertical-align: middle; position: relative; top: -4px; transform: scale(0); transition: transform .4s ease .3s; }
+.splash-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--green); margin-left: 4px; vertical-align: middle; position: relative; top: -4px; transform: scale(0); transition: transform .5s cubic-bezier(.34,1.56,.64,1) .5s; }
 .splash-dot.show { transform: scale(1); }
-.splash-sub { font-size: 14px; color: var(--text3); margin-top: 10px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; opacity: 0; transition: opacity .5s ease .4s; }
+.splash-sub { font-size: 13px; color: var(--text3); margin-top: 12px; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; opacity: 0; transition: opacity .6s ease .7s; }
 .splash-sub.show { opacity: 1; }
 .splash-bar { width: 60px; height: 3px; background: var(--border); border-radius: 99px; margin-top: 2rem; overflow: hidden; opacity: 0; transition: opacity .3s ease .6s; }
 .splash-bar.show { opacity: 1; }
-.splash-progress { height: 100%; width: 0%; background: var(--green); border-radius: 99px; transition: width 1.2s ease .7s; }
+.splash-progress { height: 100%; width: 0%; background: var(--green); border-radius: 99px; transition: width 2s ease .9s; }
 .splash-progress.go { width: 100%; }
 
 /* ── AUTH ── */
@@ -232,6 +238,26 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 .lib-add-btn:hover { background: var(--green); color: #fff; }
 .lib-add-btn.added { background: var(--green); color: #fff; }
 
+/* ── CAMERA SCANNER ── */
+.camera-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 300; flex-direction: column; align-items: center; justify-content: center; }
+.camera-modal.open { display: flex; }
+.camera-header { position: absolute; top: 0; left: 0; right: 0; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; }
+.camera-title { font-size: 16px; font-weight: 700; color: #fff; }
+.camera-close { width: 36px; height: 36px; background: rgba(255,255,255,.15); border: none; border-radius: 50%; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.camera-viewport { width: 100%; max-width: 400px; position: relative; }
+#camera-video { width: 100%; border-radius: 16px; display: block; }
+.camera-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.camera-finder { width: 220px; height: 140px; border: 2px solid var(--green); border-radius: 16px; position: relative; }
+.camera-finder::before { content: ; position: absolute; inset: -2px; border-radius: 16px; border: 2px solid transparent; background: linear-gradient(var(--green),var(--green)) top left, linear-gradient(var(--green),var(--green)) top right, linear-gradient(var(--green),var(--green)) bottom left, linear-gradient(var(--green),var(--green)) bottom right; background-size: 20px 3px, 20px 3px, 20px 3px, 20px 3px; background-repeat: no-repeat; }
+.camera-scan-line { position: absolute; left: 10px; right: 10px; height: 2px; background: var(--green); top: 50%; animation: scanline 2s ease-in-out infinite; opacity: .7; }
+@keyframes scanline { 0%,100% { top: 20%; } 50% { top: 80%; } }
+.camera-hint { color: rgba(255,255,255,.6); font-size: 13px; margin-top: 1.5rem; text-align: center; }
+.camera-status { color: #fff; font-size: 14px; font-weight: 700; margin-top: 1rem; min-height: 22px; text-align: center; }
+.camera-status.found { color: var(--green); }
+.camera-status.error { color: #f87171; }
+.btn-camera { height: 46px; width: 46px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color .15s; }
+.btn-camera:hover { border-color: var(--green); }
+
 /* ── TOAST ── */
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: #fff; font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
 .toast.show { transform: translateX(-50%) translateY(0); }
@@ -310,7 +336,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v1.6</span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v1.7</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="shared-indicator" id="shared-indicator">
@@ -327,6 +353,9 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div class="scan-label">Scan or enter barcode</div>
         <div class="scan-row">
           <input type="text" id="upc-input" placeholder="e.g. 078742434032" autocomplete="off" />
+          <button class="btn-camera" onclick="openCamera()" title="Scan with camera">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </button>
           <button class="btn-add" id="add-btn" onclick="handleScan()">Add</button>
         </div>
         <div class="status" id="status">Ready — scan with your Bluetooth scanner or type a UPC</div>
@@ -374,6 +403,24 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <div id="library-list"></div>
     </div>
   </div>
+</div>
+
+<!-- Camera Scanner Modal -->
+<div class="camera-modal" id="camera-modal">
+  <div class="camera-header">
+    <div class="camera-title">Scan barcode</div>
+    <button class="camera-close" onclick="closeCamera()">×</button>
+  </div>
+  <div class="camera-viewport">
+    <video id="camera-video" autoplay playsinline muted></video>
+    <div class="camera-overlay">
+      <div class="camera-finder">
+        <div class="camera-scan-line"></div>
+      </div>
+    </div>
+  </div>
+  <div class="camera-hint">Point at any product barcode</div>
+  <div class="camera-status" id="camera-status"></div>
 </div>
 
 <!-- New List Modal -->
@@ -432,6 +479,7 @@ const firebaseConfig = {
   messagingSenderId: "690816543799",
   appId: "1:690816543799:web:5c0d7573ab04cc009d23b2"
 };
+
 // ─────────────────────────────────────
 
 const app = initializeApp(firebaseConfig);
@@ -492,7 +540,7 @@ function hideSplash() {
   }
 }
 
-setTimeout(() => { splashReady = true; hideSplash(); }, 2200);
+setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
 
 onAuthStateChanged(auth, async user => {
   authReady = true;
@@ -1106,6 +1154,135 @@ function renderList() {
 function setStatus(msg,type=''){const el=document.getElementById('status');if(el){el.textContent=msg;el.className='status'+(type?' '+type:'');}}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ── CAMERA SCANNING ──
+let cameraStream = null;
+let scannerActive = false;
+let scanCanvas = null;
+let scanCtx = null;
+
+window.openCamera = async function() {
+  const modal = document.getElementById('camera-modal');
+  const video = document.getElementById('camera-video');
+  const status = document.getElementById('camera-status');
+  status.textContent = '';
+  status.className = 'camera-status';
+  modal.classList.add('open');
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+    });
+    video.srcObject = cameraStream;
+    await video.play();
+    scanCanvas = document.createElement('canvas');
+    scanCtx = scanCanvas.getContext('2d');
+    scannerActive = true;
+    requestAnimationFrame(scanFrame);
+  } catch(e) {
+    status.textContent = 'Camera access denied — please allow camera permission';
+    status.className = 'camera-status error';
+  }
+};
+
+window.closeCamera = function() {
+  scannerActive = false;
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+  document.getElementById('camera-modal').classList.remove('open');
+  document.getElementById('camera-status').textContent = '';
+  setTimeout(() => { const i = document.getElementById('upc-input'); if(i) i.focus(); }, 100);
+};
+
+async function scanFrame() {
+  if (!scannerActive) return;
+  const video = document.getElementById('camera-video');
+  if (video.readyState === video.HAVE_ENOUGH_DATA) {
+    scanCanvas.width = video.videoWidth;
+    scanCanvas.height = video.videoHeight;
+    scanCtx.drawImage(video, 0, 0);
+    try {
+      if ('BarcodeDetector' in window) {
+        const detector = new BarcodeDetector({ formats: ['upc_a','upc_e','ean_13','ean_8','code_128','code_39','qr_code'] });
+        const barcodes = await detector.detect(scanCanvas);
+        if (barcodes.length > 0) {
+          const code = barcodes[0].rawValue;
+          scannerActive = false;
+          await handleCameraScan(code);
+          return;
+        }
+      } else {
+        // Fallback: use ZXing library
+        if (!window.ZXingLoaded) {
+          await loadZXing();
+        }
+        if (window.zxingReader) {
+          const imageData = scanCtx.getImageData(0, 0, scanCanvas.width, scanCanvas.height);
+          const result = window.zxingReader.decodeFromImageData(imageData);
+          if (result) {
+            scannerActive = false;
+            await handleCameraScan(result.getText());
+            return;
+          }
+        }
+      }
+    } catch(e) {}
+  }
+  if (scannerActive) requestAnimationFrame(scanFrame);
+}
+
+async function loadZXing() {
+  return new Promise(resolve => {
+    if (window.ZXingLoaded) { resolve(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@zxing/library@0.19.1/umd/index.min.js';
+    script.onload = () => {
+      try {
+        window.zxingReader = new ZXing.MultiFormatReader();
+        const hints = new Map();
+        hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [
+          ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.UPC_E,
+          ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8,
+          ZXing.BarcodeFormat.CODE_128
+        ]);
+        window.zxingReader.setHints(hints);
+        window.ZXingLoaded = true;
+      } catch(e) {}
+      resolve();
+    };
+    script.onerror = resolve;
+    document.head.appendChild(script);
+  });
+}
+
+async function handleCameraScan(code) {
+  const status = document.getElementById('camera-status');
+  const upc = code.replace(/\D/g, '');
+  if (!upc || upc.length < 6) {
+    scannerActive = true;
+    requestAnimationFrame(scanFrame);
+    return;
+  }
+  status.textContent = 'Found barcode — looking up product...';
+  status.className = 'camera-status';
+  const result = await lookupProduct(upc);
+  if (result) {
+    const existing = items.find(i => i.upc === upc);
+    if (existing) { existing.qty++; }
+    else { items.push({ upc, ...result, qty:1, category: getCategory(result.name), checked:false }); }
+    await saveList();
+    status.textContent = '✓ Added: ' + result.name.substring(0, 40);
+    status.className = 'camera-status found';
+    setTimeout(() => closeCamera(), 1800);
+  } else {
+    status.textContent = 'Product not found — try again';
+    status.className = 'camera-status error';
+    setTimeout(() => {
+      status.textContent = '';
+      status.className = 'camera-status';
+      scannerActive = true;
+      requestAnimationFrame(scanFrame);
+    }, 2000);
+  }
+}
 </script>
 </body>
 </html>
