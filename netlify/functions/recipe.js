@@ -35,20 +35,14 @@ Rules:
     let requestBody;
 
     if (type === 'url') {
-      // Use Claude's web search tool to fetch the recipe URL directly
       requestBody = {
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2000,
         system: systemPrompt,
-        tools: [
-          {
-            type: 'web_search_20250305',
-            name: 'web_search'
-          }
-        ],
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{
           role: 'user',
-          content: `Please fetch this recipe URL and extract the recipe: ${data}`
+          content: `Fetch this recipe page and extract the recipe: ${data}`
         }]
       };
     } else if (type === 'text') {
@@ -72,7 +66,7 @@ Rules:
           role: 'user',
           content: [
             { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64Data } },
-            { type: 'text', text: 'Extract the recipe from this image of a recipe card or cookbook page.' }
+            { type: 'text', text: 'Extract the recipe from this image.' }
           ]
         }]
       };
@@ -98,15 +92,29 @@ Rules:
       throw new Error(result.error?.message || 'AI service error');
     }
 
-    // Extract the final text response — Claude may have used web search tool first
-    const textBlock = result.content && result.content.find(b => b.type === 'text');
-    if (!textBlock) {
-      throw new Error('No response from AI');
+    // Find the last text block in the response
+    // (Claude may have used web_search tool first, so there could be multiple content blocks)
+    let finalText = '';
+    if (result.content && Array.isArray(result.content)) {
+      for (const block of result.content) {
+        if (block.type === 'text') {
+          finalText = block.text; // keep updating — we want the last text block
+        }
+      }
     }
 
-    const text = textBlock.text.trim();
-    const clean = text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
-    const parsed = JSON.parse(clean);
+    if (!finalText) {
+      throw new Error('No text response from AI');
+    }
+
+    // Extract JSON — find the first { and last } to pull out just the JSON object
+    const start = finalText.indexOf('{');
+    const end = finalText.lastIndexOf('}');
+    if (start === -1 || end === -1) {
+      throw new Error('No JSON found in response');
+    }
+    const jsonStr = finalText.substring(start, end + 1);
+    const parsed = JSON.parse(jsonStr);
 
     if (parsed.error) {
       return { statusCode: 200, body: JSON.stringify({ error: parsed.error }) };
@@ -122,7 +130,7 @@ Rules:
     console.error('Recipe error:', e);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: e.message || 'Could not process recipe. Please try pasting the text directly.' })
+      body: JSON.stringify({ error: e.message || 'Could not process recipe.' })
     };
   }
 };
