@@ -3,94 +3,186 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReOrderly — Scan. List. Order.</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+<title>ReOrderly</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Syne', sans-serif; background: #F5F4EF; min-height: 100vh; }
-  .auth-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; }
-  .auth-box { width: 100%; max-width: 380px; background: #fff; border: 1px solid #e8e7e0; border-radius: 16px; padding: 2rem; }
-  .auth-logo { text-align: center; margin-bottom: 1.75rem; }
-  .auth-logo-text { font-size: 28px; font-weight: 700; color: #1a1a18; letter-spacing: -0.5px; }
-  .auth-logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1D9E75; margin-left: 3px; vertical-align: middle; position: relative; top: -2px; }
-  .auth-logo-sub { font-size: 13px; color: #888; margin-top: 4px; }
-  .auth-tabs { display: flex; margin-bottom: 1.5rem; border: 1px solid #e8e7e0; border-radius: 10px; overflow: hidden; }
-  .auth-tab { flex: 1; padding: 10px; text-align: center; font-size: 14px; font-weight: 600; cursor: pointer; background: none; border: none; color: #888; font-family: 'Syne', sans-serif; transition: all .15s; }
-  .auth-tab.active { background: #1D9E75; color: #fff; }
-  .auth-form { display: flex; flex-direction: column; gap: 12px; }
-  .auth-input { width: 100%; height: 44px; padding: 0 14px; border: 1px solid #ddd; border-radius: 10px; font-size: 15px; font-family: 'Syne', sans-serif; color: #1a1a18; background: #fff; outline: none; transition: border-color .15s; }
-  .auth-input:focus { border-color: #1D9E75; box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
-  .auth-btn { height: 46px; background: #1D9E75; color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; }
-  .auth-btn:hover { background: #0F6E56; }
-  .auth-btn:disabled { background: #ccc; cursor: not-allowed; }
-  .auth-divider { display: flex; align-items: center; gap: 12px; margin: 4px 0; }
-  .auth-divider-line { flex: 1; height: 1px; background: #e8e7e0; }
-  .auth-divider-text { font-size: 12px; color: #aaa; }
-  .auth-google-btn { height: 46px; background: #fff; color: #1a1a18; border: 1px solid #ddd; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background .15s; }
-  .auth-google-btn:hover { background: #f5f5f2; }
-  .auth-error { font-size: 13px; color: #c0392b; text-align: center; min-height: 18px; }
-  .app-screen { display: none; max-width: 440px; margin: 0 auto; padding: 1.5rem 1rem 2rem; }
-  .app-screen.visible { display: block; }
-  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
-  .logo { font-size: 22px; font-weight: 700; color: #1a1a18; letter-spacing: -0.5px; }
-  .logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1D9E75; margin-left: 3px; vertical-align: middle; position: relative; top: -2px; }
-  .user-bar { display: flex; align-items: center; gap: 10px; }
-  .user-name { font-size: 12px; color: #888; font-family: 'DM Mono', monospace; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .signout-btn { font-size: 12px; color: #c0392b; background: none; border: none; cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 600; }
-  .scan-box { background: #eeede6; border: 1px solid #dddcd5; border-radius: 14px; padding: 1.25rem; margin-bottom: 1rem; }
-  .scan-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #888; margin-bottom: 10px; }
-  .scan-row { display: flex; gap: 8px; }
-  input[type=text] { flex: 1; font-family: 'DM Mono', monospace; font-size: 16px; padding: 0 14px; height: 46px; border: 1px solid #ccc; border-radius: 10px; background: #fff; color: #1a1a18; outline: none; transition: border-color .15s, box-shadow .15s; }
-  input[type=text]:focus { border-color: #1D9E75; box-shadow: 0 0 0 3px rgba(29,158,117,.15); }
-  .btn-add { height: 46px; padding: 0 20px; background: #1D9E75; color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; white-space: nowrap; }
-  .btn-add:hover { background: #0F6E56; }
-  .btn-add:active { transform: scale(.97); }
-  .btn-add:disabled { background: #ccc; cursor: not-allowed; }
-  .status { font-size: 13px; color: #888; margin-top: 9px; min-height: 18px; font-family: 'DM Mono', monospace; }
-  .status.loading { color: #1D9E75; }
-  .status.error { color: #c0392b; }
-  .status.success { color: #1D9E75; }
-  .list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .list-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #888; }
-  .item-count { font-size: 12px; font-weight: 700; background: #e0f0f8; color: #1a6fa8; padding: 3px 10px; border-radius: 99px; }
-  .empty { text-align: center; padding: 3rem 1rem; color: #aaa; font-size: 14px; border: 1.5px dashed #ddd; border-radius: 14px; }
-  .item { background: #fff; border: 1px solid #e8e7e0; border-radius: 12px; margin-bottom: 7px; overflow: hidden; animation: slideIn .2s ease; }
-  @keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-  .item-main { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
-  .item-img { width: 52px; height: 52px; border-radius: 10px; object-fit: contain; flex-shrink: 0; border: 1px solid #eee; background: #f9f9f9; }
-  .item-ph { width: 52px; height: 52px; border-radius: 10px; background: #f2f2ef; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid #e8e7e0; font-size: 24px; }
-  .item-info { flex: 1; min-width: 0; }
-  .item-name { font-size: 14px; font-weight: 600; color: #1a1a18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
-  .item-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
-  .item-price { font-size: 13px; font-weight: 700; color: #1D9E75; }
-  .item-upc { font-size: 11px; font-family: 'DM Mono', monospace; color: #aaa; }
-  .item-controls { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
-  .qty-btn { width: 26px; height: 26px; border: 1px solid #ddd; border-radius: 8px; background: #f5f5f2; color: #333; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .1s; }
-  .qty-btn:hover { background: #e8e8e4; }
-  .qty-num { font-size: 15px; font-weight: 700; min-width: 18px; text-align: center; color: #1a1a18; }
-  .del-btn { width: 28px; height: 28px; border: none; background: none; color: #bbb; cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: color .15s, background .15s; font-size: 18px; }
-  .del-btn:hover { color: #c0392b; background: #fdecea; }
-  .item-walmart { display: flex; align-items: center; gap: 8px; padding: 8px 14px 10px; border-top: 1px solid #f0efe8; }
-  .btn-walmart { flex: 1; height: 34px; background: #0071CE; color: #fff; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .15s; }
-  .btn-walmart:hover { background: #005fa3; }
-  .walmart-badge { font-size: 11px; color: #aaa; font-family: 'DM Mono', monospace; }
-  .order-bar { margin-top: 1.25rem; display: flex; gap: 8px; }
-  .btn-order-all { flex: 1; height: 50px; background: #0071CE; color: #fff; border: none; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 9px; }
-  .btn-order-all:hover { background: #005fa3; }
-  .btn-order-all:active { transform: scale(.98); }
-  .btn-order-all:disabled { background: #ddd; color: #aaa; cursor: not-allowed; }
-  .btn-clear { height: 50px; padding: 0 18px; background: none; border: 1px solid #ccc; border-radius: 12px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: #888; cursor: pointer; transition: background .15s; }
-  .btn-clear:hover { background: #eeeee9; }
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1a1a18; color: #fff; font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .loading-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; font-size: 14px; color: #888; font-family: 'Syne', sans-serif; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #1a1a18;
+  --bg2: #242422;
+  --bg3: #2e2e2c;
+  --border: #3a3a38;
+  --green: #4ade80;
+  --green-dark: #16a34a;
+  --green-text: #052e16;
+  --text: #f0f0ee;
+  --text2: #888884;
+  --text3: #555552;
+  --walmart: #4ade80;
+  --walmart-text: #052e16;
+}
+
+body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); overflow-x: hidden; }
+
+/* ── LOADING ── */
+.loading-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; font-size: 14px; color: var(--text2); }
+
+/* ── AUTH SCREEN ── */
+.auth-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; }
+.auth-box { width: 100%; max-width: 360px; background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; }
+.auth-logo { text-align: center; margin-bottom: 2rem; }
+.auth-logo-text { font-size: 32px; font-weight: 800; color: var(--text); letter-spacing: -1px; }
+.auth-logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: 3px; vertical-align: middle; position: relative; top: -3px; }
+.auth-logo-sub { font-size: 13px; color: var(--text2); margin-top: 4px; font-weight: 400; }
+.auth-tabs { display: flex; margin-bottom: 1.5rem; background: var(--bg3); border-radius: 10px; padding: 3px; }
+.auth-tab { flex: 1; padding: 9px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; background: none; border: none; color: var(--text2); font-family: 'Syne', sans-serif; border-radius: 8px; transition: all .15s; }
+.auth-tab.active { background: var(--green); color: var(--green-text); }
+.auth-form { display: flex; flex-direction: column; gap: 10px; }
+.auth-input { width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 15px; font-family: 'Syne', sans-serif; color: var(--text); background: var(--bg3); outline: none; transition: border-color .15s; }
+.auth-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(74,222,128,.12); }
+.auth-input::placeholder { color: var(--text3); }
+.auth-btn { height: 46px; background: var(--green); color: var(--green-text); border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; transition: opacity .15s; }
+.auth-btn:hover { opacity: .9; }
+.auth-btn:disabled { opacity: .5; cursor: not-allowed; }
+.auth-divider { display: flex; align-items: center; gap: 12px; }
+.auth-divider-line { flex: 1; height: 1px; background: var(--border); }
+.auth-divider-text { font-size: 12px; color: var(--text3); }
+.auth-google-btn { height: 46px; background: var(--bg3); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: border-color .15s; }
+.auth-google-btn:hover { border-color: var(--green); }
+.auth-error { font-size: 13px; color: #f87171; text-align: center; min-height: 18px; }
+
+/* ── SIDE DRAWER ── */
+.drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 100; }
+.drawer-overlay.open { display: block; }
+.drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: var(--bg2); border-right: 1px solid var(--border); z-index: 101; transition: left .25s ease; padding: 0; display: flex; flex-direction: column; }
+.drawer.open { left: 0; }
+.drawer-header { padding: 1.5rem 1.25rem 1rem; border-bottom: 1px solid var(--border); }
+.drawer-logo { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+.drawer-user { font-size: 12px; color: var(--text2); margin-top: 4px; font-family: 'DM Mono', monospace; }
+.drawer-section { padding: 1rem 1.25rem 0.5rem; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); }
+.drawer-item { display: flex; align-items: center; gap: 10px; padding: 10px 1.25rem; cursor: pointer; transition: background .1s; font-size: 14px; font-weight: 600; color: var(--text2); }
+.drawer-item:hover { background: var(--bg3); color: var(--text); }
+.drawer-item.active { color: var(--green); background: rgba(74,222,128,.08); }
+.drawer-item-icon { width: 18px; height: 18px; flex-shrink: 0; }
+.drawer-new-list { display: flex; align-items: center; gap: 8px; padding: 8px 1.25rem; cursor: pointer; color: var(--green); font-size: 13px; font-weight: 700; }
+.drawer-new-list:hover { opacity: .8; }
+.drawer-footer { margin-top: auto; padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
+.drawer-signout { width: 100%; padding: 10px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; color: #f87171; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; }
+
+/* ── APP SCREEN ── */
+.app-screen { display: none; min-height: 100vh; }
+.app-screen.visible { display: block; }
+.app-inner { max-width: 460px; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
+
+/* ── HEADER ── */
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.header-left { display: flex; align-items: center; gap: 12px; }
+.menu-btn { width: 36px; height: 36px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; flex-shrink: 0; }
+.menu-btn span { display: block; width: 16px; height: 2px; background: var(--text2); border-radius: 2px; }
+.logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+.logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
+.list-name-badge { background: rgba(74,222,128,.12); color: var(--green); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(74,222,128,.2); }
+
+/* ── SCAN BOX ── */
+.scan-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; margin-bottom: 1rem; }
+.scan-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+.scan-row { display: flex; gap: 8px; }
+input[type=text] { flex: 1; font-family: 'DM Mono', monospace; font-size: 15px; padding: 0 14px; height: 46px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg3); color: var(--text); outline: none; transition: border-color .15s; }
+input[type=text]::placeholder { color: var(--text3); }
+input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(74,222,128,.1); }
+.btn-add { height: 46px; padding: 0 18px; background: var(--green); color: var(--green-text); border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: opacity .15s, transform .1s; white-space: nowrap; }
+.btn-add:hover { opacity: .9; }
+.btn-add:active { transform: scale(.97); }
+.btn-add:disabled { opacity: .4; cursor: not-allowed; }
+.status { font-size: 12px; color: var(--text3); margin-top: 8px; min-height: 18px; font-family: 'DM Mono', monospace; }
+.status.loading { color: var(--green); }
+.status.error { color: #f87171; }
+.status.success { color: var(--green); }
+
+/* ── LIST ── */
+.list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.list-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); }
+.item-count { font-size: 12px; font-weight: 700; background: rgba(74,222,128,.12); color: var(--green); padding: 2px 10px; border-radius: 99px; border: 1px solid rgba(74,222,128,.2); }
+.empty { text-align: center; padding: 3rem 1rem; color: var(--text3); font-size: 14px; border: 1px dashed var(--border); border-radius: 16px; }
+.empty-icon { font-size: 32px; margin-bottom: 10px; opacity: .4; }
+
+/* ── ITEM CARDS ── */
+.item { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; overflow: hidden; animation: slideIn .2s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+.item-main { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.item-img { width: 50px; height: 50px; border-radius: 10px; object-fit: contain; flex-shrink: 0; border: 1px solid var(--border); background: var(--bg3); }
+.item-ph { width: 50px; height: 50px; border-radius: 10px; background: var(--bg3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); font-size: 22px; }
+.item-info { flex: 1; min-width: 0; }
+.item-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+.item-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; flex-wrap: wrap; }
+.item-price { font-size: 13px; font-weight: 800; color: var(--green); }
+.item-upc { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); }
+.cat-pill { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; }
+.item-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.qty-btn { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg3); color: var(--text2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .1s; }
+.qty-btn:hover { border-color: var(--green); color: var(--green); }
+.qty-num { font-size: 14px; font-weight: 800; min-width: 18px; text-align: center; color: var(--text); }
+.del-btn { width: 26px; height: 26px; border: none; background: none; color: var(--text3); cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: color .15s; }
+.del-btn:hover { color: #f87171; }
+.item-walmart { display: flex; align-items: center; gap: 8px; padding: 8px 14px 10px; border-top: 1px solid var(--border); }
+.btn-walmart { flex: 1; height: 32px; background: var(--green); color: var(--green-text); border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: opacity .15s; }
+.btn-walmart:hover { opacity: .9; }
+.walmart-badge { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; }
+
+/* ── ORDER BAR ── */
+.order-bar { margin-top: 1.25rem; display: flex; gap: 8px; }
+.btn-order-all { flex: 1; height: 52px; background: var(--green); color: var(--green-text); border: none; border-radius: 14px; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; cursor: pointer; transition: opacity .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 9px; letter-spacing: .01em; }
+.btn-order-all:hover { opacity: .9; }
+.btn-order-all:active { transform: scale(.98); }
+.btn-order-all:disabled { opacity: .3; cursor: not-allowed; }
+.btn-clear { height: 52px; padding: 0 16px; background: none; border: 1px solid var(--border); border-radius: 14px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text2); cursor: pointer; transition: border-color .15s; }
+.btn-clear:hover { border-color: #f87171; color: #f87171; }
+
+/* ── HISTORY VIEW ── */
+.history-view { display: none; }
+.history-view.visible { display: block; }
+.history-order { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
+.history-order-header { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.history-date { font-size: 13px; font-weight: 700; color: var(--text); }
+.history-count { font-size: 12px; color: var(--text2); }
+.history-items { padding: 8px 14px; }
+.history-item-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.history-item-row:last-child { border-bottom: none; }
+.history-item-name { font-size: 13px; color: var(--text2); }
+.history-readd { font-size: 11px; font-weight: 700; color: var(--green); cursor: pointer; background: rgba(74,222,128,.1); border: none; border-radius: 6px; padding: 3px 8px; font-family: 'Syne', sans-serif; }
+.history-readd:hover { opacity: .8; }
+
+/* ── NEW LIST MODAL ── */
+.modal-wrap { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+.modal-wrap.open { display: flex; }
+.modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; width: 100%; max-width: 320px; }
+.modal-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 1rem; }
+.modal-input { width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 15px; font-family: 'Syne', sans-serif; color: var(--text); background: var(--bg3); outline: none; margin-bottom: 12px; }
+.modal-input:focus { border-color: var(--green); }
+.modal-input::placeholder { color: var(--text3); }
+.modal-btns { display: flex; gap: 8px; }
+.modal-cancel { flex: 1; height: 44px; background: none; border: 1px solid var(--border); border-radius: 10px; color: var(--text2); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
+.modal-create { flex: 1; height: 44px; background: var(--green); border: none; border-radius: 10px; color: var(--green-text); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
+
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--bg3); border: 1px solid var(--border); color: var(--text); font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* Category colors */
+.cat-grocery { background: rgba(74,222,128,.15); color: #4ade80; }
+.cat-snacks { background: rgba(251,191,36,.15); color: #fbbf24; }
+.cat-household { background: rgba(96,165,250,.15); color: #60a5fa; }
+.cat-health { background: rgba(244,114,182,.15); color: #f472b6; }
+.cat-other { background: rgba(148,163,184,.15); color: #94a3b8; }
 </style>
 </head>
 <body>
 
 <div class="loading-screen" id="loading-screen">Loading ReOrderly...</div>
 
-<div class="auth-screen" id="auth-screen" style="display:none">
+<!-- Auth -->
+<div class="auth-screen" id="auth-screen">
   <div class="auth-box">
     <div class="auth-logo">
       <div class="auth-logo-text">ReOrderly<span class="auth-logo-dot"></span></div>
@@ -106,11 +198,7 @@
       <input class="auth-input" type="password" id="auth-password2" placeholder="Confirm password" style="display:none" />
       <div class="auth-error" id="auth-error"></div>
       <button class="auth-btn" id="auth-submit-btn" onclick="handleEmailAuth()">Sign in</button>
-      <div class="auth-divider">
-        <div class="auth-divider-line"></div>
-        <div class="auth-divider-text">or</div>
-        <div class="auth-divider-line"></div>
-      </div>
+      <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-text">or</div><div class="auth-divider-line"></div></div>
       <button class="auth-google-btn" onclick="handleGoogleAuth()">
         <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Continue with Google
@@ -119,38 +207,98 @@
   </div>
 </div>
 
+<!-- Drawer overlay -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+<!-- Side Drawer -->
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="drawer-logo">ReOrderly<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#4ade80;margin-left:3px;vertical-align:middle;position:relative;top:-2px;"></span></div>
+    <div class="drawer-user" id="drawer-user"></div>
+  </div>
+  <div class="drawer-section">My Lists</div>
+  <div id="drawer-lists"></div>
+  <div class="drawer-new-list" onclick="openNewListModal()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    New list
+  </div>
+  <div class="drawer-section">Other</div>
+  <div class="drawer-item" onclick="showHistory(); closeDrawer();">
+    <svg class="drawer-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Order history
+  </div>
+  <div class="drawer-footer">
+    <button class="drawer-signout" onclick="handleSignOut()">Sign out</button>
+  </div>
+</div>
+
+<!-- App -->
 <div class="app-screen" id="app-screen">
-  <div class="header">
-    <div class="logo">ReOrderly<span class="logo-dot"></span></div>
-    <div class="user-bar">
-      <span class="user-name" id="user-name"></span>
-      <button class="signout-btn" onclick="handleSignOut()">Sign out</button>
+  <div class="app-inner">
+    <div class="header">
+      <div class="header-left">
+        <button class="menu-btn" onclick="openDrawer()">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="logo">ReOrderly<span class="logo-dot"></span></div>
+      </div>
+      <div class="list-name-badge" id="list-name-badge">My List</div>
+    </div>
+
+    <!-- Main list view -->
+    <div id="main-view">
+      <div class="scan-box">
+        <div class="scan-label">Scan or enter barcode</div>
+        <div class="scan-row">
+          <input type="text" id="upc-input" placeholder="e.g. 078742434032" autocomplete="off" />
+          <button class="btn-add" id="add-btn" onclick="handleScan()">Add</button>
+        </div>
+        <div class="status" id="status">Ready — scan with your Bluetooth scanner or type a UPC</div>
+      </div>
+      <div class="list-header">
+        <div class="list-title">Reorder list</div>
+        <div class="item-count" id="item-count" style="display:none"></div>
+      </div>
+      <div id="item-list">
+        <div class="empty" id="empty-state">
+          <div class="empty-icon">🛒</div>
+          <div>Scan an item to add it to your list</div>
+        </div>
+      </div>
+      <div class="order-bar">
+        <button class="btn-order-all" id="order-btn" disabled onclick="orderAllOnWalmart()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#052e16"><circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/><circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/><circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/></svg>
+          Order all on Walmart
+        </button>
+        <button class="btn-clear" onclick="clearList()">Clear</button>
+      </div>
+    </div>
+
+    <!-- History view -->
+    <div id="history-view" class="history-view">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+        <button onclick="showMainView()" style="background:none;border:none;color:#4ade80;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </button>
+        <div style="font-size:16px;font-weight:800;color:var(--text);">Order history</div>
+      </div>
+      <div id="history-list">
+        <div class="empty"><div class="empty-icon">📋</div><div>No order history yet</div></div>
+      </div>
     </div>
   </div>
-  <div class="scan-box">
-    <div class="scan-label">Scan or enter barcode</div>
-    <div class="scan-row">
-      <input type="text" id="upc-input" placeholder="e.g. 078742434032" autocomplete="off" />
-      <button class="btn-add" id="add-btn" onclick="handleScan()">Add</button>
+</div>
+
+<!-- New List Modal -->
+<div class="modal-wrap" id="new-list-modal">
+  <div class="modal">
+    <div class="modal-title">New list</div>
+    <input class="modal-input" type="text" id="new-list-name" placeholder="e.g. Weekly Groceries" maxlength="30" />
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeNewListModal()">Cancel</button>
+      <button class="modal-create" onclick="createNewList()">Create</button>
     </div>
-    <div class="status" id="status">Ready — scan with your Bluetooth scanner or type a UPC</div>
-  </div>
-  <div class="list-header">
-    <div class="list-title">Reorder list</div>
-    <div class="item-count" id="item-count" style="display:none"></div>
-  </div>
-  <div id="item-list">
-    <div class="empty" id="empty-state">
-      <div style="font-size:32px;margin-bottom:10px;opacity:.4">🛒</div>
-      <div>Scan an item to add it to your list</div>
-    </div>
-  </div>
-  <div class="order-bar">
-    <button class="btn-order-all" id="order-btn" disabled onclick="orderAllOnWalmart()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/><circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/><circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/></svg>
-      Order all on Walmart
-    </button>
-    <button class="btn-clear" onclick="clearList()">Clear</button>
   </div>
 </div>
 
@@ -159,9 +307,9 @@
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ── PASTE YOUR FIREBASE CONFIG BELOW ──
+// ── PASTE YOUR FIREBASE CONFIG HERE ──
 const firebaseConfig = {
   apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
   authDomain: "reorderly-b152f.firebaseapp.com",
@@ -170,7 +318,7 @@ const firebaseConfig = {
   messagingSenderId: "690816543799",
   appId: "1:690816543799:web:5c0d7573ab04cc009d23b2"
 };
- // ──────────────────────────────────────
+// ─────────────────────────────────────
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -179,17 +327,42 @@ const googleProvider = new GoogleAuthProvider();
 
 let currentUser = null;
 let items = [];
+let lists = [];
+let currentListId = 'default';
+let currentListName = 'My List';
 let unsubscribeList = null;
 let currentTab = 'signin';
 
-onAuthStateChanged(auth, user => {
+const CATEGORIES = {
+  'sugar': 'grocery', 'flour': 'grocery', 'milk': 'grocery', 'eggs': 'grocery', 'bread': 'grocery', 'butter': 'grocery', 'cheese': 'grocery', 'water': 'grocery', 'juice': 'grocery', 'coffee': 'grocery', 'tea': 'grocery', 'rice': 'grocery', 'pasta': 'grocery', 'cereal': 'grocery', 'oats': 'grocery',
+  'chips': 'snacks', 'pringles': 'snacks', 'crackers': 'snacks', 'cookies': 'snacks', 'candy': 'snacks', 'snack': 'snacks', 'popcorn': 'snacks', 'nuts': 'snacks',
+  'soap': 'household', 'detergent': 'household', 'cleaner': 'household', 'spray': 'household', 'paper': 'household', 'towel': 'household', 'tissue': 'household', 'bulb': 'household', 'light': 'household', 'battery': 'household', 'trash': 'household', 'bag': 'household',
+  'shampoo': 'health', 'conditioner': 'health', 'toothpaste': 'health', 'vitamin': 'health', 'medicine': 'health', 'lotion': 'health', 'deodorant': 'health', 'razor': 'health',
+};
+
+function getCategory(name) {
+  if (!name) return 'other';
+  const lower = name.toLowerCase();
+  for (const [keyword, cat] of Object.entries(CATEGORIES)) {
+    if (lower.includes(keyword)) return cat;
+  }
+  return 'other';
+}
+
+function getCatLabel(cat) {
+  return { grocery: 'Grocery', snacks: 'Snacks', household: 'Household', health: 'Health & Beauty', other: 'Other' }[cat] || 'Other';
+}
+
+onAuthStateChanged(auth, async user => {
   document.getElementById('loading-screen').style.display = 'none';
   if (user) {
     currentUser = user;
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app-screen').classList.add('visible');
-    document.getElementById('user-name').textContent = user.displayName || user.email.split('@')[0];
-    subscribeToList(user.uid);
+    const name = user.displayName || user.email.split('@')[0];
+    document.getElementById('drawer-user').textContent = user.email;
+    await loadLists();
+    subscribeToList(currentListId);
     setTimeout(() => { const i = document.getElementById('upc-input'); if(i) i.focus(); }, 100);
   } else {
     currentUser = null;
@@ -200,9 +373,48 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-function subscribeToList(uid) {
+async function loadLists() {
+  if (!currentUser) return;
+  try {
+    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'lists'));
+    lists = [];
+    snap.forEach(d => lists.push({ id: d.id, ...d.data() }));
+    if (lists.length === 0) {
+      await setDoc(doc(db, 'users', currentUser.uid, 'lists', 'default'), { name: 'My List', createdAt: new Date() });
+      lists = [{ id: 'default', name: 'My List' }];
+    }
+    currentListId = lists[0].id;
+    currentListName = lists[0].name;
+    renderDrawerLists();
+    document.getElementById('list-name-badge').textContent = currentListName;
+  } catch(e) { console.error(e); }
+}
+
+function renderDrawerLists() {
+  const el = document.getElementById('drawer-lists');
+  el.innerHTML = '';
+  lists.forEach(list => {
+    const div = document.createElement('div');
+    div.className = 'drawer-item' + (list.id === currentListId ? ' active' : '');
+    div.innerHTML = `<svg class="drawer-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>${esc(list.name)}`;
+    div.onclick = () => { switchList(list.id, list.name); closeDrawer(); };
+    el.appendChild(div);
+  });
+}
+
+function switchList(id, name) {
+  currentListId = id;
+  currentListName = name;
+  document.getElementById('list-name-badge').textContent = name;
+  renderDrawerLists();
+  subscribeToList(id);
+  showMainView();
+}
+
+function subscribeToList(listId) {
   if (unsubscribeList) unsubscribeList();
-  unsubscribeList = onSnapshot(doc(db, 'lists', uid), snap => {
+  if (!currentUser) return;
+  unsubscribeList = onSnapshot(doc(db, 'users', currentUser.uid, 'lists', listId, 'data', 'items'), snap => {
     items = snap.exists() ? (snap.data().items || []) : [];
     renderList();
   });
@@ -210,15 +422,27 @@ function subscribeToList(uid) {
 
 async function saveList() {
   if (!currentUser) return;
-  await setDoc(doc(db, 'lists', currentUser.uid), { items, updatedAt: new Date() });
+  await setDoc(doc(db, 'users', currentUser.uid, 'lists', currentListId, 'data', 'items'), { items, updatedAt: new Date() });
 }
 
+async function saveToHistory() {
+  if (!currentUser || items.length === 0) return;
+  const orderId = 'order_' + Date.now();
+  await setDoc(doc(db, 'users', currentUser.uid, 'history', orderId), {
+    items: items.map(i => ({ name: i.name, upc: i.upc, qty: i.qty, price: i.price || null })),
+    orderedAt: new Date(),
+    listName: currentListName,
+    itemCount: items.length
+  });
+}
+
+// ── AUTH ──
 window.switchTab = function(tab) {
   currentTab = tab;
   document.getElementById('tab-signin').className = 'auth-tab' + (tab==='signin'?' active':'');
   document.getElementById('tab-signup').className = 'auth-tab' + (tab==='signup'?' active':'');
-  document.getElementById('auth-password2').style.display = tab==='signup' ? 'block' : 'none';
-  document.getElementById('auth-submit-btn').textContent = tab==='signin' ? 'Sign in' : 'Create account';
+  document.getElementById('auth-password2').style.display = tab==='signup'?'block':'none';
+  document.getElementById('auth-submit-btn').textContent = tab==='signin'?'Sign in':'Create account';
   document.getElementById('auth-error').textContent = '';
 };
 
@@ -235,19 +459,105 @@ window.handleEmailAuth = async function() {
     if (currentTab==='signin') await signInWithEmailAndPassword(auth, email, password);
     else await createUserWithEmailAndPassword(auth, email, password);
   } catch(e) {
-    const msgs = {'auth/user-not-found':'No account found with that email','auth/wrong-password':'Incorrect password','auth/email-already-in-use':'An account already exists with that email','auth/weak-password':'Password must be at least 6 characters','auth/invalid-email':'Please enter a valid email address','auth/invalid-credential':'Incorrect email or password'};
-    errEl.textContent = msgs[e.code] || 'Something went wrong — please try again';
+    const msgs = {'auth/user-not-found':'No account with that email','auth/wrong-password':'Incorrect password','auth/email-already-in-use':'Account already exists','auth/weak-password':'Password must be 6+ characters','auth/invalid-credential':'Incorrect email or password','auth/invalid-email':'Invalid email address'};
+    errEl.textContent = msgs[e.code] || 'Something went wrong';
   }
   btn.disabled = false;
 };
 
 window.handleGoogleAuth = async function() {
   try { await signInWithPopup(auth, googleProvider); }
-  catch(e) { document.getElementById('auth-error').textContent = 'Google sign-in failed — please try again'; }
+  catch(e) { document.getElementById('auth-error').textContent = 'Google sign-in failed'; }
 };
 
-window.handleSignOut = async function() { await signOut(auth); };
+window.handleSignOut = async function() { await signOut(auth); closeDrawer(); };
 
+// ── DRAWER ──
+window.openDrawer = function() {
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+};
+window.closeDrawer = function() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+};
+
+// ── NEW LIST ──
+window.openNewListModal = function() {
+  closeDrawer();
+  document.getElementById('new-list-modal').classList.add('open');
+  document.getElementById('new-list-name').value = '';
+  setTimeout(() => document.getElementById('new-list-name').focus(), 100);
+};
+window.closeNewListModal = function() { document.getElementById('new-list-modal').classList.remove('open'); };
+window.createNewList = async function() {
+  const name = document.getElementById('new-list-name').value.trim();
+  if (!name || !currentUser) return;
+  const id = 'list_' + Date.now();
+  await setDoc(doc(db, 'users', currentUser.uid, 'lists', id), { name, createdAt: new Date() });
+  lists.push({ id, name });
+  closeNewListModal();
+  switchList(id, name);
+  showToast('List created: ' + name);
+};
+
+// ── VIEWS ──
+window.showHistory = async function() {
+  document.getElementById('main-view').style.display = 'none';
+  document.getElementById('history-view').classList.add('visible');
+  await loadHistory();
+};
+window.showMainView = function() {
+  document.getElementById('main-view').style.display = '';
+  document.getElementById('history-view').classList.remove('visible');
+};
+
+async function loadHistory() {
+  if (!currentUser) return;
+  const histList = document.getElementById('history-list');
+  histList.innerHTML = '<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">Loading...</div>';
+  try {
+    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'history'));
+    const orders = [];
+    snap.forEach(d => orders.push({ id: d.id, ...d.data() }));
+    orders.sort((a, b) => b.orderedAt?.seconds - a.orderedAt?.seconds);
+    if (orders.length === 0) {
+      histList.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div>No order history yet</div></div>';
+      return;
+    }
+    histList.innerHTML = '';
+    orders.slice(0, 20).forEach(order => {
+      const date = order.orderedAt?.toDate ? order.orderedAt.toDate() : new Date();
+      const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const div = document.createElement('div');
+      div.className = 'history-order';
+      div.innerHTML = `
+        <div class="history-order-header">
+          <div><div class="history-date">${dateStr}</div><div class="history-count" style="font-size:11px;color:var(--text3);margin-top:2px;">${order.listName || 'My List'}</div></div>
+          <div class="history-count">${order.itemCount} item${order.itemCount!==1?'s':''}</div>
+        </div>
+        <div class="history-items">
+          ${(order.items||[]).map(item => `
+            <div class="history-item-row">
+              <span class="history-item-name">${esc(item.name)}${item.qty>1?' ×'+item.qty:''}</span>
+              <button class="history-readd" onclick="reAddItem(${JSON.stringify({upc:item.upc,name:item.name,price:item.price}).replace(/"/g,'&quot;')})">+ Add</button>
+            </div>`).join('')}
+        </div>`;
+      histList.appendChild(div);
+    });
+  } catch(e) { histList.innerHTML = '<div class="empty"><div>Could not load history</div></div>'; }
+}
+
+window.reAddItem = async function(item) {
+  const existing = items.find(i => i.upc === item.upc);
+  if (existing) { existing.qty++; }
+  else { items.push({ ...item, qty: 1, source: 'history', walmartUrl: `https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`, image: null }); }
+  await saveList();
+  showToast('Added: ' + item.name.substring(0, 30));
+  showMainView();
+};
+
+// ── PRODUCT LOOKUP ──
 async function lookupProduct(upc) {
   try {
     const res = await fetch(`/api/lookup?upc=${upc}`, {signal: AbortSignal.timeout(10000)});
@@ -259,7 +569,7 @@ async function lookupProduct(upc) {
     const data = await res.json();
     if (data.items && data.items.length>0) {
       const p = data.items[0]; const name = p.title||p.brand;
-      if (name&&name.trim()) return {found:true,name:name.trim(),image:(p.images&&p.images[0])?p.images[0]:null,price:null,walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`,source:'upcitemdb'};
+      if (name&&name.trim()) return { found:true, name:name.trim(), image:(p.images&&p.images[0])?p.images[0]:null, price:null, walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`, source:'upcitemdb' };
     }
   } catch(e) {}
   try {
@@ -267,7 +577,7 @@ async function lookupProduct(upc) {
     const data = await res.json();
     if (data.status===1&&data.product) {
       const p = data.product; const name = p.product_name||p.product_name_en||p.brands;
-      if (name&&name.trim()) return {found:true,name:name.trim(),image:p.image_front_small_url||null,price:null,walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`,source:'openfoodfacts'};
+      if (name&&name.trim()) return { found:true, name:name.trim(), image:p.image_front_small_url||null, price:null, walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`, source:'openfoodfacts' };
     }
   } catch(e) {}
   return null;
@@ -275,18 +585,23 @@ async function lookupProduct(upc) {
 
 window.handleScan = async function() {
   const upcInput = document.getElementById('upc-input');
-  const statusEl = document.getElementById('status');
-  const addBtn = document.getElementById('add-btn');
   const upc = upcInput.value.trim().replace(/\D/g,'');
   if (!upc) return;
   const existing = items.find(i=>i.upc===upc);
   if (existing) { existing.qty++; upcInput.value=''; await saveList(); setStatus('Quantity updated','success'); upcInput.focus(); return; }
   setStatus('Searching Walmart catalog...','loading');
-  addBtn.disabled = true; upcInput.value = '';
+  document.getElementById('add-btn').disabled = true;
+  upcInput.value = '';
   const result = await lookupProduct(upc);
-  if (result) { items.push({upc,...result,qty:1}); await saveList(); setStatus('✓ Found: '+result.name.substring(0,45),'success'); showToast('Added to list'); }
-  else setStatus('Product not found — try a different item','error');
-  addBtn.disabled = false; upcInput.focus();
+  if (result) {
+    const category = getCategory(result.name);
+    items.push({ upc, ...result, qty:1, category });
+    await saveList();
+    setStatus('✓ Found: '+result.name.substring(0,45),'success');
+    showToast('Added to list');
+  } else { setStatus('Product not found — try a different item','error'); }
+  document.getElementById('add-btn').disabled = false;
+  upcInput.focus();
 };
 
 document.getElementById('upc-input')?.addEventListener('keydown', e=>{ if(e.key==='Enter') window.handleScan(); });
@@ -297,16 +612,17 @@ window.changeQty = async function(upc, delta) {
 };
 
 window.removeItem = async function(upc) {
-  items = items.filter(i=>i.upc!==upc); await saveList();
-  if (items.length===0) setStatus('Ready — scan with your Bluetooth scanner or type a UPC');
+  items=items.filter(i=>i.upc!==upc); await saveList();
+  if(items.length===0) setStatus('Ready — scan with your Bluetooth scanner or type a UPC');
 };
 
 window.clearList = async function() { items=[]; await saveList(); setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
 
-window.orderAllOnWalmart = function() {
+window.orderAllOnWalmart = async function() {
   if (!items.length) return;
+  await saveToHistory();
   items.forEach((item,i)=>setTimeout(()=>window.open(item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`,'_blank'),i*400));
-  showToast('Opening Walmart for each item...');
+  showToast('Opening Walmart — order saved to history!');
 };
 
 function renderList() {
@@ -320,33 +636,48 @@ function renderList() {
   const emptyState = document.getElementById('empty-state');
   if (emptyState) emptyState.style.display = empty?'':'none';
   items.forEach(item=>{
+    const cat = item.category || getCategory(item.name);
+    const catLabel = getCatLabel(cat);
     const div = document.createElement('div'); div.className='item';
     const walmartUrl = item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`;
-    const badge = item.source==='walmart_exact'?'✓ exact match':item.source==='walmart'?'walmart match':'search match';
-    div.innerHTML=`<div class="item-main">${item.image?`<img class="item-img" src="${item.image}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+    div.innerHTML=`<div class="item-main">
+      ${item.image?`<img class="item-img" src="${item.image}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'' }
       <div class="item-ph" style="${item.image?'display:none':''}">📦</div>
-      <div class="item-info"><div class="item-name">${esc(item.name)}</div>
-      <div class="item-meta">${item.price?`<span class="item-price">$${item.price}</span>`:''}<span class="item-upc">${item.upc}</span></div></div>
-      <div class="item-controls"><button class="qty-btn" onclick="changeQty('${item.upc}',-1)">−</button>
-      <span class="qty-num">${item.qty}</span><button class="qty-btn" onclick="changeQty('${item.upc}',1)">+</button>
-      <button class="del-btn" onclick="removeItem('${item.upc}')">×</button></div></div>
-      <div class="item-walmart"><button class="btn-walmart" onclick="window.open('${walmartUrl}','_blank')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-      View on Walmart</button><span class="walmart-badge">${badge}</span></div>`;
+      <div class="item-info">
+        <div class="item-name">${esc(item.name)}</div>
+        <div class="item-meta">
+          ${item.price?`<span class="item-price">$${item.price}</span>`:''}
+          <span class="cat-pill cat-${cat}">${catLabel}</span>
+          <span class="item-upc">${item.upc}</span>
+        </div>
+      </div>
+      <div class="item-controls">
+        <button class="qty-btn" onclick="changeQty('${item.upc}',-1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty('${item.upc}',1)">+</button>
+        <button class="del-btn" onclick="removeItem('${item.upc}')">×</button>
+      </div></div>
+      <div class="item-walmart">
+        <button class="btn-walmart" onclick="window.open('${walmartUrl}','_blank')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#052e16"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
+          View on Walmart
+        </button>
+        <span class="walmart-badge">${item.source==='walmart_exact'?'✓ exact':'search'}</span>
+      </div>`;
     itemList.appendChild(div);
   });
   if (!empty) setStatus(items.length+' item'+(items.length>1?'s':'')+' ready to order','success');
 }
 
 function setStatus(msg, type='') {
-  const el = document.getElementById('status');
-  if (el) { el.textContent=msg; el.className='status'+(type?' '+type:''); }
+  const el=document.getElementById('status');
+  if(el){el.textContent=msg;el.className='status'+(type?' '+type:'');}
 }
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
+  const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2200);
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
