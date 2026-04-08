@@ -36,7 +36,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 /* ── SPLASH ── */
 .splash-screen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity .5s ease; }
 .splash-screen.fade-out { opacity: 0; pointer-events: none; }
-.splash-logo { font-size: 52px; font-weight: 800; color: var(--text); letter-spacing: -2px; opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+.splash-logo { font-size: clamp(32px, 10vw, 52px); font-weight: 800; color: var(--text); letter-spacing: -2px; opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
 .splash-logo.show { opacity: 1; transform: translateY(0); }
 .splash-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--green); margin-left: 4px; vertical-align: middle; position: relative; top: -4px; transform: scale(0); transition: transform .5s cubic-bezier(.34,1.56,.64,1) .5s; }
 .splash-dot.show { transform: scale(1); }
@@ -495,6 +495,19 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <div id="library-list"></div>
     </div>
   </div>
+
+    <!-- Recipe view -->
+    <div id="recipe-view" class="recipe-view">
+      <div class="recipe-back-bar">
+        <button class="recipe-back-btn" onclick="showRecipeBook()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </button>
+        <div class="recipe-view-title" id="recipe-view-title">Recipe book</div>
+      </div>
+      <div id="recipe-content"></div>
+    </div>
+
 </div>
 
 <!-- Camera Scanner Modal -->
@@ -555,6 +568,18 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   </div>
 </div>
 
+<!-- List Picker Modal -->
+<div class="modal-wrap" id="list-picker-modal">
+  <div class="modal">
+    <div class="modal-title">Add to list</div>
+    <div class="modal-subtitle">Choose which list to add the selected ingredients to</div>
+    <div id="list-picker-items" style="margin-bottom:12px;border:1px solid var(--border);border-radius:12px;overflow:hidden;max-height:260px;overflow-y:auto;"></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('list-picker-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -594,16 +619,32 @@ let activeLibTab = 'usual';
 let pinnedItems = {};
 
 const CATEGORIES = {
-  sugar:'grocery',flour:'grocery',milk:'grocery',eggs:'grocery',bread:'grocery',butter:'grocery',cheese:'grocery',water:'grocery',juice:'grocery',coffee:'grocery',tea:'grocery',rice:'grocery',pasta:'grocery',cereal:'grocery',oats:'grocery',chicken:'grocery',beef:'grocery',pork:'grocery',fish:'grocery',produce:'grocery',fruit:'grocery',vegetable:'grocery',
-  chips:'snacks',pringles:'snacks',crackers:'snacks',cookies:'snacks',candy:'snacks',snack:'snacks',popcorn:'snacks',nuts:'snacks',granola:'snacks',
-  soap:'household',detergent:'household',cleaner:'household',spray:'household',paper:'household',towel:'household',tissue:'household',bulb:'household',light:'household',battery:'household',trash:'household',bag:'household',sponge:'household',brush:'household',
+  // Health & Beauty — check first (specific)
   shampoo:'health',conditioner:'health',toothpaste:'health',vitamin:'health',medicine:'health',lotion:'health',deodorant:'health',razor:'health',sunscreen:'health',bandage:'health',
+  moisturizer:'health',serum:'health',lipstick:'health',mascara:'health',foundation:'health',concealer:'health',blush:'health',eyeliner:'health',perfume:'health',cologne:'health',
+  floss:'health',mouthwash:'health',aspirin:'health',ibuprofen:'health',tylenol:'health',advil:'health',nyquil:'health',dayquil:'health',antacid:'health',
+  // Household — check before grocery
+  soap:'household',detergent:'household',cleaner:'household',spray:'household',towel:'household',tissue:'household',bulb:'household',light:'household',battery:'household',
+  trash:'household',sponge:'household',brush:'household',windex:'household',bleach:'household',lysol:'household',febreze:'household',pledge:'household',
+  'paper towel':'household','toilet paper':'household','paper plate':'household','trash bag':'household','zip lock':'household','ziplock':'household',
+  laundry:'household',dishwasher:'household',dryer:'household',softener:'household',foil:'household','aluminum foil':'household','plastic wrap':'household',
+  // Snacks — check before grocery
+  chips:'snacks',pringles:'snacks',crackers:'snacks',cookies:'snacks',candy:'snacks',popcorn:'snacks',nuts:'snacks',granola:'snacks',doritos:'snacks',
+  cheetos:'snacks',lays:'snacks',ritz:'snacks',oreo:'snacks','fruit snack':'snacks',pretzel:'snacks',
+  // Grocery — broadest, check last
+  sugar:'grocery',flour:'grocery',milk:'grocery',egg:'grocery',bread:'grocery',butter:'grocery',cheese:'grocery',water:'grocery',juice:'grocery',
+  coffee:'grocery',tea:'grocery',rice:'grocery',pasta:'grocery',cereal:'grocery',oats:'grocery',chicken:'grocery',beef:'grocery',pork:'grocery',
+  fish:'grocery',salmon:'grocery',tuna:'grocery',produce:'grocery',fruit:'grocery',vegetable:'grocery',tomato:'grocery',lettuce:'grocery',
+  apple:'grocery',banana:'grocery',orange:'grocery',yogurt:'grocery',cream:'grocery',sauce:'grocery',salsa:'grocery',ketchup:'grocery',
+  mayo:'grocery',mustard:'grocery',dressing:'grocery',vinegar:'grocery',oil:'grocery',broth:'grocery',soup:'grocery',bean:'grocery',
 };
 
 function getCategory(name) {
   if (!name) return 'other';
   const lower = name.toLowerCase();
-  for (const [k,v] of Object.entries(CATEGORIES)) { if (lower.includes(k)) return v; }
+  // Sort by key length descending so longer/more specific phrases match first
+  const sorted = Object.entries(CATEGORIES).sort((a,b) => b[0].length - a[0].length);
+  for (const [k,v] of sorted) { if (lower.includes(k)) return v; }
   return 'other';
 }
 function getCatLabel(cat) { return {grocery:'Grocery',snacks:'Snacks',household:'Household',health:'Health & Beauty',other:'Other'}[cat]||'Other'; }
@@ -915,6 +956,8 @@ window.sendInvite = async function() {
 window.showHistory = async function() {
   document.getElementById('main-view').style.display='none';
   document.getElementById('history-view').classList.add('visible');
+  const rv = document.getElementById('recipe-view');
+  if (rv) rv.classList.remove('visible');
   await loadHistory();
 };
 window.showMainView = function() {
@@ -930,6 +973,8 @@ window.showLibrary = async function() {
   document.getElementById('main-view').style.display='none';
   document.getElementById('history-view').classList.remove('visible');
   document.getElementById('library-view').classList.add('visible');
+  const rv = document.getElementById('recipe-view');
+  if (rv) rv.classList.remove('visible');
   await loadPinnedItems();
   renderLibTabs();
   await renderLibrary();
@@ -1137,10 +1182,15 @@ window.handleScan = async function() {
   const upcInput=document.getElementById('upc-input');
   const upc=upcInput.value.trim().replace(/\D/g,'');
   if (!upc) return;
+  // Clear input value (works even when readonly by temporarily removing the attribute)
+  const wasReadonly = upcInput.hasAttribute('readonly');
+  if (wasReadonly) upcInput.removeAttribute('readonly');
+  upcInput.value='';
+  if (wasReadonly) upcInput.setAttribute('readonly','readonly');
   const existing=items.find(i=>i.upc===upc);
-  if (existing) { existing.qty++; upcInput.value=''; await saveList(); setStatus('Quantity updated','success'); upcInput.focus(); return; }
+  if (existing) { existing.qty++; await saveList(); setStatus('Quantity updated','success'); upcInput.focus(); return; }
   setStatus('Searching Walmart catalog...','loading');
-  document.getElementById('add-btn').disabled=true; upcInput.value='';
+  document.getElementById('add-btn').disabled=true;
   const result=await lookupProduct(upc);
   if (result) {
     items.push({upc,...result,qty:1,category:getCategory(result.name)});
@@ -1150,6 +1200,50 @@ window.handleScan = async function() {
 };
 
 document.getElementById('upc-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')window.handleScan();});
+
+// ── SCANNER MODE (suppress keyboard on iPhone when Bluetooth scanner is paired) ──
+const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
+let scannerModeActive = false;
+
+function setScannerMode(active) {
+  scannerModeActive = active;
+  const input = document.getElementById('upc-input');
+  if (!input) return;
+  if (active && isMobile) {
+    input.setAttribute('readonly', 'readonly');
+    input.setAttribute('inputmode', 'none');
+    input.placeholder = 'Scanner ready — tap keyboard icon to type';
+  } else {
+    input.removeAttribute('readonly');
+    input.setAttribute('inputmode', 'text');
+    input.placeholder = 'e.g. 078742434032';
+  }
+}
+
+// Show a keyboard toggle button next to the scan input on mobile
+if (isMobile) {
+  const scanRow = document.querySelector('.scan-row');
+  if (scanRow) {
+    const kbBtn = document.createElement('button');
+    kbBtn.id = 'kb-toggle-btn';
+    kbBtn.title = 'Toggle keyboard';
+    kbBtn.style.cssText = 'height:46px;width:46px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;transition:background .15s;';
+    kbBtn.innerHTML = '⌨️';
+    kbBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      scannerModeActive = !scannerModeActive;
+      setScannerMode(scannerModeActive);
+      if (!scannerModeActive) {
+        const input = document.getElementById('upc-input');
+        if (input) { input.removeAttribute('readonly'); input.focus(); }
+      }
+      kbBtn.style.background = scannerModeActive ? 'var(--green-light)' : 'var(--bg3)';
+    });
+    // Insert before the Add button
+    const addBtn = document.getElementById('add-btn');
+    if (addBtn) scanRow.insertBefore(kbBtn, addBtn);
+  }
+}
 
 // Auto-focus: keep scanner input focused whenever the main view is active
 // and user isn't typing in a modal or other input
@@ -1161,6 +1255,7 @@ document.addEventListener('click', e => {
     const upcInput = document.getElementById('upc-input');
     const mainView = document.getElementById('main-view');
     if (upcInput && mainView && mainView.style.display !== 'none') {
+      // On mobile in scanner mode, focus without triggering keyboard (readonly handles that)
       setTimeout(() => upcInput.focus(), 50);
     }
   }
@@ -1258,16 +1353,30 @@ let recipeInputMode = 'url';
 let selectedIngredients = new Set();
 let pendingIngredientsForList = [];
 
-function showRecipeView(title) {
+let recipeNavSource = 'book'; // 'book' | 'main'
+
+function showRecipeView(title, source) {
+  if (source) recipeNavSource = source;
   document.getElementById('main-view').style.display = 'none';
   document.getElementById('history-view').classList.remove('visible');
   document.getElementById('library-view').classList.remove('visible');
   document.getElementById('recipe-view').classList.add('visible');
   document.getElementById('recipe-view-title').textContent = title || 'Recipe book';
+  // Update back button label based on where we came from
+  const backBtn = document.querySelector('.recipe-back-btn');
+  if (backBtn) {
+    if (recipeNavSource === 'book' && title !== 'Recipe book') {
+      backBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Recipe book';
+      backBtn.onclick = () => showRecipeBook();
+    } else {
+      backBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back';
+      backBtn.onclick = () => showMainView();
+    }
+  }
 }
 
 window.showRecipeBook = async function() {
-  showRecipeView('Recipe book');
+  showRecipeView('Recipe book', 'main');
   await renderRecipeBook();
 };
 
@@ -1324,7 +1433,7 @@ async function renderRecipeBook() {
 }
 
 function showRecipeInput() {
-  showRecipeView('Add recipe');
+  showRecipeView('Add recipe', 'book');
   recipeInputMode = 'url';
   const el = document.getElementById('recipe-content');
   el.innerHTML = `
@@ -1431,7 +1540,7 @@ window.processRecipe = async function() {
 };
 
 function showRecipeIngredients(recipe, fromBook) {
-  showRecipeView(recipe.name || 'Ingredients');
+  showRecipeView(recipe.name || 'Ingredients', fromBook ? 'book' : 'main');
   recipeIngredients = recipe.ingredients || [];
   if (!fromBook) selectedIngredients = new Set(recipeIngredients.map((_, i) => i));
   else selectedIngredients = new Set(recipeIngredients.map((_, i) => i));
