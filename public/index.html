@@ -245,7 +245,9 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 .camera-title { font-size: 16px; font-weight: 700; color: #fff; }
 .camera-close { width: 36px; height: 36px; background: rgba(255,255,255,.15); border: none; border-radius: 50%; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .camera-viewport { width: 100%; max-width: 400px; position: relative; }
-#camera-video { width: 100%; border-radius: 16px; display: block; }
+#quagga-viewport video { width: 100% !important; height: auto !important; display: block; border-radius: 16px; }
+#quagga-viewport canvas { display: none !important; }
+
 .camera-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
 .camera-finder { width: 220px; height: 140px; border: 2px solid var(--green); border-radius: 16px; position: relative; }
 .camera-finder::before { content: ; position: absolute; inset: -2px; border-radius: 16px; border: 2px solid transparent; background: linear-gradient(var(--green),var(--green)) top left, linear-gradient(var(--green),var(--green)) top right, linear-gradient(var(--green),var(--green)) bottom left, linear-gradient(var(--green),var(--green)) bottom right; background-size: 20px 3px, 20px 3px, 20px 3px, 20px 3px; background-repeat: no-repeat; }
@@ -257,6 +259,10 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 .camera-status.error { color: #f87171; }
 .btn-camera { height: 46px; width: 46px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color .15s; }
 .btn-camera:hover { border-color: var(--green); }
+
+/* Quagga video fill fix */
+#quagga-viewport video { width: 100% !important; height: auto !important; border-radius: 16px; display: block; object-fit: cover; }
+#quagga-viewport canvas { display: none !important; }
 
 /* ── TOAST ── */
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: #fff; font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
@@ -336,7 +342,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v1.8</span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v1.9</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="shared-indicator" id="shared-indicator">
@@ -411,9 +417,9 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="camera-title">Scan barcode</div>
     <button class="camera-close" onclick="closeCamera()">×</button>
   </div>
-  <div class="camera-viewport">
-    <div id="quagga-viewport" style="width:100%;border-radius:16px;overflow:hidden;position:relative;min-height:240px;background:#111;"></div>
-    <div class="camera-overlay" style="pointer-events:none;">
+  <div class="camera-viewport" style="position:relative;">
+    <div id="quagga-viewport" style="width:100%;border-radius:16px;overflow:hidden;position:relative;background:#000;min-height:280px;"></div>
+    <div class="camera-overlay" style="pointer-events:none;position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;">
       <div class="camera-finder">
         <div class="camera-scan-line"></div>
       </div>
@@ -479,7 +485,8 @@ const firebaseConfig = {
   messagingSenderId: "690816543799",
   appId: "1:690816543799:web:5c0d7573ab04cc009d23b2"
 };
- // ─────────────────────────────────────
+
+// ─────────────────────────────────────
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -1186,15 +1193,18 @@ window.openCamera = async function() {
         target: viewport,
         constraints: {
           facingMode: 'environment',
-          width: { min: 640, ideal: 1280 },
-          height: { min: 480, ideal: 720 }
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
         },
+        area: { top: '0%', right: '0%', left: '0%', bottom: '0%' },
+        singleChannel: false
       },
-      locator: { patchSize: 'medium', halfSample: true },
+      locator: { patchSize: 'large', halfSample: false },
       numOfWorkers: 0,
-      frequency: 10,
+      frequency: 5,
       decoder: {
-        readers: ['upc_reader','upc_e_reader','ean_reader','ean_8_reader','code_128_reader']
+        readers: ['ean_reader','upc_reader','upc_e_reader','ean_8_reader','code_128_reader'],
+        multiple: false
       },
       locate: true
     }, function(err) {
