@@ -358,7 +358,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, si
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, deleteDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // ── PASTE YOUR FIREBASE CONFIG HERE ──
-const firebaseConfig ={
+const firebaseConfig = {
   apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
   authDomain: "reorderly-b152f.firebaseapp.com",
   projectId: "reorderly-b152f",
@@ -483,6 +483,8 @@ function switchList(id, name, owner) {
   subscribeToList(id);
   updateSharedIndicator();
   showMainView();
+  closeDrawer();
+  setTimeout(()=>{ const i=document.getElementById('upc-input'); if(i) i.focus(); }, 300);
 }
 
 function subscribeToList(listId) {
@@ -736,6 +738,35 @@ window.handleScan = async function() {
 
 document.getElementById('upc-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')window.handleScan();});
 
+// Auto-focus: keep scanner input focused whenever the main view is active
+// and user isn't typing in a modal or other input
+document.addEventListener('click', e => {
+  const inModal = e.target.closest('.modal-wrap');
+  const inDrawer = e.target.closest('.drawer');
+  const inAuthInput = e.target.closest('.auth-input');
+  if (!inModal && !inDrawer && !inAuthInput) {
+    const upcInput = document.getElementById('upc-input');
+    const mainView = document.getElementById('main-view');
+    if (upcInput && mainView && mainView.style.display !== 'none') {
+      setTimeout(() => upcInput.focus(), 50);
+    }
+  }
+});
+
+// Also refocus after any keypress that isn't in a modal/input
+document.addEventListener('keydown', e => {
+  const tag = document.activeElement?.tagName;
+  const inModal = document.activeElement?.closest('.modal-wrap');
+  const inDrawer = document.activeElement?.closest('.drawer');
+  if (tag !== 'INPUT' && tag !== 'TEXTAREA' && !inModal && !inDrawer) {
+    const upcInput = document.getElementById('upc-input');
+    const mainView = document.getElementById('main-view');
+    if (upcInput && mainView && mainView.style.display !== 'none') {
+      upcInput.focus();
+    }
+  }
+});
+
 window.changeQty = async function(upc,delta) { const item=items.find(i=>i.upc===upc); if(item){item.qty=Math.max(1,item.qty+delta);await saveList();} };
 window.removeItem = async function(upc) { items=items.filter(i=>i.upc!==upc); await saveList(); if(items.length===0)setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
 window.clearList = async function() { items=[]; await saveList(); setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
@@ -773,7 +804,7 @@ function renderList() {
         </div>
       </div>
       <div class="item-controls">
-        <button class="qty-btn" onclick="changeQty('${item.upc}',-1)">−</button>
+        <button class="qty-btn" onclick="changeQty('${item.upc}',-1)" style="font-size:20px;line-height:1;">-</button>
         <span class="qty-num">${item.qty}</span>
         <button class="qty-btn" onclick="changeQty('${item.upc}',1)">+</button>
         <button class="del-btn" onclick="removeItem('${item.upc}')">×</button>
