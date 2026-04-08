@@ -257,7 +257,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v1.4</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="shared-indicator" id="shared-indicator">
@@ -452,20 +452,37 @@ function renderDrawerLists() {
     const isActive = list.id === currentListId;
     const isOwner = list.owner === currentUser?.uid;
     const div = document.createElement('div');
-    div.className = 'drawer-item' + (isActive?' active':'');
-    div.innerHTML = `
-      <div class="drawer-item-left" onclick="switchList('${list.id}','${esc(list.name)}','${list.owner||currentUser?.uid}');closeDrawer();">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
-        <span class="drawer-item-name">${esc(list.name)}${list.isShared?' 👥':''}</span>
-      </div>
-      <div class="drawer-item-actions">
-        ${isOwner?`<button class="drawer-icon-btn invite" onclick="openInviteModal('${list.id}','${esc(list.name)}')" title="Share list">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-        </button>`:''}
-        ${isOwner && list.id!=='default'?`<button class="drawer-icon-btn" onclick="openDeleteListModal('${list.id}','${esc(list.name)}')" title="Delete list">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-        </button>`:''}
-      </div>`;
+    div.className = 'drawer-item' + (isActive ? ' active' : '');
+
+    const left = document.createElement('div');
+    left.className = 'drawer-item-left';
+    left.style.cursor = 'pointer';
+    left.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span class="drawer-item-name">' + esc(list.name) + (list.isShared ? ' \ud83d\udc65' : '') + '</span>';
+    left.addEventListener('click', () => switchList(list.id, list.name, list.owner || currentUser?.uid));
+
+    const actions = document.createElement('div');
+    actions.className = 'drawer-item-actions';
+
+    if (isOwner) {
+      const inviteBtn = document.createElement('button');
+      inviteBtn.className = 'drawer-icon-btn invite';
+      inviteBtn.title = 'Share list';
+      inviteBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>';
+      inviteBtn.addEventListener('click', e => { e.stopPropagation(); openInviteModal(list.id, list.name); });
+      actions.appendChild(inviteBtn);
+    }
+
+    if (isOwner && list.id !== 'default') {
+      const delBtn = document.createElement('button');
+      delBtn.className = 'drawer-icon-btn';
+      delBtn.title = 'Delete list';
+      delBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>';
+      delBtn.addEventListener('click', e => { e.stopPropagation(); openDeleteListModal(list.id, list.name); });
+      actions.appendChild(delBtn);
+    }
+
+    div.appendChild(left);
+    div.appendChild(actions);
     el.appendChild(div);
   });
 }
