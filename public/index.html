@@ -210,6 +210,12 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 /* ── PRODUCT LIBRARY ── */
 .library-view { display: none; }
 .library-view.visible { display: block; }
+.lib-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none; }
+.lib-tabs::-webkit-scrollbar { display: none; }
+.lib-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 99px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); font-family: Syne, sans-serif; transition: all .15s; white-space: nowrap; }
+.lib-tab.active { background: var(--green); color: #fff; border-color: var(--green); }
+.lib-star-btn { width: 28px; height: 28px; border: none; background: none; cursor: pointer; font-size: 16px; flex-shrink: 0; opacity: .4; transition: opacity .15s, transform .15s; }
+.lib-star-btn.pinned { opacity: 1; transform: scale(1.1); }
 .lib-search { width: 100%; height: 42px; padding: 0 14px; border: 1px solid var(--border2); border-radius: 10px; background: var(--bg2); font-family: 'Syne', sans-serif; font-size: 14px; color: var(--text); outline: none; margin-bottom: 1rem; }
 .lib-search:focus { border-color: var(--green); }
 .lib-search::placeholder { color: var(--text3); }
@@ -304,7 +310,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v1.5</span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v1.6</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="shared-indicator" id="shared-indicator">
@@ -364,6 +370,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div style="font-size:16px;font-weight:800;color:var(--text);">Product library</div>
       </div>
       <input class="lib-search" type="text" id="lib-search" placeholder="Search your scanned products..." />
+      <div class="lib-tabs" id="lib-tabs"></div>
       <div id="library-list"></div>
     </div>
   </div>
@@ -443,6 +450,8 @@ let deleteTargetId = null;
 let deleteTargetName = null;
 let inviteTargetId = null;
 let currentTab = 'signin';
+let activeLibTab = 'usual';
+let pinnedItems = {};
 
 const CATEGORIES = {
   sugar:'grocery',flour:'grocery',milk:'grocery',eggs:'grocery',bread:'grocery',butter:'grocery',cheese:'grocery',water:'grocery',juice:'grocery',coffee:'grocery',tea:'grocery',rice:'grocery',pasta:'grocery',cereal:'grocery',oats:'grocery',chicken:'grocery',beef:'grocery',pork:'grocery',fish:'grocery',produce:'grocery',fruit:'grocery',vegetable:'grocery',
@@ -471,7 +480,11 @@ function initSplash() {
 }
 initSplash();
 
+let splashReady = false;
+let authReady = false;
+
 function hideSplash() {
+  if (!splashReady || !authReady) return;
   const splash = document.getElementById('splash-screen');
   if (splash) {
     splash.classList.add('fade-out');
@@ -479,7 +492,10 @@ function hideSplash() {
   }
 }
 
+setTimeout(() => { splashReady = true; hideSplash(); }, 2200);
+
 onAuthStateChanged(auth, async user => {
+  authReady = true;
   hideSplash();
   if (user) {
     currentUser = user;
@@ -771,75 +787,151 @@ window.showLibrary = async function() {
   document.getElementById('main-view').style.display='none';
   document.getElementById('history-view').classList.remove('visible');
   document.getElementById('library-view').classList.add('visible');
+  await loadPinnedItems();
+  renderLibTabs();
   await renderLibrary();
 };
+
+async function loadPinnedItems() {
+  if (!currentUser) return;
+  try {
+    const snap = await getDoc(doc(db,'users',currentUser.uid,'library','pins'));
+    pinnedItems = snap.exists() ? (snap.data().pins || {}) : {};
+  } catch(e) { pinnedItems = {}; }
+}
+
+async function savePinnedItems() {
+  if (!currentUser) return;
+  await setDoc(doc(db,'users',currentUser.uid,'library','pins'), { pins: pinnedItems });
+}
+
+function renderLibTabs() {
+  const tabsEl = document.getElementById('lib-tabs');
+  const tabs = [
+    { id: 'usual', label: '⭐ Usual' },
+    { id: 'all', label: 'All' },
+    { id: 'grocery', label: 'Grocery' },
+    { id: 'snacks', label: 'Snacks' },
+    { id: 'household', label: 'Household' },
+    { id: 'health', label: 'Health' },
+    { id: 'other', label: 'Other' },
+  ];
+  tabsEl.innerHTML = '';
+  tabs.forEach(tab => {
+    const btn = document.createElement('button');
+    btn.className = 'lib-tab' + (tab.id === activeLibTab ? ' active' : '');
+    btn.textContent = tab.label;
+    btn.addEventListener('click', () => {
+      activeLibTab = tab.id;
+      renderLibTabs();
+      renderLibrary(document.getElementById('lib-search').value);
+    });
+    tabsEl.appendChild(btn);
+  });
+}
 
 async function renderLibrary(filter='') {
   if (!currentUser) return;
   const el = document.getElementById('library-list');
   el.innerHTML = '<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">Loading...</div>';
   try {
+    // Build product map with scan counts from history
     const snap = await getDocs(collection(db,'users',currentUser.uid,'history'));
     const seen = new Map();
+    const scanCount = {};
     snap.forEach(d => {
       (d.data().items||[]).forEach(item => {
-        if (!seen.has(item.upc) && item.name) seen.set(item.upc, item);
+        if (item.name && item.upc) {
+          scanCount[item.upc] = (scanCount[item.upc] || 0) + 1;
+          if (!seen.has(item.upc)) seen.set(item.upc, item);
+        }
       });
     });
-    items.forEach(item => { if (!seen.has(item.upc)) seen.set(item.upc, item); });
-    let products = Array.from(seen.values());
+    items.forEach(item => {
+      if (!seen.has(item.upc)) seen.set(item.upc, item);
+      scanCount[item.upc] = (scanCount[item.upc] || 0) + 1;
+    });
+
+    let products = Array.from(seen.values()).map(p => ({
+      ...p,
+      category: p.category || getCategory(p.name),
+      scanCount: scanCount[p.upc] || 1,
+      pinned: !!pinnedItems[p.upc]
+    }));
+
+    // Filter by search
     if (filter) products = products.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()));
+
+    // Filter by active tab
+    if (activeLibTab === 'usual') {
+      products = products.filter(p => p.pinned || p.scanCount >= 2);
+    } else if (activeLibTab !== 'all') {
+      products = products.filter(p => p.category === activeLibTab);
+    }
+
+    // Sort: pinned first, then by scan count
+    products.sort((a,b) => (b.pinned?1:0) - (a.pinned?1:0) || b.scanCount - a.scanCount);
+
     if (products.length === 0) {
-      el.innerHTML = '<div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📦</div><div>' + (filter ? 'No results found' : 'Scan items to build your library') + '</div></div>';
+      const msg = activeLibTab === 'usual' ? 'Scan items more than once or star items to add them here' : filter ? 'No results found' : 'No items in this category yet';
+      el.innerHTML = '<div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">' + (activeLibTab === 'usual' ? '⭐' : '📦') + '</div><div>' + msg + '</div></div>';
       return;
     }
-    const byCategory = {};
-    products.forEach(p => {
-      const cat = p.category || getCategory(p.name);
-      if (!byCategory[cat]) byCategory[cat] = [];
-      byCategory[cat].push({...p, category: cat});
-    });
-    const catOrder = ['grocery','snacks','household','health','other'];
+
     el.innerHTML = '';
-    catOrder.forEach(cat => {
-      if (!byCategory[cat] || byCategory[cat].length === 0) return;
-      const section = document.createElement('div');
-      section.className = 'lib-category';
-      section.innerHTML = '<div class="lib-cat-header"><span class="cat-pill cat-' + cat + '">' + getCatLabel(cat) + '</span><span class="lib-cat-count">' + byCategory[cat].length + '</span></div>';
-      byCategory[cat].forEach(product => {
-        const row = document.createElement('div');
-        row.className = 'lib-item';
-        const inList = items.some(i => i.upc === product.upc);
-                const imgEl = product.image ? Object.assign(document.createElement("img"), {className:"lib-item-img", src:product.image}) : null;
-        if (imgEl) imgEl.onerror = function(){ this.style.display="none"; this.nextSibling.style.display="flex"; };
-        const phEl = document.createElement("div");
-        phEl.className = "lib-item-ph";
-        phEl.style.display = product.image ? "none" : "";
-        phEl.innerHTML = "&#128230;";
-        const infoEl = document.createElement("div");
-        infoEl.className = "lib-item-info";
-        infoEl.innerHTML = "<div class='lib-item-name'>" + esc(product.name) + "</div>" + (product.price ? "<div class='lib-item-price'>$" + product.price + "</div>" : "");
-        if (imgEl) row.appendChild(imgEl);
-        row.appendChild(phEl);
-        row.appendChild(infoEl);
-        const btn = document.createElement('button');
-        btn.className = 'lib-add-btn' + (inList ? ' added' : '');
-        btn.textContent = inList ? '✓ In list' : '+ Add';
-        btn.addEventListener('click', async () => {
-          const existing = items.find(i => i.upc === product.upc);
-          if (existing) { existing.qty++; }
-          else { items.push({...product, qty:1, checked:false}); }
-          await saveList();
-          btn.textContent = '✓ In list';
-          btn.classList.add('added');
-          showToast('Added: ' + product.name.substring(0,30));
-        });
-        row.appendChild(btn);
-        section.appendChild(row);
+    products.forEach(product => {
+      const row = document.createElement('div');
+      row.className = 'lib-item';
+
+      const imgEl = product.image ? Object.assign(document.createElement('img'), {className:'lib-item-img', src:product.image}) : null;
+      if (imgEl) imgEl.onerror = function(){ this.style.display='none'; this.nextSibling.style.display='flex'; };
+      const phEl = document.createElement('div');
+      phEl.className = 'lib-item-ph';
+      phEl.style.display = product.image ? 'none' : '';
+      phEl.innerHTML = '&#128230;';
+      const infoEl = document.createElement('div');
+      infoEl.className = 'lib-item-info';
+      infoEl.innerHTML = '<div class="lib-item-name">' + esc(product.name) + '</div>' + (product.price ? '<div class="lib-item-price">$' + product.price + '</div>' : '');
+
+      const starBtn = document.createElement('button');
+      starBtn.className = 'lib-star-btn' + (product.pinned ? ' pinned' : '');
+      starBtn.textContent = product.pinned ? '⭐' : '☆';
+      starBtn.title = product.pinned ? 'Remove from Usual' : 'Add to Usual';
+      starBtn.addEventListener('click', async () => {
+        if (pinnedItems[product.upc]) {
+          delete pinnedItems[product.upc];
+          starBtn.classList.remove('pinned');
+          starBtn.textContent = '☆';
+        } else {
+          pinnedItems[product.upc] = true;
+          starBtn.classList.add('pinned');
+          starBtn.textContent = '⭐';
+        }
+        await savePinnedItems();
       });
-      el.appendChild(section);
+
+      const btn = document.createElement('button');
+      const inList = items.some(i => i.upc === product.upc);
+      btn.className = 'lib-add-btn' + (inList ? ' added' : '');
+      btn.textContent = inList ? '✓ In list' : '+ Add';
+      btn.addEventListener('click', async () => {
+        const existing = items.find(i => i.upc === product.upc);
+        if (existing) { existing.qty++; }
+        else { items.push({...product, qty:1, checked:false}); }
+        await saveList();
+        btn.textContent = '✓ In list';
+        btn.classList.add('added');
+        showToast('Added: ' + product.name.substring(0,30));
+      });
+
+      if (imgEl) row.appendChild(imgEl);
+      row.appendChild(phEl);
+      row.appendChild(infoEl);
+      row.appendChild(starBtn);
+      row.appendChild(btn);
+      el.appendChild(row);
     });
-  } catch(e) { el.innerHTML = '<div class="empty"><div>Could not load library</div></div>'; }
+  } catch(e) { console.error(e); el.innerHTML = '<div class="empty"><div>Could not load library</div></div>'; }
 }
 
 document.getElementById('lib-search')?.addEventListener('input', e => renderLibrary(e.target.value));
