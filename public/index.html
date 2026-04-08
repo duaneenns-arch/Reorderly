@@ -9,68 +9,78 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #1a1a18;
-  --bg2: #242422;
-  --bg3: #2e2e2c;
-  --border: #3a3a38;
-  --green: #4ade80;
-  --green-dark: #16a34a;
-  --green-text: #052e16;
-  --text: #f0f0ee;
-  --text2: #888884;
-  --text3: #555552;
-  --walmart: #4ade80;
-  --walmart-text: #052e16;
+  --bg: #F5F4EF;
+  --bg2: #ffffff;
+  --bg3: #eeede6;
+  --border: #e0dfd8;
+  --border2: #d0cfc8;
+  --green: #1D9E75;
+  --green-light: #e1f5ee;
+  --green-dark: #0F6E56;
+  --green-text: #ffffff;
+  --text: #1a1a18;
+  --text2: #666662;
+  --text3: #aaa8a0;
+  --danger: #dc2626;
+  --danger-light: #fef2f2;
 }
 
 body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); overflow-x: hidden; }
 
 /* ── LOADING ── */
-.loading-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; font-size: 14px; color: var(--text2); }
+.loading-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; font-size: 14px; color: var(--text3); }
 
-/* ── AUTH SCREEN ── */
-.auth-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; }
+/* ── AUTH ── */
+.auth-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; background: var(--bg); }
 .auth-box { width: 100%; max-width: 360px; background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; }
 .auth-logo { text-align: center; margin-bottom: 2rem; }
 .auth-logo-text { font-size: 32px; font-weight: 800; color: var(--text); letter-spacing: -1px; }
 .auth-logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: 3px; vertical-align: middle; position: relative; top: -3px; }
-.auth-logo-sub { font-size: 13px; color: var(--text2); margin-top: 4px; font-weight: 400; }
+.auth-logo-sub { font-size: 13px; color: var(--text3); margin-top: 4px; }
 .auth-tabs { display: flex; margin-bottom: 1.5rem; background: var(--bg3); border-radius: 10px; padding: 3px; }
-.auth-tab { flex: 1; padding: 9px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; background: none; border: none; color: var(--text2); font-family: 'Syne', sans-serif; border-radius: 8px; transition: all .15s; }
-.auth-tab.active { background: var(--green); color: var(--green-text); }
+.auth-tab { flex: 1; padding: 9px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; background: none; border: none; color: var(--text3); font-family: 'Syne', sans-serif; border-radius: 8px; transition: all .15s; }
+.auth-tab.active { background: var(--green); color: #fff; }
 .auth-form { display: flex; flex-direction: column; gap: 10px; }
-.auth-input { width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 15px; font-family: 'Syne', sans-serif; color: var(--text); background: var(--bg3); outline: none; transition: border-color .15s; }
-.auth-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(74,222,128,.12); }
+.auth-input { width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 15px; font-family: 'Syne', sans-serif; color: var(--text); background: var(--bg2); outline: none; transition: border-color .15s; }
+.auth-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
 .auth-input::placeholder { color: var(--text3); }
-.auth-btn { height: 46px; background: var(--green); color: var(--green-text); border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; transition: opacity .15s; }
-.auth-btn:hover { opacity: .9; }
+.auth-btn { height: 46px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; }
+.auth-btn:hover { background: var(--green-dark); }
 .auth-btn:disabled { opacity: .5; cursor: not-allowed; }
 .auth-divider { display: flex; align-items: center; gap: 12px; }
 .auth-divider-line { flex: 1; height: 1px; background: var(--border); }
 .auth-divider-text { font-size: 12px; color: var(--text3); }
-.auth-google-btn { height: 46px; background: var(--bg3); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: border-color .15s; }
+.auth-google-btn { height: 46px; background: var(--bg2); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: border-color .15s; }
 .auth-google-btn:hover { border-color: var(--green); }
-.auth-error { font-size: 13px; color: #f87171; text-align: center; min-height: 18px; }
+.auth-error { font-size: 13px; color: var(--danger); text-align: center; min-height: 18px; }
 
-/* ── SIDE DRAWER ── */
-.drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 100; }
+/* ── DRAWER ── */
+.drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 100; }
 .drawer-overlay.open { display: block; }
-.drawer { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: var(--bg2); border-right: 1px solid var(--border); z-index: 101; transition: left .25s ease; padding: 0; display: flex; flex-direction: column; }
+.drawer { position: fixed; top: 0; left: -290px; width: 290px; height: 100vh; background: var(--bg2); border-right: 1px solid var(--border); z-index: 101; transition: left .25s ease; display: flex; flex-direction: column; }
 .drawer.open { left: 0; }
 .drawer-header { padding: 1.5rem 1.25rem 1rem; border-bottom: 1px solid var(--border); }
 .drawer-logo { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
-.drawer-user { font-size: 12px; color: var(--text2); margin-top: 4px; font-family: 'DM Mono', monospace; }
+.drawer-logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
+.drawer-user { font-size: 12px; color: var(--text3); margin-top: 4px; font-family: 'DM Mono', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .drawer-section { padding: 1rem 1.25rem 0.5rem; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); }
-.drawer-item { display: flex; align-items: center; gap: 10px; padding: 10px 1.25rem; cursor: pointer; transition: background .1s; font-size: 14px; font-weight: 600; color: var(--text2); }
-.drawer-item:hover { background: var(--bg3); color: var(--text); }
-.drawer-item.active { color: var(--green); background: rgba(74,222,128,.08); }
-.drawer-item-icon { width: 18px; height: 18px; flex-shrink: 0; }
-.drawer-new-list { display: flex; align-items: center; gap: 8px; padding: 8px 1.25rem; cursor: pointer; color: var(--green); font-size: 13px; font-weight: 700; }
-.drawer-new-list:hover { opacity: .8; }
+.drawer-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 1.25rem; cursor: pointer; transition: background .1s; }
+.drawer-item:hover { background: var(--bg3); }
+.drawer-item.active { background: var(--green-light); }
+.drawer-item-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text2); flex: 1; min-width: 0; }
+.drawer-item.active .drawer-item-left { color: var(--green); }
+.drawer-item-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.drawer-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.drawer-icon-btn { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 7px; background: var(--bg2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.drawer-icon-btn:hover { border-color: var(--danger); background: var(--danger-light); }
+.drawer-icon-btn.invite:hover { border-color: var(--green); background: var(--green-light); }
+.drawer-new-list { display: flex; align-items: center; gap: 8px; padding: 9px 1.25rem; cursor: pointer; color: var(--green); font-size: 13px; font-weight: 700; transition: background .1s; }
+.drawer-new-list:hover { background: var(--green-light); }
 .drawer-footer { margin-top: auto; padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
-.drawer-signout { width: 100%; padding: 10px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; color: #f87171; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; }
+.drawer-signout { width: 100%; padding: 10px; background: none; border: 1px solid var(--border); border-radius: 10px; color: var(--danger); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .15s; }
+.drawer-signout:hover { background: var(--danger-light); }
 
-/* ── APP SCREEN ── */
+/* ── APP ── */
 .app-screen { display: none; min-height: 100vh; }
 .app-screen.visible { display: block; }
 .app-inner { max-width: 460px; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
@@ -78,103 +88,110 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 /* ── HEADER ── */
 .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
 .header-left { display: flex; align-items: center; gap: 12px; }
-.menu-btn { width: 36px; height: 36px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; flex-shrink: 0; }
+.menu-btn { width: 38px; height: 38px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
 .menu-btn span { display: block; width: 16px; height: 2px; background: var(--text2); border-radius: 2px; }
-.logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+.logo { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
 .logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
-.list-name-badge { background: rgba(74,222,128,.12); color: var(--green); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(74,222,128,.2); }
+.list-badge { background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.shared-indicator { font-size: 10px; color: var(--green); background: var(--green-light); border: 1px solid rgba(29,158,117,.2); border-radius: 99px; padding: 2px 8px; display: none; }
 
 /* ── SCAN BOX ── */
-.scan-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; margin-bottom: 1rem; }
+.scan-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; margin-bottom: 1rem; }
 .scan-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
 .scan-row { display: flex; gap: 8px; }
-input[type=text] { flex: 1; font-family: 'DM Mono', monospace; font-size: 15px; padding: 0 14px; height: 46px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg3); color: var(--text); outline: none; transition: border-color .15s; }
+input[type=text] { flex: 1; font-family: 'DM Mono', monospace; font-size: 15px; padding: 0 14px; height: 46px; border: 1px solid var(--border2); border-radius: 10px; background: var(--bg2); color: var(--text); outline: none; transition: border-color .15s; }
 input[type=text]::placeholder { color: var(--text3); }
-input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(74,222,128,.1); }
-.btn-add { height: 46px; padding: 0 18px; background: var(--green); color: var(--green-text); border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: opacity .15s, transform .1s; white-space: nowrap; }
-.btn-add:hover { opacity: .9; }
+input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
+.btn-add { height: 46px; padding: 0 20px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; white-space: nowrap; }
+.btn-add:hover { background: var(--green-dark); }
 .btn-add:active { transform: scale(.97); }
 .btn-add:disabled { opacity: .4; cursor: not-allowed; }
 .status { font-size: 12px; color: var(--text3); margin-top: 8px; min-height: 18px; font-family: 'DM Mono', monospace; }
 .status.loading { color: var(--green); }
-.status.error { color: #f87171; }
+.status.error { color: var(--danger); }
 .status.success { color: var(--green); }
 
 /* ── LIST ── */
 .list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .list-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); }
-.item-count { font-size: 12px; font-weight: 700; background: rgba(74,222,128,.12); color: var(--green); padding: 2px 10px; border-radius: 99px; border: 1px solid rgba(74,222,128,.2); }
-.empty { text-align: center; padding: 3rem 1rem; color: var(--text3); font-size: 14px; border: 1px dashed var(--border); border-radius: 16px; }
-.empty-icon { font-size: 32px; margin-bottom: 10px; opacity: .4; }
+.item-count { font-size: 12px; font-weight: 700; background: #e0f0f8; color: #1a6fa8; padding: 3px 10px; border-radius: 99px; }
+.empty { text-align: center; padding: 3rem 1rem; color: var(--text3); font-size: 14px; border: 1.5px dashed var(--border); border-radius: 16px; }
 
-/* ── ITEM CARDS ── */
+/* ── ITEMS ── */
 .item { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; overflow: hidden; animation: slideIn .2s ease; }
 @keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 .item-main { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
 .item-img { width: 50px; height: 50px; border-radius: 10px; object-fit: contain; flex-shrink: 0; border: 1px solid var(--border); background: var(--bg3); }
 .item-ph { width: 50px; height: 50px; border-radius: 10px; background: var(--bg3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); font-size: 22px; }
 .item-info { flex: 1; min-width: 0; }
-.item-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
-.item-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; flex-wrap: wrap; }
+.item-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-meta { display: flex; align-items: center; gap: 6px; margin-top: 3px; flex-wrap: wrap; }
 .item-price { font-size: 13px; font-weight: 800; color: var(--green); }
 .item-upc { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); }
-.cat-pill { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; }
+.cat-pill { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; }
+.cat-grocery { background: #e1f5ee; color: #085041; }
+.cat-snacks { background: #fef3c7; color: #92400e; }
+.cat-household { background: #eff6ff; color: #1e40af; }
+.cat-health { background: #fdf2f8; color: #9d174d; }
+.cat-other { background: #f1f5f9; color: #475569; }
 .item-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 .qty-btn { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg3); color: var(--text2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .1s; }
 .qty-btn:hover { border-color: var(--green); color: var(--green); }
-.qty-num { font-size: 14px; font-weight: 800; min-width: 18px; text-align: center; color: var(--text); }
-.del-btn { width: 26px; height: 26px; border: none; background: none; color: var(--text3); cursor: pointer; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: color .15s; }
-.del-btn:hover { color: #f87171; }
-.item-walmart { display: flex; align-items: center; gap: 8px; padding: 8px 14px 10px; border-top: 1px solid var(--border); }
-.btn-walmart { flex: 1; height: 32px; background: var(--green); color: var(--green-text); border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: opacity .15s; }
-.btn-walmart:hover { opacity: .9; }
+.qty-num { font-size: 14px; font-weight: 800; min-width: 18px; text-align: center; }
+.del-btn { width: 26px; height: 26px; border: none; background: none; color: var(--text3); cursor: pointer; font-size: 18px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: color .15s; }
+.del-btn:hover { color: var(--danger); }
+.item-walmart { display: flex; align-items: center; gap: 8px; padding: 8px 14px 10px; border-top: 1px solid var(--border); background: #f8faff; }
+.btn-walmart { flex: 1; height: 32px; background: #0071CE; color: #fff; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: background .15s; }
+.btn-walmart:hover { background: #005fa3; }
 .walmart-badge { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; }
 
 /* ── ORDER BAR ── */
 .order-bar { margin-top: 1.25rem; display: flex; gap: 8px; }
-.btn-order-all { flex: 1; height: 52px; background: var(--green); color: var(--green-text); border: none; border-radius: 14px; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; cursor: pointer; transition: opacity .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 9px; letter-spacing: .01em; }
-.btn-order-all:hover { opacity: .9; }
+.btn-order-all { flex: 1; height: 52px; background: var(--green); color: #fff; border: none; border-radius: 14px; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 9px; }
+.btn-order-all:hover { background: var(--green-dark); }
 .btn-order-all:active { transform: scale(.98); }
-.btn-order-all:disabled { opacity: .3; cursor: not-allowed; }
-.btn-clear { height: 52px; padding: 0 16px; background: none; border: 1px solid var(--border); border-radius: 14px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text2); cursor: pointer; transition: border-color .15s; }
-.btn-clear:hover { border-color: #f87171; color: #f87171; }
+.btn-order-all:disabled { background: var(--bg3); color: var(--text3); cursor: not-allowed; }
+.btn-clear { height: 52px; padding: 0 16px; background: none; border: 1px solid var(--border); border-radius: 14px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text2); cursor: pointer; transition: all .15s; }
+.btn-clear:hover { border-color: var(--danger); color: var(--danger); }
 
-/* ── HISTORY VIEW ── */
+/* ── HISTORY ── */
 .history-view { display: none; }
 .history-view.visible { display: block; }
 .history-order { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
-.history-order-header { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.history-order-header { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--bg3); }
 .history-date { font-size: 13px; font-weight: 700; color: var(--text); }
-.history-count { font-size: 12px; color: var(--text2); }
+.history-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
 .history-items { padding: 8px 14px; }
-.history-item-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.history-item-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); }
 .history-item-row:last-child { border-bottom: none; }
 .history-item-name { font-size: 13px; color: var(--text2); }
-.history-readd { font-size: 11px; font-weight: 700; color: var(--green); cursor: pointer; background: rgba(74,222,128,.1); border: none; border-radius: 6px; padding: 3px 8px; font-family: 'Syne', sans-serif; }
-.history-readd:hover { opacity: .8; }
+.history-readd { font-size: 11px; font-weight: 700; color: var(--green); cursor: pointer; background: var(--green-light); border: none; border-radius: 6px; padding: 3px 10px; font-family: 'Syne', sans-serif; }
 
-/* ── NEW LIST MODAL ── */
-.modal-wrap { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+/* ── MODALS ── */
+.modal-wrap { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
 .modal-wrap.open { display: flex; }
 .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; width: 100%; max-width: 320px; }
-.modal-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 1rem; }
+.modal-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.modal-subtitle { font-size: 13px; color: var(--text3); margin-bottom: 1rem; line-height: 1.5; }
 .modal-input { width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 15px; font-family: 'Syne', sans-serif; color: var(--text); background: var(--bg3); outline: none; margin-bottom: 12px; }
 .modal-input:focus { border-color: var(--green); }
 .modal-input::placeholder { color: var(--text3); }
 .modal-btns { display: flex; gap: 8px; }
 .modal-cancel { flex: 1; height: 44px; background: none; border: 1px solid var(--border); border-radius: 10px; color: var(--text2); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
-.modal-create { flex: 1; height: 44px; background: var(--green); border: none; border-radius: 10px; color: var(--green-text); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
+.modal-confirm { flex: 1; height: 44px; background: var(--green); border: none; border-radius: 10px; color: #fff; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
+.modal-confirm.danger { background: var(--danger); }
+.modal-members { margin-bottom: 12px; }
+.member-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.member-row:last-child { border-bottom: none; }
+.member-name { color: var(--text2); }
+.member-remove { font-size: 11px; color: var(--danger); background: none; border: none; cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 700; }
+.modal-msg { font-size: 13px; min-height: 18px; margin-bottom: 8px; }
+.modal-msg.success { color: var(--green); }
+.modal-msg.error { color: var(--danger); }
 
 /* ── TOAST ── */
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--bg3); border: 1px solid var(--border); color: var(--text); font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: #fff; font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
 .toast.show { transform: translateX(-50%) translateY(0); }
-
-/* Category colors */
-.cat-grocery { background: rgba(74,222,128,.15); color: #4ade80; }
-.cat-snacks { background: rgba(251,191,36,.15); color: #fbbf24; }
-.cat-household { background: rgba(96,165,250,.15); color: #60a5fa; }
-.cat-health { background: rgba(244,114,182,.15); color: #f472b6; }
-.cat-other { background: rgba(148,163,184,.15); color: #94a3b8; }
 </style>
 </head>
 <body>
@@ -213,19 +230,21 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- Side Drawer -->
 <div class="drawer" id="drawer">
   <div class="drawer-header">
-    <div class="drawer-logo">ReOrderly<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#4ade80;margin-left:3px;vertical-align:middle;position:relative;top:-2px;"></span></div>
+    <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
   </div>
   <div class="drawer-section">My Lists</div>
   <div id="drawer-lists"></div>
   <div class="drawer-new-list" onclick="openNewListModal()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     New list
   </div>
   <div class="drawer-section">Other</div>
-  <div class="drawer-item" onclick="showHistory(); closeDrawer();">
-    <svg class="drawer-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    Order history
+  <div class="drawer-item" onclick="showHistory();closeDrawer();">
+    <div class="drawer-item-left">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span class="drawer-item-name">Order history</span>
+    </div>
   </div>
   <div class="drawer-footer">
     <button class="drawer-signout" onclick="handleSignOut()">Sign out</button>
@@ -237,15 +256,19 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="app-inner">
     <div class="header">
       <div class="header-left">
-        <button class="menu-btn" onclick="openDrawer()">
-          <span></span><span></span><span></span>
-        </button>
+        <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
         <div class="logo">ReOrderly<span class="logo-dot"></span></div>
       </div>
-      <div class="list-name-badge" id="list-name-badge">My List</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div class="shared-indicator" id="shared-indicator">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Shared
+        </div>
+        <div class="list-badge" id="list-name-badge">My List</div>
+      </div>
     </div>
 
-    <!-- Main list view -->
+    <!-- Main view -->
     <div id="main-view">
       <div class="scan-box">
         <div class="scan-label">Scan or enter barcode</div>
@@ -261,13 +284,13 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       </div>
       <div id="item-list">
         <div class="empty" id="empty-state">
-          <div class="empty-icon">🛒</div>
+          <div style="font-size:32px;margin-bottom:10px;opacity:.4">🛒</div>
           <div>Scan an item to add it to your list</div>
         </div>
       </div>
       <div class="order-bar">
         <button class="btn-order-all" id="order-btn" disabled onclick="orderAllOnWalmart()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#052e16"><circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/><circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/><circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/><circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/><circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/></svg>
           Order all on Walmart
         </button>
         <button class="btn-clear" onclick="clearList()">Clear</button>
@@ -277,15 +300,12 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- History view -->
     <div id="history-view" class="history-view">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
-        <button onclick="showMainView()" style="background:none;border:none;color:#4ade80;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-          Back
+        <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back
         </button>
         <div style="font-size:16px;font-weight:800;color:var(--text);">Order history</div>
       </div>
-      <div id="history-list">
-        <div class="empty"><div class="empty-icon">📋</div><div>No order history yet</div></div>
-      </div>
+      <div id="history-list"><div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📋</div><div>No order history yet</div></div></div>
     </div>
   </div>
 </div>
@@ -294,10 +314,38 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <div class="modal-wrap" id="new-list-modal">
   <div class="modal">
     <div class="modal-title">New list</div>
-    <input class="modal-input" type="text" id="new-list-name" placeholder="e.g. Weekly Groceries" maxlength="30" />
+    <div class="modal-subtitle">Give your list a name like "Weekly Groceries" or "Costco Run"</div>
+    <input class="modal-input" type="text" id="new-list-name" placeholder="List name" maxlength="30" />
     <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeNewListModal()">Cancel</button>
-      <button class="modal-create" onclick="createNewList()">Create</button>
+      <button class="modal-cancel" onclick="closeModal('new-list-modal')">Cancel</button>
+      <button class="modal-confirm" onclick="createNewList()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete List Modal -->
+<div class="modal-wrap" id="delete-list-modal">
+  <div class="modal">
+    <div class="modal-title">Delete list?</div>
+    <div class="modal-subtitle" id="delete-list-msg">This will permanently delete the list and all its items. This cannot be undone.</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('delete-list-modal')">Cancel</button>
+      <button class="modal-confirm danger" onclick="confirmDeleteList()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Invite Modal -->
+<div class="modal-wrap" id="invite-modal">
+  <div class="modal">
+    <div class="modal-title">Share list</div>
+    <div class="modal-subtitle">Invite someone by their email address. They'll need a ReOrderly account to access the list.</div>
+    <div class="modal-members" id="invite-members"></div>
+    <input class="modal-input" type="email" id="invite-email" placeholder="Email address" />
+    <div class="modal-msg" id="invite-msg"></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('invite-modal')">Done</button>
+      <button class="modal-confirm" onclick="sendInvite()">Invite</button>
     </div>
   </div>
 </div>
@@ -307,10 +355,10 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, deleteDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // ── PASTE YOUR FIREBASE CONFIG HERE ──
-const firebaseConfig = {
+const firebaseConfig ={
   apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
   authDomain: "reorderly-b152f.firebaseapp.com",
   projectId: "reorderly-b152f",
@@ -330,28 +378,27 @@ let items = [];
 let lists = [];
 let currentListId = 'default';
 let currentListName = 'My List';
+let currentListOwner = null;
 let unsubscribeList = null;
+let deleteTargetId = null;
+let deleteTargetName = null;
+let inviteTargetId = null;
 let currentTab = 'signin';
 
 const CATEGORIES = {
-  'sugar': 'grocery', 'flour': 'grocery', 'milk': 'grocery', 'eggs': 'grocery', 'bread': 'grocery', 'butter': 'grocery', 'cheese': 'grocery', 'water': 'grocery', 'juice': 'grocery', 'coffee': 'grocery', 'tea': 'grocery', 'rice': 'grocery', 'pasta': 'grocery', 'cereal': 'grocery', 'oats': 'grocery',
-  'chips': 'snacks', 'pringles': 'snacks', 'crackers': 'snacks', 'cookies': 'snacks', 'candy': 'snacks', 'snack': 'snacks', 'popcorn': 'snacks', 'nuts': 'snacks',
-  'soap': 'household', 'detergent': 'household', 'cleaner': 'household', 'spray': 'household', 'paper': 'household', 'towel': 'household', 'tissue': 'household', 'bulb': 'household', 'light': 'household', 'battery': 'household', 'trash': 'household', 'bag': 'household',
-  'shampoo': 'health', 'conditioner': 'health', 'toothpaste': 'health', 'vitamin': 'health', 'medicine': 'health', 'lotion': 'health', 'deodorant': 'health', 'razor': 'health',
+  sugar:'grocery',flour:'grocery',milk:'grocery',eggs:'grocery',bread:'grocery',butter:'grocery',cheese:'grocery',water:'grocery',juice:'grocery',coffee:'grocery',tea:'grocery',rice:'grocery',pasta:'grocery',cereal:'grocery',oats:'grocery',chicken:'grocery',beef:'grocery',pork:'grocery',fish:'grocery',produce:'grocery',fruit:'grocery',vegetable:'grocery',
+  chips:'snacks',pringles:'snacks',crackers:'snacks',cookies:'snacks',candy:'snacks',snack:'snacks',popcorn:'snacks',nuts:'snacks',granola:'snacks',
+  soap:'household',detergent:'household',cleaner:'household',spray:'household',paper:'household',towel:'household',tissue:'household',bulb:'household',light:'household',battery:'household',trash:'household',bag:'household',sponge:'household',brush:'household',
+  shampoo:'health',conditioner:'health',toothpaste:'health',vitamin:'health',medicine:'health',lotion:'health',deodorant:'health',razor:'health',sunscreen:'health',bandage:'health',
 };
 
 function getCategory(name) {
   if (!name) return 'other';
   const lower = name.toLowerCase();
-  for (const [keyword, cat] of Object.entries(CATEGORIES)) {
-    if (lower.includes(keyword)) return cat;
-  }
+  for (const [k,v] of Object.entries(CATEGORIES)) { if (lower.includes(k)) return v; }
   return 'other';
 }
-
-function getCatLabel(cat) {
-  return { grocery: 'Grocery', snacks: 'Snacks', household: 'Household', health: 'Health & Beauty', other: 'Other' }[cat] || 'Other';
-}
+function getCatLabel(cat) { return {grocery:'Grocery',snacks:'Snacks',household:'Household',health:'Health & Beauty',other:'Other'}[cat]||'Other'; }
 
 onAuthStateChanged(auth, async user => {
   document.getElementById('loading-screen').style.display = 'none';
@@ -359,11 +406,10 @@ onAuthStateChanged(auth, async user => {
     currentUser = user;
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app-screen').classList.add('visible');
-    const name = user.displayName || user.email.split('@')[0];
     document.getElementById('drawer-user').textContent = user.email;
     await loadLists();
     subscribeToList(currentListId);
-    setTimeout(() => { const i = document.getElementById('upc-input'); if(i) i.focus(); }, 100);
+    setTimeout(()=>{ const i=document.getElementById('upc-input'); if(i) i.focus(); },100);
   } else {
     currentUser = null;
     document.getElementById('auth-screen').style.display = 'flex';
@@ -376,17 +422,26 @@ onAuthStateChanged(auth, async user => {
 async function loadLists() {
   if (!currentUser) return;
   try {
-    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'lists'));
     lists = [];
-    snap.forEach(d => lists.push({ id: d.id, ...d.data() }));
-    if (lists.length === 0) {
-      await setDoc(doc(db, 'users', currentUser.uid, 'lists', 'default'), { name: 'My List', createdAt: new Date() });
-      lists = [{ id: 'default', name: 'My List' }];
+    const ownSnap = await getDocs(collection(db,'users',currentUser.uid,'lists'));
+    ownSnap.forEach(d => lists.push({id:d.id,...d.data(),owner:currentUser.uid}));
+    if (lists.length===0) {
+      await setDoc(doc(db,'users',currentUser.uid,'lists','default'),{name:'My List',createdAt:new Date(),members:[]});
+      lists = [{id:'default',name:'My List',owner:currentUser.uid,members:[]}];
     }
+    const sharedSnap = await getDocs(collection(db,'sharedLists'));
+    sharedSnap.forEach(d => {
+      const data = d.data();
+      if (data.members && data.members.includes(currentUser.email)) {
+        lists.push({id:d.id,...data,isShared:true});
+      }
+    });
     currentListId = lists[0].id;
     currentListName = lists[0].name;
+    currentListOwner = lists[0].owner;
     renderDrawerLists();
     document.getElementById('list-name-badge').textContent = currentListName;
+    updateSharedIndicator();
   } catch(e) { console.error(e); }
 }
 
@@ -394,228 +449,295 @@ function renderDrawerLists() {
   const el = document.getElementById('drawer-lists');
   el.innerHTML = '';
   lists.forEach(list => {
+    const isActive = list.id === currentListId;
+    const isOwner = list.owner === currentUser?.uid;
     const div = document.createElement('div');
-    div.className = 'drawer-item' + (list.id === currentListId ? ' active' : '');
-    div.innerHTML = `<svg class="drawer-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>${esc(list.name)}`;
-    div.onclick = () => { switchList(list.id, list.name); closeDrawer(); };
+    div.className = 'drawer-item' + (isActive?' active':'');
+    div.innerHTML = `
+      <div class="drawer-item-left" onclick="switchList('${list.id}','${esc(list.name)}','${list.owner||currentUser?.uid}');closeDrawer();">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+        <span class="drawer-item-name">${esc(list.name)}${list.isShared?' 👥':''}</span>
+      </div>
+      <div class="drawer-item-actions">
+        ${isOwner?`<button class="drawer-icon-btn invite" onclick="openInviteModal('${list.id}','${esc(list.name)}')" title="Share list">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        </button>`:''}
+        ${isOwner && list.id!=='default'?`<button class="drawer-icon-btn" onclick="openDeleteListModal('${list.id}','${esc(list.name)}')" title="Delete list">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+        </button>`:''}
+      </div>`;
     el.appendChild(div);
   });
 }
 
-function switchList(id, name) {
-  currentListId = id;
-  currentListName = name;
+function updateSharedIndicator() {
+  const list = lists.find(l=>l.id===currentListId);
+  const indicator = document.getElementById('shared-indicator');
+  if (indicator) indicator.style.display = (list?.members?.length>0 || list?.isShared) ? 'flex' : 'none';
+}
+
+function switchList(id, name, owner) {
+  currentListId = id; currentListName = name; currentListOwner = owner;
   document.getElementById('list-name-badge').textContent = name;
   renderDrawerLists();
   subscribeToList(id);
+  updateSharedIndicator();
   showMainView();
 }
 
 function subscribeToList(listId) {
   if (unsubscribeList) unsubscribeList();
   if (!currentUser) return;
-  unsubscribeList = onSnapshot(doc(db, 'users', currentUser.uid, 'lists', listId, 'data', 'items'), snap => {
-    items = snap.exists() ? (snap.data().items || []) : [];
+  const isShared = lists.find(l=>l.id===listId)?.isShared;
+  const ref = isShared
+    ? doc(db,'sharedLists',listId,'data','items')
+    : doc(db,'users',currentUser.uid,'lists',listId,'data','items');
+  unsubscribeList = onSnapshot(ref, snap => {
+    items = snap.exists() ? (snap.data().items||[]) : [];
     renderList();
   });
 }
 
 async function saveList() {
   if (!currentUser) return;
-  await setDoc(doc(db, 'users', currentUser.uid, 'lists', currentListId, 'data', 'items'), { items, updatedAt: new Date() });
+  const isShared = lists.find(l=>l.id===currentListId)?.isShared;
+  const ref = isShared
+    ? doc(db,'sharedLists',currentListId,'data','items')
+    : doc(db,'users',currentUser.uid,'lists',currentListId,'data','items');
+  await setDoc(ref, {items, updatedAt:new Date()});
 }
 
 async function saveToHistory() {
-  if (!currentUser || items.length === 0) return;
-  const orderId = 'order_' + Date.now();
-  await setDoc(doc(db, 'users', currentUser.uid, 'history', orderId), {
-    items: items.map(i => ({ name: i.name, upc: i.upc, qty: i.qty, price: i.price || null })),
-    orderedAt: new Date(),
-    listName: currentListName,
-    itemCount: items.length
+  if (!currentUser || items.length===0) return;
+  await setDoc(doc(db,'users',currentUser.uid,'history','order_'+Date.now()), {
+    items: items.map(i=>({name:i.name,upc:i.upc,qty:i.qty,price:i.price||null})),
+    orderedAt: new Date(), listName: currentListName, itemCount: items.length
   });
 }
 
 // ── AUTH ──
 window.switchTab = function(tab) {
-  currentTab = tab;
-  document.getElementById('tab-signin').className = 'auth-tab' + (tab==='signin'?' active':'');
-  document.getElementById('tab-signup').className = 'auth-tab' + (tab==='signup'?' active':'');
-  document.getElementById('auth-password2').style.display = tab==='signup'?'block':'none';
-  document.getElementById('auth-submit-btn').textContent = tab==='signin'?'Sign in':'Create account';
-  document.getElementById('auth-error').textContent = '';
+  currentTab=tab;
+  document.getElementById('tab-signin').className='auth-tab'+(tab==='signin'?' active':'');
+  document.getElementById('tab-signup').className='auth-tab'+(tab==='signup'?' active':'');
+  document.getElementById('auth-password2').style.display=tab==='signup'?'block':'none';
+  document.getElementById('auth-submit-btn').textContent=tab==='signin'?'Sign in':'Create account';
+  document.getElementById('auth-error').textContent='';
 };
 
 window.handleEmailAuth = async function() {
-  const email = document.getElementById('auth-email').value.trim();
-  const password = document.getElementById('auth-password').value;
-  const password2 = document.getElementById('auth-password2').value;
-  const errEl = document.getElementById('auth-error');
-  const btn = document.getElementById('auth-submit-btn');
-  if (!email || !password) { errEl.textContent = 'Please fill in all fields'; return; }
-  if (currentTab==='signup' && password!==password2) { errEl.textContent = 'Passwords do not match'; return; }
-  btn.disabled = true; errEl.textContent = '';
+  const email=document.getElementById('auth-email').value.trim();
+  const pass=document.getElementById('auth-password').value;
+  const pass2=document.getElementById('auth-password2').value;
+  const errEl=document.getElementById('auth-error');
+  const btn=document.getElementById('auth-submit-btn');
+  if (!email||!pass){errEl.textContent='Please fill in all fields';return;}
+  if (currentTab==='signup'&&pass!==pass2){errEl.textContent='Passwords do not match';return;}
+  btn.disabled=true; errEl.textContent='';
   try {
-    if (currentTab==='signin') await signInWithEmailAndPassword(auth, email, password);
-    else await createUserWithEmailAndPassword(auth, email, password);
+    if (currentTab==='signin') await signInWithEmailAndPassword(auth,email,pass);
+    else await createUserWithEmailAndPassword(auth,email,pass);
   } catch(e) {
-    const msgs = {'auth/user-not-found':'No account with that email','auth/wrong-password':'Incorrect password','auth/email-already-in-use':'Account already exists','auth/weak-password':'Password must be 6+ characters','auth/invalid-credential':'Incorrect email or password','auth/invalid-email':'Invalid email address'};
-    errEl.textContent = msgs[e.code] || 'Something went wrong';
+    const msgs={'auth/user-not-found':'No account with that email','auth/wrong-password':'Incorrect password','auth/email-already-in-use':'Account already exists','auth/weak-password':'Password must be 6+ characters','auth/invalid-credential':'Incorrect email or password','auth/invalid-email':'Invalid email'};
+    errEl.textContent=msgs[e.code]||'Something went wrong';
   }
-  btn.disabled = false;
+  btn.disabled=false;
 };
 
 window.handleGoogleAuth = async function() {
-  try { await signInWithPopup(auth, googleProvider); }
-  catch(e) { document.getElementById('auth-error').textContent = 'Google sign-in failed'; }
+  try { await signInWithPopup(auth,googleProvider); }
+  catch(e) { document.getElementById('auth-error').textContent='Google sign-in failed'; }
 };
 
 window.handleSignOut = async function() { await signOut(auth); closeDrawer(); };
 
 // ── DRAWER ──
-window.openDrawer = function() {
-  document.getElementById('drawer').classList.add('open');
-  document.getElementById('drawer-overlay').classList.add('open');
-};
-window.closeDrawer = function() {
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('drawer-overlay').classList.remove('open');
-};
+window.openDrawer = ()=>{ document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); };
+window.closeDrawer = ()=>{ document.getElementById('drawer').classList.remove('open'); document.getElementById('drawer-overlay').classList.remove('open'); };
 
-// ── NEW LIST ──
+// ── MODALS ──
+window.closeModal = id=>document.getElementById(id).classList.remove('open');
+
 window.openNewListModal = function() {
   closeDrawer();
+  document.getElementById('new-list-name').value='';
   document.getElementById('new-list-modal').classList.add('open');
-  document.getElementById('new-list-name').value = '';
-  setTimeout(() => document.getElementById('new-list-name').focus(), 100);
+  setTimeout(()=>document.getElementById('new-list-name').focus(),100);
 };
-window.closeNewListModal = function() { document.getElementById('new-list-modal').classList.remove('open'); };
+
 window.createNewList = async function() {
-  const name = document.getElementById('new-list-name').value.trim();
-  if (!name || !currentUser) return;
-  const id = 'list_' + Date.now();
-  await setDoc(doc(db, 'users', currentUser.uid, 'lists', id), { name, createdAt: new Date() });
-  lists.push({ id, name });
-  closeNewListModal();
-  switchList(id, name);
-  showToast('List created: ' + name);
+  const name=document.getElementById('new-list-name').value.trim();
+  if (!name||!currentUser) return;
+  const id='list_'+Date.now();
+  await setDoc(doc(db,'users',currentUser.uid,'lists',id),{name,createdAt:new Date(),members:[]});
+  lists.push({id,name,owner:currentUser.uid,members:[]});
+  closeModal('new-list-modal');
+  switchList(id,name,currentUser.uid);
+  showToast('List created: '+name);
+};
+
+window.openDeleteListModal = function(id, name) {
+  deleteTargetId=id; deleteTargetName=name;
+  document.getElementById('delete-list-msg').textContent=`Delete "${name}"? This will permanently remove the list and all its items.`;
+  document.getElementById('delete-list-modal').classList.add('open');
+};
+
+window.confirmDeleteList = async function() {
+  if (!deleteTargetId||!currentUser) return;
+  try {
+    await deleteDoc(doc(db,'users',currentUser.uid,'lists',deleteTargetId));
+    lists=lists.filter(l=>l.id!==deleteTargetId);
+    closeModal('delete-list-modal');
+    if (currentListId===deleteTargetId) {
+      currentListId=lists[0]?.id||'default';
+      currentListName=lists[0]?.name||'My List';
+      currentListOwner=currentUser.uid;
+      document.getElementById('list-name-badge').textContent=currentListName;
+      subscribeToList(currentListId);
+    }
+    renderDrawerLists();
+    showToast('List deleted');
+  } catch(e) { showToast('Could not delete list'); }
+};
+
+window.openInviteModal = async function(listId, listName) {
+  inviteTargetId=listId;
+  document.getElementById('invite-email').value='';
+  document.getElementById('invite-msg').textContent='';
+  document.getElementById('invite-msg').className='modal-msg';
+  closeDrawer();
+  await loadInviteMembers(listId);
+  document.getElementById('invite-modal').classList.add('open');
+};
+
+async function loadInviteMembers(listId) {
+  const el=document.getElementById('invite-members');
+  try {
+    const snap=await getDoc(doc(db,'users',currentUser.uid,'lists',listId));
+    const members=snap.data()?.members||[];
+    if (members.length===0) { el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:4px 0 8px;">No members yet</div>'; return; }
+    el.innerHTML=members.map(m=>`<div class="member-row"><span class="member-name">${esc(m)}</span><button class="member-remove" onclick="removeMember('${listId}','${m}')">Remove</button></div>`).join('');
+  } catch(e) { el.innerHTML=''; }
+}
+
+window.removeMember = async function(listId, email) {
+  if (!currentUser) return;
+  const snap=await getDoc(doc(db,'users',currentUser.uid,'lists',listId));
+  let members=snap.data()?.members||[];
+  members=members.filter(m=>m!==email);
+  await setDoc(doc(db,'users',currentUser.uid,'lists',listId),{...snap.data(),members});
+  await loadInviteMembers(listId);
+  showToast('Member removed');
+};
+
+window.sendInvite = async function() {
+  const email=document.getElementById('invite-email').value.trim().toLowerCase();
+  const msgEl=document.getElementById('invite-msg');
+  if (!email) { msgEl.textContent='Please enter an email address'; msgEl.className='modal-msg error'; return; }
+  if (email===currentUser.email) { msgEl.textContent="You can't invite yourself"; msgEl.className='modal-msg error'; return; }
+  try {
+    const snap=await getDoc(doc(db,'users',currentUser.uid,'lists',inviteTargetId));
+    const data=snap.data()||{};
+    const members=data.members||[];
+    if (members.includes(email)) { msgEl.textContent='Already a member'; msgEl.className='modal-msg error'; return; }
+    members.push(email);
+    await setDoc(doc(db,'users',currentUser.uid,'lists',inviteTargetId),{...data,members});
+    await setDoc(doc(db,'sharedLists',inviteTargetId),{
+      name: currentListName, owner: currentUser.uid, ownerEmail: currentUser.email, members, createdAt: data.createdAt||new Date()
+    });
+    document.getElementById('invite-email').value='';
+    msgEl.textContent=`✓ ${email} added to list`;
+    msgEl.className='modal-msg success';
+    await loadInviteMembers(inviteTargetId);
+    updateSharedIndicator();
+  } catch(e) { msgEl.textContent='Could not add member'; msgEl.className='modal-msg error'; }
 };
 
 // ── VIEWS ──
 window.showHistory = async function() {
-  document.getElementById('main-view').style.display = 'none';
+  document.getElementById('main-view').style.display='none';
   document.getElementById('history-view').classList.add('visible');
   await loadHistory();
 };
 window.showMainView = function() {
-  document.getElementById('main-view').style.display = '';
+  document.getElementById('main-view').style.display='';
   document.getElementById('history-view').classList.remove('visible');
 };
 
 async function loadHistory() {
-  if (!currentUser) return;
-  const histList = document.getElementById('history-list');
-  histList.innerHTML = '<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">Loading...</div>';
+  const el=document.getElementById('history-list');
+  el.innerHTML='<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">Loading...</div>';
   try {
-    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'history'));
-    const orders = [];
-    snap.forEach(d => orders.push({ id: d.id, ...d.data() }));
-    orders.sort((a, b) => b.orderedAt?.seconds - a.orderedAt?.seconds);
-    if (orders.length === 0) {
-      histList.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div>No order history yet</div></div>';
-      return;
-    }
-    histList.innerHTML = '';
-    orders.slice(0, 20).forEach(order => {
-      const date = order.orderedAt?.toDate ? order.orderedAt.toDate() : new Date();
-      const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      const div = document.createElement('div');
-      div.className = 'history-order';
-      div.innerHTML = `
-        <div class="history-order-header">
-          <div><div class="history-date">${dateStr}</div><div class="history-count" style="font-size:11px;color:var(--text3);margin-top:2px;">${order.listName || 'My List'}</div></div>
-          <div class="history-count">${order.itemCount} item${order.itemCount!==1?'s':''}</div>
-        </div>
-        <div class="history-items">
-          ${(order.items||[]).map(item => `
-            <div class="history-item-row">
-              <span class="history-item-name">${esc(item.name)}${item.qty>1?' ×'+item.qty:''}</span>
-              <button class="history-readd" onclick="reAddItem(${JSON.stringify({upc:item.upc,name:item.name,price:item.price}).replace(/"/g,'&quot;')})">+ Add</button>
-            </div>`).join('')}
-        </div>`;
-      histList.appendChild(div);
+    const snap=await getDocs(collection(db,'users',currentUser.uid,'history'));
+    const orders=[];
+    snap.forEach(d=>orders.push({id:d.id,...d.data()}));
+    orders.sort((a,b)=>(b.orderedAt?.seconds||0)-(a.orderedAt?.seconds||0));
+    if (orders.length===0) { el.innerHTML='<div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📋</div><div>No order history yet</div></div>'; return; }
+    el.innerHTML='';
+    orders.slice(0,20).forEach(order=>{
+      const date=order.orderedAt?.toDate?order.orderedAt.toDate():new Date();
+      const dateStr=date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      const div=document.createElement('div'); div.className='history-order';
+      div.innerHTML=`<div class="history-order-header"><div><div class="history-date">${dateStr}</div><div class="history-meta">${order.listName||'My List'} · ${order.itemCount} item${order.itemCount!==1?'s':''}</div></div></div>
+        <div class="history-items">${(order.items||[]).map(item=>`<div class="history-item-row"><span class="history-item-name">${esc(item.name)}${item.qty>1?' ×'+item.qty:''}</span><button class="history-readd" onclick="reAddItem(${JSON.stringify({upc:item.upc,name:item.name,price:item.price}).replace(/"/g,'&quot;')})">+ Add</button></div>`).join('')}</div>`;
+      el.appendChild(div);
     });
-  } catch(e) { histList.innerHTML = '<div class="empty"><div>Could not load history</div></div>'; }
+  } catch(e) { el.innerHTML='<div class="empty"><div>Could not load history</div></div>'; }
 }
 
 window.reAddItem = async function(item) {
-  const existing = items.find(i => i.upc === item.upc);
-  if (existing) { existing.qty++; }
-  else { items.push({ ...item, qty: 1, source: 'history', walmartUrl: `https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`, image: null }); }
-  await saveList();
-  showToast('Added: ' + item.name.substring(0, 30));
-  showMainView();
+  const existing=items.find(i=>i.upc===item.upc);
+  if (existing) existing.qty++;
+  else items.push({...item,qty:1,source:'history',walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`,image:null,category:getCategory(item.name)});
+  await saveList(); showToast('Added: '+item.name.substring(0,30)); showMainView();
 };
 
 // ── PRODUCT LOOKUP ──
 async function lookupProduct(upc) {
   try {
-    const res = await fetch(`/api/lookup?upc=${upc}`, {signal: AbortSignal.timeout(10000)});
-    const data = await res.json();
-    if (data.found && data.name) return data;
+    const res=await fetch(`/api/lookup?upc=${upc}`,{signal:AbortSignal.timeout(10000)});
+    const data=await res.json();
+    if (data.found&&data.name) return data;
   } catch(e) {}
   try {
-    const res = await fetch('https://api.upcitemdb.com/prod/trial/lookup?upc='+upc, {signal: AbortSignal.timeout(8000)});
-    const data = await res.json();
-    if (data.items && data.items.length>0) {
-      const p = data.items[0]; const name = p.title||p.brand;
-      if (name&&name.trim()) return { found:true, name:name.trim(), image:(p.images&&p.images[0])?p.images[0]:null, price:null, walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`, source:'upcitemdb' };
+    const res=await fetch('https://api.upcitemdb.com/prod/trial/lookup?upc='+upc,{signal:AbortSignal.timeout(8000)});
+    const data=await res.json();
+    if (data.items&&data.items.length>0) {
+      const p=data.items[0]; const name=p.title||p.brand;
+      if (name&&name.trim()) return {found:true,name:name.trim(),image:(p.images&&p.images[0])?p.images[0]:null,price:null,walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`,source:'upcitemdb'};
     }
   } catch(e) {}
   try {
-    const res = await fetch('https://world.openfoodfacts.org/api/v0/product/'+upc+'.json', {signal: AbortSignal.timeout(7000)});
-    const data = await res.json();
+    const res=await fetch('https://world.openfoodfacts.org/api/v0/product/'+upc+'.json',{signal:AbortSignal.timeout(7000)});
+    const data=await res.json();
     if (data.status===1&&data.product) {
-      const p = data.product; const name = p.product_name||p.product_name_en||p.brands;
-      if (name&&name.trim()) return { found:true, name:name.trim(), image:p.image_front_small_url||null, price:null, walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`, source:'openfoodfacts' };
+      const p=data.product; const name=p.product_name||p.product_name_en||p.brands;
+      if (name&&name.trim()) return {found:true,name:name.trim(),image:p.image_front_small_url||null,price:null,walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`,source:'openfoodfacts'};
     }
   } catch(e) {}
   return null;
 }
 
 window.handleScan = async function() {
-  const upcInput = document.getElementById('upc-input');
-  const upc = upcInput.value.trim().replace(/\D/g,'');
+  const upcInput=document.getElementById('upc-input');
+  const upc=upcInput.value.trim().replace(/\D/g,'');
   if (!upc) return;
-  const existing = items.find(i=>i.upc===upc);
+  const existing=items.find(i=>i.upc===upc);
   if (existing) { existing.qty++; upcInput.value=''; await saveList(); setStatus('Quantity updated','success'); upcInput.focus(); return; }
   setStatus('Searching Walmart catalog...','loading');
-  document.getElementById('add-btn').disabled = true;
-  upcInput.value = '';
-  const result = await lookupProduct(upc);
+  document.getElementById('add-btn').disabled=true; upcInput.value='';
+  const result=await lookupProduct(upc);
   if (result) {
-    const category = getCategory(result.name);
-    items.push({ upc, ...result, qty:1, category });
-    await saveList();
-    setStatus('✓ Found: '+result.name.substring(0,45),'success');
-    showToast('Added to list');
-  } else { setStatus('Product not found — try a different item','error'); }
-  document.getElementById('add-btn').disabled = false;
-  upcInput.focus();
+    items.push({upc,...result,qty:1,category:getCategory(result.name)});
+    await saveList(); setStatus('✓ Found: '+result.name.substring(0,45),'success'); showToast('Added to list');
+  } else setStatus('Product not found — try a different item','error');
+  document.getElementById('add-btn').disabled=false; upcInput.focus();
 };
 
-document.getElementById('upc-input')?.addEventListener('keydown', e=>{ if(e.key==='Enter') window.handleScan(); });
+document.getElementById('upc-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')window.handleScan();});
 
-window.changeQty = async function(upc, delta) {
-  const item = items.find(i=>i.upc===upc);
-  if (item) { item.qty=Math.max(1,item.qty+delta); await saveList(); }
-};
-
-window.removeItem = async function(upc) {
-  items=items.filter(i=>i.upc!==upc); await saveList();
-  if(items.length===0) setStatus('Ready — scan with your Bluetooth scanner or type a UPC');
-};
-
+window.changeQty = async function(upc,delta) { const item=items.find(i=>i.upc===upc); if(item){item.qty=Math.max(1,item.qty+delta);await saveList();} };
+window.removeItem = async function(upc) { items=items.filter(i=>i.upc!==upc); await saveList(); if(items.length===0)setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
 window.clearList = async function() { items=[]; await saveList(); setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
 
 window.orderAllOnWalmart = async function() {
@@ -626,28 +748,27 @@ window.orderAllOnWalmart = async function() {
 };
 
 function renderList() {
-  const empty = items.length===0;
-  const orderBtn = document.getElementById('order-btn');
-  const itemCount = document.getElementById('item-count');
-  const itemList = document.getElementById('item-list');
-  if (orderBtn) orderBtn.disabled = empty;
-  if (itemCount) { itemCount.style.display=empty?'none':'inline-block'; itemCount.textContent=items.length+(items.length===1?' item':' items'); }
+  const empty=items.length===0;
+  const orderBtn=document.getElementById('order-btn');
+  const itemCount=document.getElementById('item-count');
+  const itemList=document.getElementById('item-list');
+  if(orderBtn) orderBtn.disabled=empty;
+  if(itemCount){itemCount.style.display=empty?'none':'inline-block';itemCount.textContent=items.length+(items.length===1?' item':' items');}
   document.querySelectorAll('.item').forEach(el=>el.remove());
-  const emptyState = document.getElementById('empty-state');
-  if (emptyState) emptyState.style.display = empty?'':'none';
+  const emptyState=document.getElementById('empty-state');
+  if(emptyState) emptyState.style.display=empty?'':'none';
   items.forEach(item=>{
-    const cat = item.category || getCategory(item.name);
-    const catLabel = getCatLabel(cat);
-    const div = document.createElement('div'); div.className='item';
-    const walmartUrl = item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`;
+    const cat=item.category||getCategory(item.name);
+    const div=document.createElement('div'); div.className='item';
+    const walmartUrl=item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`;
     div.innerHTML=`<div class="item-main">
-      ${item.image?`<img class="item-img" src="${item.image}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'' }
+      ${item.image?`<img class="item-img" src="${item.image}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` :''}
       <div class="item-ph" style="${item.image?'display:none':''}">📦</div>
       <div class="item-info">
         <div class="item-name">${esc(item.name)}</div>
         <div class="item-meta">
           ${item.price?`<span class="item-price">$${item.price}</span>`:''}
-          <span class="cat-pill cat-${cat}">${catLabel}</span>
+          <span class="cat-pill cat-${cat}">${getCatLabel(cat)}</span>
           <span class="item-upc">${item.upc}</span>
         </div>
       </div>
@@ -659,28 +780,19 @@ function renderList() {
       </div></div>
       <div class="item-walmart">
         <button class="btn-walmart" onclick="window.open('${walmartUrl}','_blank')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="#052e16"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
           View on Walmart
         </button>
         <span class="walmart-badge">${item.source==='walmart_exact'?'✓ exact':'search'}</span>
       </div>`;
     itemList.appendChild(div);
   });
-  if (!empty) setStatus(items.length+' item'+(items.length>1?'s':'')+' ready to order','success');
+  if(!empty) setStatus(items.length+' item'+(items.length>1?'s':'')+' ready to order','success');
 }
 
-function setStatus(msg, type='') {
-  const el=document.getElementById('status');
-  if(el){el.textContent=msg;el.className='status'+(type?' '+type:'');}
-}
-
-function showToast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
-
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function setStatus(msg,type=''){const el=document.getElementById('status');if(el){el.textContent=msg;el.className='status'+(type?' '+type:'');}}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
 </body>
 </html>
