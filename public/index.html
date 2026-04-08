@@ -27,8 +27,19 @@
 
 body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); overflow-x: hidden; }
 
-/* ── LOADING ── */
-.loading-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; font-size: 14px; color: var(--text3); }
+/* ── SPLASH ── */
+.splash-screen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity .5s ease; }
+.splash-screen.fade-out { opacity: 0; pointer-events: none; }
+.splash-logo { font-size: 48px; font-weight: 800; color: var(--text); letter-spacing: -2px; opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease; }
+.splash-logo.show { opacity: 1; transform: translateY(0); }
+.splash-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--green); margin-left: 4px; vertical-align: middle; position: relative; top: -4px; transform: scale(0); transition: transform .4s ease .3s; }
+.splash-dot.show { transform: scale(1); }
+.splash-sub { font-size: 14px; color: var(--text3); margin-top: 10px; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; opacity: 0; transition: opacity .5s ease .4s; }
+.splash-sub.show { opacity: 1; }
+.splash-bar { width: 60px; height: 3px; background: var(--border); border-radius: 99px; margin-top: 2rem; overflow: hidden; opacity: 0; transition: opacity .3s ease .6s; }
+.splash-bar.show { opacity: 1; }
+.splash-progress { height: 100%; width: 0%; background: var(--green); border-radius: 99px; transition: width 1.2s ease .7s; }
+.splash-progress.go { width: 100%; }
 
 /* ── AUTH ── */
 .auth-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; background: var(--bg); }
@@ -189,6 +200,32 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 .modal-msg.success { color: var(--green); }
 .modal-msg.error { color: var(--danger); }
 
+/* ── CHECKBOX ITEMS ── */
+.item.checked { opacity: .55; }
+.item.checked .item-name { text-decoration: line-through; color: var(--text3); }
+.item-check { width: 22px; height: 22px; border: 2px solid var(--border2); border-radius: 6px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; background: var(--bg2); }
+.item-check.checked { background: var(--green); border-color: var(--green); }
+.item-check.checked::after { content: ""; display: block; width: 5px; height: 9px; border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg) translateY(-1px); }
+
+/* ── PRODUCT LIBRARY ── */
+.library-view { display: none; }
+.library-view.visible { display: block; }
+.lib-search { width: 100%; height: 42px; padding: 0 14px; border: 1px solid var(--border2); border-radius: 10px; background: var(--bg2); font-family: 'Syne', sans-serif; font-size: 14px; color: var(--text); outline: none; margin-bottom: 1rem; }
+.lib-search:focus { border-color: var(--green); }
+.lib-search::placeholder { color: var(--text3); }
+.lib-category { margin-bottom: 1.25rem; }
+.lib-cat-header { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.lib-cat-count { background: var(--bg3); color: var(--text3); font-size: 10px; padding: 2px 7px; border-radius: 99px; }
+.lib-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+.lib-item-img { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; border: 1px solid var(--border); background: var(--bg3); flex-shrink: 0; }
+.lib-item-ph { width: 36px; height: 36px; border-radius: 8px; background: var(--bg3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; border: 1px solid var(--border); }
+.lib-item-info { flex: 1; min-width: 0; }
+.lib-item-name { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lib-item-price { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 1px; }
+.lib-add-btn { height: 30px; padding: 0 12px; background: var(--green-light); color: var(--green); border: 1px solid rgba(29,158,117,.2); border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background .15s; flex-shrink: 0; }
+.lib-add-btn:hover { background: var(--green); color: #fff; }
+.lib-add-btn.added { background: var(--green); color: #fff; }
+
 /* ── TOAST ── */
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: #fff; font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
 .toast.show { transform: translateX(-50%) translateY(0); }
@@ -196,7 +233,11 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 </head>
 <body>
 
-<div class="loading-screen" id="loading-screen">Loading ReOrderly...</div>
+<div class="splash-screen" id="splash-screen">
+  <div class="splash-logo" id="splash-logo">ReOrderly<span class="splash-dot" id="splash-dot"></span></div>
+  <div class="splash-sub" id="splash-sub">Scan &bull; List &bull; Order</div>
+  <div class="splash-bar" id="splash-bar"><div class="splash-progress" id="splash-progress"></div></div>
+</div>
 
 <!-- Auth -->
 <div class="auth-screen" id="auth-screen">
@@ -240,7 +281,13 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     New list
   </div>
   <div class="drawer-section">Other</div>
-  <div class="drawer-item" onclick="showHistory();closeDrawer();">
+  <div class="drawer-item" id="drawer-library-btn">
+    <div class="drawer-item-left">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span class="drawer-item-name">Product library</span>
+    </div>
+  </div>
+  <div class="drawer-item" id="drawer-history-btn">
     <div class="drawer-item-left">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span class="drawer-item-name">Order history</span>
@@ -257,7 +304,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v1.4</span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v1.5</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="shared-indicator" id="shared-indicator">
@@ -306,6 +353,18 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div style="font-size:16px;font-weight:800;color:var(--text);">Order history</div>
       </div>
       <div id="history-list"><div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📋</div><div>No order history yet</div></div></div>
+    </div>
+
+    <!-- Library view -->
+    <div id="library-view" class="library-view">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+        <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back
+        </button>
+        <div style="font-size:16px;font-weight:800;color:var(--text);">Product library</div>
+      </div>
+      <input class="lib-search" type="text" id="lib-search" placeholder="Search your scanned products..." />
+      <div id="library-list"></div>
     </div>
   </div>
 </div>
@@ -400,8 +459,28 @@ function getCategory(name) {
 }
 function getCatLabel(cat) { return {grocery:'Grocery',snacks:'Snacks',household:'Household',health:'Health & Beauty',other:'Other'}[cat]||'Other'; }
 
+// ── SPLASH SCREEN ──
+function initSplash() {
+  setTimeout(() => {
+    document.getElementById('splash-logo').classList.add('show');
+    document.getElementById('splash-dot').classList.add('show');
+    document.getElementById('splash-sub').classList.add('show');
+    document.getElementById('splash-bar').classList.add('show');
+    setTimeout(() => document.getElementById('splash-progress').classList.add('go'), 100);
+  }, 100);
+}
+initSplash();
+
+function hideSplash() {
+  const splash = document.getElementById('splash-screen');
+  if (splash) {
+    splash.classList.add('fade-out');
+    setTimeout(() => { if (splash.parentNode) splash.parentNode.removeChild(splash); }, 600);
+  }
+}
+
 onAuthStateChanged(auth, async user => {
-  document.getElementById('loading-screen').style.display = 'none';
+  hideSplash();
   if (user) {
     currentUser = user;
     document.getElementById('auth-screen').style.display = 'none';
@@ -572,6 +651,9 @@ window.handleSignOut = async function() { await signOut(auth); closeDrawer(); };
 
 // ── DRAWER ──
 window.openDrawer = ()=>{ document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); };
+
+document.getElementById('drawer-library-btn')?.addEventListener('click', ()=>{ showLibrary(); closeDrawer(); });
+document.getElementById('drawer-history-btn')?.addEventListener('click', ()=>{ showHistory(); closeDrawer(); });
 window.closeDrawer = ()=>{ document.getElementById('drawer').classList.remove('open'); document.getElementById('drawer-overlay').classList.remove('open'); };
 
 // ── MODALS ──
@@ -681,7 +763,86 @@ window.showHistory = async function() {
 window.showMainView = function() {
   document.getElementById('main-view').style.display='';
   document.getElementById('history-view').classList.remove('visible');
+  document.getElementById('library-view').classList.remove('visible');
+  setTimeout(()=>{ const i=document.getElementById('upc-input'); if(i) i.focus(); },100);
 };
+
+window.showLibrary = async function() {
+  document.getElementById('main-view').style.display='none';
+  document.getElementById('history-view').classList.remove('visible');
+  document.getElementById('library-view').classList.add('visible');
+  await renderLibrary();
+};
+
+async function renderLibrary(filter='') {
+  if (!currentUser) return;
+  const el = document.getElementById('library-list');
+  el.innerHTML = '<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">Loading...</div>';
+  try {
+    const snap = await getDocs(collection(db,'users',currentUser.uid,'history'));
+    const seen = new Map();
+    snap.forEach(d => {
+      (d.data().items||[]).forEach(item => {
+        if (!seen.has(item.upc) && item.name) seen.set(item.upc, item);
+      });
+    });
+    items.forEach(item => { if (!seen.has(item.upc)) seen.set(item.upc, item); });
+    let products = Array.from(seen.values());
+    if (filter) products = products.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()));
+    if (products.length === 0) {
+      el.innerHTML = '<div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📦</div><div>' + (filter ? 'No results found' : 'Scan items to build your library') + '</div></div>';
+      return;
+    }
+    const byCategory = {};
+    products.forEach(p => {
+      const cat = p.category || getCategory(p.name);
+      if (!byCategory[cat]) byCategory[cat] = [];
+      byCategory[cat].push({...p, category: cat});
+    });
+    const catOrder = ['grocery','snacks','household','health','other'];
+    el.innerHTML = '';
+    catOrder.forEach(cat => {
+      if (!byCategory[cat] || byCategory[cat].length === 0) return;
+      const section = document.createElement('div');
+      section.className = 'lib-category';
+      section.innerHTML = '<div class="lib-cat-header"><span class="cat-pill cat-' + cat + '">' + getCatLabel(cat) + '</span><span class="lib-cat-count">' + byCategory[cat].length + '</span></div>';
+      byCategory[cat].forEach(product => {
+        const row = document.createElement('div');
+        row.className = 'lib-item';
+        const inList = items.some(i => i.upc === product.upc);
+                const imgEl = product.image ? Object.assign(document.createElement("img"), {className:"lib-item-img", src:product.image}) : null;
+        if (imgEl) imgEl.onerror = function(){ this.style.display="none"; this.nextSibling.style.display="flex"; };
+        const phEl = document.createElement("div");
+        phEl.className = "lib-item-ph";
+        phEl.style.display = product.image ? "none" : "";
+        phEl.innerHTML = "&#128230;";
+        const infoEl = document.createElement("div");
+        infoEl.className = "lib-item-info";
+        infoEl.innerHTML = "<div class='lib-item-name'>" + esc(product.name) + "</div>" + (product.price ? "<div class='lib-item-price'>$" + product.price + "</div>" : "");
+        if (imgEl) row.appendChild(imgEl);
+        row.appendChild(phEl);
+        row.appendChild(infoEl);
+        const btn = document.createElement('button');
+        btn.className = 'lib-add-btn' + (inList ? ' added' : '');
+        btn.textContent = inList ? '✓ In list' : '+ Add';
+        btn.addEventListener('click', async () => {
+          const existing = items.find(i => i.upc === product.upc);
+          if (existing) { existing.qty++; }
+          else { items.push({...product, qty:1, checked:false}); }
+          await saveList();
+          btn.textContent = '✓ In list';
+          btn.classList.add('added');
+          showToast('Added: ' + product.name.substring(0,30));
+        });
+        row.appendChild(btn);
+        section.appendChild(row);
+      });
+      el.appendChild(section);
+    });
+  } catch(e) { el.innerHTML = '<div class="empty"><div>Could not load library</div></div>'; }
+}
+
+document.getElementById('lib-search')?.addEventListener('input', e => renderLibrary(e.target.value));
 
 async function loadHistory() {
   const el=document.getElementById('history-list');
@@ -785,6 +946,17 @@ document.addEventListener('keydown', e => {
 });
 
 window.changeQty = async function(upc,delta) { const item=items.find(i=>i.upc===upc); if(item){item.qty=Math.max(1,item.qty+delta);await saveList();} };
+
+window.toggleCheck = async function(upc) {
+  const item = items.find(i=>i.upc===upc);
+  if (!item) return;
+  item.checked = !item.checked;
+  // Move checked items to bottom, unchecked to their original position
+  const unchecked = items.filter(i=>!i.checked);
+  const checked = items.filter(i=>i.checked);
+  items = [...unchecked, ...checked];
+  await saveList();
+};
 window.removeItem = async function(upc) { items=items.filter(i=>i.upc!==upc); await saveList(); if(items.length===0)setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
 window.clearList = async function() { items=[]; await saveList(); setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
 
@@ -807,9 +979,10 @@ function renderList() {
   if(emptyState) emptyState.style.display=empty?'':'none';
   items.forEach(item=>{
     const cat=item.category||getCategory(item.name);
-    const div=document.createElement('div'); div.className='item';
+    const div=document.createElement('div'); div.className='item'+(item.checked?' checked':'');
     const walmartUrl=item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`;
     div.innerHTML=`<div class="item-main">
+      <div class="item-check${item.checked?' checked':''}" onclick="toggleCheck('${item.upc}')"></div>
       ${item.image?`<img class="item-img" src="${item.image}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` :''}
       <div class="item-ph" style="${item.image?'display:none':''}">📦</div>
       <div class="item-info">
