@@ -18,16 +18,24 @@ exports.handler = async function(event) {
 {
   "name": "Recipe name",
   "category": "dinner/lunch/breakfast/dessert/snack/etc",
-  "servings": "4 servings",
+  "servings": "4",
   "prepTime": "30 mins",
+  "image": "https://full-url-to-recipe-image-if-available-or-empty-string",
   "ingredients": [
     { "name": "ingredient name", "quantity": "2 cups" }
+  ],
+  "instructions": [
+    "Step 1 instruction text",
+    "Step 2 instruction text"
   ],
   "emoji": "🍽️"
 }
 Rules:
+- servings should be just the number, e.g. "4" not "4 servings"
 - ingredient name should be the simple product name (e.g. "chicken breast" not "boneless skinless chicken breast, trimmed")
 - quantity should include amount and unit
+- instructions should be an array of strings, one per step, in plain English
+- image should be the full URL of the main recipe photo if found, otherwise empty string ""
 - Return ONLY the JSON object, no other text
 - If you cannot find a recipe, return { "error": "Could not find recipe in this content" }`;
 
@@ -37,22 +45,22 @@ Rules:
     if (type === 'url') {
       requestBody = {
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
+        max_tokens: 4000,
         system: systemPrompt,
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{
           role: 'user',
-          content: `Fetch this recipe page and extract the recipe: ${data}`
+          content: `Fetch this recipe page and extract the full recipe including ingredients, instructions, and the main photo URL: ${data}`
         }]
       };
     } else if (type === 'text') {
       requestBody = {
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
+        max_tokens: 4000,
         system: systemPrompt,
         messages: [{
           role: 'user',
-          content: 'Extract the recipe from this text:\n\n' + data
+          content: 'Extract the full recipe including ingredients and instructions from this text:\n\n' + data
         }]
       };
     } else if (type === 'photo') {
@@ -60,13 +68,13 @@ Rules:
       const mediaType = data.match(/^data:(image\/\w+);base64,/)?.[1] || 'image/jpeg';
       requestBody = {
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
+        max_tokens: 4000,
         system: systemPrompt,
         messages: [{
           role: 'user',
           content: [
             { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64Data } },
-            { type: 'text', text: 'Extract the recipe from this image.' }
+            { type: 'text', text: 'Extract the full recipe including ingredients and instructions from this image.' }
           ]
         }]
       };
@@ -92,13 +100,12 @@ Rules:
       throw new Error(result.error?.message || 'AI service error');
     }
 
-    // Find the last text block in the response
-    // (Claude may have used web_search tool first, so there could be multiple content blocks)
+    // Find the last text block — Claude may have used web_search first
     let finalText = '';
     if (result.content && Array.isArray(result.content)) {
       for (const block of result.content) {
         if (block.type === 'text') {
-          finalText = block.text; // keep updating — we want the last text block
+          finalText = block.text;
         }
       }
     }
@@ -107,7 +114,7 @@ Rules:
       throw new Error('No text response from AI');
     }
 
-    // Extract JSON — find the first { and last } to pull out just the JSON object
+    // Extract JSON from the response
     const start = finalText.indexOf('{');
     const end = finalText.lastIndexOf('}');
     if (start === -1 || end === -1) {
