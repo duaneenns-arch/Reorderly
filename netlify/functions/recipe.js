@@ -20,7 +20,7 @@ exports.handler = async function(event) {
   "category": "dinner/lunch/breakfast/dessert/snack/etc",
   "servings": "4",
   "prepTime": "30 mins",
-  "image": "https://full-url-to-recipe-image-if-available-or-empty-string",
+  "image": "",
   "ingredients": [
     { "name": "ingredient name", "quantity": "2 cups" }
   ],
@@ -31,11 +31,11 @@ exports.handler = async function(event) {
   "emoji": "🍽️"
 }
 Rules:
-- servings should be just the number, e.g. "4" not "4 servings"
-- ingredient name should be the simple product name (e.g. "chicken breast" not "boneless skinless chicken breast, trimmed")
+- servings should be just the number e.g. "4"
+- ingredient name should be simple e.g. "chicken breast" not "boneless skinless chicken breast, trimmed"
 - quantity should include amount and unit
-- instructions should be an array of strings, one per step, in plain English
-- image should be the full URL of the main recipe photo if found, otherwise empty string ""
+- instructions should be an array of strings, one per step
+- image should be the full URL of the main recipe photo if available, otherwise empty string ""
 - Return ONLY the JSON object, no other text
 - If you cannot find a recipe, return { "error": "Could not find recipe in this content" }`;
 
@@ -50,7 +50,7 @@ Rules:
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{
           role: 'user',
-          content: `Fetch this recipe page and extract the full recipe including ingredients, instructions, and the main photo URL: ${data}`
+          content: `Please fetch this recipe URL and extract the full recipe including all ingredients, step by step instructions, and photo URL if available: ${data}`
         }]
       };
     } else if (type === 'text') {
@@ -80,6 +80,8 @@ Rules:
       };
     }
 
+    console.log('Calling Anthropic API, type:', type);
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -92,8 +94,12 @@ Rules:
     });
 
     const result = await response.json();
+    console.log('API response status:', response.status);
+    console.log('API stop reason:', result.stop_reason);
+    console.log('Content blocks:', result.content ? result.content.map(b => b.type).join(', ') : 'none');
 
     if (!response.ok) {
+      console.log('API error:', JSON.stringify(result.error));
       if (response.status === 401) {
         return { statusCode: 500, body: JSON.stringify({ error: 'Invalid Anthropic API key' }) };
       }
@@ -110,6 +116,9 @@ Rules:
       }
     }
 
+    console.log('Final text length:', finalText.length);
+    console.log('Final text preview:', finalText.substring(0, 200));
+
     if (!finalText) {
       throw new Error('No text response from AI');
     }
@@ -118,8 +127,10 @@ Rules:
     const start = finalText.indexOf('{');
     const end = finalText.lastIndexOf('}');
     if (start === -1 || end === -1) {
+      console.log('No JSON found in:', finalText);
       throw new Error('No JSON found in response');
     }
+
     const jsonStr = finalText.substring(start, end + 1);
     const parsed = JSON.parse(jsonStr);
 
@@ -134,7 +145,7 @@ Rules:
     };
 
   } catch(e) {
-    console.error('Recipe error:', e);
+    console.error('Recipe error:', e.message);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: e.message || 'Could not process recipe.' })
