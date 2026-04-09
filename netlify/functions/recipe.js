@@ -45,7 +45,7 @@ Rules:
     if (type === 'url') {
       requestBody = {
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
+        max_tokens: 2000,
         system: systemPrompt,
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{
@@ -56,7 +56,7 @@ Rules:
     } else if (type === 'text') {
       requestBody = {
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
+        max_tokens: 2000,
         system: systemPrompt,
         messages: [{
           role: 'user',
@@ -68,7 +68,7 @@ Rules:
       const mediaType = data.match(/^data:(image\/\w+);base64,/)?.[1] || 'image/jpeg';
       requestBody = {
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
+        max_tokens: 2000,
         system: systemPrompt,
         messages: [{
           role: 'user',
