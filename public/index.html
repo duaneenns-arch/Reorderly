@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReOrderly — Scan. List. Order.</title>
-<meta name="description" content="Scan household items as you run out, build your reorder list automatically, and order everything on Walmart with one tap.">
+<title>ReOrderly — Scan it. Add it. Order it.</title>
+<meta name="description" content="ReOrderly helps you keep track of household items as they run out. Scan a barcode, build your shopping list automatically, and send everything to Walmart in one simple flow.">
 <link rel="icon" type="image/png" href="/icon.png">
 <link rel="apple-touch-icon" href="/icon.png">
 <meta name="theme-color" content="#1D9E75">
@@ -19,118 +19,129 @@
 html { scroll-behavior: smooth; }
 body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-/* NAV */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; background: rgba(245,244,239,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-.nav-logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; text-decoration: none; }
-.nav-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
+/* ── NAV ── */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; background: rgba(245,244,239,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; text-decoration: none; display: flex; align-items: center; gap: 4px; }
+.nav-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
 .nav-links { display: flex; align-items: center; gap: 8px; }
-.nav-link { font-size: 13px; font-weight: 700; color: var(--text2); text-decoration: none; padding: 8px 14px; border-radius: 8px; transition: color .15s; }
+.nav-link { font-size: 13px; font-weight: 700; color: var(--text2); text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: color .15s; }
 .nav-link:hover { color: var(--green); }
-.nav-cta { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: background .15s; text-decoration: none; }
+.nav-cta { background: var(--green); color: #fff; font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: background .15s; text-decoration: none; border: none; }
 .nav-cta:hover { background: var(--green-dark); }
 
-/* HERO */
-.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6rem 1.5rem 4rem; text-align: center; }
-.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); margin-bottom: 1.5rem; letter-spacing: .05em; text-transform: uppercase; opacity: 0; animation: fadeUp .6s ease .2s forwards; }
-.hero-title { font-size: clamp(48px, 12vw, 88px); font-weight: 800; color: var(--text); letter-spacing: -3px; line-height: .95; margin-bottom: 1.25rem; opacity: 0; animation: fadeUp .6s ease .3s forwards; }
-.accent { color: var(--green); }
-.hero-sub { font-size: clamp(16px, 2.5vw, 20px); color: var(--text2); max-width: 500px; line-height: 1.6; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp .6s ease .4s forwards; }
-.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp .6s ease .5s forwards; }
-.btn-p { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 14px; cursor: pointer; transition: background .15s, transform .1s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-.btn-p:hover { background: var(--green-dark); }
-.btn-p:active { transform: scale(.97); }
-.btn-s { background: var(--bg2); color: var(--text); border: 1px solid var(--border); font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 14px; cursor: pointer; transition: border-color .15s, color .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-.btn-s:hover { border-color: var(--green); color: var(--green); }
-.hero-proof { margin-top: 2.5rem; font-size: 13px; color: var(--text3); opacity: 0; animation: fadeUp .6s ease .7s forwards; }
+/* ── BUTTONS ── */
+.btn-primary { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 14px; cursor: pointer; transition: background .15s, transform .1s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary:hover { background: var(--green-dark); }
+.btn-primary:active { transform: scale(.97); }
+.btn-secondary { background: transparent; color: var(--text); border: 1.5px solid var(--border); font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 14px; cursor: pointer; transition: border-color .15s, color .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn-secondary:hover { border-color: var(--green); color: var(--green); }
 
-/* SECTIONS */
-.section { padding: 5rem 1.5rem; max-width: 860px; margin: 0 auto; }
-.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
-.sec-title { font-size: clamp(26px, 5vw, 40px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; line-height: 1.1; margin-bottom: .75rem; }
-.sec-sub { font-size: 15px; color: var(--text2); line-height: 1.6; max-width: 500px; margin-bottom: 2.5rem; }
+/* ── SECTION BASE ── */
+.section { padding: 5rem 2rem; max-width: 820px; margin: 0 auto; }
+.section-center { text-align: center; }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+.sec-title { font-size: clamp(26px, 4.5vw, 40px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 1rem; }
+.sec-sub { font-size: 15px; color: var(--text2); line-height: 1.7; max-width: 560px; }
+.sec-sub.centered { margin: 0 auto; text-align: center; }
 
-/* STEPS */
-.steps { display: flex; flex-direction: column; gap: 12px; }
-.step { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; transition: border-color .2s; }
-.step:hover { border-color: var(--green); }
-.step-num { width: 38px; height: 38px; border-radius: 10px; background: var(--green); color: #fff; font-size: 17px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.step-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.step-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+/* ── HERO ── */
+.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 7rem 2rem 5rem; text-align: center; }
+.hero-title { font-size: clamp(44px, 11vw, 86px); font-weight: 800; color: var(--text); letter-spacing: -3px; line-height: .95; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp .7s ease .1s forwards; }
+.hero-title .accent { color: var(--green); }
+.hero-sub { font-size: clamp(15px, 2.5vw, 18px); color: var(--text2); max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp .7s ease .25s forwards; }
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp .7s ease .4s forwards; }
+.hero-support { font-size: 13px; color: var(--text3); opacity: 0; animation: fadeUp .7s ease .55s forwards; line-height: 1.6; }
 
-/* DEMO */
-.demo-wrap { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 1.5rem; }
-.demo-inner { max-width: 860px; margin: 0 auto; }
-.demo-hdr { text-align: center; margin-bottom: 2.5rem; }
-.demo-phone { max-width: 360px; margin: 0 auto; background: var(--bg); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.12); }
-.demo-topbar { background: var(--bg2); padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.demo-topbar-logo { font-size: 15px; font-weight: 800; color: var(--text); }
-.demo-badge { background: var(--green-light); color: var(--green); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); }
-.demo-banner { background: var(--green); color: #fff; padding: 9px 14px; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
-.demo-signup-link { color: rgba(255,255,255,.85); font-size: 11px; text-decoration: underline; cursor: pointer; background: none; border: none; font-family: 'Syne',sans-serif; font-weight: 700; }
-.demo-list { padding: 10px; }
-.demo-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 11px; margin-bottom: 7px; overflow: hidden; }
-.demo-item-row { display: flex; align-items: center; gap: 10px; padding: 9px 11px; }
-.demo-emoji { width: 40px; height: 40px; border-radius: 8px; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.demo-name { font-size: 12px; font-weight: 700; color: var(--text); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.demo-price { font-size: 11px; font-weight: 800; color: var(--green); margin-top: 1px; }
-.demo-ctls { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-.demo-qbtn { width: 22px; height: 22px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg3); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); }
-.demo-qnum { font-size: 12px; font-weight: 800; min-width: 14px; text-align: center; }
-.demo-wbar { padding: 5px 11px 9px; border-top: 1px solid var(--border); background: #f8faff; }
-.demo-wbtn { width: 100%; height: 26px; background: #0071CE; color: #fff; border: none; border-radius: 6px; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; }
-.demo-order { padding: 0 10px 12px; }
-.demo-order-btn { width: 100%; height: 46px; background: var(--green); color: #fff; border: none; border-radius: 11px; font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .15s; }
-.demo-order-btn:hover { background: var(--green-dark); }
+/* ── HOW IT WORKS ── */
+.steps { display: flex; flex-direction: column; gap: 12px; margin-top: 2.5rem; }
+.step { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 1.5rem 1.75rem; display: flex; gap: 1.25rem; align-items: flex-start; transition: border-color .2s, transform .15s; }
+.step:hover { border-color: var(--green); transform: translateX(4px); }
+.step-num { width: 36px; height: 36px; border-radius: 10px; background: var(--green); color: #fff; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.step-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+.step-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
 
-/* FEATURES */
-.feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-.feat { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 1.4rem; }
-.feat-icon { font-size: 26px; margin-bottom: 10px; }
-.feat-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
-.feat-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
+/* ── WHY REORDERLY ── */
+.why-wrap { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 2rem; }
+.why-inner { max-width: 820px; margin: 0 auto; }
+.why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-top: 2.5rem; }
+.why-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 1.4rem; transition: border-color .2s; }
+.why-card:hover { border-color: var(--green); }
+.why-card-label { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.why-card-icon { font-size: 20px; }
+.why-card-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
 
-/* VS */
-.vs-wrap { background: var(--text); padding: 5rem 1.5rem; }
-.vs-inner { max-width: 680px; margin: 0 auto; text-align: center; }
-.vs-title { font-size: clamp(24px, 5vw, 38px); font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1.2; margin-bottom: .75rem; }
-.vs-sub { font-size: 15px; color: rgba(255,255,255,.55); line-height: 1.6; margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
-.vs-cards { display: flex; gap: 14px; justify-content: center; margin-bottom: 2.5rem; flex-wrap: wrap; }
-.vs-card { flex: 1; min-width: 200px; max-width: 280px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 1.5rem; text-align: center; }
-.vs-card.win { background: var(--green-light); border-color: var(--green); }
-.vs-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.35); margin-bottom: 8px; }
-.vs-card.win .vs-lbl { color: var(--green); }
-.vs-price { font-size: 36px; font-weight: 800; color: #fff; margin-bottom: 4px; }
-.vs-card.win .vs-price { color: var(--green); }
-.vs-name { font-size: 12px; color: rgba(255,255,255,.4); }
-.vs-card.win .vs-name { color: var(--text2); }
+/* ── MAIN FEATURE ── */
+.feature-wrap { padding: 5rem 2rem; max-width: 820px; margin: 0 auto; }
+.feature-body { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; margin-top: 2rem; }
+.feature-body p { font-size: 15px; color: var(--text2); line-height: 1.8; margin-bottom: 1rem; }
+.feature-body p:last-child { margin-bottom: 0; }
+.feature-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; }
+.feature-tag { background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); }
 
-/* CTA */
-.cta-wrap { padding: 5rem 1.5rem; text-align: center; }
-.cta-title { font-size: clamp(26px, 5vw, 40px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; margin-bottom: .75rem; }
-.cta-sub { font-size: 15px; color: var(--text2); margin-bottom: 2rem; line-height: 1.6; }
+/* ── SHARING ── */
+.sharing-wrap { background: var(--text); padding: 5rem 2rem; }
+.sharing-inner { max-width: 820px; margin: 0 auto; }
+.sharing-title { font-size: clamp(26px, 4.5vw, 38px); font-weight: 800; color: #fff; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 1rem; }
+.sharing-sub { font-size: 15px; color: rgba(255,255,255,.55); line-height: 1.7; max-width: 520px; margin-bottom: 2rem; }
+.sharing-points { display: flex; flex-direction: column; gap: 12px; margin-bottom: 2.5rem; }
+.sharing-point { display: flex; align-items: flex-start; gap: 12px; }
+.sharing-check { width: 22px; height: 22px; border-radius: 6px; background: var(--green); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.sharing-check svg { width: 12px; height: 12px; }
+.sharing-point-text { font-size: 14px; color: rgba(255,255,255,.75); line-height: 1.6; }
 
-/* FOOTER */
-footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; }
-.ft-logo { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-.ft-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -1px; }
-.ft-disc { font-size: 11px; color: var(--text3); max-width: 460px; margin: 0 auto 12px; line-height: 1.6; }
-.ft-links { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
-.ft-link { font-size: 12px; color: var(--text3); text-decoration: none; transition: color .15s; }
-.ft-link:hover { color: var(--green); }
+/* ── SECONDARY FEATURES ── */
+.secondary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 2.5rem; }
+.sec-feat { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 1.4rem; }
+.sec-feat-icon { font-size: 24px; margin-bottom: 10px; }
+.sec-feat-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+.sec-feat-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
 
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 560px) {
+/* ── RECIPE ── */
+.recipe-wrap { background: var(--bg3); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 4rem 2rem; }
+.recipe-inner { max-width: 820px; margin: 0 auto; display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+.recipe-text { flex: 1; min-width: 260px; }
+.recipe-tag { display: inline-block; background: #fef3c7; color: #92400e; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 99px; margin-bottom: 12px; letter-spacing: .05em; text-transform: uppercase; }
+.recipe-title { font-size: clamp(22px, 4vw, 30px); font-weight: 800; color: var(--text); letter-spacing: -1px; margin-bottom: 10px; }
+.recipe-desc { font-size: 14px; color: var(--text2); line-height: 1.7; }
+.recipe-visual { flex: 0 0 auto; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; min-width: 200px; }
+.recipe-visual-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text2); }
+.recipe-visual-item:last-child { border-bottom: none; }
+.recipe-visual-check { width: 18px; height: 18px; border-radius: 5px; background: var(--green); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* ── CLOSING CTA ── */
+.cta-wrap { padding: 5rem 2rem; text-align: center; }
+.cta-title { font-size: clamp(28px, 5vw, 44px); font-weight: 800; color: var(--text); letter-spacing: -2px; margin-bottom: 1rem; }
+.cta-sub { font-size: 15px; color: var(--text2); margin-bottom: 2.5rem; line-height: 1.7; max-width: 460px; margin-left: auto; margin-right: auto; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ── FOOTER ── */
+footer { border-top: 1px solid var(--border); padding: 2rem 2rem; }
+.footer-inner { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.footer-logo { font-size: 17px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 5px; }
+.footer-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.footer-disc { font-size: 11px; color: var(--text3); text-align: center; max-width: 480px; line-height: 1.6; }
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+.footer-link { font-size: 12px; color: var(--text3); text-decoration: none; transition: color .15s; }
+.footer-link:hover { color: var(--green); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  nav { padding: 1rem; }
   .nav-link { display: none; }
-  .hero-btns { flex-direction: column; align-items: stretch; }
-  .btn-p, .btn-s { justify-content: center; }
-  .vs-cards { flex-direction: column; align-items: center; }
+  .hero-btns, .cta-btns { flex-direction: column; align-items: stretch; }
+  .btn-primary, .btn-secondary { justify-content: center; }
+  .recipe-visual { width: 100%; }
 }
 </style>
 </head>
 <body>
 
+<!-- Nav -->
 <nav>
-  <a href="/" class="nav-logo">ReOrderly<span class="nav-dot"></span></a>
+  <a href="/" class="nav-logo">ReOrderly <span class="nav-dot"></span></a>
   <div class="nav-links">
     <a href="#how-it-works" class="nav-link">How it works</a>
     <a href="#features" class="nav-link">Features</a>
@@ -138,174 +149,210 @@ footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: 
   </div>
 </nav>
 
+<!-- 1. HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-    No smart fridge required
-  </div>
-  <h1 class="hero-title">Scan.<span class="accent"> List.</span><br>Order.</h1>
-  <p class="hero-sub">Scan household items as you run out, build your reorder list automatically, and send everything to your Walmart cart with one tap.</p>
+  <h1 class="hero-title">Scan it.<br><span class="accent">Add it.</span><br>Order it.</h1>
+  <p class="hero-sub">ReOrderly helps you keep track of household items as they run out. Scan a barcode, build your shopping list automatically, and send everything to Walmart in one simple flow.</p>
   <div class="hero-btns">
-    <a href="/app.html" class="btn-p">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Get started free
+    <a href="/app.html" class="btn-primary">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Start Scanning
     </a>
-    <a href="#demo" class="btn-s">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-      See the demo
-    </a>
+    <a href="#how-it-works" class="btn-secondary">See How It Works</a>
   </div>
-  <p class="hero-proof">Free to use &nbsp;·&nbsp; Works with any fridge &nbsp;·&nbsp; Any Bluetooth scanner</p>
+  <p class="hero-support">Perfect for busy households, shared grocery lists, and everyday essentials.</p>
 </section>
 
+<!-- 2. HOW IT WORKS -->
 <section class="section" id="how-it-works">
   <div class="eyebrow">How it works</div>
-  <h2 class="sec-title">Three steps.<br>That's it.</h2>
-  <p class="sec-sub">ReOrderly removes every bit of friction between running out of something and having it back in your home.</p>
+  <h2 class="sec-title">Three simple steps</h2>
+  <p class="sec-sub">No learning curve. No complicated setup. Just scan, list, and order.</p>
   <div class="steps">
     <div class="step">
       <div class="step-num">1</div>
       <div>
-        <div class="step-title">Scan as you run out</div>
-        <div class="step-desc">Use a Bluetooth barcode scanner or your phone camera. Scan the item as you finish it — the app instantly finds it on Walmart with the name, image, and price.</div>
+        <div class="step-title">Scan items as you run low</div>
+        <div class="step-desc">Use a barcode scanner or your phone camera to quickly add products to your list. The app instantly finds the item on Walmart with the name, image, and price.</div>
       </div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
       <div>
-        <div class="step-title">Your list builds itself</div>
-        <div class="step-desc">Items add up throughout the week. Adjust quantities, check things off, share with your whole household. Your list syncs across all devices in real time.</div>
+        <div class="step-title">Build your reorder list automatically</div>
+        <div class="step-desc">ReOrderly keeps your items organized in one place, so you can review everything before you buy. Adjust quantities, check things off, or remove items anytime.</div>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div>
-        <div class="step-title">Order everything on Walmart</div>
-        <div class="step-desc">When you're ready, tap "Order all on Walmart." Every item opens on Walmart.com ready to add to your cart. Done in seconds.</div>
+        <div class="step-title">Order from Walmart</div>
+        <div class="step-desc">When you're ready, send your list to Walmart and complete checkout there. Every item opens on Walmart.com ready to add to your cart.</div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="demo-wrap" id="demo">
-  <div class="demo-inner">
-    <div class="demo-hdr">
-      <div class="eyebrow" style="text-align:center">Live demo</div>
-      <h2 class="sec-title" style="text-align:center">See it in action</h2>
-      <p class="sec-sub" style="text-align:center;margin:0 auto 2rem">This is the real app with sample items. The Walmart buttons actually work — try them.</p>
-    </div>
-    <div class="demo-phone">
-      <div class="demo-topbar">
-        <div class="demo-topbar-logo">ReOrderly<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#1D9E75;margin-left:2px;vertical-align:middle;position:relative;top:-1px"></span></div>
-        <div class="demo-badge" id="demo-count">5 items</div>
+<!-- 3. WHY REORDERLY -->
+<section class="why-wrap">
+  <div class="why-inner">
+    <div class="eyebrow">Why ReOrderly</div>
+    <h2 class="sec-title">Built for real life</h2>
+    <p class="sec-sub">ReOrderly is designed for the way households actually work — not the way apps think they should.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-card-label"><span class="why-card-icon">✓</span> Simple</div>
+        <div class="why-card-desc">No more sticky notes, forgotten items, or half-finished shopping lists. Everything lives in one place.</div>
       </div>
-      <div class="demo-banner">
-        <span>👋 Demo — sign up to save your list</span>
-        <a href="/app.html" class="demo-signup-link">Sign up free →</a>
+      <div class="why-card">
+        <div class="why-card-label"><span class="why-card-icon">⚡</span> Fast</div>
+        <div class="why-card-desc">Scanning is quicker than typing and easier for everyday use. Add an item in seconds as you notice it running low.</div>
       </div>
-      <div class="demo-list" id="demo-list"></div>
-      <div class="demo-order">
-        <button class="demo-order-btn" onclick="demoOrderAll()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-          Order all on Walmart
-        </button>
+      <div class="why-card">
+        <div class="why-card-label"><span class="why-card-icon">👥</span> Shared</div>
+        <div class="why-card-desc">Keep one household list that family members can view and update together from any device.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-label"><span class="why-card-icon">🏠</span> Practical</div>
+        <div class="why-card-desc">Designed for real household reordering — not just general list-making. Built for the items that run out every week.</div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" id="features">
-  <div class="eyebrow">Features</div>
-  <h2 class="sec-title">Everything your<br>household needs</h2>
-  <p class="sec-sub" style="margin-bottom:2rem">Built for busy families who shop at Walmart every week.</p>
-  <div class="feat-grid">
-    <div class="feat"><div class="feat-icon">📱</div><div class="feat-title">Camera scanning</div><div class="feat-desc">Use your phone camera or any Bluetooth barcode scanner to scan items in seconds.</div></div>
-    <div class="feat"><div class="feat-icon">🔄</div><div class="feat-title">Real-time sync</div><div class="feat-desc">Your list syncs instantly across all your devices. Everyone in the household always sees the same list.</div></div>
-    <div class="feat"><div class="feat-icon">👨‍👩‍👧</div><div class="feat-title">Household sharing</div><div class="feat-desc">Invite family members to share your list. Anyone can scan and add items from anywhere.</div></div>
-    <div class="feat"><div class="feat-icon">📖</div><div class="feat-title">Recipe intelligence</div><div class="feat-desc">Paste any recipe URL and AI extracts all ingredients automatically. Add them to your Walmart list in one tap.</div></div>
-    <div class="feat"><div class="feat-icon">📋</div><div class="feat-title">Multiple lists</div><div class="feat-desc">Weekly Groceries, Costco Run, Pet Supplies — create as many named lists as you need.</div></div>
-    <div class="feat"><div class="feat-icon">🕐</div><div class="feat-title">Order history</div><div class="feat-desc">Every order is saved. Re-add items from past orders with one tap — no scanning needed.</div></div>
+<!-- 4. MAIN FEATURE -->
+<section class="feature-wrap" id="features">
+  <div class="eyebrow">What it's for</div>
+  <h2 class="sec-title">A smarter way to manage<br>household reordering</h2>
+  <div class="feature-body">
+    <p>ReOrderly is built for the small things that run out all the time — pantry items, paper goods, cleaning supplies, toiletries, and more.</p>
+    <p>Instead of waiting until shopping day and trying to remember everything, just scan items as you notice them. ReOrderly keeps the list ready so when it's time to order, everything is already there.</p>
+    <div class="feature-tags">
+      <span class="feature-tag">Pantry staples</span>
+      <span class="feature-tag">Paper goods</span>
+      <span class="feature-tag">Cleaning supplies</span>
+      <span class="feature-tag">Toiletries</span>
+      <span class="feature-tag">Pet supplies</span>
+      <span class="feature-tag">Baby items</span>
+      <span class="feature-tag">Snacks & drinks</span>
+      <span class="feature-tag">Household essentials</span>
+    </div>
   </div>
 </section>
 
-<section class="vs-wrap">
-  <div class="vs-inner">
-    <h2 class="vs-title">The smart fridge experience.<br><span class="accent">Without the smart fridge.</span></h2>
-    <p class="vs-sub">GE just released a refrigerator with a built-in barcode scanner for $4,899. It does one thing. ReOrderly does that and much more — for free — on any phone, with any fridge.</p>
-    <div class="vs-cards">
-      <div class="vs-card">
-        <div class="vs-lbl">GE Profile Smart Fridge</div>
-        <div class="vs-price">$4,899</div>
-        <div class="vs-name">Barcode scanning only</div>
+<!-- 5. HOUSEHOLD SHARING -->
+<section class="sharing-wrap">
+  <div class="sharing-inner">
+    <div class="eyebrow" style="color:rgba(255,255,255,.4)">Household sharing</div>
+    <h2 class="sharing-title">Built for families<br>and shared homes</h2>
+    <p class="sharing-sub">Everyone in the household can help keep the list current. No more separate notes, forgotten texts, or duplicate purchases.</p>
+    <div class="sharing-points">
+      <div class="sharing-point">
+        <div class="sharing-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="sharing-point-text">Invite family members by email — they get instant access to the shared list</div>
       </div>
-      <div class="vs-card win">
-        <div class="vs-lbl">ReOrderly</div>
-        <div class="vs-price">Free</div>
-        <div class="vs-name">Scanning + recipes + sharing + history</div>
+      <div class="sharing-point">
+        <div class="sharing-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="sharing-point-text">Anyone in the household can scan items and add them from their own phone</div>
+      </div>
+      <div class="sharing-point">
+        <div class="sharing-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="sharing-point-text">Changes sync in real time — everyone always sees the same up-to-date list</div>
+      </div>
+      <div class="sharing-point">
+        <div class="sharing-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="sharing-point-text">Create multiple lists — Weekly Groceries, Costco Run, Pet Supplies, and more</div>
       </div>
     </div>
-    <a href="/app.html" class="btn-p" style="display:inline-flex">Get started free</a>
+    <a href="/app.html" class="btn-primary">Explore Shared Lists</a>
   </div>
 </section>
 
+<!-- 6. SECONDARY FEATURES -->
+<section class="section">
+  <div class="eyebrow">More features</div>
+  <h2 class="sec-title">More than just<br>barcode scanning</h2>
+  <p class="sec-sub">ReOrderly also helps you organize product history, manage recurring items, and build toward a smarter home shopping workflow.</p>
+  <div class="secondary-grid">
+    <div class="sec-feat">
+      <div class="sec-feat-icon">📋</div>
+      <div class="sec-feat-title">Order history</div>
+      <div class="sec-feat-desc">Every order is saved. Re-add items from past orders with one tap — no scanning needed.</div>
+    </div>
+    <div class="sec-feat">
+      <div class="sec-feat-icon">📦</div>
+      <div class="sec-feat-title">Product library</div>
+      <div class="sec-feat-desc">Browse everything you've ever scanned, organized by category. Your most-used items are always easy to find.</div>
+    </div>
+    <div class="sec-feat">
+      <div class="sec-feat-icon">📱</div>
+      <div class="sec-feat-title">Camera scanning</div>
+      <div class="sec-feat-desc">No special hardware needed. Use your phone camera to scan any barcode, or pair a Bluetooth scanner for hands-free use.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. RECIPE (secondary, lower) -->
+<section class="recipe-wrap">
+  <div class="recipe-inner">
+    <div class="recipe-text">
+      <div class="recipe-tag">Bonus feature</div>
+      <h3 class="recipe-title">Recipe support,<br>when you want it</h3>
+      <p class="recipe-desc">Save recipe ideas and turn ingredients into shopping items more easily. Paste any recipe URL and ReOrderly extracts the ingredients automatically — ready to add to your Walmart list.</p>
+    </div>
+    <div class="recipe-visual">
+      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Classic Lasagna</div>
+      <div class="recipe-visual-item">
+        <div class="recipe-visual-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        ground beef · 1 lb
+      </div>
+      <div class="recipe-visual-item">
+        <div class="recipe-visual-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        lasagna noodles · 12 oz
+      </div>
+      <div class="recipe-visual-item">
+        <div class="recipe-visual-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        ricotta cheese · 30 oz
+      </div>
+      <div class="recipe-visual-item">
+        <div class="recipe-visual-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        mozzarella · 2 cups
+      </div>
+      <div style="margin-top:10px;">
+        <a href="/app.html" style="display:block;width:100%;height:32px;background:#0071CE;color:#fff;border:none;border-radius:8px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;">Add to Walmart list</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. CLOSING CTA -->
 <section class="cta-wrap">
-  <div style="max-width:520px;margin:0 auto">
-    <h2 class="cta-title">Never run out of anything again</h2>
-    <p class="cta-sub">Join ReOrderly and turn your weekly Walmart shopping into a one-tap experience.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <a href="/app.html" class="btn-p">Get started free</a>
-      <a href="#demo" class="btn-s">Try the demo</a>
+  <div style="max-width:500px;margin:0 auto">
+    <h2 class="cta-title">Stop forgetting<br>the small things</h2>
+    <p class="cta-sub">ReOrderly makes it easy to capture what you need, keep your household organized, and shop with less hassle.</p>
+    <div class="cta-btns">
+      <a href="/app.html" class="btn-primary">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Start Scanning
+      </a>
+      <a href="/app.html" class="btn-secondary">Create Free Account</a>
     </div>
   </div>
 </section>
 
+<!-- Footer -->
 <footer>
-  <div class="ft-logo">ReOrderly<span class="ft-dot"></span></div>
-  <p class="ft-disc">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</p>
-  <div class="ft-links">
-    <a href="#how-it-works" class="ft-link">How it works</a>
-    <a href="#features" class="ft-link">Features</a>
-    <a href="#demo" class="ft-link">Demo</a>
-    <a href="/app.html" class="ft-link">Sign in</a>
-    <a href="/app.html" class="ft-link">Get started</a>
+  <div class="footer-inner">
+    <div class="footer-logo">ReOrderly <span class="footer-dot"></span></div>
+    <p class="footer-disc">Affiliate disclosure: ReOrderly may earn a commission from qualifying Walmart purchases. This does not change your price.</p>
+    <div class="footer-links">
+      <a href="#how-it-works" class="footer-link">How it works</a>
+      <a href="#features" class="footer-link">Features</a>
+      <a href="/app.html" class="footer-link">Sign in</a>
+      <a href="/app.html" class="footer-link">Get started</a>
+    </div>
   </div>
 </footer>
 
-<script>
-const ITEMS = [
-  { name: 'Tide Pods Laundry Detergent', price: '$13.97', emoji: '🧺', qty: 1, q: 'Tide Pods laundry detergent' },
-  { name: 'Bounty Paper Towels 8-Pack', price: '$18.94', emoji: '🧻', qty: 1, q: 'Bounty paper towels 8 pack' },
-  { name: 'Great Value 2% Milk 1 Gallon', price: '$3.48', emoji: '🥛', qty: 2, q: 'Great Value 2% milk gallon' },
-  { name: 'Folgers Classic Roast Coffee', price: '$9.97', emoji: '☕', qty: 1, q: 'Folgers Classic Roast coffee' },
-  { name: 'Colgate Total Toothpaste', price: '$4.27', emoji: '🦷', qty: 1, q: 'Colgate Total toothpaste' },
-];
-let items = ITEMS.map(i => ({...i}));
-
-function render() {
-  document.getElementById('demo-list').innerHTML = items.map((it, i) => `
-    <div class="demo-item">
-      <div class="demo-item-row">
-        <div class="demo-emoji">${it.emoji}</div>
-        <div style="flex:1;min-width:0">
-          <div class="demo-name">${it.name}</div>
-          <div class="demo-price">${it.price}</div>
-        </div>
-        <div class="demo-ctls">
-          <button class="demo-qbtn" onclick="chg(${i},-1)">−</button>
-          <span class="demo-qnum">${it.qty}</span>
-          <button class="demo-qbtn" onclick="chg(${i},1)">+</button>
-        </div>
-      </div>
-      <div class="demo-wbar">
-        <button class="demo-wbtn" onclick="window.open('https://www.walmart.com/search?q=${encodeURIComponent(it.q)}','_blank')">View on Walmart →</button>
-      </div>
-    </div>`).join('');
-  document.getElementById('demo-count').textContent = items.length + ' items';
-}
-
-function chg(i, d) { items[i].qty = Math.max(1, items[i].qty + d); render(); }
-function demoOrderAll() { items.forEach((it, i) => setTimeout(() => window.open('https://www.walmart.com/search?q=' + encodeURIComponent(it.q), '_blank'), i * 400)); }
-render();
-</script>
 </body>
 </html>
