@@ -428,7 +428,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.2</span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.3</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="shared-indicator" id="shared-indicator">
@@ -589,7 +589,7 @@ import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, del
 
 // ── PASTE YOUR FIREBASE CONFIG HERE ──
 const firebaseConfig = {
- apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
+  apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
   authDomain: "reorderly-b152f.firebaseapp.com",
   projectId: "reorderly-b152f",
   storageBucket: "reorderly-b152f.firebasestorage.app",
@@ -1432,7 +1432,7 @@ async function renderRecipeBook() {
   } catch(e) { console.error(e); }
 }
 
-function showRecipeInput() {
+window.showRecipeInput = function() {
   showRecipeView('Add recipe', 'book');
   recipeInputMode = 'url';
   const el = document.getElementById('recipe-content');
@@ -1519,7 +1519,7 @@ window.processRecipe = async function() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type: inputType, data: inputData }),
-      signal: AbortSignal.timeout(30000)
+      signal: AbortSignal.timeout(60000)
     });
     const result = await response.json();
     if (result.error === 'url_blocked') {
