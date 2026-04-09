@@ -7,10 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#1D9E75">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="ReOrderly">
 <link rel="apple-touch-icon" href="/icon.png">
+<link rel="icon" type="image/png" href="/icon.png">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -46,6 +48,62 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 .splash-bar.show { opacity: 1; }
 .splash-progress { height: 100%; width: 0%; background: var(--green); border-radius: 99px; transition: width 2s ease .9s; }
 .splash-progress.go { width: 100%; }
+
+
+/* ── HOME SCREEN ── */
+.home-screen { display: none; min-height: 100vh; }
+.home-screen.visible { display: block; }
+.home-inner { max-width: 460px; margin: 0 auto; padding: 1.5rem 1rem 2rem; }
+.home-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+.home-greeting { font-size: 13px; color: var(--text3); font-weight: 600; margin-bottom: 2px; }
+.home-logo { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -1px; }
+.home-logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: 3px; vertical-align: middle; position: relative; top: -2px; }
+.home-version { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-left: 6px; vertical-align: middle; }
+.home-stats { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+.home-stat { flex: 1; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px 12px; text-align: center; }
+.home-stat-num { font-size: 24px; font-weight: 800; color: var(--green); line-height: 1; }
+.home-stat-label { font-size: 10px; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+.home-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+.home-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; cursor: pointer; display: flex; align-items: center; gap: 16px; transition: border-color .15s, transform .1s; }
+.home-card:hover { border-color: var(--green); }
+.home-card:active { transform: scale(.98); }
+.home-card-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.home-card-icon.green { background: var(--green-light); }
+.home-card-icon.blue { background: #e8f0fe; }
+.home-card-icon.amber { background: #fef3c7; }
+.home-card-icon.purple { background: #f3e8ff; }
+.home-card-info { flex: 1; }
+.home-card-title { font-size: 16px; font-weight: 800; color: var(--text); }
+.home-card-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.home-card-arrow { color: var(--text3); flex-shrink: 0; }
+.home-card.primary { background: var(--green); border-color: var(--green); }
+.home-card.primary .home-card-icon { background: rgba(255,255,255,.2); }
+.home-card.primary .home-card-title { color: #fff; }
+.home-card.primary .home-card-sub { color: rgba(255,255,255,.7); }
+.home-card.primary .home-card-arrow { color: rgba(255,255,255,.7); }
+.home-recent { margin-bottom: 1.5rem; }
+.home-recent-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+.home-recent-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.home-recent-item:last-child { border-bottom: none; }
+.home-recent-icon { font-size: 18px; width: 32px; text-align: center; }
+.home-recent-name { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; }
+.home-recent-meta { font-size: 11px; color: var(--text3); }
+.home-footer { border-top: 1px solid var(--border); padding-top: 1rem; text-align: center; }
+.home-footer-disclosure { font-size: 11px; color: var(--text3); line-height: 1.5; margin-bottom: 8px; }
+.home-footer-links { display: flex; justify-content: center; gap: 16px; }
+.home-footer-link { font-size: 11px; color: var(--green); font-weight: 700; cursor: pointer; background: none; border: none; font-family: 'Syne', sans-serif; }
+
+/* ── ABOUT MODAL ── */
+.about-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 500; align-items: center; justify-content: center; padding: 1rem; }
+.about-modal.open { display: flex; }
+.about-box { background: var(--bg2); border-radius: 20px; padding: 1.75rem; width: 100%; max-width: 380px; max-height: 80vh; overflow-y: auto; }
+.about-logo { font-size: 26px; font-weight: 800; color: var(--text); letter-spacing: -1px; margin-bottom: 4px; }
+.about-logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
+.about-tagline { font-size: 13px; color: var(--text3); margin-bottom: 1.25rem; }
+.about-section { margin-bottom: 1rem; }
+.about-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); margin-bottom: 6px; }
+.about-section-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.about-close { width: 100%; height: 44px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 1rem; }
 
 /* ── AUTH ── */
 .auth-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; background: var(--bg); }
@@ -356,6 +414,114 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="splash-bar" id="splash-bar"><div class="splash-progress" id="splash-progress"></div></div>
 </div>
 
+
+<!-- Home Screen -->
+<div class="home-screen" id="home-screen">
+  <div class="home-inner">
+    <div class="home-header">
+      <div>
+        <div class="home-greeting" id="home-greeting">Welcome back</div>
+        <div class="home-logo">ReOrderly<span class="home-logo-dot"></span><span class="home-version">v2.4</span></div>
+      </div>
+      <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
+    </div>
+
+    <div class="home-stats">
+      <div class="home-stat">
+        <div class="home-stat-num" id="home-stat-items">0</div>
+        <div class="home-stat-label">In List</div>
+      </div>
+      <div class="home-stat">
+        <div class="home-stat-num" id="home-stat-recipes">0</div>
+        <div class="home-stat-label">Recipes</div>
+      </div>
+      <div class="home-stat">
+        <div class="home-stat-num" id="home-stat-orders">0</div>
+        <div class="home-stat-label">Orders</div>
+      </div>
+    </div>
+
+    <div class="home-cards">
+      <div class="home-card primary" onclick="showMainView(); showAppScreen();">
+        <div class="home-card-icon green">🛒</div>
+        <div class="home-card-info">
+          <div class="home-card-title">My Shopping List</div>
+          <div class="home-card-sub">Scan items and order on Walmart</div>
+        </div>
+        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="home-card" onclick="showRecipeBook(); showAppScreen();">
+        <div class="home-card-icon amber">📖</div>
+        <div class="home-card-info">
+          <div class="home-card-title">Recipe Book</div>
+          <div class="home-card-sub">Add recipes and extract ingredients</div>
+        </div>
+        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="home-card" onclick="showHistory(); showAppScreen();">
+        <div class="home-card-icon blue">🕐</div>
+        <div class="home-card-info">
+          <div class="home-card-title">Order History</div>
+          <div class="home-card-sub">View and re-add past orders</div>
+        </div>
+        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="home-card" onclick="showLibrary(); showAppScreen();">
+        <div class="home-card-icon purple">📦</div>
+        <div class="home-card-info">
+          <div class="home-card-title">Product Library</div>
+          <div class="home-card-sub">Browse all your scanned products</div>
+        </div>
+        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div class="home-recent">
+      <div class="home-recent-title">Recent activity</div>
+      <div id="home-recent-list">
+        <div style="font-size:13px;color:var(--text3);padding:8px 0;">No recent activity yet</div>
+      </div>
+    </div>
+
+    <div class="home-footer">
+      <div class="home-footer-disclosure">ReOrderly may earn a commission on purchases made through links to Walmart.com. As a Walmart affiliate, we earn from qualifying purchases.</div>
+      <div class="home-footer-links">
+        <button class="home-footer-link" onclick="openAbout()">About</button>
+        <button class="home-footer-link" onclick="showMainView(); showAppScreen();">Go to App</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- About Modal -->
+<div class="about-modal" id="about-modal">
+  <div class="about-box">
+    <div class="about-logo">ReOrderly<span class="about-logo-dot"></span></div>
+    <div class="about-tagline">Scan. List. Order. — reorderlysolutions.com</div>
+    <div class="about-section">
+      <div class="about-section-title">What is ReOrderly?</div>
+      <div class="about-section-body">ReOrderly is a smart household reordering app. Scan any product barcode as you run out, build your reorder list automatically, and send everything to your Walmart cart with one tap. No more manually typing grocery lists or forgetting what you need.</div>
+    </div>
+    <div class="about-section">
+      <div class="about-section-title">Recipe Intelligence</div>
+      <div class="about-section-body">Paste any recipe URL and our AI automatically extracts all ingredients with quantities. Add them to your shopping list and send to Walmart in one tap. Works with AllRecipes, Food Network, and thousands of recipe sites.</div>
+    </div>
+    <div class="about-section">
+      <div class="about-section-title">Household Sharing</div>
+      <div class="about-section-body">Invite family members to share your list. Anyone in the household can scan items and add them — everything syncs in real time across all devices.</div>
+    </div>
+    <div class="about-section">
+      <div class="about-section-title">Affiliate Disclosure</div>
+      <div class="about-section-body">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
+    </div>
+    <div class="about-section">
+      <div class="about-section-title">Version</div>
+      <div class="about-section-body">ReOrderly v2.4 — Built with Firebase, Netlify, and Anthropic AI.</div>
+    </div>
+    <button class="about-close" onclick="closeAbout()">Close</button>
+  </div>
+</div>
+
 <!-- Auth -->
 <div class="auth-screen" id="auth-screen">
   <div class="auth-box">
@@ -428,7 +594,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.3</span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.4</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="shared-indicator" id="shared-indicator">
@@ -589,7 +755,7 @@ import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, del
 
 // ── PASTE YOUR FIREBASE CONFIG HERE ──
 const firebaseConfig = {
-  apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
+   apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
   authDomain: "reorderly-b152f.firebaseapp.com",
   projectId: "reorderly-b152f",
   storageBucket: "reorderly-b152f.firebasestorage.app",
@@ -681,11 +847,21 @@ onAuthStateChanged(auth, async user => {
   if (user) {
     currentUser = user;
     document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('app-screen').classList.add('visible');
     document.getElementById('drawer-user').textContent = user.email;
+    // Set greeting
+    const name = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
+    const greetEl = document.getElementById('home-greeting');
+    const hour = new Date().getHours();
+    const timeGreet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    if (greetEl) greetEl.textContent = timeGreet + ', ' + name;
     await loadLists();
     subscribeToList(currentListId);
-    setTimeout(()=>{ const i=document.getElementById('upc-input'); if(i) i.focus(); },100);
+    // Show home screen on fresh page load
+    if (!sessionStarted) {
+      showHomeScreen();
+    } else {
+      document.getElementById('app-screen').classList.add('visible');
+    }
   } else {
     currentUser = null;
     document.getElementById('auth-screen').style.display = 'flex';
@@ -849,9 +1025,9 @@ window.handleSignOut = async function() { await signOut(auth); closeDrawer(); };
 // ── DRAWER ──
 window.openDrawer = ()=>{ document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); };
 
-document.getElementById('drawer-recipe-btn')?.addEventListener('click', ()=>{ showRecipeBook(); closeDrawer(); });
-document.getElementById('drawer-library-btn')?.addEventListener('click', ()=>{ showLibrary(); closeDrawer(); });
-document.getElementById('drawer-history-btn')?.addEventListener('click', ()=>{ showHistory(); closeDrawer(); });
+document.getElementById('drawer-recipe-btn')?.addEventListener('click', ()=>{ showRecipeBook(); showAppScreen(); closeDrawer(); });
+document.getElementById('drawer-library-btn')?.addEventListener('click', ()=>{ showLibrary(); showAppScreen(); closeDrawer(); });
+document.getElementById('drawer-history-btn')?.addEventListener('click', ()=>{ showHistory(); showAppScreen(); closeDrawer(); });
 window.closeDrawer = ()=>{ document.getElementById('drawer').classList.remove('open'); document.getElementById('drawer-overlay').classList.remove('open'); };
 
 // ── MODALS ──
@@ -951,6 +1127,69 @@ window.sendInvite = async function() {
     updateSharedIndicator();
   } catch(e) { msgEl.textContent='Could not add member'; msgEl.className='modal-msg error'; }
 };
+
+
+// ── HOME SCREEN ──
+let sessionStarted = false; // tracks if user has navigated away from home this session
+
+window.showHomeScreen = function() {
+  document.getElementById('home-screen').classList.add('visible');
+  document.getElementById('app-screen').classList.remove('visible');
+  updateHomeStats();
+  updateHomeRecent();
+};
+
+window.showAppScreen = function() {
+  sessionStarted = true;
+  document.getElementById('home-screen').classList.remove('visible');
+  document.getElementById('app-screen').classList.add('visible');
+};
+
+window.openAbout = function() {
+  document.getElementById('about-modal').classList.add('open');
+};
+window.closeAbout = function() {
+  document.getElementById('about-modal').classList.remove('open');
+};
+
+async function updateHomeStats() {
+  if (!currentUser) return;
+  // Items in current list
+  document.getElementById('home-stat-items').textContent = items.length || 0;
+  // Recipes count
+  try {
+    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'recipes'));
+    document.getElementById('home-stat-recipes').textContent = snap.size || 0;
+  } catch(e) { document.getElementById('home-stat-recipes').textContent = '0'; }
+  // Orders count
+  try {
+    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'history'));
+    document.getElementById('home-stat-orders').textContent = snap.size || 0;
+  } catch(e) { document.getElementById('home-stat-orders').textContent = '0'; }
+}
+
+async function updateHomeRecent() {
+  if (!currentUser) return;
+  const el = document.getElementById('home-recent-list');
+  const recentItems = [];
+  // Last 3 items from current list
+  if (items.length > 0) {
+    items.slice(-3).reverse().forEach(item => {
+      recentItems.push({ icon: '🛒', name: item.name, meta: 'In your list' });
+    });
+  }
+  if (recentItems.length === 0) {
+    el.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:8px 0;">No recent activity yet — scan your first item to get started</div>';
+    return;
+  }
+  el.innerHTML = recentItems.map(r =>
+    '<div class="home-recent-item">' +
+    '<div class="home-recent-icon">' + r.icon + '</div>' +
+    '<div class="home-recent-name">' + esc(r.name) + '</div>' +
+    '<div class="home-recent-meta">' + r.meta + '</div>' +
+    '</div>'
+  ).join('');
+}
 
 // ── VIEWS ──
 window.showHistory = async function() {
