@@ -3,2138 +3,309 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReOrderly</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#1D9E75">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="ReOrderly">
-<link rel="apple-touch-icon" href="/icon.png">
+<title>ReOrderly — Scan. List. Order.</title>
+<meta name="description" content="Scan household items as you run out, build your reorder list automatically, and order everything on Walmart with one tap.">
 <link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<meta name="theme-color" content="#1D9E75">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg: #F5F4EF;
-  --bg2: #ffffff;
-  --bg3: #eeede6;
-  --border: #e0dfd8;
-  --border2: #d0cfc8;
-  --green: #1D9E75;
-  --green-light: #e1f5ee;
-  --green-dark: #0F6E56;
-  --green-text: #ffffff;
-  --text: #1a1a18;
-  --text2: #666662;
-  --text3: #aaa8a0;
-  --danger: #dc2626;
-  --danger-light: #fef2f2;
+  --bg: #F5F4EF; --bg2: #ffffff; --bg3: #eeede6; --border: #e0dfd8;
+  --green: #1D9E75; --green-light: #e1f5ee; --green-dark: #0F6E56;
+  --text: #1a1a18; --text2: #666662; --text3: #aaa8a0;
 }
+html { scroll-behavior: smooth; }
+body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); overflow-x: hidden; }
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; background: rgba(245,244,239,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; text-decoration: none; }
+.nav-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
+.nav-links { display: flex; align-items: center; gap: 8px; }
+.nav-link { font-size: 13px; font-weight: 700; color: var(--text2); text-decoration: none; padding: 8px 14px; border-radius: 8px; transition: color .15s; }
+.nav-link:hover { color: var(--green); }
+.nav-cta { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: background .15s; text-decoration: none; }
+.nav-cta:hover { background: var(--green-dark); }
 
-/* ── SPLASH ── */
-.splash-screen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity .5s ease; }
-.splash-screen.fade-out { opacity: 0; pointer-events: none; }
-.splash-logo { font-size: clamp(32px, 10vw, 52px); font-weight: 800; color: var(--text); letter-spacing: -2px; opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
-.splash-logo.show { opacity: 1; transform: translateY(0); }
-.splash-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--green); margin-left: 4px; vertical-align: middle; position: relative; top: -4px; transform: scale(0); transition: transform .5s cubic-bezier(.34,1.56,.64,1) .5s; }
-.splash-dot.show { transform: scale(1); }
-.splash-sub { font-size: 13px; color: var(--text3); margin-top: 12px; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; opacity: 0; transition: opacity .6s ease .7s; }
-.splash-sub.show { opacity: 1; }
-.splash-bar { width: 60px; height: 3px; background: var(--border); border-radius: 99px; margin-top: 2rem; overflow: hidden; opacity: 0; transition: opacity .3s ease .6s; }
-.splash-bar.show { opacity: 1; }
-.splash-progress { height: 100%; width: 0%; background: var(--green); border-radius: 99px; transition: width 2s ease .9s; }
-.splash-progress.go { width: 100%; }
+/* HERO */
+.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6rem 1.5rem 4rem; text-align: center; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); margin-bottom: 1.5rem; letter-spacing: .05em; text-transform: uppercase; opacity: 0; animation: fadeUp .6s ease .2s forwards; }
+.hero-title { font-size: clamp(48px, 12vw, 88px); font-weight: 800; color: var(--text); letter-spacing: -3px; line-height: .95; margin-bottom: 1.25rem; opacity: 0; animation: fadeUp .6s ease .3s forwards; }
+.accent { color: var(--green); }
+.hero-sub { font-size: clamp(16px, 2.5vw, 20px); color: var(--text2); max-width: 500px; line-height: 1.6; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp .6s ease .4s forwards; }
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp .6s ease .5s forwards; }
+.btn-p { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 14px; cursor: pointer; transition: background .15s, transform .1s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn-p:hover { background: var(--green-dark); }
+.btn-p:active { transform: scale(.97); }
+.btn-s { background: var(--bg2); color: var(--text); border: 1px solid var(--border); font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 14px; cursor: pointer; transition: border-color .15s, color .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn-s:hover { border-color: var(--green); color: var(--green); }
+.hero-proof { margin-top: 2.5rem; font-size: 13px; color: var(--text3); opacity: 0; animation: fadeUp .6s ease .7s forwards; }
 
+/* SECTIONS */
+.section { padding: 5rem 1.5rem; max-width: 860px; margin: 0 auto; }
+.eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
+.sec-title { font-size: clamp(26px, 5vw, 40px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; line-height: 1.1; margin-bottom: .75rem; }
+.sec-sub { font-size: 15px; color: var(--text2); line-height: 1.6; max-width: 500px; margin-bottom: 2.5rem; }
 
-/* ── HOME SCREEN ── */
-.home-screen { display: none; min-height: 100vh; }
-.home-screen.visible { display: block; }
-.home-inner { max-width: 460px; margin: 0 auto; padding: 1.5rem 1rem 2rem; }
-.home-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
-.home-greeting { font-size: 13px; color: var(--text3); font-weight: 600; margin-bottom: 2px; }
-.home-logo { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -1px; }
-.home-logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: 3px; vertical-align: middle; position: relative; top: -2px; }
-.home-version { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-left: 6px; vertical-align: middle; }
-.home-stats { display: flex; gap: 8px; margin-bottom: 1.5rem; }
-.home-stat { flex: 1; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px 12px; text-align: center; }
-.home-stat-num { font-size: 24px; font-weight: 800; color: var(--green); line-height: 1; }
-.home-stat-label { font-size: 10px; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
-.home-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
-.home-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; cursor: pointer; display: flex; align-items: center; gap: 16px; transition: border-color .15s, transform .1s; }
-.home-card:hover { border-color: var(--green); }
-.home-card:active { transform: scale(.98); }
-.home-card-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
-.home-card-icon.green { background: var(--green-light); }
-.home-card-icon.blue { background: #e8f0fe; }
-.home-card-icon.amber { background: #fef3c7; }
-.home-card-icon.purple { background: #f3e8ff; }
-.home-card-info { flex: 1; }
-.home-card-title { font-size: 16px; font-weight: 800; color: var(--text); }
-.home-card-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
-.home-card-arrow { color: var(--text3); flex-shrink: 0; }
-.home-card.primary { background: var(--green); border-color: var(--green); }
-.home-card.primary .home-card-icon { background: rgba(255,255,255,.2); }
-.home-card.primary .home-card-title { color: #fff; }
-.home-card.primary .home-card-sub { color: rgba(255,255,255,.7); }
-.home-card.primary .home-card-arrow { color: rgba(255,255,255,.7); }
-.home-recent { margin-bottom: 1.5rem; }
-.home-recent-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
-.home-recent-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-.home-recent-item:last-child { border-bottom: none; }
-.home-recent-icon { font-size: 18px; width: 32px; text-align: center; }
-.home-recent-name { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; }
-.home-recent-meta { font-size: 11px; color: var(--text3); }
-.home-footer { border-top: 1px solid var(--border); padding-top: 1rem; text-align: center; }
-.home-footer-disclosure { font-size: 11px; color: var(--text3); line-height: 1.5; margin-bottom: 8px; }
-.home-footer-links { display: flex; justify-content: center; gap: 16px; }
-.home-footer-link { font-size: 11px; color: var(--green); font-weight: 700; cursor: pointer; background: none; border: none; font-family: 'Syne', sans-serif; }
+/* STEPS */
+.steps { display: flex; flex-direction: column; gap: 12px; }
+.step { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; transition: border-color .2s; }
+.step:hover { border-color: var(--green); }
+.step-num { width: 38px; height: 38px; border-radius: 10px; background: var(--green); color: #fff; font-size: 17px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.step-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
 
-/* ── ABOUT MODAL ── */
-.about-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 500; align-items: center; justify-content: center; padding: 1rem; }
-.about-modal.open { display: flex; }
-.about-box { background: var(--bg2); border-radius: 20px; padding: 1.75rem; width: 100%; max-width: 380px; max-height: 80vh; overflow-y: auto; }
-.about-logo { font-size: 26px; font-weight: 800; color: var(--text); letter-spacing: -1px; margin-bottom: 4px; }
-.about-logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
-.about-tagline { font-size: 13px; color: var(--text3); margin-bottom: 1.25rem; }
-.about-section { margin-bottom: 1rem; }
-.about-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); margin-bottom: 6px; }
-.about-section-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
-.about-close { width: 100%; height: 44px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+/* DEMO */
+.demo-wrap { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 1.5rem; }
+.demo-inner { max-width: 860px; margin: 0 auto; }
+.demo-hdr { text-align: center; margin-bottom: 2.5rem; }
+.demo-phone { max-width: 360px; margin: 0 auto; background: var(--bg); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.12); }
+.demo-topbar { background: var(--bg2); padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.demo-topbar-logo { font-size: 15px; font-weight: 800; color: var(--text); }
+.demo-badge { background: var(--green-light); color: var(--green); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); }
+.demo-banner { background: var(--green); color: #fff; padding: 9px 14px; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+.demo-signup-link { color: rgba(255,255,255,.85); font-size: 11px; text-decoration: underline; cursor: pointer; background: none; border: none; font-family: 'Syne',sans-serif; font-weight: 700; }
+.demo-list { padding: 10px; }
+.demo-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 11px; margin-bottom: 7px; overflow: hidden; }
+.demo-item-row { display: flex; align-items: center; gap: 10px; padding: 9px 11px; }
+.demo-emoji { width: 40px; height: 40px; border-radius: 8px; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.demo-name { font-size: 12px; font-weight: 700; color: var(--text); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.demo-price { font-size: 11px; font-weight: 800; color: var(--green); margin-top: 1px; }
+.demo-ctls { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.demo-qbtn { width: 22px; height: 22px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg3); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); }
+.demo-qnum { font-size: 12px; font-weight: 800; min-width: 14px; text-align: center; }
+.demo-wbar { padding: 5px 11px 9px; border-top: 1px solid var(--border); background: #f8faff; }
+.demo-wbtn { width: 100%; height: 26px; background: #0071CE; color: #fff; border: none; border-radius: 6px; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; }
+.demo-order { padding: 0 10px 12px; }
+.demo-order-btn { width: 100%; height: 46px; background: var(--green); color: #fff; border: none; border-radius: 11px; font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .15s; }
+.demo-order-btn:hover { background: var(--green-dark); }
 
-/* ── AUTH ── */
-.auth-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; background: var(--bg); }
-.auth-box { width: 100%; max-width: 360px; background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; }
-.auth-logo { text-align: center; margin-bottom: 2rem; }
-.auth-logo-text { font-size: 32px; font-weight: 800; color: var(--text); letter-spacing: -1px; }
-.auth-logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: 3px; vertical-align: middle; position: relative; top: -3px; }
-.auth-logo-sub { font-size: 13px; color: var(--text3); margin-top: 4px; }
-.auth-tabs { display: flex; margin-bottom: 1.5rem; background: var(--bg3); border-radius: 10px; padding: 3px; }
-.auth-tab { flex: 1; padding: 9px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; background: none; border: none; color: var(--text3); font-family: 'Syne', sans-serif; border-radius: 8px; transition: all .15s; }
-.auth-tab.active { background: var(--green); color: #fff; }
-.auth-form { display: flex; flex-direction: column; gap: 10px; }
-.auth-input { width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 15px; font-family: 'Syne', sans-serif; color: var(--text); background: var(--bg2); outline: none; transition: border-color .15s; }
-.auth-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
-.auth-input::placeholder { color: var(--text3); }
-.auth-btn { height: 46px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; }
-.auth-btn:hover { background: var(--green-dark); }
-.auth-btn:disabled { opacity: .5; cursor: not-allowed; }
-.auth-divider { display: flex; align-items: center; gap: 12px; }
-.auth-divider-line { flex: 1; height: 1px; background: var(--border); }
-.auth-divider-text { font-size: 12px; color: var(--text3); }
-.auth-google-btn { height: 46px; background: var(--bg2); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: border-color .15s; }
-.auth-google-btn:hover { border-color: var(--green); }
-.auth-error { font-size: 13px; color: var(--danger); text-align: center; min-height: 18px; }
+/* FEATURES */
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.feat { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 1.4rem; }
+.feat-icon { font-size: 26px; margin-bottom: 10px; }
+.feat-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+.feat-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
 
-/* ── DRAWER ── */
-.drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 100; }
-.drawer-overlay.open { display: block; }
-.drawer { position: fixed; top: 0; left: -290px; width: 290px; height: 100vh; background: var(--bg2); border-right: 1px solid var(--border); z-index: 101; transition: left .25s ease; display: flex; flex-direction: column; }
-.drawer.open { left: 0; }
-.drawer-header { padding: 1.5rem 1.25rem 1rem; border-bottom: 1px solid var(--border); }
-.drawer-logo { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
-.drawer-logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
-.drawer-user { font-size: 12px; color: var(--text3); margin-top: 4px; font-family: 'DM Mono', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.drawer-section { padding: 1rem 1.25rem 0.5rem; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); }
-.drawer-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 1.25rem; cursor: pointer; transition: background .1s; }
-.drawer-item:hover { background: var(--bg3); }
-.drawer-item.active { background: var(--green-light); }
-.drawer-item-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text2); flex: 1; min-width: 0; }
-.drawer-item.active .drawer-item-left { color: var(--green); }
-.drawer-item-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.drawer-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
-.drawer-icon-btn { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 7px; background: var(--bg2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-.drawer-icon-btn:hover { border-color: var(--danger); background: var(--danger-light); }
-.drawer-icon-btn.invite:hover { border-color: var(--green); background: var(--green-light); }
-.drawer-new-list { display: flex; align-items: center; gap: 8px; padding: 9px 1.25rem; cursor: pointer; color: var(--green); font-size: 13px; font-weight: 700; transition: background .1s; }
-.drawer-new-list:hover { background: var(--green-light); }
-.drawer-footer { margin-top: auto; padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
-.drawer-signout { width: 100%; padding: 10px; background: none; border: 1px solid var(--border); border-radius: 10px; color: var(--danger); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .15s; }
-.drawer-signout:hover { background: var(--danger-light); }
+/* VS */
+.vs-wrap { background: var(--text); padding: 5rem 1.5rem; }
+.vs-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+.vs-title { font-size: clamp(24px, 5vw, 38px); font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1.2; margin-bottom: .75rem; }
+.vs-sub { font-size: 15px; color: rgba(255,255,255,.55); line-height: 1.6; margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+.vs-cards { display: flex; gap: 14px; justify-content: center; margin-bottom: 2.5rem; flex-wrap: wrap; }
+.vs-card { flex: 1; min-width: 200px; max-width: 280px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 1.5rem; text-align: center; }
+.vs-card.win { background: var(--green-light); border-color: var(--green); }
+.vs-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.35); margin-bottom: 8px; }
+.vs-card.win .vs-lbl { color: var(--green); }
+.vs-price { font-size: 36px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.vs-card.win .vs-price { color: var(--green); }
+.vs-name { font-size: 12px; color: rgba(255,255,255,.4); }
+.vs-card.win .vs-name { color: var(--text2); }
 
-/* ── APP ── */
-.app-screen { display: none; min-height: 100vh; }
-.app-screen.visible { display: block; }
-.app-inner { max-width: 460px; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
+/* CTA */
+.cta-wrap { padding: 5rem 1.5rem; text-align: center; }
+.cta-title { font-size: clamp(26px, 5vw, 40px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; margin-bottom: .75rem; }
+.cta-sub { font-size: 15px; color: var(--text2); margin-bottom: 2rem; line-height: 1.6; }
 
-/* ── HEADER ── */
-.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
-.header-left { display: flex; align-items: center; gap: 12px; }
-.menu-btn { width: 38px; height: 38px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
-.menu-btn span { display: block; width: 16px; height: 2px; background: var(--text2); border-radius: 2px; }
-.logo { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
-.logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
-.list-badge { background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; transition: background .15s; }
-.list-badge:hover { background: var(--green); color: #fff; }
-.shared-indicator { font-size: 10px; color: var(--green); background: var(--green-light); border: 1px solid rgba(29,158,117,.2); border-radius: 99px; padding: 2px 8px; display: none; }
+/* FOOTER */
+footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; }
+.ft-logo { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+.ft-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -1px; }
+.ft-disc { font-size: 11px; color: var(--text3); max-width: 460px; margin: 0 auto 12px; line-height: 1.6; }
+.ft-links { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+.ft-link { font-size: 12px; color: var(--text3); text-decoration: none; transition: color .15s; }
+.ft-link:hover { color: var(--green); }
 
-/* ── SCAN BOX ── */
-.scan-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; margin-bottom: 1rem; }
-.scan-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
-.scan-row { display: flex; gap: 8px; }
-input[type=text] { flex: 1; font-family: 'DM Mono', monospace; font-size: 15px; padding: 0 14px; height: 46px; border: 1px solid var(--border2); border-radius: 10px; background: var(--bg2); color: var(--text); outline: none; transition: border-color .15s; }
-input[type=text]::placeholder { color: var(--text3); }
-input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
-.btn-add { height: 46px; padding: 0 20px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; white-space: nowrap; }
-.btn-add:hover { background: var(--green-dark); }
-.btn-add:active { transform: scale(.97); }
-.btn-add:disabled { opacity: .4; cursor: not-allowed; }
-.status { font-size: 12px; color: var(--text3); margin-top: 8px; min-height: 18px; font-family: 'DM Mono', monospace; }
-.status.loading { color: var(--green); }
-.status.error { color: var(--danger); }
-.status.success { color: var(--green); }
-
-/* ── LIST ── */
-.list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.list-title { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); }
-.item-count { font-size: 12px; font-weight: 700; background: #e0f0f8; color: #1a6fa8; padding: 3px 10px; border-radius: 99px; }
-.empty { text-align: center; padding: 3rem 1rem; color: var(--text3); font-size: 14px; border: 1.5px dashed var(--border); border-radius: 16px; }
-
-/* ── ITEMS ── */
-.item { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; overflow: hidden; animation: slideIn .2s ease; }
-@keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-.item-main { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
-.item-img { width: 50px; height: 50px; border-radius: 10px; object-fit: contain; flex-shrink: 0; border: 1px solid var(--border); background: var(--bg3); }
-.item-ph { width: 50px; height: 50px; border-radius: 10px; background: var(--bg3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); font-size: 22px; }
-.item-info { flex: 1; min-width: 0; }
-.item-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.item-meta { display: flex; align-items: center; gap: 6px; margin-top: 3px; flex-wrap: wrap; }
-.item-price { font-size: 13px; font-weight: 800; color: var(--green); }
-.item-upc { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--text3); }
-.cat-pill { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; }
-.cat-grocery { background: #e1f5ee; color: #085041; }
-.cat-snacks { background: #fef3c7; color: #92400e; }
-.cat-household { background: #eff6ff; color: #1e40af; }
-.cat-health { background: #fdf2f8; color: #9d174d; }
-.cat-other { background: #f1f5f9; color: #475569; }
-.item-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.qty-btn { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg3); color: var(--text2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .1s; }
-.qty-btn:hover { border-color: var(--green); color: var(--green); }
-.qty-num { font-size: 14px; font-weight: 800; min-width: 18px; text-align: center; }
-.del-btn { width: 26px; height: 26px; border: none; background: none; color: var(--text3); cursor: pointer; font-size: 18px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: color .15s; }
-.del-btn:hover { color: var(--danger); }
-.item-walmart { display: flex; align-items: center; gap: 8px; padding: 8px 14px 10px; border-top: 1px solid var(--border); background: #f8faff; }
-.btn-walmart { flex: 1; height: 32px; background: #0071CE; color: #fff; border: none; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: background .15s; }
-.btn-walmart:hover { background: #005fa3; }
-.walmart-badge { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; }
-
-/* ── ORDER BAR ── */
-.order-bar { margin-top: 1.25rem; display: flex; gap: 8px; }
-.btn-order-all { flex: 1; height: 52px; background: var(--green); color: #fff; border: none; border-radius: 14px; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 9px; }
-.btn-order-all:hover { background: var(--green-dark); }
-.btn-order-all:active { transform: scale(.98); }
-.btn-order-all:disabled { background: var(--bg3); color: var(--text3); cursor: not-allowed; }
-.btn-clear { height: 52px; padding: 0 16px; background: none; border: 1px solid var(--border); border-radius: 14px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text2); cursor: pointer; transition: all .15s; }
-.btn-clear:hover { border-color: var(--danger); color: var(--danger); }
-
-/* ── HISTORY ── */
-.history-view { display: none; }
-.history-view.visible { display: block; }
-.history-order { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
-.history-order-header { padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--bg3); }
-.history-date { font-size: 13px; font-weight: 700; color: var(--text); }
-.history-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
-.history-items { padding: 8px 14px; }
-.history-item-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); }
-.history-item-row:last-child { border-bottom: none; }
-.history-item-name { font-size: 13px; color: var(--text2); }
-.history-readd { font-size: 11px; font-weight: 700; color: var(--green); cursor: pointer; background: var(--green-light); border: none; border-radius: 6px; padding: 3px 10px; font-family: 'Syne', sans-serif; }
-
-/* ── MODALS ── */
-.modal-wrap { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
-.modal-wrap.open { display: flex; }
-.modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; width: 100%; max-width: 320px; }
-.modal-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
-.modal-subtitle { font-size: 13px; color: var(--text3); margin-bottom: 1rem; line-height: 1.5; }
-.modal-input { width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 15px; font-family: 'Syne', sans-serif; color: var(--text); background: var(--bg3); outline: none; margin-bottom: 12px; }
-.modal-input:focus { border-color: var(--green); }
-.modal-input::placeholder { color: var(--text3); }
-.modal-btns { display: flex; gap: 8px; }
-.modal-cancel { flex: 1; height: 44px; background: none; border: 1px solid var(--border); border-radius: 10px; color: var(--text2); font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
-.modal-confirm { flex: 1; height: 44px; background: var(--green); border: none; border-radius: 10px; color: #fff; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
-.modal-confirm.danger { background: var(--danger); }
-.modal-members { margin-bottom: 12px; }
-.member-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-.member-row:last-child { border-bottom: none; }
-.member-name { color: var(--text2); }
-.member-remove { font-size: 11px; color: var(--danger); background: none; border: none; cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 700; }
-.modal-msg { font-size: 13px; min-height: 18px; margin-bottom: 8px; }
-.modal-msg.success { color: var(--green); }
-.modal-msg.error { color: var(--danger); }
-
-/* ── CHECKBOX ITEMS ── */
-.item.checked { opacity: .55; }
-.item.checked .item-name { text-decoration: line-through; color: var(--text3); }
-.item-check { width: 22px; height: 22px; border: 2px solid var(--border2); border-radius: 6px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; background: var(--bg2); }
-.item-check.checked { background: var(--green); border-color: var(--green); }
-.item-check.checked::after { content: ""; display: block; width: 5px; height: 9px; border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg) translateY(-1px); }
-
-/* ── PRODUCT LIBRARY ── */
-.library-view { display: none; }
-.library-view.visible { display: block; }
-.lib-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none; }
-.lib-tabs::-webkit-scrollbar { display: none; }
-.lib-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 99px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); font-family: Syne, sans-serif; transition: all .15s; white-space: nowrap; }
-.lib-tab.active { background: var(--green); color: #fff; border-color: var(--green); }
-.lib-star-btn { width: 28px; height: 28px; border: none; background: none; cursor: pointer; font-size: 16px; flex-shrink: 0; opacity: .4; transition: opacity .15s, transform .15s; }
-.lib-star-btn.pinned { opacity: 1; transform: scale(1.1); }
-.lib-search { width: 100%; height: 42px; padding: 0 14px; border: 1px solid var(--border2); border-radius: 10px; background: var(--bg2); font-family: 'Syne', sans-serif; font-size: 14px; color: var(--text); outline: none; margin-bottom: 1rem; }
-.lib-search:focus { border-color: var(--green); }
-.lib-search::placeholder { color: var(--text3); }
-.lib-category { margin-bottom: 1.25rem; }
-.lib-cat-header { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-.lib-cat-count { background: var(--bg3); color: var(--text3); font-size: 10px; padding: 2px 7px; border-radius: 99px; }
-.lib-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
-.lib-item-img { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; border: 1px solid var(--border); background: var(--bg3); flex-shrink: 0; }
-.lib-item-ph { width: 36px; height: 36px; border-radius: 8px; background: var(--bg3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; border: 1px solid var(--border); }
-.lib-item-info { flex: 1; min-width: 0; }
-.lib-item-name { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.lib-item-price { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 1px; }
-.lib-add-btn { height: 30px; padding: 0 12px; background: var(--green-light); color: var(--green); border: 1px solid rgba(29,158,117,.2); border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background .15s; flex-shrink: 0; }
-.lib-add-btn:hover { background: var(--green); color: #fff; }
-.lib-add-btn.added { background: var(--green); color: #fff; }
-
-/* ── CAMERA SCANNER ── */
-.camera-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 300; flex-direction: column; align-items: center; justify-content: center; }
-.camera-modal.open { display: flex; }
-.camera-header { position: absolute; top: 0; left: 0; right: 0; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; }
-.camera-title { font-size: 16px; font-weight: 700; color: #fff; }
-.camera-close { width: 36px; height: 36px; background: rgba(255,255,255,.15); border: none; border-radius: 50%; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.camera-viewport { width: 100%; max-width: 400px; position: relative; }
-#quagga-viewport video { width: 100% !important; height: auto !important; display: block; border-radius: 16px; }
-#quagga-viewport canvas { display: none !important; }
-
-.camera-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-.camera-finder { width: 220px; height: 140px; border: 2px solid var(--green); border-radius: 16px; position: relative; }
-.camera-finder::before { content: ; position: absolute; inset: -2px; border-radius: 16px; border: 2px solid transparent; background: linear-gradient(var(--green),var(--green)) top left, linear-gradient(var(--green),var(--green)) top right, linear-gradient(var(--green),var(--green)) bottom left, linear-gradient(var(--green),var(--green)) bottom right; background-size: 20px 3px, 20px 3px, 20px 3px, 20px 3px; background-repeat: no-repeat; }
-.camera-scan-line { position: absolute; left: 10px; right: 10px; height: 2px; background: var(--green); top: 50%; animation: scanline 2s ease-in-out infinite; opacity: .7; }
-@keyframes scanline { 0%,100% { top: 20%; } 50% { top: 80%; } }
-.camera-hint { color: rgba(255,255,255,.6); font-size: 13px; margin-top: 1.5rem; text-align: center; }
-.camera-status { color: #fff; font-size: 14px; font-weight: 700; margin-top: 1rem; min-height: 22px; text-align: center; }
-.camera-status.found { color: var(--green); }
-.camera-status.error { color: #f87171; }
-.btn-camera { height: 46px; width: 46px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color .15s; }
-.btn-camera:hover { border-color: var(--green); }
-
-/* Quagga video fill fix */
-#quagga-viewport video { width: 100% !important; height: auto !important; border-radius: 16px; display: block; object-fit: cover; }
-#quagga-viewport canvas { display: none !important; }
-
-/* ── RECIPE MODULE ── */
-.recipe-view { display: none; }
-.recipe-view.visible { display: block; }
-.recipe-back-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
-.recipe-back-btn { background: none; border: none; color: var(--green); cursor: pointer; font-family: Syne,sans-serif; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
-.recipe-view-title { font-size: 16px; font-weight: 800; color: var(--text); }
-
-/* Input screen */
-.recipe-input-tabs { display: flex; background: var(--bg3); border-radius: 10px; padding: 3px; margin-bottom: 1rem; }
-.recipe-input-tab { flex: 1; padding: 8px; text-align: center; font-size: 12px; font-weight: 700; cursor: pointer; background: none; border: none; color: var(--text3); font-family: Syne,sans-serif; border-radius: 8px; transition: all .15s; }
-.recipe-input-tab.active { background: var(--green); color: #fff; }
-.recipe-textarea { width: 100%; min-height: 140px; padding: 12px 14px; border: 1px solid var(--border2); border-radius: 12px; font-size: 14px; font-family: Syne,sans-serif; color: var(--text); background: var(--bg2); outline: none; resize: vertical; line-height: 1.5; }
-.recipe-textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.1); }
-.recipe-textarea::placeholder { color: var(--text3); }
-.recipe-url-input { width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--border2); border-radius: 10px; font-size: 14px; font-family: DM Mono,monospace; color: var(--text); background: var(--bg2); outline: none; }
-.recipe-url-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.1); }
-.recipe-url-input::placeholder { color: var(--text3); }
-.recipe-photo-area { border: 2px dashed var(--border2); border-radius: 12px; padding: 2rem 1rem; text-align: center; cursor: pointer; transition: border-color .15s; background: var(--bg2); }
-.recipe-photo-area:hover { border-color: var(--green); }
-.recipe-photo-area.has-image { border-style: solid; border-color: var(--green); padding: 0; overflow: hidden; }
-.recipe-photo-preview { width: 100%; border-radius: 10px; display: block; max-height: 220px; object-fit: cover; }
-.recipe-photo-icon { font-size: 36px; margin-bottom: 10px; opacity: .5; }
-.recipe-photo-label { font-size: 14px; color: var(--text2); font-weight: 600; }
-.recipe-photo-sub { font-size: 12px; color: var(--text3); margin-top: 4px; }
-.recipe-process-btn { width: 100%; height: 50px; background: var(--green); color: #fff; border: none; border-radius: 12px; font-family: Syne,sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 1rem; transition: background .15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.recipe-process-btn:hover { background: var(--green-dark); }
-.recipe-process-btn:disabled { opacity: .5; cursor: not-allowed; }
-.recipe-processing { text-align: center; padding: 2rem 1rem; }
-.recipe-processing-icon { font-size: 40px; animation: spin 1.5s linear infinite; display: inline-block; margin-bottom: 1rem; }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.recipe-processing-text { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-.recipe-processing-sub { font-size: 13px; color: var(--text3); }
-
-/* Results screen */
-.recipe-result-header { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; margin-bottom: 1rem; }
-.recipe-result-name { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.recipe-result-meta { font-size: 12px; color: var(--text3); display: flex; gap: 12px; flex-wrap: wrap; }
-.recipe-result-meta span { display: flex; align-items: center; gap: 4px; }
-.recipe-rating { display: flex; gap: 6px; margin-top: 10px; }
-.recipe-star { font-size: 22px; cursor: pointer; opacity: .3; transition: opacity .15s; }
-.recipe-star.active { opacity: 1; }
-.recipe-notes-input { width: 100%; height: 70px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; font-family: Syne,sans-serif; color: var(--text); background: var(--bg3); outline: none; resize: none; margin-top: 10px; }
-.recipe-notes-input:focus { border-color: var(--green); }
-.recipe-notes-input::placeholder { color: var(--text3); }
-
-.recipe-ingredients-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.recipe-select-all { font-size: 13px; font-weight: 700; color: var(--green); background: none; border: none; cursor: pointer; font-family: Syne,sans-serif; }
-.recipe-ingredient { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin-bottom: 6px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color .15s; }
-.recipe-ingredient.selected { border-color: var(--green); background: var(--green-light); }
-.recipe-ingredient-check { width: 20px; height: 20px; border: 2px solid var(--border2); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-.recipe-ingredient.selected .recipe-ingredient-check { background: var(--green); border-color: var(--green); }
-.recipe-ingredient.selected .recipe-ingredient-check::after { content: ""; display: block; width: 4px; height: 8px; border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg) translateY(-1px); }
-.recipe-ingredient-info { flex: 1; }
-.recipe-ingredient-name { font-size: 14px; font-weight: 600; color: var(--text); }
-.recipe-ingredient-qty { font-size: 12px; color: var(--text3); margin-top: 2px; }
-.recipe-ingredient-walmart { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 2px; }
-
-.recipe-action-bar { position: sticky; bottom: 0; background: var(--bg); padding: 1rem 0 0.5rem; margin-top: 1rem; display: flex; gap: 8px; }
-.recipe-save-btn { flex: 1; height: 50px; background: var(--green); color: #fff; border: none; border-radius: 12px; font-family: Syne,sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; }
-.recipe-save-btn:hover { background: var(--green-dark); }
-.recipe-add-list-btn { flex: 1; height: 50px; background: #0071CE; color: #fff; border: none; border-radius: 12px; font-family: Syne,sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; }
-.recipe-add-list-btn:hover { background: #005fa3; }
-
-/* Recipe book */
-.recipe-book-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 8px; cursor: pointer; transition: border-color .15s; display: flex; gap: 12px; align-items: flex-start; }
-.recipe-book-item:hover { border-color: var(--green); }
-.recipe-book-thumb { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: var(--bg3); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid var(--border); }
-.recipe-book-info { flex: 1; min-width: 0; }
-.recipe-book-name { font-size: 15px; font-weight: 700; color: var(--text); }
-.recipe-book-meta { font-size: 12px; color: var(--text3); margin-top: 3px; }
-.recipe-book-stars { font-size: 12px; margin-top: 3px; }
-.recipe-book-actions { display: flex; gap: 6px; flex-shrink: 0; }
-.recipe-book-shop-btn { height: 32px; padding: 0 12px; background: #0071CE; color: #fff; border: none; border-radius: 8px; font-family: Syne,sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-
-/* List picker modal extras */
-.list-picker-item { padding: 12px 14px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text2); display: flex; align-items: center; gap: 10px; transition: background .15s; }
-.list-picker-item:hover { background: var(--bg3); color: var(--green); }
-.list-picker-item:last-child { border-bottom: none; }
-
-/* ── TOAST ── */
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: #fff; font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
-.toast.show { transform: translateX(-50%) translateY(0); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 560px) {
+  .nav-link { display: none; }
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .btn-p, .btn-s { justify-content: center; }
+  .vs-cards { flex-direction: column; align-items: center; }
+}
 </style>
 </head>
 <body>
 
-<div class="splash-screen" id="splash-screen">
-  <div class="splash-logo" id="splash-logo">ReOrderly<span class="splash-dot" id="splash-dot"></span></div>
-  <div class="splash-sub" id="splash-sub">Scan &bull; List &bull; Order</div>
-  <div class="splash-bar" id="splash-bar"><div class="splash-progress" id="splash-progress"></div></div>
-</div>
+<nav>
+  <a href="/" class="nav-logo">ReOrderly<span class="nav-dot"></span></a>
+  <div class="nav-links">
+    <a href="#how-it-works" class="nav-link">How it works</a>
+    <a href="#features" class="nav-link">Features</a>
+    <a href="/app.html" class="nav-cta">Sign in</a>
+  </div>
+</nav>
 
+<section class="hero">
+  <div class="hero-eyebrow">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    No smart fridge required
+  </div>
+  <h1 class="hero-title">Scan.<span class="accent"> List.</span><br>Order.</h1>
+  <p class="hero-sub">Scan household items as you run out, build your reorder list automatically, and send everything to your Walmart cart with one tap.</p>
+  <div class="hero-btns">
+    <a href="/app.html" class="btn-p">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Get started free
+    </a>
+    <a href="#demo" class="btn-s">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+      See the demo
+    </a>
+  </div>
+  <p class="hero-proof">Free to use &nbsp;·&nbsp; Works with any fridge &nbsp;·&nbsp; Any Bluetooth scanner</p>
+</section>
 
-<!-- Home Screen -->
-<div class="home-screen" id="home-screen">
-  <div class="home-inner">
-    <div class="home-header">
+<section class="section" id="how-it-works">
+  <div class="eyebrow">How it works</div>
+  <h2 class="sec-title">Three steps.<br>That's it.</h2>
+  <p class="sec-sub">ReOrderly removes every bit of friction between running out of something and having it back in your home.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
       <div>
-        <div class="home-greeting" id="home-greeting">Welcome back</div>
-        <div class="home-logo">ReOrderly<span class="home-logo-dot"></span><span class="home-version">v2.4</span></div>
-      </div>
-      <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-    </div>
-
-    <div class="home-stats">
-      <div class="home-stat">
-        <div class="home-stat-num" id="home-stat-items">0</div>
-        <div class="home-stat-label">In List</div>
-      </div>
-      <div class="home-stat">
-        <div class="home-stat-num" id="home-stat-recipes">0</div>
-        <div class="home-stat-label">Recipes</div>
-      </div>
-      <div class="home-stat">
-        <div class="home-stat-num" id="home-stat-orders">0</div>
-        <div class="home-stat-label">Orders</div>
+        <div class="step-title">Scan as you run out</div>
+        <div class="step-desc">Use a Bluetooth barcode scanner or your phone camera. Scan the item as you finish it — the app instantly finds it on Walmart with the name, image, and price.</div>
       </div>
     </div>
-
-    <div class="home-cards">
-      <div class="home-card primary" onclick="showMainView(); showAppScreen();">
-        <div class="home-card-icon green">🛒</div>
-        <div class="home-card-info">
-          <div class="home-card-title">My Shopping List</div>
-          <div class="home-card-sub">Scan items and order on Walmart</div>
-        </div>
-        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-      <div class="home-card" onclick="showRecipeBook(); showAppScreen();">
-        <div class="home-card-icon amber">📖</div>
-        <div class="home-card-info">
-          <div class="home-card-title">Recipe Book</div>
-          <div class="home-card-sub">Add recipes and extract ingredients</div>
-        </div>
-        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-      <div class="home-card" onclick="showHistory(); showAppScreen();">
-        <div class="home-card-icon blue">🕐</div>
-        <div class="home-card-info">
-          <div class="home-card-title">Order History</div>
-          <div class="home-card-sub">View and re-add past orders</div>
-        </div>
-        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-      <div class="home-card" onclick="showLibrary(); showAppScreen();">
-        <div class="home-card-icon purple">📦</div>
-        <div class="home-card-info">
-          <div class="home-card-title">Product Library</div>
-          <div class="home-card-sub">Browse all your scanned products</div>
-        </div>
-        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Your list builds itself</div>
+        <div class="step-desc">Items add up throughout the week. Adjust quantities, check things off, share with your whole household. Your list syncs across all devices in real time.</div>
       </div>
     </div>
-
-    <div class="home-recent">
-      <div class="home-recent-title">Recent activity</div>
-      <div id="home-recent-list">
-        <div style="font-size:13px;color:var(--text3);padding:8px 0;">No recent activity yet</div>
-      </div>
-    </div>
-
-    <div class="home-footer">
-      <div class="home-footer-disclosure">ReOrderly may earn a commission on purchases made through links to Walmart.com. As a Walmart affiliate, we earn from qualifying purchases.</div>
-      <div class="home-footer-links">
-        <button class="home-footer-link" onclick="openAbout()">About</button>
-        <button class="home-footer-link" onclick="showMainView(); showAppScreen();">Go to App</button>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Order everything on Walmart</div>
+        <div class="step-desc">When you're ready, tap "Order all on Walmart." Every item opens on Walmart.com ready to add to your cart. Done in seconds.</div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- About Modal -->
-<div class="about-modal" id="about-modal">
-  <div class="about-box">
-    <div class="about-logo">ReOrderly<span class="about-logo-dot"></span></div>
-    <div class="about-tagline">Scan. List. Order. — reorderlysolutions.com</div>
-    <div class="about-section">
-      <div class="about-section-title">What is ReOrderly?</div>
-      <div class="about-section-body">ReOrderly is a smart household reordering app. Scan any product barcode as you run out, build your reorder list automatically, and send everything to your Walmart cart with one tap. No more manually typing grocery lists or forgetting what you need.</div>
+<section class="demo-wrap" id="demo">
+  <div class="demo-inner">
+    <div class="demo-hdr">
+      <div class="eyebrow" style="text-align:center">Live demo</div>
+      <h2 class="sec-title" style="text-align:center">See it in action</h2>
+      <p class="sec-sub" style="text-align:center;margin:0 auto 2rem">This is the real app with sample items. The Walmart buttons actually work — try them.</p>
     </div>
-    <div class="about-section">
-      <div class="about-section-title">Recipe Intelligence</div>
-      <div class="about-section-body">Paste any recipe URL and our AI automatically extracts all ingredients with quantities. Add them to your shopping list and send to Walmart in one tap. Works with AllRecipes, Food Network, and thousands of recipe sites.</div>
-    </div>
-    <div class="about-section">
-      <div class="about-section-title">Household Sharing</div>
-      <div class="about-section-body">Invite family members to share your list. Anyone in the household can scan items and add them — everything syncs in real time across all devices.</div>
-    </div>
-    <div class="about-section">
-      <div class="about-section-title">Affiliate Disclosure</div>
-      <div class="about-section-body">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
-    </div>
-    <div class="about-section">
-      <div class="about-section-title">Version</div>
-      <div class="about-section-body">ReOrderly v2.4 — Built with Firebase, Netlify, and Anthropic AI.</div>
-    </div>
-    <button class="about-close" onclick="closeAbout()">Close</button>
-  </div>
-</div>
-
-<!-- Auth -->
-<div class="auth-screen" id="auth-screen">
-  <div class="auth-box">
-    <div class="auth-logo">
-      <div class="auth-logo-text">ReOrderly<span class="auth-logo-dot"></span></div>
-      <div class="auth-logo-sub">Scan. List. Order.</div>
-    </div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Sign in</button>
-      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create account</button>
-    </div>
-    <div class="auth-form">
-      <input class="auth-input" type="email" id="auth-email" placeholder="Email address" />
-      <input class="auth-input" type="password" id="auth-password" placeholder="Password" />
-      <input class="auth-input" type="password" id="auth-password2" placeholder="Confirm password" style="display:none" />
-      <div class="auth-error" id="auth-error"></div>
-      <button class="auth-btn" id="auth-submit-btn" onclick="handleEmailAuth()">Sign in</button>
-      <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-text">or</div><div class="auth-divider-line"></div></div>
-      <button class="auth-google-btn" onclick="handleGoogleAuth()">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Drawer overlay -->
-<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
-
-<!-- Side Drawer -->
-<div class="drawer" id="drawer">
-  <div class="drawer-header">
-    <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
-    <div class="drawer-user" id="drawer-user"></div>
-  </div>
-  <div class="drawer-section">My Lists</div>
-  <div id="drawer-lists"></div>
-  <div class="drawer-new-list" onclick="openNewListModal()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    New list
-  </div>
-  <div class="drawer-section">Recipes</div>
-  <div class="drawer-item" id="drawer-recipe-btn">
-    <div class="drawer-item-left">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 013 3v1H9V5a3 3 0 013-3z"/><path d="M19 6H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2z"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
-      <span class="drawer-item-name">Recipe book</span>
-    </div>
-  </div>
-  <div class="drawer-section">Other</div>
-  <div class="drawer-item" id="drawer-library-btn">
-    <div class="drawer-item-left">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      <span class="drawer-item-name">Product library</span>
-    </div>
-  </div>
-  <div class="drawer-item" id="drawer-history-btn">
-    <div class="drawer-item-left">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span class="drawer-item-name">Order history</span>
-    </div>
-  </div>
-  <div class="drawer-footer">
-    <button class="drawer-signout" onclick="handleSignOut()">Sign out</button>
-  </div>
-</div>
-
-<!-- App -->
-<div class="app-screen" id="app-screen">
-  <div class="app-inner">
-    <div class="header">
-      <div class="header-left">
-        <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.4</span></div>
+    <div class="demo-phone">
+      <div class="demo-topbar">
+        <div class="demo-topbar-logo">ReOrderly<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#1D9E75;margin-left:2px;vertical-align:middle;position:relative;top:-1px"></span></div>
+        <div class="demo-badge" id="demo-count">5 items</div>
       </div>
-      <div style="display:flex;align-items:center;gap:6px;">
-        <div class="shared-indicator" id="shared-indicator">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-          Shared
-        </div>
-        <div class="list-badge" id="list-name-badge" onclick="showMainView(); showAppScreen();" style="cursor:pointer;" title="Go to shopping list">My List</div>
+      <div class="demo-banner">
+        <span>👋 Demo — sign up to save your list</span>
+        <a href="/app.html" class="demo-signup-link">Sign up free →</a>
       </div>
-    </div>
-
-    <!-- Main view -->
-    <div id="main-view">
-      <div class="scan-box">
-        <div class="scan-label">Scan or enter barcode</div>
-        <div class="scan-row">
-          <input type="text" id="upc-input" placeholder="e.g. 078742434032" autocomplete="off" />
-          <button class="btn-camera" onclick="openCamera()" title="Scan with camera">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          </button>
-          <button class="btn-add" id="add-btn" onclick="handleScan()">Add</button>
-        </div>
-        <div class="status" id="status">Ready — scan with your Bluetooth scanner or type a UPC</div>
-      </div>
-      <div class="list-header">
-        <div class="list-title">Reorder list</div>
-        <div class="item-count" id="item-count" style="display:none"></div>
-      </div>
-      <div id="item-list">
-        <div class="empty" id="empty-state">
-          <div style="font-size:32px;margin-bottom:10px;opacity:.4">🛒</div>
-          <div>Scan an item to add it to your list</div>
-        </div>
-      </div>
-      <div class="order-bar">
-        <button class="btn-order-all" id="order-btn" disabled onclick="orderAllOnWalmart()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/><circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/><circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/></svg>
+      <div class="demo-list" id="demo-list"></div>
+      <div class="demo-order">
+        <button class="demo-order-btn" onclick="demoOrderAll()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
           Order all on Walmart
         </button>
-        <button class="btn-clear" onclick="clearList()">Clear</button>
-      </div>
-    </div>
-
-    <!-- History view -->
-    <div id="history-view" class="history-view">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
-        <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back
-        </button>
-        <div style="font-size:16px;font-weight:800;color:var(--text);">Order history</div>
-      </div>
-      <div id="history-list"><div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📋</div><div>No order history yet</div></div></div>
-    </div>
-
-    <!-- Library view -->
-    <div id="library-view" class="library-view">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
-        <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back
-        </button>
-        <div style="font-size:16px;font-weight:800;color:var(--text);">Product library</div>
-      </div>
-      <input class="lib-search" type="text" id="lib-search" placeholder="Search your scanned products..." />
-      <div class="lib-tabs" id="lib-tabs"></div>
-      <div id="library-list"></div>
-    </div>
-  </div>
-
-    <!-- Recipe view -->
-    <div id="recipe-view" class="recipe-view">
-      <div class="recipe-back-bar">
-        <button class="recipe-back-btn" onclick="showRecipeBook()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-          Back
-        </button>
-        <div class="recipe-view-title" id="recipe-view-title">Recipe book</div>
-      </div>
-      <div id="recipe-content"></div>
-    </div>
-
-</div>
-
-<!-- Camera Scanner Modal -->
-<div class="camera-modal" id="camera-modal">
-  <div class="camera-header">
-    <div class="camera-title">Scan barcode</div>
-    <button class="camera-close" onclick="closeCamera()">×</button>
-  </div>
-  <div class="camera-viewport" style="position:relative;">
-    <div id="quagga-viewport" style="width:100%;border-radius:16px;overflow:hidden;position:relative;background:#000;min-height:280px;"></div>
-    <div class="camera-overlay" style="pointer-events:none;position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;">
-      <div class="camera-finder">
-        <div class="camera-scan-line"></div>
       </div>
     </div>
   </div>
-  <div class="camera-hint">Point at any product barcode</div>
-  <div class="camera-status" id="camera-status"></div>
-</div>
+</section>
 
-<!-- New List Modal -->
-<div class="modal-wrap" id="new-list-modal">
-  <div class="modal">
-    <div class="modal-title">New list</div>
-    <div class="modal-subtitle">Give your list a name like "Weekly Groceries" or "Costco Run"</div>
-    <input class="modal-input" type="text" id="new-list-name" placeholder="List name" maxlength="30" />
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('new-list-modal')">Cancel</button>
-      <button class="modal-confirm" onclick="createNewList()">Create</button>
+<section class="section" id="features">
+  <div class="eyebrow">Features</div>
+  <h2 class="sec-title">Everything your<br>household needs</h2>
+  <p class="sec-sub" style="margin-bottom:2rem">Built for busy families who shop at Walmart every week.</p>
+  <div class="feat-grid">
+    <div class="feat"><div class="feat-icon">📱</div><div class="feat-title">Camera scanning</div><div class="feat-desc">Use your phone camera or any Bluetooth barcode scanner to scan items in seconds.</div></div>
+    <div class="feat"><div class="feat-icon">🔄</div><div class="feat-title">Real-time sync</div><div class="feat-desc">Your list syncs instantly across all your devices. Everyone in the household always sees the same list.</div></div>
+    <div class="feat"><div class="feat-icon">👨‍👩‍👧</div><div class="feat-title">Household sharing</div><div class="feat-desc">Invite family members to share your list. Anyone can scan and add items from anywhere.</div></div>
+    <div class="feat"><div class="feat-icon">📖</div><div class="feat-title">Recipe intelligence</div><div class="feat-desc">Paste any recipe URL and AI extracts all ingredients automatically. Add them to your Walmart list in one tap.</div></div>
+    <div class="feat"><div class="feat-icon">📋</div><div class="feat-title">Multiple lists</div><div class="feat-desc">Weekly Groceries, Costco Run, Pet Supplies — create as many named lists as you need.</div></div>
+    <div class="feat"><div class="feat-icon">🕐</div><div class="feat-title">Order history</div><div class="feat-desc">Every order is saved. Re-add items from past orders with one tap — no scanning needed.</div></div>
+  </div>
+</section>
+
+<section class="vs-wrap">
+  <div class="vs-inner">
+    <h2 class="vs-title">The smart fridge experience.<br><span class="accent">Without the smart fridge.</span></h2>
+    <p class="vs-sub">GE just released a refrigerator with a built-in barcode scanner for $4,899. It does one thing. ReOrderly does that and much more — for free — on any phone, with any fridge.</p>
+    <div class="vs-cards">
+      <div class="vs-card">
+        <div class="vs-lbl">GE Profile Smart Fridge</div>
+        <div class="vs-price">$4,899</div>
+        <div class="vs-name">Barcode scanning only</div>
+      </div>
+      <div class="vs-card win">
+        <div class="vs-lbl">ReOrderly</div>
+        <div class="vs-price">Free</div>
+        <div class="vs-name">Scanning + recipes + sharing + history</div>
+      </div>
+    </div>
+    <a href="/app.html" class="btn-p" style="display:inline-flex">Get started free</a>
+  </div>
+</section>
+
+<section class="cta-wrap">
+  <div style="max-width:520px;margin:0 auto">
+    <h2 class="cta-title">Never run out of anything again</h2>
+    <p class="cta-sub">Join ReOrderly and turn your weekly Walmart shopping into a one-tap experience.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="/app.html" class="btn-p">Get started free</a>
+      <a href="#demo" class="btn-s">Try the demo</a>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Delete List Modal -->
-<div class="modal-wrap" id="delete-list-modal">
-  <div class="modal">
-    <div class="modal-title">Delete list?</div>
-    <div class="modal-subtitle" id="delete-list-msg">This will permanently delete the list and all its items. This cannot be undone.</div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('delete-list-modal')">Cancel</button>
-      <button class="modal-confirm danger" onclick="confirmDeleteList()">Delete</button>
-    </div>
+<footer>
+  <div class="ft-logo">ReOrderly<span class="ft-dot"></span></div>
+  <p class="ft-disc">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</p>
+  <div class="ft-links">
+    <a href="#how-it-works" class="ft-link">How it works</a>
+    <a href="#features" class="ft-link">Features</a>
+    <a href="#demo" class="ft-link">Demo</a>
+    <a href="/app.html" class="ft-link">Sign in</a>
+    <a href="/app.html" class="ft-link">Get started</a>
   </div>
-</div>
-
-<!-- Invite Modal -->
-<div class="modal-wrap" id="invite-modal">
-  <div class="modal">
-    <div class="modal-title">Share list</div>
-    <div class="modal-subtitle">Invite someone by their email address. They'll need a ReOrderly account to access the list.</div>
-    <div class="modal-members" id="invite-members"></div>
-    <input class="modal-input" type="email" id="invite-email" placeholder="Email address" />
-    <div class="modal-msg" id="invite-msg"></div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('invite-modal')">Done</button>
-      <button class="modal-confirm" onclick="sendInvite()">Invite</button>
-    </div>
-  </div>
-</div>
-
-<!-- List Picker Modal -->
-<div class="modal-wrap" id="list-picker-modal">
-  <div class="modal">
-    <div class="modal-title">Add to list</div>
-    <div class="modal-subtitle">Choose which list to add the selected ingredients to</div>
-    <div id="list-picker-items" style="margin-bottom:12px;border:1px solid var(--border);border-radius:12px;overflow:hidden;max-height:260px;overflow-y:auto;"></div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('list-picker-modal')">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, deleteDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-// ── PASTE YOUR FIREBASE CONFIG HERE ──
-const firebaseConfig = {
-   apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
-  authDomain: "reorderly-b152f.firebaseapp.com",
-  projectId: "reorderly-b152f",
-  storageBucket: "reorderly-b152f.firebasestorage.app",
-  messagingSenderId: "690816543799",
-  appId: "1:690816543799:web:5c0d7573ab04cc009d23b2"
-
-};
-// ─────────────────────────────────────
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
-
-let currentUser = null;
-let items = [];
-let lists = [];
-let currentListId = 'default';
-let currentListName = 'My List';
-let currentListOwner = null;
-let unsubscribeList = null;
-let deleteTargetId = null;
-let deleteTargetName = null;
-let inviteTargetId = null;
-let currentTab = 'signin';
-let activeLibTab = 'usual';
-let pinnedItems = {};
-
-const CATEGORIES = {
-  // Health & Beauty — check first (specific)
-  shampoo:'health',conditioner:'health',toothpaste:'health',vitamin:'health',medicine:'health',lotion:'health',deodorant:'health',razor:'health',sunscreen:'health',bandage:'health',
-  moisturizer:'health',serum:'health',lipstick:'health',mascara:'health',foundation:'health',concealer:'health',blush:'health',eyeliner:'health',perfume:'health',cologne:'health',
-  floss:'health',mouthwash:'health',aspirin:'health',ibuprofen:'health',tylenol:'health',advil:'health',nyquil:'health',dayquil:'health',antacid:'health',
-  // Household — check before grocery
-  soap:'household',detergent:'household',cleaner:'household',spray:'household',towel:'household',tissue:'household',bulb:'household',light:'household',battery:'household',
-  trash:'household',sponge:'household',brush:'household',windex:'household',bleach:'household',lysol:'household',febreze:'household',pledge:'household',
-  'paper towel':'household','toilet paper':'household','paper plate':'household','trash bag':'household','zip lock':'household','ziplock':'household',
-  laundry:'household',dishwasher:'household',dryer:'household',softener:'household',foil:'household','aluminum foil':'household','plastic wrap':'household',
-  // Snacks — check before grocery
-  chips:'snacks',pringles:'snacks',crackers:'snacks',cookies:'snacks',candy:'snacks',popcorn:'snacks',nuts:'snacks',granola:'snacks',doritos:'snacks',
-  cheetos:'snacks',lays:'snacks',ritz:'snacks',oreo:'snacks','fruit snack':'snacks',pretzel:'snacks',
-  // Grocery — broadest, check last
-  sugar:'grocery',flour:'grocery',milk:'grocery',egg:'grocery',bread:'grocery',butter:'grocery',cheese:'grocery',water:'grocery',juice:'grocery',
-  coffee:'grocery',tea:'grocery',rice:'grocery',pasta:'grocery',cereal:'grocery',oats:'grocery',chicken:'grocery',beef:'grocery',pork:'grocery',
-  fish:'grocery',salmon:'grocery',tuna:'grocery',produce:'grocery',fruit:'grocery',vegetable:'grocery',tomato:'grocery',lettuce:'grocery',
-  apple:'grocery',banana:'grocery',orange:'grocery',yogurt:'grocery',cream:'grocery',sauce:'grocery',salsa:'grocery',ketchup:'grocery',
-  mayo:'grocery',mustard:'grocery',dressing:'grocery',vinegar:'grocery',oil:'grocery',broth:'grocery',soup:'grocery',bean:'grocery',
-};
-
-function getCategory(name) {
-  if (!name) return 'other';
-  const lower = name.toLowerCase();
-  // Sort by key length descending so longer/more specific phrases match first
-  const sorted = Object.entries(CATEGORIES).sort((a,b) => b[0].length - a[0].length);
-  for (const [k,v] of sorted) { if (lower.includes(k)) return v; }
-  return 'other';
-}
-function getCatLabel(cat) { return {grocery:'Grocery',snacks:'Snacks',household:'Household',health:'Health & Beauty',other:'Other'}[cat]||'Other'; }
-
-// ── SPLASH SCREEN ──
-function initSplash() {
-  setTimeout(() => {
-    document.getElementById('splash-logo').classList.add('show');
-    document.getElementById('splash-dot').classList.add('show');
-    document.getElementById('splash-sub').classList.add('show');
-    document.getElementById('splash-bar').classList.add('show');
-    setTimeout(() => document.getElementById('splash-progress').classList.add('go'), 100);
-  }, 100);
-}
-initSplash();
-
-let splashReady = false;
-let authReady = false;
-
-function hideSplash() {
-  if (!splashReady || !authReady) return;
-  const splash = document.getElementById('splash-screen');
-  if (splash) {
-    splash.classList.add('fade-out');
-    setTimeout(() => { if (splash.parentNode) splash.parentNode.removeChild(splash); }, 600);
-  }
-}
-
-setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
-
-onAuthStateChanged(auth, async user => {
-  authReady = true;
-  hideSplash();
-  if (user) {
-    currentUser = user;
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('drawer-user').textContent = user.email;
-    // Set greeting
-    const name = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
-    const greetEl = document.getElementById('home-greeting');
-    const hour = new Date().getHours();
-    const timeGreet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-    if (greetEl) greetEl.textContent = timeGreet + ', ' + name;
-    await loadLists();
-    subscribeToList(currentListId);
-    // Show home screen on fresh page load
-    if (!sessionStarted) {
-      showHomeScreen();
-    } else {
-      document.getElementById('app-screen').classList.add('visible');
-    }
-  } else {
-    currentUser = null;
-    document.getElementById('auth-screen').style.display = 'flex';
-    document.getElementById('app-screen').classList.remove('visible');
-    if (unsubscribeList) unsubscribeList();
-    items = [];
-  }
-});
-
-async function loadLists() {
-  if (!currentUser) return;
-  try {
-    lists = [];
-    const ownSnap = await getDocs(collection(db,'users',currentUser.uid,'lists'));
-    ownSnap.forEach(d => lists.push({id:d.id,...d.data(),owner:currentUser.uid}));
-    if (lists.length===0) {
-      await setDoc(doc(db,'users',currentUser.uid,'lists','default'),{name:'My List',createdAt:new Date(),members:[]});
-      lists = [{id:'default',name:'My List',owner:currentUser.uid,members:[]}];
-    }
-    const sharedSnap = await getDocs(collection(db,'sharedLists'));
-    sharedSnap.forEach(d => {
-      const data = d.data();
-      if (data.members && data.members.includes(currentUser.email)) {
-        lists.push({id:d.id,...data,isShared:true});
-      }
-    });
-    currentListId = lists[0].id;
-    currentListName = lists[0].name;
-    currentListOwner = lists[0].owner;
-    renderDrawerLists();
-    document.getElementById('list-name-badge').textContent = currentListName;
-    updateSharedIndicator();
-  } catch(e) { console.error(e); }
-}
-
-function renderDrawerLists() {
-  const el = document.getElementById('drawer-lists');
-  el.innerHTML = '';
-  lists.forEach(list => {
-    const isActive = list.id === currentListId;
-    const isOwner = list.owner === currentUser?.uid;
-    const div = document.createElement('div');
-    div.className = 'drawer-item' + (isActive ? ' active' : '');
-
-    const left = document.createElement('div');
-    left.className = 'drawer-item-left';
-    left.style.cursor = 'pointer';
-    left.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span class="drawer-item-name">' + esc(list.name) + (list.isShared ? ' \ud83d\udc65' : '') + '</span>';
-    left.addEventListener('click', () => switchList(list.id, list.name, list.owner || currentUser?.uid));
-
-    const actions = document.createElement('div');
-    actions.className = 'drawer-item-actions';
-
-    if (isOwner) {
-      const inviteBtn = document.createElement('button');
-      inviteBtn.className = 'drawer-icon-btn invite';
-      inviteBtn.title = 'Share list';
-      inviteBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>';
-      inviteBtn.addEventListener('click', e => { e.stopPropagation(); openInviteModal(list.id, list.name); });
-      actions.appendChild(inviteBtn);
-    }
-
-    if (isOwner && list.id !== 'default') {
-      const delBtn = document.createElement('button');
-      delBtn.className = 'drawer-icon-btn';
-      delBtn.title = 'Delete list';
-      delBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>';
-      delBtn.addEventListener('click', e => { e.stopPropagation(); openDeleteListModal(list.id, list.name); });
-      actions.appendChild(delBtn);
-    }
-
-    div.appendChild(left);
-    div.appendChild(actions);
-    el.appendChild(div);
-  });
-}
-
-function updateSharedIndicator() {
-  const list = lists.find(l=>l.id===currentListId);
-  const indicator = document.getElementById('shared-indicator');
-  if (indicator) indicator.style.display = (list?.members?.length>0 || list?.isShared) ? 'flex' : 'none';
-}
-
-function switchList(id, name, owner) {
-  currentListId = id; currentListName = name; currentListOwner = owner;
-  document.getElementById('list-name-badge').textContent = name;
-  renderDrawerLists();
-  subscribeToList(id);
-  updateSharedIndicator();
-  showMainView();
-  closeDrawer();
-  setTimeout(()=>{ const i=document.getElementById('upc-input'); if(i) i.focus(); }, 300);
-}
-
-function subscribeToList(listId) {
-  if (unsubscribeList) unsubscribeList();
-  if (!currentUser) return;
-  const isShared = lists.find(l=>l.id===listId)?.isShared;
-  const ref = isShared
-    ? doc(db,'sharedLists',listId,'data','items')
-    : doc(db,'users',currentUser.uid,'lists',listId,'data','items');
-  unsubscribeList = onSnapshot(ref, snap => {
-    items = snap.exists() ? (snap.data().items||[]) : [];
-    renderList();
-  });
-}
-
-async function saveList() {
-  if (!currentUser) return;
-  const isShared = lists.find(l=>l.id===currentListId)?.isShared;
-  const ref = isShared
-    ? doc(db,'sharedLists',currentListId,'data','items')
-    : doc(db,'users',currentUser.uid,'lists',currentListId,'data','items');
-  await setDoc(ref, {items, updatedAt:new Date()});
-}
-
-async function saveToHistory() {
-  if (!currentUser || items.length===0) return;
-  await setDoc(doc(db,'users',currentUser.uid,'history','order_'+Date.now()), {
-    items: items.map(i=>({name:i.name,upc:i.upc,qty:i.qty,price:i.price||null})),
-    orderedAt: new Date(), listName: currentListName, itemCount: items.length
-  });
-}
-
-// ── AUTH ──
-window.switchTab = function(tab) {
-  currentTab=tab;
-  document.getElementById('tab-signin').className='auth-tab'+(tab==='signin'?' active':'');
-  document.getElementById('tab-signup').className='auth-tab'+(tab==='signup'?' active':'');
-  document.getElementById('auth-password2').style.display=tab==='signup'?'block':'none';
-  document.getElementById('auth-submit-btn').textContent=tab==='signin'?'Sign in':'Create account';
-  document.getElementById('auth-error').textContent='';
-};
-
-window.handleEmailAuth = async function() {
-  const email=document.getElementById('auth-email').value.trim();
-  const pass=document.getElementById('auth-password').value;
-  const pass2=document.getElementById('auth-password2').value;
-  const errEl=document.getElementById('auth-error');
-  const btn=document.getElementById('auth-submit-btn');
-  if (!email||!pass){errEl.textContent='Please fill in all fields';return;}
-  if (currentTab==='signup'&&pass!==pass2){errEl.textContent='Passwords do not match';return;}
-  btn.disabled=true; errEl.textContent='';
-  try {
-    if (currentTab==='signin') await signInWithEmailAndPassword(auth,email,pass);
-    else await createUserWithEmailAndPassword(auth,email,pass);
-  } catch(e) {
-    const msgs={'auth/user-not-found':'No account with that email','auth/wrong-password':'Incorrect password','auth/email-already-in-use':'Account already exists','auth/weak-password':'Password must be 6+ characters','auth/invalid-credential':'Incorrect email or password','auth/invalid-email':'Invalid email'};
-    errEl.textContent=msgs[e.code]||'Something went wrong';
-  }
-  btn.disabled=false;
-};
-
-window.handleGoogleAuth = async function() {
-  try { await signInWithPopup(auth,googleProvider); }
-  catch(e) { document.getElementById('auth-error').textContent='Google sign-in failed'; }
-};
-
-window.handleSignOut = async function() { await signOut(auth); closeDrawer(); };
-
-// ── DRAWER ──
-window.openDrawer = ()=>{ document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); };
-
-document.getElementById('drawer-recipe-btn')?.addEventListener('click', ()=>{ showRecipeBook(); showAppScreen(); closeDrawer(); });
-document.getElementById('drawer-library-btn')?.addEventListener('click', ()=>{ showLibrary(); showAppScreen(); closeDrawer(); });
-document.getElementById('drawer-history-btn')?.addEventListener('click', ()=>{ showHistory(); showAppScreen(); closeDrawer(); });
-window.closeDrawer = ()=>{ document.getElementById('drawer').classList.remove('open'); document.getElementById('drawer-overlay').classList.remove('open'); };
-
-// ── MODALS ──
-window.closeModal = id=>document.getElementById(id).classList.remove('open');
-
-window.openNewListModal = function() {
-  closeDrawer();
-  document.getElementById('new-list-name').value='';
-  document.getElementById('new-list-modal').classList.add('open');
-  setTimeout(()=>document.getElementById('new-list-name').focus(),100);
-};
-
-window.createNewList = async function() {
-  const name=document.getElementById('new-list-name').value.trim();
-  if (!name||!currentUser) return;
-  const id='list_'+Date.now();
-  await setDoc(doc(db,'users',currentUser.uid,'lists',id),{name,createdAt:new Date(),members:[]});
-  lists.push({id,name,owner:currentUser.uid,members:[]});
-  closeModal('new-list-modal');
-  switchList(id,name,currentUser.uid);
-  showToast('List created: '+name);
-};
-
-window.openDeleteListModal = function(id, name) {
-  deleteTargetId=id; deleteTargetName=name;
-  document.getElementById('delete-list-msg').textContent=`Delete "${name}"? This will permanently remove the list and all its items.`;
-  document.getElementById('delete-list-modal').classList.add('open');
-};
-
-window.confirmDeleteList = async function() {
-  if (!deleteTargetId||!currentUser) return;
-  try {
-    await deleteDoc(doc(db,'users',currentUser.uid,'lists',deleteTargetId));
-    lists=lists.filter(l=>l.id!==deleteTargetId);
-    closeModal('delete-list-modal');
-    if (currentListId===deleteTargetId) {
-      currentListId=lists[0]?.id||'default';
-      currentListName=lists[0]?.name||'My List';
-      currentListOwner=currentUser.uid;
-      document.getElementById('list-name-badge').textContent=currentListName;
-      subscribeToList(currentListId);
-    }
-    renderDrawerLists();
-    showToast('List deleted');
-  } catch(e) { showToast('Could not delete list'); }
-};
-
-window.openInviteModal = async function(listId, listName) {
-  inviteTargetId=listId;
-  document.getElementById('invite-email').value='';
-  document.getElementById('invite-msg').textContent='';
-  document.getElementById('invite-msg').className='modal-msg';
-  closeDrawer();
-  await loadInviteMembers(listId);
-  document.getElementById('invite-modal').classList.add('open');
-};
-
-async function loadInviteMembers(listId) {
-  const el=document.getElementById('invite-members');
-  try {
-    const snap=await getDoc(doc(db,'users',currentUser.uid,'lists',listId));
-    const members=snap.data()?.members||[];
-    if (members.length===0) { el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:4px 0 8px;">No members yet</div>'; return; }
-    el.innerHTML=members.map(m=>`<div class="member-row"><span class="member-name">${esc(m)}</span><button class="member-remove" onclick="removeMember('${listId}','${m}')">Remove</button></div>`).join('');
-  } catch(e) { el.innerHTML=''; }
-}
-
-window.removeMember = async function(listId, email) {
-  if (!currentUser) return;
-  const snap=await getDoc(doc(db,'users',currentUser.uid,'lists',listId));
-  let members=snap.data()?.members||[];
-  members=members.filter(m=>m!==email);
-  await setDoc(doc(db,'users',currentUser.uid,'lists',listId),{...snap.data(),members});
-  await loadInviteMembers(listId);
-  showToast('Member removed');
-};
-
-window.sendInvite = async function() {
-  const email=document.getElementById('invite-email').value.trim().toLowerCase();
-  const msgEl=document.getElementById('invite-msg');
-  if (!email) { msgEl.textContent='Please enter an email address'; msgEl.className='modal-msg error'; return; }
-  if (email===currentUser.email) { msgEl.textContent="You can't invite yourself"; msgEl.className='modal-msg error'; return; }
-  try {
-    const snap=await getDoc(doc(db,'users',currentUser.uid,'lists',inviteTargetId));
-    const data=snap.data()||{};
-    const members=data.members||[];
-    if (members.includes(email)) { msgEl.textContent='Already a member'; msgEl.className='modal-msg error'; return; }
-    members.push(email);
-    await setDoc(doc(db,'users',currentUser.uid,'lists',inviteTargetId),{...data,members});
-    await setDoc(doc(db,'sharedLists',inviteTargetId),{
-      name: currentListName, owner: currentUser.uid, ownerEmail: currentUser.email, members, createdAt: data.createdAt||new Date()
-    });
-    document.getElementById('invite-email').value='';
-    msgEl.textContent=`✓ ${email} added to list`;
-    msgEl.className='modal-msg success';
-    await loadInviteMembers(inviteTargetId);
-    updateSharedIndicator();
-  } catch(e) { msgEl.textContent='Could not add member'; msgEl.className='modal-msg error'; }
-};
-
-
-// ── HOME SCREEN ──
-let sessionStarted = false; // tracks if user has navigated away from home this session
-
-window.showHomeScreen = function() {
-  document.getElementById('home-screen').classList.add('visible');
-  document.getElementById('app-screen').classList.remove('visible');
-  updateHomeStats();
-  updateHomeRecent();
-};
-
-window.showAppScreen = function() {
-  sessionStarted = true;
-  document.getElementById('home-screen').classList.remove('visible');
-  document.getElementById('app-screen').classList.add('visible');
-};
-
-window.openAbout = function() {
-  document.getElementById('about-modal').classList.add('open');
-};
-window.closeAbout = function() {
-  document.getElementById('about-modal').classList.remove('open');
-};
-
-async function updateHomeStats() {
-  if (!currentUser) return;
-  // Items in current list
-  document.getElementById('home-stat-items').textContent = items.length || 0;
-  // Recipes count
-  try {
-    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'recipes'));
-    document.getElementById('home-stat-recipes').textContent = snap.size || 0;
-  } catch(e) { document.getElementById('home-stat-recipes').textContent = '0'; }
-  // Orders count
-  try {
-    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'history'));
-    document.getElementById('home-stat-orders').textContent = snap.size || 0;
-  } catch(e) { document.getElementById('home-stat-orders').textContent = '0'; }
-}
-
-async function updateHomeRecent() {
-  if (!currentUser) return;
-  const el = document.getElementById('home-recent-list');
-  const recentItems = [];
-  // Last 3 items from current list
-  if (items.length > 0) {
-    items.slice(-3).reverse().forEach(item => {
-      recentItems.push({ icon: '🛒', name: item.name, meta: 'In your list' });
-    });
-  }
-  if (recentItems.length === 0) {
-    el.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:8px 0;">No recent activity yet — scan your first item to get started</div>';
-    return;
-  }
-  el.innerHTML = recentItems.map(r =>
-    '<div class="home-recent-item">' +
-    '<div class="home-recent-icon">' + r.icon + '</div>' +
-    '<div class="home-recent-name">' + esc(r.name) + '</div>' +
-    '<div class="home-recent-meta">' + r.meta + '</div>' +
-    '</div>'
-  ).join('');
-}
-
-// ── VIEWS ──
-window.showHistory = async function() {
-  document.getElementById('main-view').style.display='none';
-  document.getElementById('history-view').classList.add('visible');
-  const rv = document.getElementById('recipe-view');
-  if (rv) rv.classList.remove('visible');
-  await loadHistory();
-};
-window.showMainView = function() {
-  document.getElementById('main-view').style.display='';
-  document.getElementById('history-view').classList.remove('visible');
-  document.getElementById('library-view').classList.remove('visible');
-  const rv = document.getElementById('recipe-view');
-  if (rv) rv.classList.remove('visible');
-  setTimeout(()=>{ const i=document.getElementById('upc-input'); if(i) i.focus(); },100);
-};
-
-window.showLibrary = async function() {
-  document.getElementById('main-view').style.display='none';
-  document.getElementById('history-view').classList.remove('visible');
-  document.getElementById('library-view').classList.add('visible');
-  const rv = document.getElementById('recipe-view');
-  if (rv) rv.classList.remove('visible');
-  await loadPinnedItems();
-  renderLibTabs();
-  await renderLibrary();
-};
-
-async function loadPinnedItems() {
-  if (!currentUser) return;
-  try {
-    const snap = await getDoc(doc(db,'users',currentUser.uid,'library','pins'));
-    pinnedItems = snap.exists() ? (snap.data().pins || {}) : {};
-  } catch(e) { pinnedItems = {}; }
-}
-
-async function savePinnedItems() {
-  if (!currentUser) return;
-  await setDoc(doc(db,'users',currentUser.uid,'library','pins'), { pins: pinnedItems });
-}
-
-function renderLibTabs() {
-  const tabsEl = document.getElementById('lib-tabs');
-  const tabs = [
-    { id: 'usual', label: '⭐ Usual' },
-    { id: 'all', label: 'All' },
-    { id: 'grocery', label: 'Grocery' },
-    { id: 'snacks', label: 'Snacks' },
-    { id: 'household', label: 'Household' },
-    { id: 'health', label: 'Health' },
-    { id: 'other', label: 'Other' },
-  ];
-  tabsEl.innerHTML = '';
-  tabs.forEach(tab => {
-    const btn = document.createElement('button');
-    btn.className = 'lib-tab' + (tab.id === activeLibTab ? ' active' : '');
-    btn.textContent = tab.label;
-    btn.addEventListener('click', () => {
-      activeLibTab = tab.id;
-      renderLibTabs();
-      renderLibrary(document.getElementById('lib-search').value);
-    });
-    tabsEl.appendChild(btn);
-  });
-}
-
-async function renderLibrary(filter='') {
-  if (!currentUser) return;
-  const el = document.getElementById('library-list');
-  el.innerHTML = '<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">Loading...</div>';
-  try {
-    // Build product map with scan counts from history
-    const snap = await getDocs(collection(db,'users',currentUser.uid,'history'));
-    const seen = new Map();
-    const scanCount = {};
-    snap.forEach(d => {
-      (d.data().items||[]).forEach(item => {
-        if (item.name && item.upc) {
-          scanCount[item.upc] = (scanCount[item.upc] || 0) + 1;
-          if (!seen.has(item.upc)) seen.set(item.upc, item);
-        }
-      });
-    });
-    items.forEach(item => {
-      if (!seen.has(item.upc)) seen.set(item.upc, item);
-      scanCount[item.upc] = (scanCount[item.upc] || 0) + 1;
-    });
-
-    let products = Array.from(seen.values()).map(p => ({
-      ...p,
-      category: p.category || getCategory(p.name),
-      scanCount: scanCount[p.upc] || 1,
-      pinned: !!pinnedItems[p.upc]
-    }));
-
-    // Filter by search
-    if (filter) products = products.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()));
-
-    // Filter by active tab
-    if (activeLibTab === 'usual') {
-      products = products.filter(p => p.pinned || p.scanCount >= 2);
-    } else if (activeLibTab !== 'all') {
-      products = products.filter(p => p.category === activeLibTab);
-    }
-
-    // Sort: pinned first, then by scan count
-    products.sort((a,b) => (b.pinned?1:0) - (a.pinned?1:0) || b.scanCount - a.scanCount);
-
-    if (products.length === 0) {
-      const msg = activeLibTab === 'usual' ? 'Scan items more than once or star items to add them here' : filter ? 'No results found' : 'No items in this category yet';
-      el.innerHTML = '<div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">' + (activeLibTab === 'usual' ? '⭐' : '📦') + '</div><div>' + msg + '</div></div>';
-      return;
-    }
-
-    el.innerHTML = '';
-    products.forEach(product => {
-      const row = document.createElement('div');
-      row.className = 'lib-item';
-
-      const imgEl = product.image ? Object.assign(document.createElement('img'), {className:'lib-item-img', src:product.image}) : null;
-      if (imgEl) imgEl.onerror = function(){ this.style.display='none'; this.nextSibling.style.display='flex'; };
-      const phEl = document.createElement('div');
-      phEl.className = 'lib-item-ph';
-      phEl.style.display = product.image ? 'none' : '';
-      phEl.innerHTML = '&#128230;';
-      const infoEl = document.createElement('div');
-      infoEl.className = 'lib-item-info';
-      infoEl.innerHTML = '<div class="lib-item-name">' + esc(product.name) + '</div>' + (product.price ? '<div class="lib-item-price">$' + product.price + '</div>' : '');
-
-      const starBtn = document.createElement('button');
-      starBtn.className = 'lib-star-btn' + (product.pinned ? ' pinned' : '');
-      starBtn.textContent = product.pinned ? '⭐' : '☆';
-      starBtn.title = product.pinned ? 'Remove from Usual' : 'Add to Usual';
-      starBtn.addEventListener('click', async () => {
-        if (pinnedItems[product.upc]) {
-          delete pinnedItems[product.upc];
-          starBtn.classList.remove('pinned');
-          starBtn.textContent = '☆';
-        } else {
-          pinnedItems[product.upc] = true;
-          starBtn.classList.add('pinned');
-          starBtn.textContent = '⭐';
-        }
-        await savePinnedItems();
-      });
-
-      const btn = document.createElement('button');
-      const inList = items.some(i => i.upc === product.upc);
-      btn.className = 'lib-add-btn' + (inList ? ' added' : '');
-      btn.textContent = inList ? '✓ In list' : '+ Add';
-      btn.addEventListener('click', async () => {
-        const existing = items.find(i => i.upc === product.upc);
-        if (existing) { existing.qty++; }
-        else { items.push({...product, qty:1, checked:false}); }
-        await saveList();
-        btn.textContent = '✓ In list';
-        btn.classList.add('added');
-        showToast('Added: ' + product.name.substring(0,30));
-      });
-
-      if (imgEl) row.appendChild(imgEl);
-      row.appendChild(phEl);
-      row.appendChild(infoEl);
-      row.appendChild(starBtn);
-      row.appendChild(btn);
-      el.appendChild(row);
-    });
-  } catch(e) { console.error(e); el.innerHTML = '<div class="empty"><div>Could not load library</div></div>'; }
-}
-
-document.getElementById('lib-search')?.addEventListener('input', e => renderLibrary(e.target.value));
-
-async function loadHistory() {
-  const el=document.getElementById('history-list');
-  el.innerHTML='<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">Loading...</div>';
-  try {
-    const snap=await getDocs(collection(db,'users',currentUser.uid,'history'));
-    const orders=[];
-    snap.forEach(d=>orders.push({id:d.id,...d.data()}));
-    orders.sort((a,b)=>(b.orderedAt?.seconds||0)-(a.orderedAt?.seconds||0));
-    if (orders.length===0) { el.innerHTML='<div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📋</div><div>No order history yet</div></div>'; return; }
-    el.innerHTML='';
-    orders.slice(0,20).forEach(order=>{
-      const date=order.orderedAt?.toDate?order.orderedAt.toDate():new Date();
-      const dateStr=date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-      const div=document.createElement('div'); div.className='history-order';
-      div.innerHTML=`<div class="history-order-header"><div><div class="history-date">${dateStr}</div><div class="history-meta">${order.listName||'My List'} · ${order.itemCount} item${order.itemCount!==1?'s':''}</div></div></div>
-        <div class="history-items">${(order.items||[]).map(item=>`<div class="history-item-row"><span class="history-item-name">${esc(item.name)}${item.qty>1?' ×'+item.qty:''}</span><button class="history-readd" onclick="reAddItem(${JSON.stringify({upc:item.upc,name:item.name,price:item.price}).replace(/"/g,'&quot;')})">+ Add</button></div>`).join('')}</div>`;
-      el.appendChild(div);
-    });
-  } catch(e) { el.innerHTML='<div class="empty"><div>Could not load history</div></div>'; }
-}
-
-window.reAddItem = async function(item) {
-  const existing=items.find(i=>i.upc===item.upc);
-  if (existing) existing.qty++;
-  else items.push({...item,qty:1,source:'history',walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`,image:null,category:getCategory(item.name)});
-  await saveList(); showToast('Added: '+item.name.substring(0,30)); showMainView();
-};
-
-// ── PRODUCT LOOKUP ──
-async function lookupProduct(upc) {
-  try {
-    const res=await fetch(`/api/lookup?upc=${upc}`,{signal:AbortSignal.timeout(10000)});
-    const data=await res.json();
-    if (data.found&&data.name) return data;
-  } catch(e) {}
-  try {
-    const res=await fetch('https://api.upcitemdb.com/prod/trial/lookup?upc='+upc,{signal:AbortSignal.timeout(8000)});
-    const data=await res.json();
-    if (data.items&&data.items.length>0) {
-      const p=data.items[0]; const name=p.title||p.brand;
-      if (name&&name.trim()) return {found:true,name:name.trim(),image:(p.images&&p.images[0])?p.images[0]:null,price:null,walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`,source:'upcitemdb'};
-    }
-  } catch(e) {}
-  try {
-    const res=await fetch('https://world.openfoodfacts.org/api/v0/product/'+upc+'.json',{signal:AbortSignal.timeout(7000)});
-    const data=await res.json();
-    if (data.status===1&&data.product) {
-      const p=data.product; const name=p.product_name||p.product_name_en||p.brands;
-      if (name&&name.trim()) return {found:true,name:name.trim(),image:p.image_front_small_url||null,price:null,walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`,source:'openfoodfacts'};
-    }
-  } catch(e) {}
-  return null;
-}
-
-window.handleScan = async function() {
-  const upcInput=document.getElementById('upc-input');
-  const upc=upcInput.value.trim().replace(/\D/g,'');
-  if (!upc) return;
-  // Clear input value (works even when readonly by temporarily removing the attribute)
-  const wasReadonly = upcInput.hasAttribute('readonly');
-  if (wasReadonly) upcInput.removeAttribute('readonly');
-  upcInput.value='';
-  if (wasReadonly) upcInput.setAttribute('readonly','readonly');
-  const existing=items.find(i=>i.upc===upc);
-  if (existing) { existing.qty++; await saveList(); setStatus('Quantity updated','success'); upcInput.focus(); return; }
-  setStatus('Searching Walmart catalog...','loading');
-  document.getElementById('add-btn').disabled=true;
-  const result=await lookupProduct(upc);
-  if (result) {
-    items.push({upc,...result,qty:1,category:getCategory(result.name)});
-    await saveList(); setStatus('✓ Found: '+result.name.substring(0,45),'success'); showToast('Added to list');
-  } else setStatus('Product not found — try a different item','error');
-  document.getElementById('add-btn').disabled=false; upcInput.focus();
-};
-
-document.getElementById('upc-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')window.handleScan();});
-
-// ── SCANNER MODE (suppress keyboard on iPhone when Bluetooth scanner is paired) ──
-const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
-let scannerModeActive = false;
-
-function setScannerMode(active) {
-  scannerModeActive = active;
-  const input = document.getElementById('upc-input');
-  if (!input) return;
-  if (active && isMobile) {
-    input.setAttribute('readonly', 'readonly');
-    input.setAttribute('inputmode', 'none');
-    input.placeholder = 'Scanner ready — tap keyboard icon to type';
-  } else {
-    input.removeAttribute('readonly');
-    input.setAttribute('inputmode', 'text');
-    input.placeholder = 'e.g. 078742434032';
-  }
-}
-
-// Show a keyboard toggle button next to the scan input on mobile
-if (isMobile) {
-  const scanRow = document.querySelector('.scan-row');
-  if (scanRow) {
-    const kbBtn = document.createElement('button');
-    kbBtn.id = 'kb-toggle-btn';
-    kbBtn.title = 'Toggle keyboard';
-    kbBtn.style.cssText = 'height:46px;width:46px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;transition:background .15s;';
-    kbBtn.innerHTML = '⌨️';
-    kbBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      scannerModeActive = !scannerModeActive;
-      setScannerMode(scannerModeActive);
-      if (!scannerModeActive) {
-        const input = document.getElementById('upc-input');
-        if (input) { input.removeAttribute('readonly'); input.focus(); }
-      }
-      kbBtn.style.background = scannerModeActive ? 'var(--green-light)' : 'var(--bg3)';
-    });
-    // Insert before the Add button
-    const addBtn = document.getElementById('add-btn');
-    if (addBtn) scanRow.insertBefore(kbBtn, addBtn);
-  }
-}
-
-// Auto-focus: keep scanner input focused whenever the main view is active
-// and user isn't typing in a modal or other input
-document.addEventListener('click', e => {
-  const inModal = e.target.closest('.modal-wrap');
-  const inDrawer = e.target.closest('.drawer');
-  const inAuthInput = e.target.closest('.auth-input');
-  if (!inModal && !inDrawer && !inAuthInput) {
-    const upcInput = document.getElementById('upc-input');
-    const mainView = document.getElementById('main-view');
-    if (upcInput && mainView && mainView.style.display !== 'none') {
-      // On mobile in scanner mode, focus without triggering keyboard (readonly handles that)
-      setTimeout(() => upcInput.focus(), 50);
-    }
-  }
-});
-
-// Also refocus after any keypress that isn't in a modal/input
-document.addEventListener('keydown', e => {
-  const tag = document.activeElement?.tagName;
-  const inModal = document.activeElement?.closest('.modal-wrap');
-  const inDrawer = document.activeElement?.closest('.drawer');
-  if (tag !== 'INPUT' && tag !== 'TEXTAREA' && !inModal && !inDrawer) {
-    const upcInput = document.getElementById('upc-input');
-    const mainView = document.getElementById('main-view');
-    if (upcInput && mainView && mainView.style.display !== 'none') {
-      upcInput.focus();
-    }
-  }
-});
-
-window.changeQty = async function(upc,delta) { const item=items.find(i=>i.upc===upc); if(item){item.qty=Math.max(1,item.qty+delta);await saveList();} };
-
-window.toggleCheck = async function(upc) {
-  const item = items.find(i=>i.upc===upc);
-  if (!item) return;
-  item.checked = !item.checked;
-  // Move checked items to bottom, unchecked to their original position
-  const unchecked = items.filter(i=>!i.checked);
-  const checked = items.filter(i=>i.checked);
-  items = [...unchecked, ...checked];
-  await saveList();
-};
-window.removeItem = async function(upc) { items=items.filter(i=>i.upc!==upc); await saveList(); if(items.length===0)setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
-window.clearList = async function() { items=[]; await saveList(); setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
-
-window.orderAllOnWalmart = async function() {
-  if (!items.length) return;
-  await saveToHistory();
-  items.forEach((item,i)=>setTimeout(()=>window.open(item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`,'_blank'),i*400));
-  showToast('Opening Walmart — order saved to history!');
-};
-
-function renderList() {
-  const empty=items.length===0;
-  const orderBtn=document.getElementById('order-btn');
-  const itemCount=document.getElementById('item-count');
-  const itemList=document.getElementById('item-list');
-  if(orderBtn) orderBtn.disabled=empty;
-  if(itemCount){itemCount.style.display=empty?'none':'inline-block';itemCount.textContent=items.length+(items.length===1?' item':' items');}
-  document.querySelectorAll('.item').forEach(el=>el.remove());
-  const emptyState=document.getElementById('empty-state');
-  if(emptyState) emptyState.style.display=empty?'':'none';
-  items.forEach(item=>{
-    const cat=item.category||getCategory(item.name);
-    const div=document.createElement('div'); div.className='item'+(item.checked?' checked':'');
-    const walmartUrl=item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`;
-    div.innerHTML=`<div class="item-main">
-      <div class="item-check${item.checked?' checked':''}" onclick="toggleCheck('${item.upc}')"></div>
-      ${item.image?`<img class="item-img" src="${item.image}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` :''}
-      <div class="item-ph" style="${item.image?'display:none':''}">📦</div>
-      <div class="item-info">
-        <div class="item-name">${esc(item.name)}</div>
-        <div class="item-meta">
-          ${item.price?`<span class="item-price">$${item.price}</span>`:''}
-          <span class="cat-pill cat-${cat}">${getCatLabel(cat)}</span>
-          <span class="item-upc">${item.upc}</span>
+</footer>
+
+<script>
+const ITEMS = [
+  { name: 'Tide Pods Laundry Detergent', price: '$13.97', emoji: '🧺', qty: 1, q: 'Tide Pods laundry detergent' },
+  { name: 'Bounty Paper Towels 8-Pack', price: '$18.94', emoji: '🧻', qty: 1, q: 'Bounty paper towels 8 pack' },
+  { name: 'Great Value 2% Milk 1 Gallon', price: '$3.48', emoji: '🥛', qty: 2, q: 'Great Value 2% milk gallon' },
+  { name: 'Folgers Classic Roast Coffee', price: '$9.97', emoji: '☕', qty: 1, q: 'Folgers Classic Roast coffee' },
+  { name: 'Colgate Total Toothpaste', price: '$4.27', emoji: '🦷', qty: 1, q: 'Colgate Total toothpaste' },
+];
+let items = ITEMS.map(i => ({...i}));
+
+function render() {
+  document.getElementById('demo-list').innerHTML = items.map((it, i) => `
+    <div class="demo-item">
+      <div class="demo-item-row">
+        <div class="demo-emoji">${it.emoji}</div>
+        <div style="flex:1;min-width:0">
+          <div class="demo-name">${it.name}</div>
+          <div class="demo-price">${it.price}</div>
+        </div>
+        <div class="demo-ctls">
+          <button class="demo-qbtn" onclick="chg(${i},-1)">−</button>
+          <span class="demo-qnum">${it.qty}</span>
+          <button class="demo-qbtn" onclick="chg(${i},1)">+</button>
         </div>
       </div>
-      <div class="item-controls">
-        <button class="qty-btn" onclick="changeQty('${item.upc}',-1)" style="font-size:20px;line-height:1;">-</button>
-        <span class="qty-num">${item.qty}</span>
-        <button class="qty-btn" onclick="changeQty('${item.upc}',1)">+</button>
-        <button class="del-btn" onclick="removeItem('${item.upc}')">×</button>
-      </div></div>
-      <div class="item-walmart">
-        <button class="btn-walmart" onclick="window.open('${walmartUrl}','_blank')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-          View on Walmart
-        </button>
-        <span class="walmart-badge">${item.source==='walmart_exact'?'✓ exact':'search'}</span>
-      </div>`;
-    itemList.appendChild(div);
-  });
-  if(!empty) setStatus(items.length+' item'+(items.length>1?'s':'')+' ready to order','success');
-}
-
-function setStatus(msg,type=''){const el=document.getElementById('status');if(el){el.textContent=msg;el.className='status'+(type?' '+type:'');}}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-// ── RECIPE MODULE ──
-let currentRecipe = null;
-let recipeIngredients = [];
-let recipeRating = 0;
-let recipeInputMode = 'url';
-let selectedIngredients = new Set();
-let pendingIngredientsForList = [];
-
-let recipeNavSource = 'book'; // 'book' | 'main'
-
-function showRecipeView(title, source) {
-  if (source) recipeNavSource = source;
-  document.getElementById('main-view').style.display = 'none';
-  document.getElementById('history-view').classList.remove('visible');
-  document.getElementById('library-view').classList.remove('visible');
-  document.getElementById('recipe-view').classList.add('visible');
-  document.getElementById('recipe-view-title').textContent = title || 'Recipe book';
-  // Update back button label based on where we came from
-  const backBtn = document.querySelector('.recipe-back-btn');
-  if (backBtn) {
-    if (recipeNavSource === 'book' && title !== 'Recipe book') {
-      backBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Recipe book';
-      backBtn.onclick = () => showRecipeBook();
-    } else {
-      backBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back';
-      backBtn.onclick = () => showMainView();
-    }
-  }
-}
-
-window.showRecipeBook = async function() {
-  showRecipeView('Recipe book', 'main');
-  await renderRecipeBook();
-};
-
-async function renderRecipeBook() {
-  const el = document.getElementById('recipe-content');
-  el.innerHTML = '';
-
-  // New recipe button
-  const newBtn = document.createElement('button');
-  newBtn.style.cssText = 'width:100%;height:50px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:Syne,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:8px;';
-  newBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add new recipe';
-  newBtn.addEventListener('click', () => showRecipeInput());
-  el.appendChild(newBtn);
-
-  // Load saved recipes
-  if (!currentUser) return;
-  try {
-    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'recipes'));
-    const recipes = [];
-    snap.forEach(d => recipes.push({ id: d.id, ...d.data() }));
-    recipes.sort((a, b) => (b.savedAt?.seconds || 0) - (a.savedAt?.seconds || 0));
-
-    if (recipes.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'empty';
-      empty.innerHTML = '<div style="font-size:32px;margin-bottom:10px;opacity:.4">📖</div><div>No recipes saved yet</div><div style="font-size:12px;color:var(--text3);margin-top:6px;">Add your first recipe above</div>';
-      el.appendChild(empty);
-      return;
-    }
-
-    recipes.forEach(recipe => {
-      const card = document.createElement('div');
-      card.className = 'recipe-book-item';
-      const stars = recipe.rating ? '⭐'.repeat(recipe.rating) : '';
-      const ingCount = recipe.ingredients ? recipe.ingredients.length : 0;
-      card.innerHTML = `
-        <div class="recipe-book-thumb">${recipe.image ? `<img src="${recipe.image}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;" onerror="this.outerHTML='${recipe.emoji || '🍽️'}'">` : (recipe.emoji || '🍽️')}</div>
-        <div class="recipe-book-info">
-          <div class="recipe-book-name">${esc(recipe.name)}</div>
-          <div class="recipe-book-meta">${ingCount} ingredients${recipe.category ? ' · ' + recipe.category : ''}</div>
-          <div class="recipe-book-stars">${stars}</div>
-          ${recipe.notes ? '<div style="font-size:11px;color:var(--text3);margin-top:3px;font-style:italic;">' + esc(recipe.notes.substring(0,60)) + (recipe.notes.length>60?'...':'') + '</div>' : ''}
-        </div>`;
-      const shopBtn = document.createElement('button');
-      shopBtn.className = 'recipe-book-shop-btn';
-      shopBtn.textContent = '🛒 Shop';
-      shopBtn.addEventListener('click', e => { e.stopPropagation(); showRecipeIngredients(recipe, true); });
-      card.querySelector('.recipe-book-actions') || card.appendChild(Object.assign(document.createElement('div'), {className:'recipe-book-actions'}));
-      card.querySelector('.recipe-book-actions').appendChild(shopBtn);
-      card.addEventListener('click', () => showRecipeDetail(recipe));
-      el.appendChild(card);
-    });
-  } catch(e) { console.error(e); }
-}
-
-window.showRecipeInput = function() {
-  showRecipeView('Add recipe', 'book');
-  recipeInputMode = 'url';
-  const el = document.getElementById('recipe-content');
-  el.innerHTML = `
-    <div class="recipe-input-tabs">
-      <button class="recipe-input-tab active" id="tab-url" onclick="switchRecipeTab('url')">🔗 URL</button>
-      <button class="recipe-input-tab" id="tab-text" onclick="switchRecipeTab('text')">📝 Text</button>
-      <button class="recipe-input-tab" id="tab-photo" onclick="switchRecipeTab('photo')">📷 Photo</button>
-    </div>
-    <div id="recipe-input-area"></div>
-    <button class="recipe-process-btn" id="recipe-process-btn" onclick="processRecipe()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      Extract ingredients with AI
-    </button>`;
-  switchRecipeTab('url');
-}
-
-window.switchRecipeTab = function(mode) {
-  recipeInputMode = mode;
-  ['url','text','photo'].forEach(m => {
-    const t = document.getElementById('tab-' + m);
-    if (t) t.className = 'recipe-input-tab' + (m === mode ? ' active' : '');
-  });
-  const area = document.getElementById('recipe-input-area');
-  if (!area) return;
-  if (mode === 'url') {
-    area.innerHTML = '<input class="recipe-url-input" type="url" id="recipe-url" placeholder="https://www.allrecipes.com/recipe/..." style="margin-bottom:10px;" /><div style="font-size:12px;color:var(--text3);">Paste any recipe URL from AllRecipes, Food Network, or any cooking site</div>';
-  } else if (mode === 'text') {
-    area.innerHTML = '<textarea class="recipe-textarea" id="recipe-text" placeholder="Paste or type your recipe here — ingredients, amounts, instructions..."></textarea>';
-  } else {
-    area.innerHTML = `
-      <div class="recipe-photo-area" id="recipe-photo-area" onclick="document.getElementById('recipe-photo-input').click()">
-        <div class="recipe-photo-icon">📷</div>
-        <div class="recipe-photo-label">Take a photo or choose from camera roll</div>
-        <div class="recipe-photo-sub">Point at a recipe card, cookbook page, or printed recipe</div>
+      <div class="demo-wbar">
+        <button class="demo-wbtn" onclick="window.open('https://www.walmart.com/search?q=${encodeURIComponent(it.q)}','_blank')">View on Walmart →</button>
       </div>
-      <input type="file" id="recipe-photo-input" accept="image/*" capture="environment" style="display:none" onchange="handleRecipePhoto(this)">`;
-  }
-};
-
-window.handleRecipePhoto = function(input) {
-  if (!input.files || !input.files[0]) return;
-  const file = input.files[0];
-  const reader = new FileReader();
-  reader.onload = e => {
-    const area = document.getElementById('recipe-photo-area');
-    if (area) {
-      area.className = 'recipe-photo-area has-image';
-      area.innerHTML = '<img class="recipe-photo-preview" src="' + e.target.result + '">';
-      area.onclick = () => document.getElementById('recipe-photo-input').click();
-    }
-    window._recipePhotoData = e.target.result;
-  };
-  reader.readAsDataURL(file);
-};
-
-window.processRecipe = async function() {
-  const btn = document.getElementById('recipe-process-btn');
-  const el = document.getElementById('recipe-content');
-  let inputData = '';
-  let inputType = recipeInputMode;
-
-  if (recipeInputMode === 'url') {
-    inputData = document.getElementById('recipe-url')?.value?.trim() || '';
-    if (!inputData) { showToast('Please enter a recipe URL'); return; }
-  } else if (recipeInputMode === 'text') {
-    inputData = document.getElementById('recipe-text')?.value?.trim() || '';
-    if (!inputData) { showToast('Please paste or type recipe text'); return; }
-  } else {
-    if (!window._recipePhotoData) { showToast('Please take or choose a photo first'); return; }
-    inputData = window._recipePhotoData;
-  }
-
-  btn.disabled = true;
-  el.innerHTML = `
-    <div class="recipe-processing">
-      <div class="recipe-processing-icon">🤖</div>
-      <div class="recipe-processing-text">Reading recipe with AI...</div>
-      <div class="recipe-processing-sub">Extracting ingredients and quantities</div>
-    </div>`;
-
-  try {
-    const response = await fetch('/api/recipe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: inputType, data: inputData }),
-      signal: AbortSignal.timeout(60000)
-    });
-    const result = await response.json();
-    if (result.error === 'url_blocked') {
-      // Site blocked our fetch — switch to text tab with helpful message
-      showRecipeInput();
-      switchRecipeTab('text');
-      showToast('That site blocked the fetch — paste the recipe text instead');
-      const ta = document.getElementById('recipe-text');
-      if (ta) {
-        ta.placeholder = 'This site blocked automatic fetching.\n\nGo to the recipe page, select all the text (Ctrl+A), copy it (Ctrl+C), then paste it here.';
-        ta.focus();
-      }
-      return;
-    }
-    if (result.error) throw new Error(result.error);
-    currentRecipe = result;
-    recipeIngredients = result.ingredients || [];
-    selectedIngredients = new Set(recipeIngredients.map((_, i) => i));
-    recipeRating = 0;
-    showRecipeIngredients(result, false);
-  } catch(e) {
-    el.innerHTML = `
-      <div class="empty">
-        <div style="font-size:32px;margin-bottom:10px;">😕</div>
-        <div style="font-weight:700;margin-bottom:6px;">Couldn't read that recipe</div>
-        <div style="font-size:13px;color:var(--text3);">${e.message === 'Failed to fetch' ? 'Check your connection and try again' : 'Try pasting the recipe text directly instead'}</div>
-      </div>
-      <button class="recipe-process-btn" onclick="showRecipeInput()" style="margin-top:1rem;">Try again</button>`;
-  }
-};
-
-function showRecipeIngredients(recipe, fromBook) {
-  showRecipeView(recipe.name || 'Ingredients', fromBook ? 'book' : 'main');
-  recipeIngredients = recipe.ingredients || [];
-  if (!fromBook) selectedIngredients = new Set(recipeIngredients.map((_, i) => i));
-  else selectedIngredients = new Set(recipeIngredients.map((_, i) => i));
-  currentRecipe = recipe;
-
-  const el = document.getElementById('recipe-content');
-  el.innerHTML = '';
-
-  // Recipe header card
-  const header = document.createElement('div');
-  header.className = 'recipe-result-header';
-  header.innerHTML = `
-    ${recipe.image ? `<img src="${recipe.image}" alt="" style="width:100%;border-radius:10px;margin-bottom:12px;max-height:220px;object-fit:cover;display:block;" onerror="this.style.display='none'">` : ''}
-    <div class="recipe-result-name">${esc(recipe.name || 'Recipe')}</div>
-    <div class="recipe-result-meta">
-      ${recipe.servings ? '<span>🍽️ ' + recipe.servings + ' servings</span>' : ''}
-      ${recipe.prepTime ? '<span>⏱️ ' + recipe.prepTime + '</span>' : ''}
-      ${recipe.category ? '<span>📂 ' + recipe.category + '</span>' : ''}
-    </div>
-    <div class="recipe-rating" id="recipe-stars">
-      ${[1,2,3,4,5].map(n => '<span class="recipe-star' + (recipe.rating >= n ? ' active' : '') + '" onclick="setRecipeRating(' + n + ')" data-star="' + n + '">⭐</span>').join('')}
-    </div>
-    <textarea class="recipe-notes-input" id="recipe-notes" placeholder="Add notes — substitutions, tips, what you changed...">${recipe.notes || ''}</textarea>`;
-  el.appendChild(header);
-
-  // Ingredients section
-  const ingHeader = document.createElement('div');
-  ingHeader.className = 'recipe-ingredients-header';
-  ingHeader.innerHTML = `
-    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);">${recipeIngredients.length} ingredients</div>
-    <button class="recipe-select-all" onclick="toggleSelectAll()">Deselect all</button>`;
-  el.appendChild(ingHeader);
-
-  recipeIngredients.forEach((ing, i) => {
-    const row = document.createElement('div');
-    row.className = 'recipe-ingredient selected';
-    row.id = 'ing-' + i;
-    row.innerHTML = `
-      <div class="recipe-ingredient-check"></div>
-      <div class="recipe-ingredient-info">
-        <div class="recipe-ingredient-name">${esc(ing.name)}</div>
-        <div class="recipe-ingredient-qty">${esc(ing.quantity || '')}</div>
-      </div>`;
-    row.addEventListener('click', () => {
-      if (selectedIngredients.has(i)) selectedIngredients.delete(i);
-      else selectedIngredients.add(i);
-      row.className = 'recipe-ingredient' + (selectedIngredients.has(i) ? ' selected' : '');
-      updateSelectAllBtn();
-    });
-    el.appendChild(row);
-  });
-
-  // Instructions section
-  if (recipe.instructions && recipe.instructions.length > 0) {
-    const instHeader = document.createElement('div');
-    instHeader.style.cssText = 'font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:1.25rem 0 8px;';
-    instHeader.textContent = recipe.instructions.length + ' steps';
-    el.appendChild(instHeader);
-
-    recipe.instructions.forEach((step, i) => {
-      const row = document.createElement('div');
-      row.style.cssText = 'background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:6px;display:flex;gap:12px;align-items:flex-start;';
-      row.innerHTML = `
-        <div style="width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">${i+1}</div>
-        <div style="font-size:14px;color:var(--text);line-height:1.5;">${esc(step)}</div>`;
-      el.appendChild(row);
-    });
-  }
-
-  // Action bar
-  const actionBar = document.createElement('div');
-  actionBar.className = 'recipe-action-bar';
-  if (!fromBook) {
-    const saveBtn = document.createElement('button');
-    saveBtn.className = 'recipe-save-btn';
-    saveBtn.textContent = '💾 Save recipe';
-    saveBtn.addEventListener('click', saveCurrentRecipe);
-    actionBar.appendChild(saveBtn);
-  }
-  const addListBtn = document.createElement('button');
-  addListBtn.className = 'recipe-add-list-btn';
-  addListBtn.textContent = '🛒 Add to list';
-  addListBtn.addEventListener('click', openListPicker);
-  actionBar.appendChild(addListBtn);
-  el.appendChild(actionBar);
+    </div>`).join('');
+  document.getElementById('demo-count').textContent = items.length + ' items';
 }
 
-window.setRecipeRating = function(n) {
-  recipeRating = n;
-  document.querySelectorAll('.recipe-star').forEach((s, i) => {
-    s.classList.toggle('active', i < n);
-  });
-};
-
-function updateSelectAllBtn() {
-  const btn = document.querySelector('.recipe-select-all');
-  if (!btn) return;
-  const allSelected = selectedIngredients.size === recipeIngredients.length;
-  btn.textContent = allSelected ? 'Deselect all' : 'Select all';
-}
-
-window.toggleSelectAll = function() {
-  const allSelected = selectedIngredients.size === recipeIngredients.length;
-  if (allSelected) {
-    selectedIngredients.clear();
-    document.querySelectorAll('.recipe-ingredient').forEach(r => r.className = 'recipe-ingredient');
-  } else {
-    recipeIngredients.forEach((_, i) => selectedIngredients.add(i));
-    document.querySelectorAll('.recipe-ingredient').forEach(r => r.className = 'recipe-ingredient selected');
-  }
-  updateSelectAllBtn();
-};
-
-async function saveCurrentRecipe() {
-  if (!currentUser || !currentRecipe) return;
-  const notes = document.getElementById('recipe-notes')?.value || '';
-  const recipeToSave = {
-    ...currentRecipe,
-    rating: recipeRating,
-    notes,
-    savedAt: new Date(),
-    emoji: getRecipeEmoji(currentRecipe.category)
-  };
-  try {
-    const id = currentRecipe.id || 'recipe_' + Date.now();
-    await setDoc(doc(db, 'users', currentUser.uid, 'recipes', id), recipeToSave);
-    showToast('Recipe saved to your book!');
-    currentRecipe = { ...recipeToSave, id };
-  } catch(e) { showToast('Could not save recipe'); }
-}
-
-function getRecipeEmoji(category) {
-  const map = { breakfast: '🥞', lunch: '🥗', dinner: '🍽️', dessert: '🍰', snack: '🍎', soup: '🍲', pasta: '🍝', chicken: '🍗', beef: '🥩', seafood: '🐟', vegetarian: '🥦', baking: '🍞' };
-  if (!category) return '🍽️';
-  const lower = category.toLowerCase();
-  for (const [k, v] of Object.entries(map)) { if (lower.includes(k)) return v; }
-  return '🍽️';
-}
-
-function openListPicker() {
-  const selected = Array.from(selectedIngredients).map(i => recipeIngredients[i]);
-  if (selected.length === 0) { showToast('Please select at least one ingredient'); return; }
-  pendingIngredientsForList = selected;
-
-  const el = document.getElementById('list-picker-items');
-  el.innerHTML = '';
-  lists.forEach(list => {
-    const item = document.createElement('div');
-    item.className = 'list-picker-item';
-    item.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>${esc(list.name)}`;
-    item.addEventListener('click', () => addIngredientsToList(list.id, list.name));
-    el.appendChild(item);
-  });
-  const newItem = document.createElement('div');
-  newItem.className = 'list-picker-item';
-  newItem.style.color = 'var(--green)';
-  newItem.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Create new list for this recipe';
-  newItem.addEventListener('click', () => {
-    closeModal('list-picker-modal');
-    openNewListModal();
-  });
-  el.appendChild(newItem);
-  document.getElementById('list-picker-modal').classList.add('open');
-}
-
-async function addIngredientsToList(listId, listName) {
-  closeModal('list-picker-modal');
-  let addedCount = 0;
-
-  // Switch to target list temporarily for adding
-  const prevListId = currentListId;
-  const prevListName = currentListName;
-
-  if (listId !== currentListId) {
-    currentListId = listId;
-    currentListName = listName;
-    // Load current items for that list
-    try {
-      const snap = await getDocs(collection(db, 'users', currentUser.uid, 'lists', listId, 'data', 'items'));
-    } catch(e) {}
-  }
-
-  // Load the target list items
-  let targetItems = [];
-  try {
-    const snap = await getDoc(doc(db, 'users', currentUser.uid, 'lists', listId, 'data', 'items'));
-    targetItems = snap.exists() ? (snap.data().items || []) : [];
-  } catch(e) {}
-
-  pendingIngredientsForList.forEach(ing => {
-    const searchName = ing.name;
-    const existing = targetItems.find(i => i.name?.toLowerCase() === searchName.toLowerCase());
-    if (existing) { existing.qty++; }
-    else {
-      targetItems.push({
-        upc: 'recipe_' + Date.now() + '_' + Math.random().toString(36).substr(2,5),
-        name: ing.name,
-        qty: 1,
-        price: null,
-        image: null,
-        category: getCategory(ing.name),
-        source: 'recipe',
-        walmartUrl: 'https://www.walmart.com/search?q=' + encodeURIComponent(ing.name),
-        checked: false
-      });
-      addedCount++;
-    }
-  });
-
-  try {
-    await setDoc(doc(db, 'users', currentUser.uid, 'lists', listId, 'data', 'items'), {
-      items: targetItems, updatedAt: new Date()
-    });
-    showToast(addedCount + ' ingredients added to ' + listName);
-    if (listId === prevListId) {
-      items = targetItems;
-      renderList();
-    }
-  } catch(e) { showToast('Could not add ingredients'); }
-
-  currentListId = prevListId;
-  currentListName = prevListName;
-}
-
-window.showRecipeDetail = function(recipe) {
-  showRecipeIngredients(recipe, true);
-};
-
-
-// ── CAMERA SCANNING (QuaggaJS - works on Safari iPhone) ──
-let quaggaRunning = false;
-
-function loadQuagga() {
-  return new Promise((resolve, reject) => {
-    if (window.Quagga) { resolve(); return; }
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js';
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
-
-window.openCamera = async function() {
-  const modal = document.getElementById('camera-modal');
-  const status = document.getElementById('camera-status');
-  status.textContent = 'Starting camera...';
-  status.className = 'camera-status';
-  modal.classList.add('open');
-  try {
-    await loadQuagga();
-    // Clear previous video content
-    const viewport = document.getElementById('quagga-viewport');
-    viewport.innerHTML = '';
-    Quagga.init({
-      inputStream: {
-        name: 'Live',
-        type: 'LiveStream',
-        target: viewport,
-        constraints: {
-          facingMode: 'environment',
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
-        area: { top: '0%', right: '0%', left: '0%', bottom: '0%' },
-        singleChannel: false
-      },
-      locator: { patchSize: 'large', halfSample: false },
-      numOfWorkers: 0,
-      frequency: 5,
-      decoder: {
-        readers: ['ean_reader','upc_reader','upc_e_reader','ean_8_reader','code_128_reader'],
-        multiple: false
-      },
-      locate: true
-    }, function(err) {
-      if (err) {
-        status.textContent = 'Camera access denied — please allow camera in Settings';
-        status.className = 'camera-status error';
-        return;
-      }
-      Quagga.start();
-      quaggaRunning = true;
-      status.textContent = 'Point camera at a barcode';
-      status.className = 'camera-status';
-    });
-
-    Quagga.offDetected();
-    Quagga.onDetected(async result => {
-      if (!quaggaRunning) return;
-      const code = result.codeResult.code;
-      if (!code) return;
-      quaggaRunning = false;
-      Quagga.stop();
-      await handleCameraScan(code);
-    });
-
-  } catch(e) {
-    status.textContent = 'Could not start camera — please try again';
-    status.className = 'camera-status error';
-  }
-};
-
-window.closeCamera = function() {
-  quaggaRunning = false;
-  try { if (window.Quagga) Quagga.stop(); } catch(e) {}
-  document.getElementById('quagga-viewport').innerHTML = '';
-  document.getElementById('camera-modal').classList.remove('open');
-  document.getElementById('camera-status').textContent = '';
-  setTimeout(() => { const i = document.getElementById('upc-input'); if(i) i.focus(); }, 100);
-};
-
-async function handleCameraScan(code) {
-  const status = document.getElementById('camera-status');
-  const upc = code.replace(/[^0-9]/g, '');
-  if (!upc || upc.length < 6) {
-    quaggaRunning = true;
-    try { Quagga.start(); } catch(e) {}
-    return;
-  }
-  status.textContent = 'Found: ' + upc + ' — looking up...';
-  status.className = 'camera-status';
-  const result = await lookupProduct(upc);
-  if (result) {
-    const existing = items.find(i => i.upc === upc);
-    if (existing) { existing.qty++; }
-    else { items.push({ upc, ...result, qty:1, category: getCategory(result.name), checked:false }); }
-    await saveList();
-    status.textContent = '✓ Added: ' + result.name.substring(0, 40);
-    status.className = 'camera-status found';
-    setTimeout(() => closeCamera(), 1800);
-  } else {
-    status.textContent = 'Product not found — try again';
-    status.className = 'camera-status error';
-    setTimeout(() => {
-      status.textContent = 'Point camera at a barcode';
-      status.className = 'camera-status';
-      quaggaRunning = true;
-      try { Quagga.start(); } catch(e) {}
-    }, 2000);
-  }
-}
+function chg(i, d) { items[i].qty = Math.max(1, items[i].qty + d); render(); }
+function demoOrderAll() { items.forEach((it, i) => setTimeout(() => window.open('https://www.walmart.com/search?q=' + encodeURIComponent(it.q), '_blank'), i * 400)); }
+render();
 </script>
 </body>
 </html>
