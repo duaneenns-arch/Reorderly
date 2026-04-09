@@ -167,7 +167,8 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 .menu-btn span { display: block; width: 16px; height: 2px; background: var(--text2); border-radius: 2px; }
 .logo { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
 .logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
-.list-badge { background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list-badge { background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; transition: background .15s; }
+.list-badge:hover { background: var(--green); color: #fff; }
 .shared-indicator { font-size: 10px; color: var(--green); background: var(--green-light); border: 1px solid rgba(29,158,117,.2); border-radius: 99px; padding: 2px 8px; display: none; }
 
 /* ── SCAN BOX ── */
@@ -601,7 +602,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
           Shared
         </div>
-        <div class="list-badge" id="list-name-badge">My List</div>
+        <div class="list-badge" id="list-name-badge" onclick="showMainView(); showAppScreen();" style="cursor:pointer;" title="Go to shopping list">My List</div>
       </div>
     </div>
 
