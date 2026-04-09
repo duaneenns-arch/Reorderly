@@ -422,23 +422,26 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="home-header">
       <div>
         <div class="home-greeting" id="home-greeting">Welcome back</div>
-        <div class="home-logo">ReOrderly<span class="home-logo-dot"></span><span class="home-version">v2.4</span></div>
+        <div class="home-logo">ReOrderly<span class="home-logo-dot"></span><span class="home-version">v2.6</span></div>
       </div>
-      <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button id="home-lang-btn" onclick="toggleLanguage()" style="height:30px;padding:0 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);transition:background .15s;" title="Switch language / Cambiar idioma">ES</button>
+        <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
+      </div>
     </div>
 
     <div class="home-stats">
       <div class="home-stat">
         <div class="home-stat-num" id="home-stat-items">0</div>
-        <div class="home-stat-label">In List</div>
+        <div class="home-stat-label" data-i18n="statInList">In List</div>
       </div>
       <div class="home-stat">
         <div class="home-stat-num" id="home-stat-recipes">0</div>
-        <div class="home-stat-label">Recipes</div>
+        <div class="home-stat-label" data-i18n="statRecipes">Recipes</div>
       </div>
       <div class="home-stat">
         <div class="home-stat-num" id="home-stat-orders">0</div>
-        <div class="home-stat-label">Orders</div>
+        <div class="home-stat-label" data-i18n="statOrders">Orders</div>
       </div>
     </div>
 
@@ -446,49 +449,49 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <div class="home-card primary" onclick="showMainView(); showAppScreen();">
         <div class="home-card-icon green">🛒</div>
         <div class="home-card-info">
-          <div class="home-card-title">My Shopping List</div>
-          <div class="home-card-sub">Scan items and order on Walmart</div>
+          <div class="home-card-title" data-i18n="cardListTitle">My Shopping List</div>
+          <div class="home-card-sub" data-i18n="cardListSub">Scan items and order on Walmart</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div class="home-card" onclick="showRecipeBook(); showAppScreen();">
         <div class="home-card-icon amber">📖</div>
         <div class="home-card-info">
-          <div class="home-card-title">Recipe Book</div>
-          <div class="home-card-sub">Add recipes and extract ingredients</div>
+          <div class="home-card-title" data-i18n="cardRecipeTitle">Recipe Book</div>
+          <div class="home-card-sub" data-i18n="cardRecipeSub">Add recipes and extract ingredients</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div class="home-card" onclick="showHistory(); showAppScreen();">
         <div class="home-card-icon blue">🕐</div>
         <div class="home-card-info">
-          <div class="home-card-title">Order History</div>
-          <div class="home-card-sub">View and re-add past orders</div>
+          <div class="home-card-title" data-i18n="cardHistoryTitle">Order History</div>
+          <div class="home-card-sub" data-i18n="cardHistorySub">View and re-add past orders</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div class="home-card" onclick="showLibrary(); showAppScreen();">
         <div class="home-card-icon purple">📦</div>
         <div class="home-card-info">
-          <div class="home-card-title">Product Library</div>
-          <div class="home-card-sub">Browse all your scanned products</div>
+          <div class="home-card-title" data-i18n="cardLibraryTitle">Product Library</div>
+          <div class="home-card-sub" data-i18n="cardLibrarySub">Browse all your scanned products</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
     </div>
 
     <div class="home-recent">
-      <div class="home-recent-title">Recent activity</div>
+      <div class="home-recent-title" data-i18n="recentActivity">Recent activity</div>
       <div id="home-recent-list">
-        <div style="font-size:13px;color:var(--text3);padding:8px 0;">No recent activity yet</div>
+        <div style="font-size:13px;color:var(--text3);padding:8px 0;" data-i18n="noRecentActivity">No recent activity yet</div>
       </div>
     </div>
 
     <div class="home-footer">
-      <div class="home-footer-disclosure">ReOrderly may earn a commission on purchases made through links to Walmart.com. As a Walmart affiliate, we earn from qualifying purchases.</div>
+      <div class="home-footer-disclosure" data-i18n="affiliateDisclosure">ReOrderly may earn a commission on purchases made through links to Walmart.com. As a Walmart affiliate, we earn from qualifying purchases.</div>
       <div class="home-footer-links">
-        <button class="home-footer-link" onclick="openAbout()">About</button>
-        <button class="home-footer-link" onclick="showMainView(); showAppScreen();">Go to App</button>
+        <button class="home-footer-link" onclick="openAbout()" data-i18n="btnAbout">About</button>
+        <button class="home-footer-link" onclick="showMainView(); showAppScreen();" data-i18n="btnGoToApp">Go to App</button>
       </div>
     </div>
   </div>
@@ -498,28 +501,28 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <div class="about-modal" id="about-modal">
   <div class="about-box">
     <div class="about-logo">ReOrderly<span class="about-logo-dot"></span></div>
-    <div class="about-tagline">Scan. List. Order. — reorderlysolutions.com</div>
+    <div class="about-tagline" data-i18n="tagline">Scan. List. Order. — reorderlysolutions.com</div>
     <div class="about-section">
-      <div class="about-section-title">What is ReOrderly?</div>
-      <div class="about-section-body">ReOrderly is a smart household reordering app. Scan any product barcode as you run out, build your reorder list automatically, and send everything to your Walmart cart with one tap. No more manually typing grocery lists or forgetting what you need.</div>
+      <div class="about-section-title" data-i18n="aboutWhatTitle">What is ReOrderly?</div>
+      <div class="about-section-body" data-i18n="aboutWhatBody">ReOrderly is a smart household reordering app. Scan any product barcode as you run out, build your reorder list automatically, and send everything to your Walmart cart with one tap. No more manually typing grocery lists or forgetting what you need.</div>
     </div>
     <div class="about-section">
-      <div class="about-section-title">Recipe Intelligence</div>
-      <div class="about-section-body">Paste any recipe URL and our AI automatically extracts all ingredients with quantities. Add them to your shopping list and send to Walmart in one tap. Works with AllRecipes, Food Network, and thousands of recipe sites.</div>
+      <div class="about-section-title" data-i18n="aboutRecipeTitle">Recipe Intelligence</div>
+      <div class="about-section-body" data-i18n="aboutRecipeBody">Paste any recipe URL and our AI automatically extracts all ingredients with quantities. Add them to your shopping list and send to Walmart in one tap. Works with AllRecipes, Food Network, and thousands of recipe sites.</div>
     </div>
     <div class="about-section">
-      <div class="about-section-title">Household Sharing</div>
-      <div class="about-section-body">Invite family members to share your list. Anyone in the household can scan items and add them — everything syncs in real time across all devices.</div>
+      <div class="about-section-title" data-i18n="aboutSharingTitle">Household Sharing</div>
+      <div class="about-section-body" data-i18n="aboutSharingBody">Invite family members to share your list. Anyone in the household can scan items and add them — everything syncs in real time across all devices.</div>
     </div>
     <div class="about-section">
-      <div class="about-section-title">Affiliate Disclosure</div>
-      <div class="about-section-body">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
+      <div class="about-section-title" data-i18n="aboutAffiliateTitle">Affiliate Disclosure</div>
+      <div class="about-section-body" data-i18n="aboutAffiliateBody">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
     </div>
     <div class="about-section">
-      <div class="about-section-title">Version</div>
-      <div class="about-section-body">ReOrderly v2.4 — Built with Firebase, Netlify, and Anthropic AI.</div>
+      <div class="about-section-title" data-i18n="aboutVersionTitle">Version</div>
+      <div class="about-section-body">ReOrderly v2.6 — Built with Firebase, Netlify, and Anthropic AI.</div>
     </div>
-    <button class="about-close" onclick="closeAbout()">Close</button>
+    <button class="about-close" onclick="closeAbout()" data-i18n="btnClose">Close</button>
   </div>
 </div>
 
@@ -528,22 +531,22 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="auth-box">
     <div class="auth-logo">
       <div class="auth-logo-text">ReOrderly<span class="auth-logo-dot"></span></div>
-      <div class="auth-logo-sub">Scan. List. Order.</div>
+      <div class="auth-logo-sub" data-i18n="taglineShort">Scan. List. Order.</div>
     </div>
     <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Sign in</button>
-      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create account</button>
+      <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')" data-i18n="btnSignIn">Sign in</button>
+      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')" data-i18n="btnCreateAccount">Create account</button>
     </div>
     <div class="auth-form">
-      <input class="auth-input" type="email" id="auth-email" placeholder="Email address" />
-      <input class="auth-input" type="password" id="auth-password" placeholder="Password" />
-      <input class="auth-input" type="password" id="auth-password2" placeholder="Confirm password" style="display:none" />
+      <input class="auth-input" type="email" id="auth-email" data-i18n-placeholder="placeholderEmail" placeholder="Email address" />
+      <input class="auth-input" type="password" id="auth-password" data-i18n-placeholder="placeholderPassword" placeholder="Password" />
+      <input class="auth-input" type="password" id="auth-password2" data-i18n-placeholder="placeholderConfirmPassword" placeholder="Confirm password" style="display:none" />
       <div class="auth-error" id="auth-error"></div>
-      <button class="auth-btn" id="auth-submit-btn" onclick="handleEmailAuth()">Sign in</button>
-      <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-text">or</div><div class="auth-divider-line"></div></div>
+      <button class="auth-btn" id="auth-submit-btn" onclick="handleEmailAuth()" data-i18n="btnSignIn">Sign in</button>
+      <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-text" data-i18n="or">or</div><div class="auth-divider-line"></div></div>
       <button class="auth-google-btn" onclick="handleGoogleAuth()">
         <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
+        <span data-i18n="btnGoogleSignIn">Continue with Google</span>
       </button>
     </div>
   </div>
@@ -558,34 +561,34 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
   </div>
-  <div class="drawer-section">My Lists</div>
+  <div class="drawer-section" data-i18n="myLists">My Lists</div>
   <div id="drawer-lists"></div>
   <div class="drawer-new-list" onclick="openNewListModal()">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    New list
+    <span data-i18n="newList">New list</span>
   </div>
-  <div class="drawer-section">Recipes</div>
+  <div class="drawer-section" data-i18n="recipes">Recipes</div>
   <div class="drawer-item" id="drawer-recipe-btn">
     <div class="drawer-item-left">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 013 3v1H9V5a3 3 0 013-3z"/><path d="M19 6H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2z"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
-      <span class="drawer-item-name">Recipe book</span>
+      <span class="drawer-item-name" data-i18n="recipeBook">Recipe book</span>
     </div>
   </div>
-  <div class="drawer-section">Other</div>
+  <div class="drawer-section" data-i18n="other">Other</div>
   <div class="drawer-item" id="drawer-library-btn">
     <div class="drawer-item-left">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      <span class="drawer-item-name">Product library</span>
+      <span class="drawer-item-name" data-i18n="productLibrary">Product library</span>
     </div>
   </div>
   <div class="drawer-item" id="drawer-history-btn">
     <div class="drawer-item-left">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span class="drawer-item-name">Order history</span>
+      <span class="drawer-item-name" data-i18n="orderHistory">Order history</span>
     </div>
   </div>
   <div class="drawer-footer">
-    <button class="drawer-signout" onclick="handleSignOut()">Sign out</button>
+    <button class="drawer-signout" onclick="handleSignOut()" data-i18n="btnSignOut">Sign out</button>
   </div>
 </div>
 
@@ -595,12 +598,13 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.4</span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.6</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
+        <button id="lang-toggle-btn" onclick="toggleLanguage()" style="height:30px;padding:0 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);transition:background .15s;" title="Switch language / Cambiar idioma">ES</button>
         <div class="shared-indicator" id="shared-indicator">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-          Shared
+          <span data-i18n="shared">Shared</span>
         </div>
         <div class="list-badge" id="list-name-badge" onclick="showMainView(); showAppScreen();" style="cursor:pointer;" title="Go to shopping list">My List</div>
       </div>
@@ -609,32 +613,32 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- Main view -->
     <div id="main-view">
       <div class="scan-box">
-        <div class="scan-label">Scan or enter barcode</div>
+        <div class="scan-label" data-i18n="scanLabel">Scan or enter barcode</div>
         <div class="scan-row">
-          <input type="text" id="upc-input" placeholder="e.g. 078742434032" autocomplete="off" />
+          <input type="text" id="upc-input" data-i18n-placeholder="scanPlaceholder" placeholder="e.g. 078742434032" autocomplete="off" />
           <button class="btn-camera" onclick="openCamera()" title="Scan with camera">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </button>
-          <button class="btn-add" id="add-btn" onclick="handleScan()">Add</button>
+          <button class="btn-add" id="add-btn" onclick="handleScan()" data-i18n="btnAdd">Add</button>
         </div>
-        <div class="status" id="status">Ready — scan with your Bluetooth scanner or type a UPC</div>
+        <div class="status" id="status" data-i18n="statusReady">Ready — scan with your Bluetooth scanner or type a UPC</div>
       </div>
       <div class="list-header">
-        <div class="list-title">Reorder list</div>
+        <div class="list-title" data-i18n="reorderList">Reorder list</div>
         <div class="item-count" id="item-count" style="display:none"></div>
       </div>
       <div id="item-list">
         <div class="empty" id="empty-state">
           <div style="font-size:32px;margin-bottom:10px;opacity:.4">🛒</div>
-          <div>Scan an item to add it to your list</div>
+          <div data-i18n="emptyList">Scan an item to add it to your list</div>
         </div>
       </div>
       <div class="order-bar">
         <button class="btn-order-all" id="order-btn" disabled onclick="orderAllOnWalmart()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/><circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/><circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/></svg>
-          Order all on Walmart
+          <span data-i18n="btnOrderAll">Order all on Walmart</span>
         </button>
-        <button class="btn-clear" onclick="clearList()">Clear</button>
+        <button class="btn-clear" onclick="clearList()" data-i18n="btnClear">Clear</button>
       </div>
     </div>
 
@@ -642,22 +646,22 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div id="history-view" class="history-view">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
         <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="btnBack">Back</span>
         </button>
-        <div style="font-size:16px;font-weight:800;color:var(--text);">Order history</div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);" data-i18n="orderHistory">Order history</div>
       </div>
-      <div id="history-list"><div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📋</div><div>No order history yet</div></div></div>
+      <div id="history-list"><div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📋</div><div data-i18n="noHistory">No order history yet</div></div></div>
     </div>
 
     <!-- Library view -->
     <div id="library-view" class="library-view">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
         <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="btnBack">Back</span>
         </button>
-        <div style="font-size:16px;font-weight:800;color:var(--text);">Product library</div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);" data-i18n="productLibrary">Product library</div>
       </div>
-      <input class="lib-search" type="text" id="lib-search" placeholder="Search your scanned products..." />
+      <input class="lib-search" type="text" id="lib-search" data-i18n-placeholder="searchProducts" placeholder="Search your scanned products..." />
       <div class="lib-tabs" id="lib-tabs"></div>
       <div id="library-list"></div>
     </div>
@@ -680,7 +684,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- Camera Scanner Modal -->
 <div class="camera-modal" id="camera-modal">
   <div class="camera-header">
-    <div class="camera-title">Scan barcode</div>
+    <div class="camera-title" data-i18n="cameraTitle">Scan barcode</div>
     <button class="camera-close" onclick="closeCamera()">×</button>
   </div>
   <div class="camera-viewport" style="position:relative;">
@@ -698,12 +702,12 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- New List Modal -->
 <div class="modal-wrap" id="new-list-modal">
   <div class="modal">
-    <div class="modal-title">New list</div>
-    <div class="modal-subtitle">Give your list a name like "Weekly Groceries" or "Costco Run"</div>
-    <input class="modal-input" type="text" id="new-list-name" placeholder="List name" maxlength="30" />
+    <div class="modal-title" data-i18n="newListTitle">New list</div>
+    <div class="modal-subtitle" data-i18n="newListSub">Give your list a name like "Weekly Groceries" or "Costco Run"</div>
+    <input class="modal-input" type="text" id="new-list-name" data-i18n-placeholder="listNamePlaceholder" placeholder="List name" maxlength="30" />
     <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('new-list-modal')">Cancel</button>
-      <button class="modal-confirm" onclick="createNewList()">Create</button>
+      <button class="modal-cancel" onclick="closeModal('new-list-modal')" data-i18n="btnCancel">Cancel</button>
+      <button class="modal-confirm" onclick="createNewList()" data-i18n="btnCreate">Create</button>
     </div>
   </div>
 </div>
@@ -711,11 +715,11 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- Delete List Modal -->
 <div class="modal-wrap" id="delete-list-modal">
   <div class="modal">
-    <div class="modal-title">Delete list?</div>
+    <div class="modal-title" data-i18n="deleteListTitle">Delete list?</div>
     <div class="modal-subtitle" id="delete-list-msg">This will permanently delete the list and all its items. This cannot be undone.</div>
     <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('delete-list-modal')">Cancel</button>
-      <button class="modal-confirm danger" onclick="confirmDeleteList()">Delete</button>
+      <button class="modal-cancel" onclick="closeModal('delete-list-modal')" data-i18n="btnCancel">Cancel</button>
+      <button class="modal-confirm danger" onclick="confirmDeleteList()" data-i18n="btnDelete">Delete</button>
     </div>
   </div>
 </div>
@@ -723,14 +727,14 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- Invite Modal -->
 <div class="modal-wrap" id="invite-modal">
   <div class="modal">
-    <div class="modal-title">Share list</div>
-    <div class="modal-subtitle">Invite someone by their email address. They'll need a ReOrderly account to access the list.</div>
+    <div class="modal-title" data-i18n="shareListTitle">Share list</div>
+    <div class="modal-subtitle" data-i18n="shareListSub">Invite someone by their email address. They'll need a ReOrderly account to access the list.</div>
     <div class="modal-members" id="invite-members"></div>
-    <input class="modal-input" type="email" id="invite-email" placeholder="Email address" />
+    <input class="modal-input" type="email" id="invite-email" data-i18n-placeholder="placeholderEmail" placeholder="Email address" />
     <div class="modal-msg" id="invite-msg"></div>
     <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('invite-modal')">Done</button>
-      <button class="modal-confirm" onclick="sendInvite()">Invite</button>
+      <button class="modal-cancel" onclick="closeModal('invite-modal')" data-i18n="btnDone">Done</button>
+      <button class="modal-confirm" onclick="sendInvite()" data-i18n="btnInvite">Invite</button>
     </div>
   </div>
 </div>
@@ -738,11 +742,11 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- List Picker Modal -->
 <div class="modal-wrap" id="list-picker-modal">
   <div class="modal">
-    <div class="modal-title">Add to list</div>
-    <div class="modal-subtitle">Choose which list to add the selected ingredients to</div>
+    <div class="modal-title" data-i18n="addToListTitle">Add to list</div>
+    <div class="modal-subtitle" data-i18n="addToListSub">Choose which list to add the selected ingredients to</div>
     <div id="list-picker-items" style="margin-bottom:12px;border:1px solid var(--border);border-radius:12px;overflow:hidden;max-height:260px;overflow-y:auto;"></div>
     <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal('list-picker-modal')">Cancel</button>
+      <button class="modal-cancel" onclick="closeModal('list-picker-modal')" data-i18n="btnCancel">Cancel</button>
     </div>
   </div>
 </div>
@@ -756,12 +760,12 @@ import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, del
 
 // ── PASTE YOUR FIREBASE CONFIG HERE ──
 const firebaseConfig = {
-  apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
-  authDomain: "reorderly-b152f.firebaseapp.com",
-  projectId: "reorderly-b152f",
-  storageBucket: "reorderly-b152f.firebasestorage.app",
-  messagingSenderId: "690816543799",
-  appId: "1:690816543799:web:5c0d7573ab04cc009d23b2"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 // ─────────────────────────────────────
 
@@ -769,6 +773,272 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
+
+// ── LANGUAGE SYSTEM ──
+let currentLang = localStorage.getItem('reorderly_lang') || 'en';
+
+const LANG = {
+  en: {
+    // Stats
+    statInList: 'In List', statRecipes: 'Recipes', statOrders: 'Orders',
+    // Home cards
+    cardListTitle: 'My Shopping List', cardListSub: 'Scan items and order on Walmart',
+    cardRecipeTitle: 'Recipe Book', cardRecipeSub: 'Add recipes and extract ingredients',
+    cardHistoryTitle: 'Order History', cardHistorySub: 'View and re-add past orders',
+    cardLibraryTitle: 'Product Library', cardLibrarySub: 'Browse all your scanned products',
+    // Home
+    recentActivity: 'Recent activity', noRecentActivity: 'No recent activity yet — scan your first item to get started',
+    inYourList: 'In your list',
+    affiliateDisclosure: 'ReOrderly may earn a commission on purchases made through links to Walmart.com. As a Walmart affiliate, we earn from qualifying purchases.',
+    btnAbout: 'About', btnGoToApp: 'Go to App',
+    // About modal
+    tagline: 'Scan. List. Order. — reorderlysolutions.com', taglineShort: 'Scan. List. Order.',
+    aboutWhatTitle: 'What is ReOrderly?',
+    aboutWhatBody: 'ReOrderly is a smart household reordering app. Scan any product barcode as you run out, build your reorder list automatically, and send everything to your Walmart cart with one tap. No more manually typing grocery lists or forgetting what you need.',
+    aboutRecipeTitle: 'Recipe Intelligence',
+    aboutRecipeBody: 'Paste any recipe URL and our AI automatically extracts all ingredients with quantities. Add them to your shopping list and send to Walmart in one tap. Works with AllRecipes, Food Network, and thousands of recipe sites.',
+    aboutSharingTitle: 'Household Sharing',
+    aboutSharingBody: 'Invite family members to share your list. Anyone in the household can scan items and add them — everything syncs in real time across all devices.',
+    aboutAffiliateTitle: 'Affiliate Disclosure',
+    aboutAffiliateBody: 'ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.',
+    aboutVersionTitle: 'Version', btnClose: 'Close',
+    // Auth
+    btnSignIn: 'Sign in', btnCreateAccount: 'Create account',
+    placeholderEmail: 'Email address', placeholderPassword: 'Password', placeholderConfirmPassword: 'Confirm password',
+    or: 'or', btnGoogleSignIn: 'Continue with Google', btnSignOut: 'Sign out',
+    // Auth errors
+    authFillFields: 'Please fill in all fields', authPasswordNoMatch: 'Passwords do not match',
+    authNoAccount: 'No account with that email', authWrongPassword: 'Incorrect password',
+    authEmailExists: 'Account already exists', authWeakPassword: 'Password must be 6+ characters',
+    authInvalidCred: 'Incorrect email or password', authInvalidEmail: 'Invalid email',
+    authGoogleFail: 'Google sign-in failed', authSomethingWrong: 'Something went wrong',
+    // Drawer
+    myLists: 'My Lists', newList: 'New list', recipes: 'Recipes',
+    recipeBook: 'Recipe book', other: 'Other', productLibrary: 'Product library',
+    orderHistory: 'Order history', shared: 'Shared',
+    // Scan / main view
+    scanLabel: 'Scan or enter barcode', scanPlaceholder: 'e.g. 078742434032',
+    btnAdd: 'Add', btnOrderAll: 'Order all on Walmart', btnClear: 'Clear',
+    reorderList: 'Reorder list', emptyList: 'Scan an item to add it to your list',
+    statusReady: 'Ready — scan with your Bluetooth scanner or type a UPC',
+    statusSearching: 'Searching Walmart catalog...', statusQtyUpdated: 'Quantity updated',
+    statusNotFound: 'Product not found — try a different item',
+    statusFound: '✓ Found: ', statusItemsReady: ' items ready to order', statusItemReady: ' item ready to order',
+    toastAddedToList: 'Added to list', toastOpeningWalmart: 'Opening Walmart — order saved to history!',
+    viewOnWalmart: 'View on Walmart',
+    // History
+    btnBack: 'Back', noHistory: 'No order history yet', loading: 'Loading...',
+    historyCouldNotLoad: 'Could not load history', items: 'items', item: 'item',
+    btnReAdd: '+ Add', toastAdded: 'Added: ',
+    // Library
+    searchProducts: 'Search your scanned products...',
+    libUsual: '⭐ Usual', libAll: 'All', libGrocery: 'Grocery', libSnacks: 'Snacks',
+    libHousehold: 'Household', libHealth: 'Health', libOther: 'Other',
+    libNoUsual: 'Scan items more than once or star items to add them here',
+    libNoResults: 'No results found', libNoCategory: 'No items in this category yet',
+    libCouldNotLoad: 'Could not load library', libLoading: 'Loading...',
+    inList: '✓ In list', addItem: '+ Add',
+    addToUsual: 'Add to Usual', removeFromUsual: 'Remove from Usual',
+    // Modals
+    newListTitle: 'New list', newListSub: 'Give your list a name like "Weekly Groceries" or "Costco Run"',
+    listNamePlaceholder: 'List name', btnCancel: 'Cancel', btnCreate: 'Create',
+    deleteListTitle: 'Delete list?', btnDelete: 'Delete',
+    shareListTitle: 'Share list',
+    shareListSub: "Invite someone by their email address. They'll need a ReOrderly account to access the list.",
+    btnDone: 'Done', btnInvite: 'Invite', noMembersYet: 'No members yet',
+    btnRemove: 'Remove', memberRemoved: 'Member removed',
+    invitePleaseEnterEmail: 'Please enter an email address', inviteCantInviteSelf: "You can't invite yourself",
+    inviteAlreadyMember: 'Already a member', inviteCouldNotAdd: 'Could not add member',
+    addToListTitle: 'Add to list', addToListSub: 'Choose which list to add the selected ingredients to',
+    // List operations
+    toastListCreated: 'List created: ', toastListDeleted: 'List deleted', toastCouldNotDelete: 'Could not delete list',
+    // Camera
+    cameraTitle: 'Scan barcode', cameraHint: 'Point at any product barcode',
+    cameraStarting: 'Starting camera...', cameraReady: 'Point camera at a barcode',
+    cameraFound: '✓ Added: ', cameraNotFound: 'Product not found — try again',
+    cameraAccessDenied: 'Camera access denied — please allow camera in Settings',
+    cameraCouldNotStart: 'Could not start camera — please try again',
+    // Recipe
+    addNewRecipe: '+ Add new recipe', noRecipesSaved: 'No recipes saved yet', addFirstRecipe: 'Add your first recipe above',
+    addRecipeTitle: 'Add recipe', extractBtn: 'Extract ingredients with AI',
+    tabUrl: '🔗 URL', tabText: '📝 Text', tabPhoto: '📷 Photo',
+    urlPlaceholder: 'https://www.allrecipes.com/recipe/...',
+    urlHint: 'Paste any recipe URL from AllRecipes, Food Network, or any cooking site',
+    textPlaceholder: 'Paste or type your recipe here — ingredients, amounts, instructions...',
+    photoLabel: 'Take a photo or choose from camera roll',
+    photoSub: 'Point at a recipe card, cookbook page, or printed recipe',
+    recipeProcessing: 'Reading recipe with AI...', recipeExtracting: 'Extracting ingredients and quantities',
+    recipeUrlToast: 'Please enter a recipe URL', recipeTextToast: 'Please paste or type recipe text',
+    recipePhotoToast: 'Please take or choose a photo first',
+    recipeUrlBlocked: 'That site blocked the fetch — paste the recipe text instead',
+    recipeUrlBlockedPlaceholder: 'This site blocked automatic fetching.\n\nGo to the recipe page, select all the text (Ctrl+A), copy it (Ctrl+C), then paste it here.',
+    recipeCantRead: "Couldn't read that recipe", recipeCheckConnection: 'Check your connection and try again',
+    recipeTryText: 'Try pasting the recipe text directly instead', btnTryAgain: 'Try again',
+    ingredients: 'ingredients', steps: 'steps', servings: 'servings',
+    notesPlaceholder: 'Add notes — substitutions, tips, what you changed...',
+    deselectAll: 'Deselect all', selectAll: 'Select all',
+    btnSaveRecipe: '💾 Save recipe', btnAddToList: '🛒 Add to list', btnShop: '🛒 Shop',
+    recipeSaved: 'Recipe saved to your book!', recipeCouldNotSave: 'Could not save recipe',
+    selectAtLeastOne: 'Please select at least one ingredient',
+    createNewListForRecipe: 'Create new list for this recipe',
+    ingredientsAddedTo: ' ingredients added to ',
+    couldNotAddIngredients: 'Could not add ingredients',
+    // Category labels
+    catGrocery: 'Grocery', catSnacks: 'Snacks', catHousehold: 'Household',
+    catHealth: 'Health & Beauty', catOther: 'Other',
+    // Greetings
+    greetMorning: 'Good morning', greetAfternoon: 'Good afternoon', greetEvening: 'Good evening',
+  },
+  es: {
+    // Stats
+    statInList: 'En Lista', statRecipes: 'Recetas', statOrders: 'Pedidos',
+    // Home cards
+    cardListTitle: 'Mi Lista de Compras', cardListSub: 'Escanea artículos y pide en Walmart',
+    cardRecipeTitle: 'Libro de Recetas', cardRecipeSub: 'Agrega recetas y extrae ingredientes',
+    cardHistoryTitle: 'Historial de Pedidos', cardHistorySub: 'Ver y volver a agregar pedidos',
+    cardLibraryTitle: 'Biblioteca de Productos', cardLibrarySub: 'Explora todos tus productos escaneados',
+    // Home
+    recentActivity: 'Actividad reciente', noRecentActivity: 'Sin actividad reciente — escanea tu primer artículo',
+    inYourList: 'En tu lista',
+    affiliateDisclosure: 'ReOrderly puede ganar una comisión por compras realizadas a través de enlaces a Walmart.com. Como afiliado de Walmart, ganamos por compras calificadas.',
+    btnAbout: 'Acerca de', btnGoToApp: 'Ir a la App',
+    // About modal
+    tagline: 'Escanea. Lista. Pide. — reorderlysolutions.com', taglineShort: 'Escanea. Lista. Pide.',
+    aboutWhatTitle: '¿Qué es ReOrderly?',
+    aboutWhatBody: 'ReOrderly es una app inteligente para reordenar productos del hogar. Escanea el código de barras cuando se te acabe algo, crea tu lista automáticamente y envía todo a tu carrito de Walmart con un toque.',
+    aboutRecipeTitle: 'Recetas con IA',
+    aboutRecipeBody: 'Pega cualquier URL de receta y nuestra IA extrae automáticamente todos los ingredientes con cantidades. Agrégalos a tu lista y envíalos a Walmart con un toque.',
+    aboutSharingTitle: 'Compartir en el Hogar',
+    aboutSharingBody: 'Invita a los miembros de tu familia a compartir la lista. Cualquier persona puede escanear artículos — todo se sincroniza en tiempo real.',
+    aboutAffiliateTitle: 'Divulgación de Afiliados',
+    aboutAffiliateBody: 'ReOrderly participa en el programa de afiliados de Walmart. Podemos ganar una comisión cuando realizas compras a través de enlaces en esta app. Esto no afecta el precio que pagas.',
+    aboutVersionTitle: 'Versión', btnClose: 'Cerrar',
+    // Auth
+    btnSignIn: 'Iniciar sesión', btnCreateAccount: 'Crear cuenta',
+    placeholderEmail: 'Correo electrónico', placeholderPassword: 'Contraseña', placeholderConfirmPassword: 'Confirmar contraseña',
+    or: 'o', btnGoogleSignIn: 'Continuar con Google', btnSignOut: 'Cerrar sesión',
+    // Auth errors
+    authFillFields: 'Por favor completa todos los campos', authPasswordNoMatch: 'Las contraseñas no coinciden',
+    authNoAccount: 'No hay cuenta con ese correo', authWrongPassword: 'Contraseña incorrecta',
+    authEmailExists: 'La cuenta ya existe', authWeakPassword: 'La contraseña debe tener 6+ caracteres',
+    authInvalidCred: 'Correo o contraseña incorrectos', authInvalidEmail: 'Correo electrónico inválido',
+    authGoogleFail: 'Error al iniciar sesión con Google', authSomethingWrong: 'Algo salió mal',
+    // Drawer
+    myLists: 'Mis Listas', newList: 'Nueva lista', recipes: 'Recetas',
+    recipeBook: 'Libro de recetas', other: 'Otros', productLibrary: 'Biblioteca de productos',
+    orderHistory: 'Historial de pedidos', shared: 'Compartida',
+    // Scan / main view
+    scanLabel: 'Escanea o ingresa código de barras', scanPlaceholder: 'ej. 078742434032',
+    btnAdd: 'Agregar', btnOrderAll: 'Pedir todo en Walmart', btnClear: 'Borrar',
+    reorderList: 'Lista de pedidos', emptyList: 'Escanea un artículo para agregarlo a tu lista',
+    statusReady: 'Listo — escanea con tu lector Bluetooth o escribe un UPC',
+    statusSearching: 'Buscando en catálogo de Walmart...', statusQtyUpdated: 'Cantidad actualizada',
+    statusNotFound: 'Producto no encontrado — intenta con otro artículo',
+    statusFound: '✓ Encontrado: ', statusItemsReady: ' artículos listos para pedir', statusItemReady: ' artículo listo para pedir',
+    toastAddedToList: 'Agregado a la lista', toastOpeningWalmart: '¡Abriendo Walmart — pedido guardado en historial!',
+    viewOnWalmart: 'Ver en Walmart',
+    // History
+    btnBack: 'Atrás', noHistory: 'Sin historial de pedidos', loading: 'Cargando...',
+    historyCouldNotLoad: 'No se pudo cargar el historial', items: 'artículos', item: 'artículo',
+    btnReAdd: '+ Agregar', toastAdded: 'Agregado: ',
+    // Library
+    searchProducts: 'Buscar productos escaneados...',
+    libUsual: '⭐ Habituales', libAll: 'Todos', libGrocery: 'Comestibles', libSnacks: 'Botanas',
+    libHousehold: 'Hogar', libHealth: 'Salud', libOther: 'Otros',
+    libNoUsual: 'Escanea artículos más de una vez o márcalos con estrella para agregarlos aquí',
+    libNoResults: 'Sin resultados', libNoCategory: 'Sin artículos en esta categoría',
+    libCouldNotLoad: 'No se pudo cargar la biblioteca', libLoading: 'Cargando...',
+    inList: '✓ En lista', addItem: '+ Agregar',
+    addToUsual: 'Agregar a Habituales', removeFromUsual: 'Quitar de Habituales',
+    // Modals
+    newListTitle: 'Nueva lista', newListSub: 'Ponle un nombre como "Súper semanal" o "Costco"',
+    listNamePlaceholder: 'Nombre de la lista', btnCancel: 'Cancelar', btnCreate: 'Crear',
+    deleteListTitle: '¿Eliminar lista?', btnDelete: 'Eliminar',
+    shareListTitle: 'Compartir lista',
+    shareListSub: 'Invita a alguien con su correo electrónico. Necesitan una cuenta de ReOrderly.',
+    btnDone: 'Listo', btnInvite: 'Invitar', noMembersYet: 'Sin miembros aún',
+    btnRemove: 'Quitar', memberRemoved: 'Miembro eliminado',
+    invitePleaseEnterEmail: 'Por favor ingresa un correo electrónico', inviteCantInviteSelf: 'No puedes invitarte a ti mismo',
+    inviteAlreadyMember: 'Ya es miembro', inviteCouldNotAdd: 'No se pudo agregar al miembro',
+    addToListTitle: 'Agregar a lista', addToListSub: 'Elige a qué lista agregar los ingredientes seleccionados',
+    // List operations
+    toastListCreated: 'Lista creada: ', toastListDeleted: 'Lista eliminada', toastCouldNotDelete: 'No se pudo eliminar la lista',
+    // Camera
+    cameraTitle: 'Escanear código', cameraHint: 'Apunta a cualquier código de barras',
+    cameraStarting: 'Iniciando cámara...', cameraReady: 'Apunta la cámara al código de barras',
+    cameraFound: '✓ Agregado: ', cameraNotFound: 'Producto no encontrado — intenta de nuevo',
+    cameraAccessDenied: 'Acceso a cámara denegado — permite el acceso en Configuración',
+    cameraCouldNotStart: 'No se pudo iniciar la cámara — intenta de nuevo',
+    // Recipe
+    addNewRecipe: '+ Agregar nueva receta', noRecipesSaved: 'Sin recetas guardadas', addFirstRecipe: 'Agrega tu primera receta arriba',
+    addRecipeTitle: 'Agregar receta', extractBtn: 'Extraer ingredientes con IA',
+    tabUrl: '🔗 URL', tabText: '📝 Texto', tabPhoto: '📷 Foto',
+    urlPlaceholder: 'https://www.allrecipes.com/recipe/...',
+    urlHint: 'Pega cualquier URL de receta de AllRecipes, Food Network u otros sitios',
+    textPlaceholder: 'Pega o escribe tu receta aquí — ingredientes, cantidades, instrucciones...',
+    photoLabel: 'Toma una foto o elige de tu galería',
+    photoSub: 'Apunta a una tarjeta de receta, libro de cocina o receta impresa',
+    recipeProcessing: 'Leyendo receta con IA...', recipeExtracting: 'Extrayendo ingredientes y cantidades',
+    recipeUrlToast: 'Por favor ingresa una URL de receta', recipeTextToast: 'Por favor pega o escribe el texto de la receta',
+    recipePhotoToast: 'Por favor toma o elige una foto primero',
+    recipeUrlBlocked: 'Ese sitio bloqueó la descarga — pega el texto de la receta',
+    recipeUrlBlockedPlaceholder: 'Ese sitio bloqueó la descarga automática.\n\nVe a la página de la receta, selecciona todo el texto (Ctrl+A), cópialo (Ctrl+C) y pégalo aquí.',
+    recipeCantRead: 'No se pudo leer esa receta', recipeCheckConnection: 'Verifica tu conexión e intenta de nuevo',
+    recipeTryText: 'Intenta pegando el texto de la receta directamente', btnTryAgain: 'Intentar de nuevo',
+    ingredients: 'ingredientes', steps: 'pasos', servings: 'porciones',
+    notesPlaceholder: 'Agrega notas — sustituciones, consejos, cambios...',
+    deselectAll: 'Deseleccionar todo', selectAll: 'Seleccionar todo',
+    btnSaveRecipe: '💾 Guardar receta', btnAddToList: '🛒 Agregar a lista', btnShop: '🛒 Comprar',
+    recipeSaved: '¡Receta guardada en tu libro!', recipeCouldNotSave: 'No se pudo guardar la receta',
+    selectAtLeastOne: 'Por favor selecciona al menos un ingrediente',
+    createNewListForRecipe: 'Crear nueva lista para esta receta',
+    ingredientsAddedTo: ' ingredientes agregados a ',
+    couldNotAddIngredients: 'No se pudieron agregar los ingredientes',
+    // Category labels
+    catGrocery: 'Comestibles', catSnacks: 'Botanas', catHousehold: 'Hogar',
+    catHealth: 'Salud y Belleza', catOther: 'Otros',
+    // Greetings
+    greetMorning: 'Buenos días', greetAfternoon: 'Buenas tardes', greetEvening: 'Buenas noches',
+  }
+};
+
+function t(key) { return (LANG[currentLang] && LANG[currentLang][key]) || LANG.en[key] || key; }
+
+function applyLang() {
+  // Update all data-i18n text elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = t(key);
+  });
+  // Update all data-i18n-placeholder elements
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    el.placeholder = t(key);
+  });
+  // Update camera hint (not in data-i18n)
+  const cameraHint = document.querySelector('.camera-hint');
+  if (cameraHint) cameraHint.textContent = t('cameraHint');
+  // Update lang toggle buttons
+  const label = currentLang === 'en' ? 'ES' : 'EN';
+  const btn = document.getElementById('lang-toggle-btn');
+  if (btn) btn.textContent = label;
+  const homeBtn = document.getElementById('home-lang-btn');
+  if (homeBtn) homeBtn.textContent = label;
+  // Update html lang attribute
+  document.documentElement.lang = currentLang;
+}
+
+window.toggleLanguage = function() {
+  currentLang = currentLang === 'en' ? 'es' : 'en';
+  localStorage.setItem('reorderly_lang', currentLang);
+  applyLang();
+  // Re-render dynamic views that may be visible
+  if (document.getElementById('main-view').style.display !== 'none') {
+    renderList();
+    const statusEl = document.getElementById('status');
+    if (statusEl && statusEl.textContent) setStatus(t('statusReady'));
+  }
+};
 
 let currentUser = null;
 let items = [];
@@ -813,7 +1083,7 @@ function getCategory(name) {
   for (const [k,v] of sorted) { if (lower.includes(k)) return v; }
   return 'other';
 }
-function getCatLabel(cat) { return {grocery:'Grocery',snacks:'Snacks',household:'Household',health:'Health & Beauty',other:'Other'}[cat]||'Other'; }
+function getCatLabel(cat) { return {grocery:t('catGrocery'),snacks:t('catSnacks'),household:t('catHousehold'),health:t('catHealth'),other:t('catOther')}[cat]||t('catOther'); }
 
 // ── SPLASH SCREEN ──
 function initSplash() {
@@ -852,7 +1122,7 @@ onAuthStateChanged(auth, async user => {
     const name = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
     const greetEl = document.getElementById('home-greeting');
     const hour = new Date().getHours();
-    const timeGreet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    const timeGreet = hour < 12 ? t('greetMorning') : hour < 17 ? t('greetAfternoon') : t('greetEvening');
     if (greetEl) greetEl.textContent = timeGreet + ', ' + name;
     await loadLists();
     subscribeToList(currentListId);
@@ -992,7 +1262,7 @@ window.switchTab = function(tab) {
   document.getElementById('tab-signin').className='auth-tab'+(tab==='signin'?' active':'');
   document.getElementById('tab-signup').className='auth-tab'+(tab==='signup'?' active':'');
   document.getElementById('auth-password2').style.display=tab==='signup'?'block':'none';
-  document.getElementById('auth-submit-btn').textContent=tab==='signin'?'Sign in':'Create account';
+  document.getElementById('auth-submit-btn').textContent=tab==='signin'?t('btnSignIn'):t('btnCreateAccount');
   document.getElementById('auth-error').textContent='';
 };
 
@@ -1002,22 +1272,22 @@ window.handleEmailAuth = async function() {
   const pass2=document.getElementById('auth-password2').value;
   const errEl=document.getElementById('auth-error');
   const btn=document.getElementById('auth-submit-btn');
-  if (!email||!pass){errEl.textContent='Please fill in all fields';return;}
-  if (currentTab==='signup'&&pass!==pass2){errEl.textContent='Passwords do not match';return;}
+  if (!email||!pass){errEl.textContent=t('authFillFields');return;}
+  if (currentTab==='signup'&&pass!==pass2){errEl.textContent=t('authPasswordNoMatch');return;}
   btn.disabled=true; errEl.textContent='';
   try {
     if (currentTab==='signin') await signInWithEmailAndPassword(auth,email,pass);
     else await createUserWithEmailAndPassword(auth,email,pass);
   } catch(e) {
-    const msgs={'auth/user-not-found':'No account with that email','auth/wrong-password':'Incorrect password','auth/email-already-in-use':'Account already exists','auth/weak-password':'Password must be 6+ characters','auth/invalid-credential':'Incorrect email or password','auth/invalid-email':'Invalid email'};
-    errEl.textContent=msgs[e.code]||'Something went wrong';
+    const msgs={'auth/user-not-found':t('authNoAccount'),'auth/wrong-password':t('authWrongPassword'),'auth/email-already-in-use':t('authEmailExists'),'auth/weak-password':t('authWeakPassword'),'auth/invalid-credential':t('authInvalidCred'),'auth/invalid-email':t('authInvalidEmail')};
+    errEl.textContent=msgs[e.code]||t('authSomethingWrong');
   }
   btn.disabled=false;
 };
 
 window.handleGoogleAuth = async function() {
   try { await signInWithPopup(auth,googleProvider); }
-  catch(e) { document.getElementById('auth-error').textContent='Google sign-in failed'; }
+  catch(e) { document.getElementById('auth-error').textContent=t('authGoogleFail'); }
 };
 
 window.handleSignOut = async function() { await signOut(auth); closeDrawer(); window.location.href='/'; };
@@ -1048,7 +1318,7 @@ window.createNewList = async function() {
   lists.push({id,name,owner:currentUser.uid,members:[]});
   closeModal('new-list-modal');
   switchList(id,name,currentUser.uid);
-  showToast('List created: '+name);
+  showToast(t('toastListCreated')+name);
 };
 
 window.openDeleteListModal = function(id, name) {
@@ -1071,8 +1341,8 @@ window.confirmDeleteList = async function() {
       subscribeToList(currentListId);
     }
     renderDrawerLists();
-    showToast('List deleted');
-  } catch(e) { showToast('Could not delete list'); }
+    showToast(t('toastListDeleted'));
+  } catch(e) { showToast(t('toastCouldNotDelete')); }
 };
 
 window.openInviteModal = async function(listId, listName) {
@@ -1090,8 +1360,8 @@ async function loadInviteMembers(listId) {
   try {
     const snap=await getDoc(doc(db,'users',currentUser.uid,'lists',listId));
     const members=snap.data()?.members||[];
-    if (members.length===0) { el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:4px 0 8px;">No members yet</div>'; return; }
-    el.innerHTML=members.map(m=>`<div class="member-row"><span class="member-name">${esc(m)}</span><button class="member-remove" onclick="removeMember('${listId}','${m}')">Remove</button></div>`).join('');
+    if (members.length===0) { el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:4px 0 8px;">'+t('noMembersYet')+'</div>'; return; }
+    el.innerHTML=members.map(m=>`<div class="member-row"><span class="member-name">${esc(m)}</span><button class="member-remove" onclick="removeMember('${listId}','${m}')">${t('btnRemove')}</button></div>`).join('');
   } catch(e) { el.innerHTML=''; }
 }
 
@@ -1102,19 +1372,19 @@ window.removeMember = async function(listId, email) {
   members=members.filter(m=>m!==email);
   await setDoc(doc(db,'users',currentUser.uid,'lists',listId),{...snap.data(),members});
   await loadInviteMembers(listId);
-  showToast('Member removed');
+  showToast(t('memberRemoved'));
 };
 
 window.sendInvite = async function() {
   const email=document.getElementById('invite-email').value.trim().toLowerCase();
   const msgEl=document.getElementById('invite-msg');
-  if (!email) { msgEl.textContent='Please enter an email address'; msgEl.className='modal-msg error'; return; }
-  if (email===currentUser.email) { msgEl.textContent="You can't invite yourself"; msgEl.className='modal-msg error'; return; }
+  if (!email) { msgEl.textContent=t('invitePleaseEnterEmail'); msgEl.className='modal-msg error'; return; }
+  if (email===currentUser.email) { msgEl.textContent=t('inviteCantInviteSelf'); msgEl.className='modal-msg error'; return; }
   try {
     const snap=await getDoc(doc(db,'users',currentUser.uid,'lists',inviteTargetId));
     const data=snap.data()||{};
     const members=data.members||[];
-    if (members.includes(email)) { msgEl.textContent='Already a member'; msgEl.className='modal-msg error'; return; }
+    if (members.includes(email)) { msgEl.textContent=t('inviteAlreadyMember'); msgEl.className='modal-msg error'; return; }
     members.push(email);
     await setDoc(doc(db,'users',currentUser.uid,'lists',inviteTargetId),{...data,members});
     await setDoc(doc(db,'sharedLists',inviteTargetId),{
@@ -1125,7 +1395,7 @@ window.sendInvite = async function() {
     msgEl.className='modal-msg success';
     await loadInviteMembers(inviteTargetId);
     updateSharedIndicator();
-  } catch(e) { msgEl.textContent='Could not add member'; msgEl.className='modal-msg error'; }
+  } catch(e) { msgEl.textContent=t('inviteCouldNotAdd'); msgEl.className='modal-msg error'; }
 };
 
 
@@ -1175,11 +1445,11 @@ async function updateHomeRecent() {
   // Last 3 items from current list
   if (items.length > 0) {
     items.slice(-3).reverse().forEach(item => {
-      recentItems.push({ icon: '🛒', name: item.name, meta: 'In your list' });
+      recentItems.push({ icon: '🛒', name: item.name, meta: t('inYourList') });
     });
   }
   if (recentItems.length === 0) {
-    el.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:8px 0;">No recent activity yet — scan your first item to get started</div>';
+    el.innerHTML = '<div style="font-size:13px;color:var(--text3);padding:8px 0;">'+t('noRecentActivity')+'</div>';
     return;
   }
   el.innerHTML = recentItems.map(r =>
@@ -1235,13 +1505,13 @@ async function savePinnedItems() {
 function renderLibTabs() {
   const tabsEl = document.getElementById('lib-tabs');
   const tabs = [
-    { id: 'usual', label: '⭐ Usual' },
-    { id: 'all', label: 'All' },
-    { id: 'grocery', label: 'Grocery' },
-    { id: 'snacks', label: 'Snacks' },
-    { id: 'household', label: 'Household' },
-    { id: 'health', label: 'Health' },
-    { id: 'other', label: 'Other' },
+    { id: 'usual', label: t('libUsual') },
+    { id: 'all', label: t('libAll') },
+    { id: 'grocery', label: t('libGrocery') },
+    { id: 'snacks', label: t('libSnacks') },
+    { id: 'household', label: t('libHousehold') },
+    { id: 'health', label: t('libHealth') },
+    { id: 'other', label: t('libOther') },
   ];
   tabsEl.innerHTML = '';
   tabs.forEach(tab => {
@@ -1260,7 +1530,7 @@ function renderLibTabs() {
 async function renderLibrary(filter='') {
   if (!currentUser) return;
   const el = document.getElementById('library-list');
-  el.innerHTML = '<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">Loading...</div>';
+  el.innerHTML = '<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">'+t('libLoading')+'</div>';
   try {
     // Build product map with scan counts from history
     const snap = await getDocs(collection(db,'users',currentUser.uid,'history'));
@@ -1300,7 +1570,7 @@ async function renderLibrary(filter='') {
     products.sort((a,b) => (b.pinned?1:0) - (a.pinned?1:0) || b.scanCount - a.scanCount);
 
     if (products.length === 0) {
-      const msg = activeLibTab === 'usual' ? 'Scan items more than once or star items to add them here' : filter ? 'No results found' : 'No items in this category yet';
+      const msg = activeLibTab === 'usual' ? t('libNoUsual') : filter ? t('libNoResults') : t('libNoCategory');
       el.innerHTML = '<div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">' + (activeLibTab === 'usual' ? '⭐' : '📦') + '</div><div>' + msg + '</div></div>';
       return;
     }
@@ -1323,7 +1593,7 @@ async function renderLibrary(filter='') {
       const starBtn = document.createElement('button');
       starBtn.className = 'lib-star-btn' + (product.pinned ? ' pinned' : '');
       starBtn.textContent = product.pinned ? '⭐' : '☆';
-      starBtn.title = product.pinned ? 'Remove from Usual' : 'Add to Usual';
+      starBtn.title = product.pinned ? t('removeFromUsual') : t('addToUsual');
       starBtn.addEventListener('click', async () => {
         if (pinnedItems[product.upc]) {
           delete pinnedItems[product.upc];
@@ -1340,15 +1610,15 @@ async function renderLibrary(filter='') {
       const btn = document.createElement('button');
       const inList = items.some(i => i.upc === product.upc);
       btn.className = 'lib-add-btn' + (inList ? ' added' : '');
-      btn.textContent = inList ? '✓ In list' : '+ Add';
+      btn.textContent = inList ? t('inList') : t('addItem');
       btn.addEventListener('click', async () => {
         const existing = items.find(i => i.upc === product.upc);
         if (existing) { existing.qty++; }
         else { items.push({...product, qty:1, checked:false}); }
         await saveList();
-        btn.textContent = '✓ In list';
+        btn.textContent = t('inList');
         btn.classList.add('added');
-        showToast('Added: ' + product.name.substring(0,30));
+        showToast(t('toastAdded') + product.name.substring(0,30));
       });
 
       if (imgEl) row.appendChild(imgEl);
@@ -1358,37 +1628,37 @@ async function renderLibrary(filter='') {
       row.appendChild(btn);
       el.appendChild(row);
     });
-  } catch(e) { console.error(e); el.innerHTML = '<div class="empty"><div>Could not load library</div></div>'; }
+  } catch(e) { console.error(e); el.innerHTML = '<div class="empty"><div>'+t('libCouldNotLoad')+'</div></div>'; }
 }
 
 document.getElementById('lib-search')?.addEventListener('input', e => renderLibrary(e.target.value));
 
 async function loadHistory() {
   const el=document.getElementById('history-list');
-  el.innerHTML='<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">Loading...</div>';
+  el.innerHTML='<div style="text-align:center;color:var(--text3);padding:1rem;font-size:13px;">'+t('loading')+'</div>';
   try {
     const snap=await getDocs(collection(db,'users',currentUser.uid,'history'));
     const orders=[];
     snap.forEach(d=>orders.push({id:d.id,...d.data()}));
     orders.sort((a,b)=>(b.orderedAt?.seconds||0)-(a.orderedAt?.seconds||0));
-    if (orders.length===0) { el.innerHTML='<div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📋</div><div>No order history yet</div></div>'; return; }
+    if (orders.length===0) { el.innerHTML='<div class="empty"><div style="font-size:28px;margin-bottom:8px;opacity:.4">📋</div><div>'+t('noHistory')+'</div></div>'; return; }
     el.innerHTML='';
     orders.slice(0,20).forEach(order=>{
       const date=order.orderedAt?.toDate?order.orderedAt.toDate():new Date();
       const dateStr=date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
       const div=document.createElement('div'); div.className='history-order';
-      div.innerHTML=`<div class="history-order-header"><div><div class="history-date">${dateStr}</div><div class="history-meta">${order.listName||'My List'} · ${order.itemCount} item${order.itemCount!==1?'s':''}</div></div></div>
-        <div class="history-items">${(order.items||[]).map(item=>`<div class="history-item-row"><span class="history-item-name">${esc(item.name)}${item.qty>1?' ×'+item.qty:''}</span><button class="history-readd" onclick="reAddItem(${JSON.stringify({upc:item.upc,name:item.name,price:item.price}).replace(/"/g,'&quot;')})">+ Add</button></div>`).join('')}</div>`;
+      div.innerHTML=`<div class="history-order-header"><div><div class="history-date">${dateStr}</div><div class="history-meta">${order.listName||t('reorderList')} · ${order.itemCount} ${order.itemCount!==1?t('items'):t('item')}</div></div></div>
+        <div class="history-items">${(order.items||[]).map(item=>`<div class="history-item-row"><span class="history-item-name">${esc(item.name)}${item.qty>1?' ×'+item.qty:''}</span><button class="history-readd" onclick="reAddItem(${JSON.stringify({upc:item.upc,name:item.name,price:item.price}).replace(/"/g,'&quot;')})">${t('btnReAdd')}</button></div>`).join('')}</div>`;
       el.appendChild(div);
     });
-  } catch(e) { el.innerHTML='<div class="empty"><div>Could not load history</div></div>'; }
+  } catch(e) { el.innerHTML='<div class="empty"><div>'+t('historyCouldNotLoad')+'</div></div>'; }
 }
 
 window.reAddItem = async function(item) {
   const existing=items.find(i=>i.upc===item.upc);
   if (existing) existing.qty++;
   else items.push({...item,qty:1,source:'history',walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`,image:null,category:getCategory(item.name)});
-  await saveList(); showToast('Added: '+item.name.substring(0,30)); showMainView();
+  await saveList(); showToast(t('toastAdded')+item.name.substring(0,30)); showMainView();
 };
 
 // ── PRODUCT LOOKUP ──
@@ -1427,14 +1697,14 @@ window.handleScan = async function() {
   upcInput.value='';
   if (wasReadonly) upcInput.setAttribute('readonly','readonly');
   const existing=items.find(i=>i.upc===upc);
-  if (existing) { existing.qty++; await saveList(); setStatus('Quantity updated','success'); upcInput.focus(); return; }
-  setStatus('Searching Walmart catalog...','loading');
+  if (existing) { existing.qty++; await saveList(); setStatus(t('statusQtyUpdated'),'success'); upcInput.focus(); return; }
+  setStatus(t('statusSearching'),'loading');
   document.getElementById('add-btn').disabled=true;
   const result=await lookupProduct(upc);
   if (result) {
     items.push({upc,...result,qty:1,category:getCategory(result.name)});
-    await saveList(); setStatus('✓ Found: '+result.name.substring(0,45),'success'); showToast('Added to list');
-  } else setStatus('Product not found — try a different item','error');
+    await saveList(); setStatus(t('statusFound')+result.name.substring(0,45),'success'); showToast(t('toastAddedToList'));
+  } else setStatus(t('statusNotFound'),'error');
   document.getElementById('add-btn').disabled=false; upcInput.focus();
 };
 
@@ -1455,7 +1725,7 @@ function setScannerMode(active) {
   } else {
     input.removeAttribute('readonly');
     input.setAttribute('inputmode', 'text');
-    input.placeholder = 'e.g. 078742434032';
+    input.placeholder = t('scanPlaceholder');
   }
 }
 
@@ -1526,14 +1796,14 @@ window.toggleCheck = async function(upc) {
   items = [...unchecked, ...checked];
   await saveList();
 };
-window.removeItem = async function(upc) { items=items.filter(i=>i.upc!==upc); await saveList(); if(items.length===0)setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
-window.clearList = async function() { items=[]; await saveList(); setStatus('Ready — scan with your Bluetooth scanner or type a UPC'); };
+window.removeItem = async function(upc) { items=items.filter(i=>i.upc!==upc); await saveList(); if(items.length===0)setStatus(t('statusReady')); };
+window.clearList = async function() { items=[]; await saveList(); setStatus(t('statusReady')); };
 
 window.orderAllOnWalmart = async function() {
   if (!items.length) return;
   await saveToHistory();
   items.forEach((item,i)=>setTimeout(()=>window.open(item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`,'_blank'),i*400));
-  showToast('Opening Walmart — order saved to history!');
+  showToast(t('toastOpeningWalmart'));
 };
 
 function renderList() {
@@ -1542,7 +1812,7 @@ function renderList() {
   const itemCount=document.getElementById('item-count');
   const itemList=document.getElementById('item-list');
   if(orderBtn) orderBtn.disabled=empty;
-  if(itemCount){itemCount.style.display=empty?'none':'inline-block';itemCount.textContent=items.length+(items.length===1?' item':' items');}
+  if(itemCount){itemCount.style.display=empty?'none':'inline-block';itemCount.textContent=items.length+(items.length===1?' '+t('item'):' '+t('items'));}
   document.querySelectorAll('.item').forEach(el=>el.remove());
   const emptyState=document.getElementById('empty-state');
   if(emptyState) emptyState.style.display=empty?'':'none';
@@ -1571,13 +1841,13 @@ function renderList() {
       <div class="item-walmart">
         <button class="btn-walmart" onclick="window.open('${walmartUrl}','_blank')">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-          View on Walmart
+          ${t('viewOnWalmart')}
         </button>
         <span class="walmart-badge">${item.source==='walmart_exact'?'✓ exact':'search'}</span>
       </div>`;
     itemList.appendChild(div);
   });
-  if(!empty) setStatus(items.length+' item'+(items.length>1?'s':'')+' ready to order','success');
+  if(!empty) setStatus(items.length+(items.length>1?t('statusItemsReady'):t('statusItemReady')),'success');
 }
 
 function setStatus(msg,type=''){const el=document.getElementById('status');if(el){el.textContent=msg;el.className='status'+(type?' '+type:'');}}
@@ -1626,7 +1896,7 @@ async function renderRecipeBook() {
   // New recipe button
   const newBtn = document.createElement('button');
   newBtn.style.cssText = 'width:100%;height:50px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:Syne,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:8px;';
-  newBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add new recipe';
+  newBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'+t('addNewRecipe');
   newBtn.addEventListener('click', () => showRecipeInput());
   el.appendChild(newBtn);
 
@@ -1641,7 +1911,7 @@ async function renderRecipeBook() {
     if (recipes.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'empty';
-      empty.innerHTML = '<div style="font-size:32px;margin-bottom:10px;opacity:.4">📖</div><div>No recipes saved yet</div><div style="font-size:12px;color:var(--text3);margin-top:6px;">Add your first recipe above</div>';
+      empty.innerHTML = '<div style="font-size:32px;margin-bottom:10px;opacity:.4">📖</div><div>'+t('noRecipesSaved')+'</div><div style="font-size:12px;color:var(--text3);margin-top:6px;">'+t('addFirstRecipe')+'</div>';
       el.appendChild(empty);
       return;
     }
@@ -1661,7 +1931,7 @@ async function renderRecipeBook() {
         </div>`;
       const shopBtn = document.createElement('button');
       shopBtn.className = 'recipe-book-shop-btn';
-      shopBtn.textContent = '🛒 Shop';
+      shopBtn.textContent = t('btnShop');
       shopBtn.addEventListener('click', e => { e.stopPropagation(); showRecipeIngredients(recipe, true); });
       card.querySelector('.recipe-book-actions') || card.appendChild(Object.assign(document.createElement('div'), {className:'recipe-book-actions'}));
       card.querySelector('.recipe-book-actions').appendChild(shopBtn);
@@ -1672,19 +1942,19 @@ async function renderRecipeBook() {
 }
 
 window.showRecipeInput = function() {
-  showRecipeView('Add recipe', 'book');
+  showRecipeView(t('addRecipeTitle'), 'book');
   recipeInputMode = 'url';
   const el = document.getElementById('recipe-content');
   el.innerHTML = `
     <div class="recipe-input-tabs">
-      <button class="recipe-input-tab active" id="tab-url" onclick="switchRecipeTab('url')">🔗 URL</button>
-      <button class="recipe-input-tab" id="tab-text" onclick="switchRecipeTab('text')">📝 Text</button>
-      <button class="recipe-input-tab" id="tab-photo" onclick="switchRecipeTab('photo')">📷 Photo</button>
+      <button class="recipe-input-tab active" id="tab-url" onclick="switchRecipeTab('url')">${t('tabUrl')}</button>
+      <button class="recipe-input-tab" id="tab-text" onclick="switchRecipeTab('text')">${t('tabText')}</button>
+      <button class="recipe-input-tab" id="tab-photo" onclick="switchRecipeTab('photo')">${t('tabPhoto')}</button>
     </div>
     <div id="recipe-input-area"></div>
     <button class="recipe-process-btn" id="recipe-process-btn" onclick="processRecipe()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      Extract ingredients with AI
+      ${t('extractBtn')}
     </button>`;
   switchRecipeTab('url');
 }
@@ -1698,15 +1968,15 @@ window.switchRecipeTab = function(mode) {
   const area = document.getElementById('recipe-input-area');
   if (!area) return;
   if (mode === 'url') {
-    area.innerHTML = '<input class="recipe-url-input" type="url" id="recipe-url" placeholder="https://www.allrecipes.com/recipe/..." style="margin-bottom:10px;" /><div style="font-size:12px;color:var(--text3);">Paste any recipe URL from AllRecipes, Food Network, or any cooking site</div>';
+    area.innerHTML = '<input class="recipe-url-input" type="url" id="recipe-url" placeholder="'+t('urlPlaceholder')+'" style="margin-bottom:10px;" /><div style="font-size:12px;color:var(--text3);">'+t('urlHint')+'</div>';
   } else if (mode === 'text') {
-    area.innerHTML = '<textarea class="recipe-textarea" id="recipe-text" placeholder="Paste or type your recipe here — ingredients, amounts, instructions..."></textarea>';
+    area.innerHTML = '<textarea class="recipe-textarea" id="recipe-text" placeholder="'+t('textPlaceholder')+'"></textarea>';
   } else {
     area.innerHTML = `
       <div class="recipe-photo-area" id="recipe-photo-area" onclick="document.getElementById('recipe-photo-input').click()">
         <div class="recipe-photo-icon">📷</div>
-        <div class="recipe-photo-label">Take a photo or choose from camera roll</div>
-        <div class="recipe-photo-sub">Point at a recipe card, cookbook page, or printed recipe</div>
+        <div class="recipe-photo-label">${t('photoLabel')}</div>
+        <div class="recipe-photo-sub">${t('photoSub')}</div>
       </div>
       <input type="file" id="recipe-photo-input" accept="image/*" capture="environment" style="display:none" onchange="handleRecipePhoto(this)">`;
   }
@@ -1736,12 +2006,12 @@ window.processRecipe = async function() {
 
   if (recipeInputMode === 'url') {
     inputData = document.getElementById('recipe-url')?.value?.trim() || '';
-    if (!inputData) { showToast('Please enter a recipe URL'); return; }
+    if (!inputData) { showToast(t('recipeUrlToast')); return; }
   } else if (recipeInputMode === 'text') {
     inputData = document.getElementById('recipe-text')?.value?.trim() || '';
-    if (!inputData) { showToast('Please paste or type recipe text'); return; }
+    if (!inputData) { showToast(t('recipeTextToast')); return; }
   } else {
-    if (!window._recipePhotoData) { showToast('Please take or choose a photo first'); return; }
+    if (!window._recipePhotoData) { showToast(t('recipePhotoToast')); return; }
     inputData = window._recipePhotoData;
   }
 
@@ -1749,8 +2019,8 @@ window.processRecipe = async function() {
   el.innerHTML = `
     <div class="recipe-processing">
       <div class="recipe-processing-icon">🤖</div>
-      <div class="recipe-processing-text">Reading recipe with AI...</div>
-      <div class="recipe-processing-sub">Extracting ingredients and quantities</div>
+      <div class="recipe-processing-text">${t('recipeProcessing')}</div>
+      <div class="recipe-processing-sub">${t('recipeExtracting')}</div>
     </div>`;
 
   try {
@@ -1765,10 +2035,10 @@ window.processRecipe = async function() {
       // Site blocked our fetch — switch to text tab with helpful message
       showRecipeInput();
       switchRecipeTab('text');
-      showToast('That site blocked the fetch — paste the recipe text instead');
+      showToast(t('recipeUrlBlocked'));
       const ta = document.getElementById('recipe-text');
       if (ta) {
-        ta.placeholder = 'This site blocked automatic fetching.\n\nGo to the recipe page, select all the text (Ctrl+A), copy it (Ctrl+C), then paste it here.';
+        ta.placeholder = t('recipeUrlBlockedPlaceholder');
         ta.focus();
       }
       return;
@@ -1783,10 +2053,10 @@ window.processRecipe = async function() {
     el.innerHTML = `
       <div class="empty">
         <div style="font-size:32px;margin-bottom:10px;">😕</div>
-        <div style="font-weight:700;margin-bottom:6px;">Couldn't read that recipe</div>
-        <div style="font-size:13px;color:var(--text3);">${e.message === 'Failed to fetch' ? 'Check your connection and try again' : 'Try pasting the recipe text directly instead'}</div>
+        <div style="font-weight:700;margin-bottom:6px;">${t('recipeCantRead')}</div>
+        <div style="font-size:13px;color:var(--text3);">${e.message === 'Failed to fetch' ? t('recipeCheckConnection') : t('recipeTryText')}</div>
       </div>
-      <button class="recipe-process-btn" onclick="showRecipeInput()" style="margin-top:1rem;">Try again</button>`;
+      <button class="recipe-process-btn" onclick="showRecipeInput()" style="margin-top:1rem;">${t('btnTryAgain')}</button>`;
   }
 };
 
@@ -1814,15 +2084,15 @@ function showRecipeIngredients(recipe, fromBook) {
     <div class="recipe-rating" id="recipe-stars">
       ${[1,2,3,4,5].map(n => '<span class="recipe-star' + (recipe.rating >= n ? ' active' : '') + '" onclick="setRecipeRating(' + n + ')" data-star="' + n + '">⭐</span>').join('')}
     </div>
-    <textarea class="recipe-notes-input" id="recipe-notes" placeholder="Add notes — substitutions, tips, what you changed...">${recipe.notes || ''}</textarea>`;
+    <textarea class="recipe-notes-input" id="recipe-notes" placeholder="${t('notesPlaceholder')}">${recipe.notes || ''}</textarea>`;
   el.appendChild(header);
 
   // Ingredients section
   const ingHeader = document.createElement('div');
   ingHeader.className = 'recipe-ingredients-header';
   ingHeader.innerHTML = `
-    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);">${recipeIngredients.length} ingredients</div>
-    <button class="recipe-select-all" onclick="toggleSelectAll()">Deselect all</button>`;
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);">${recipeIngredients.length} ${t('ingredients')}</div>
+    <button class="recipe-select-all" onclick="toggleSelectAll()">${t('deselectAll')}</button>`;
   el.appendChild(ingHeader);
 
   recipeIngredients.forEach((ing, i) => {
@@ -1848,7 +2118,7 @@ function showRecipeIngredients(recipe, fromBook) {
   if (recipe.instructions && recipe.instructions.length > 0) {
     const instHeader = document.createElement('div');
     instHeader.style.cssText = 'font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:1.25rem 0 8px;';
-    instHeader.textContent = recipe.instructions.length + ' steps';
+    instHeader.textContent = recipe.instructions.length + ' ' + t('steps');
     el.appendChild(instHeader);
 
     recipe.instructions.forEach((step, i) => {
@@ -1867,13 +2137,13 @@ function showRecipeIngredients(recipe, fromBook) {
   if (!fromBook) {
     const saveBtn = document.createElement('button');
     saveBtn.className = 'recipe-save-btn';
-    saveBtn.textContent = '💾 Save recipe';
+    saveBtn.textContent = t('btnSaveRecipe');
     saveBtn.addEventListener('click', saveCurrentRecipe);
     actionBar.appendChild(saveBtn);
   }
   const addListBtn = document.createElement('button');
   addListBtn.className = 'recipe-add-list-btn';
-  addListBtn.textContent = '🛒 Add to list';
+  addListBtn.textContent = t('btnAddToList');
   addListBtn.addEventListener('click', openListPicker);
   actionBar.appendChild(addListBtn);
   el.appendChild(actionBar);
@@ -1890,7 +2160,7 @@ function updateSelectAllBtn() {
   const btn = document.querySelector('.recipe-select-all');
   if (!btn) return;
   const allSelected = selectedIngredients.size === recipeIngredients.length;
-  btn.textContent = allSelected ? 'Deselect all' : 'Select all';
+  btn.textContent = allSelected ? t('deselectAll') : t('selectAll');
 }
 
 window.toggleSelectAll = function() {
@@ -1918,9 +2188,9 @@ async function saveCurrentRecipe() {
   try {
     const id = currentRecipe.id || 'recipe_' + Date.now();
     await setDoc(doc(db, 'users', currentUser.uid, 'recipes', id), recipeToSave);
-    showToast('Recipe saved to your book!');
+    showToast(t('recipeSaved'));
     currentRecipe = { ...recipeToSave, id };
-  } catch(e) { showToast('Could not save recipe'); }
+  } catch(e) { showToast(t('recipeCouldNotSave')); }
 }
 
 function getRecipeEmoji(category) {
@@ -1933,7 +2203,7 @@ function getRecipeEmoji(category) {
 
 function openListPicker() {
   const selected = Array.from(selectedIngredients).map(i => recipeIngredients[i]);
-  if (selected.length === 0) { showToast('Please select at least one ingredient'); return; }
+  if (selected.length === 0) { showToast(t('selectAtLeastOne')); return; }
   pendingIngredientsForList = selected;
 
   const el = document.getElementById('list-picker-items');
@@ -1948,7 +2218,7 @@ function openListPicker() {
   const newItem = document.createElement('div');
   newItem.className = 'list-picker-item';
   newItem.style.color = 'var(--green)';
-  newItem.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Create new list for this recipe';
+  newItem.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'+t('createNewListForRecipe');
   newItem.addEventListener('click', () => {
     closeModal('list-picker-modal');
     openNewListModal();
@@ -2005,12 +2275,12 @@ async function addIngredientsToList(listId, listName) {
     await setDoc(doc(db, 'users', currentUser.uid, 'lists', listId, 'data', 'items'), {
       items: targetItems, updatedAt: new Date()
     });
-    showToast(addedCount + ' ingredients added to ' + listName);
+    showToast(addedCount + t('ingredientsAddedTo') + listName);
     if (listId === prevListId) {
       items = targetItems;
       renderList();
     }
-  } catch(e) { showToast('Could not add ingredients'); }
+  } catch(e) { showToast(t('couldNotAddIngredients')); }
 
   currentListId = prevListId;
   currentListName = prevListName;
@@ -2038,7 +2308,7 @@ function loadQuagga() {
 window.openCamera = async function() {
   const modal = document.getElementById('camera-modal');
   const status = document.getElementById('camera-status');
-  status.textContent = 'Starting camera...';
+  status.textContent = t('cameraStarting');
   status.className = 'camera-status';
   modal.classList.add('open');
   try {
@@ -2069,13 +2339,13 @@ window.openCamera = async function() {
       locate: true
     }, function(err) {
       if (err) {
-        status.textContent = 'Camera access denied — please allow camera in Settings';
+        status.textContent = t('cameraAccessDenied');
         status.className = 'camera-status error';
         return;
       }
       Quagga.start();
       quaggaRunning = true;
-      status.textContent = 'Point camera at a barcode';
+      status.textContent = t('cameraReady');
       status.className = 'camera-status';
     });
 
@@ -2090,7 +2360,7 @@ window.openCamera = async function() {
     });
 
   } catch(e) {
-    status.textContent = 'Could not start camera — please try again';
+    status.textContent = t('cameraCouldNotStart');
     status.className = 'camera-status error';
   }
 };
@@ -2112,7 +2382,7 @@ async function handleCameraScan(code) {
     try { Quagga.start(); } catch(e) {}
     return;
   }
-  status.textContent = 'Found: ' + upc + ' — looking up...';
+  status.textContent = t('statusFound') + upc + '...';
   status.className = 'camera-status';
   const result = await lookupProduct(upc);
   if (result) {
@@ -2120,20 +2390,23 @@ async function handleCameraScan(code) {
     if (existing) { existing.qty++; }
     else { items.push({ upc, ...result, qty:1, category: getCategory(result.name), checked:false }); }
     await saveList();
-    status.textContent = '✓ Added: ' + result.name.substring(0, 40);
+    status.textContent = t('cameraFound') + result.name.substring(0, 40);
     status.className = 'camera-status found';
     setTimeout(() => closeCamera(), 1800);
   } else {
-    status.textContent = 'Product not found — try again';
+    status.textContent = t('cameraNotFound');
     status.className = 'camera-status error';
     setTimeout(() => {
-      status.textContent = 'Point camera at a barcode';
+      status.textContent = t('cameraReady');
       status.className = 'camera-status';
       quaggaRunning = true;
       try { Quagga.start(); } catch(e) {}
     }, 2000);
   }
 }
+
+// ── APPLY LANGUAGE ON STARTUP ──
+applyLang();
 </script>
 </body>
 </html>
