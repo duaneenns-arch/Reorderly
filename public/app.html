@@ -422,9 +422,10 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="home-header">
       <div>
         <div class="home-greeting" id="home-greeting">Welcome back</div>
-        <div class="home-logo">ReOrderly<span class="home-logo-dot"></span><span class="home-version">v2.6</span></div>
+        <div class="home-logo">ReOrderly<span class="home-logo-dot"></span><span class="home-version">v2.7</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
+        <button id="home-lang-btn" onclick="toggleLanguage()" style="height:30px;padding:0 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);transition:background .15s;" title="Switch language / Cambiar idioma">ES</button>
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -519,7 +520,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
     <div class="about-section">
       <div class="about-section-title" data-i18n="aboutVersionTitle">Version</div>
-      <div class="about-section-body">ReOrderly v2.6 — Built with Firebase, Netlify, and Anthropic AI.</div>
+      <div class="about-section-body">ReOrderly v2.7 — Built with Firebase, Netlify, and Anthropic AI.</div>
     </div>
     <button class="about-close" onclick="closeAbout()" data-i18n="btnClose">Close</button>
   </div>
@@ -559,6 +560,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="drawer-header">
     <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
+    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v2.7</div>
   </div>
   <div class="drawer-section" data-i18n="myLists">My Lists</div>
   <div id="drawer-lists"></div>
@@ -586,13 +588,14 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <span class="drawer-item-name" data-i18n="orderHistory">Order history</span>
     </div>
   </div>
-  <div class="drawer-item" onclick="toggleLanguage(); closeDrawer();" style="cursor:pointer;">
-    <div class="drawer-item-left">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-      <span class="drawer-item-name" id="drawer-lang-label">Switch to Spanish</span>
-    </div>
-  </div>
   <div class="drawer-footer">
+    <div class="drawer-item" onclick="toggleLanguage(); closeDrawer();" style="padding:9px 0;margin-bottom:8px;">
+      <div class="drawer-item-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        <span id="drawer-lang-label" data-i18n="switchLanguage">Switch to Spanish</span>
+      </div>
+      <span id="drawer-lang-flag" style="font-size:18px;">🇪🇸</span>
+    </div>
     <button class="drawer-signout" onclick="handleSignOut()" data-i18n="btnSignOut">Sign out</button>
   </div>
 </div>
@@ -603,7 +606,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.6</span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <div class="shared-indicator" id="shared-indicator">
@@ -1023,9 +1026,14 @@ function applyLang() {
   // Update camera hint (not in data-i18n)
   const cameraHint = document.querySelector('.camera-hint');
   if (cameraHint) cameraHint.textContent = t('cameraHint');
-  // Update drawer language label
+  // Update drawer language toggle
   const drawerLangLabel = document.getElementById('drawer-lang-label');
-  if (drawerLangLabel) drawerLangLabel.textContent = currentLang === 'en' ? 'Switch to Spanish' : 'Cambiar a inglés';
+  const drawerLangFlag = document.getElementById('drawer-lang-flag');
+  if (drawerLangLabel) drawerLangLabel.textContent = currentLang === 'en' ? 'Switch to Spanish' : 'Switch to English';
+  if (drawerLangFlag) drawerLangFlag.textContent = currentLang === 'en' ? '🇪🇸' : '🇺🇸';
+  // Legacy home screen lang button
+  const homeBtn = document.getElementById('home-lang-btn');
+  if (homeBtn) homeBtn.textContent = currentLang === 'en' ? 'ES' : 'EN';
   // Update html lang attribute
   document.documentElement.lang = currentLang;
 }
