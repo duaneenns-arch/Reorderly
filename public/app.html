@@ -422,9 +422,10 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="home-header">
       <div>
         <div class="home-greeting" id="home-greeting">Welcome back</div>
-        <div class="home-logo">ReOrderly<span class="home-logo-dot"></span></div>
+        <div class="home-logo">ReOrderly<span class="home-logo-dot"></span><span class="home-version">v2.6</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
+        <button id="home-lang-btn" onclick="toggleLanguage()" style="height:30px;padding:0 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);transition:background .15s;" title="Switch language / Cambiar idioma">ES</button>
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -490,6 +491,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <div class="home-footer-disclosure" data-i18n="affiliateDisclosure">ReOrderly may earn a commission on purchases made through links to Walmart.com. As a Walmart affiliate, we earn from qualifying purchases.</div>
       <div class="home-footer-links">
         <button class="home-footer-link" onclick="openAbout()" data-i18n="btnAbout">About</button>
+        <button class="home-footer-link" onclick="showMainView(); showAppScreen();" data-i18n="btnGoToApp">Go to App</button>
       </div>
     </div>
   </div>
@@ -518,7 +520,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
     <div class="about-section">
       <div class="about-section-title" data-i18n="aboutVersionTitle">Version</div>
-      <div class="about-section-body">ReOrderly v2.7 — Built with Firebase, Netlify, and Anthropic AI.</div>
+      <div class="about-section-body">ReOrderly v2.6 — Built with Firebase, Netlify, and Anthropic AI.</div>
     </div>
     <button class="about-close" onclick="closeAbout()" data-i18n="btnClose">Close</button>
   </div>
@@ -558,7 +560,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="drawer-header">
     <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
-    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v2.7</div>
   </div>
   <div class="drawer-section" data-i18n="myLists">My Lists</div>
   <div id="drawer-lists"></div>
@@ -587,13 +588,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
   </div>
   <div class="drawer-footer">
-    <div class="drawer-item" onclick="toggleLanguage(); closeDrawer();" style="padding:9px 0;margin-bottom:8px;">
-      <div class="drawer-item-left">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-        <span id="drawer-lang-label" data-i18n="switchLanguage">Switch to Spanish</span>
-      </div>
-      <span id="drawer-lang-flag" style="font-size:18px;">🇪🇸</span>
-    </div>
     <button class="drawer-signout" onclick="handleSignOut()" data-i18n="btnSignOut">Sign out</button>
   </div>
 </div>
@@ -604,9 +598,10 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
-        <div class="logo">ReOrderly<span class="logo-dot"></span></div>
+        <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.6</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
+        <button id="lang-toggle-btn" onclick="toggleLanguage()" style="height:30px;padding:0 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);transition:background .15s;" title="Switch language / Cambiar idioma">ES</button>
         <div class="shared-indicator" id="shared-indicator">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
           <span data-i18n="shared">Shared</span>
@@ -641,7 +636,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <div class="order-bar">
         <button class="btn-order-all" id="order-btn" disabled onclick="orderAllOnWalmart()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/><circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/><circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/></svg>
-          <span data-i18n="btnOrderAll">Order all</span>
+          <span data-i18n="btnOrderAll">Order all on Walmart</span>
         </button>
         <button class="btn-clear" onclick="clearList()" data-i18n="btnClear">Clear</button>
       </div>
@@ -650,7 +645,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- History view -->
     <div id="history-view" class="history-view">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
-        <button onclick="showHomeScreen()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
+        <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="btnBack">Back</span>
         </button>
         <div style="font-size:16px;font-weight:800;color:var(--text);" data-i18n="orderHistory">Order history</div>
@@ -661,7 +656,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- Library view -->
     <div id="library-view" class="library-view">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
-        <button onclick="showHomeScreen()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
+        <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="btnBack">Back</span>
         </button>
         <div style="font-size:16px;font-weight:800;color:var(--text);" data-i18n="productLibrary">Product library</div>
@@ -675,7 +670,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- Recipe view -->
     <div id="recipe-view" class="recipe-view">
       <div class="recipe-back-bar">
-        <button class="recipe-back-btn" onclick="showHomeScreen()">
+        <button class="recipe-back-btn" onclick="showRecipeBook()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           Back
         </button>
@@ -760,7 +755,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, deleteDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // ── PASTE YOUR FIREBASE CONFIG HERE ──
@@ -771,7 +766,6 @@ const firebaseConfig = {
   storageBucket: "reorderly-b152f.firebasestorage.app",
   messagingSenderId: "690816543799",
   appId: "1:690816543799:web:5c0d7573ab04cc009d23b2"
-
 };
 // ─────────────────────────────────────
 
@@ -824,13 +818,13 @@ const LANG = {
     orderHistory: 'Order history', shared: 'Shared',
     // Scan / main view
     scanLabel: 'Scan or enter barcode', scanPlaceholder: 'e.g. 078742434032',
-    btnAdd: 'Add', btnOrderAll: 'Order all', btnClear: 'Clear',
+    btnAdd: 'Add', btnOrderAll: 'Order all on Walmart', btnClear: 'Clear',
     reorderList: 'Reorder list', emptyList: 'Scan an item to add it to your list',
     statusReady: 'Ready — scan with your Bluetooth scanner or type a UPC',
     statusSearching: 'Searching Walmart catalog...', statusQtyUpdated: 'Quantity updated',
     statusNotFound: 'Product not found — try a different item',
     statusFound: '✓ Found: ', statusItemsReady: ' items ready to order', statusItemReady: ' item ready to order',
-    toastAddedToList: 'Added to list', toastOpeningWalmart: 'Opening store pages — order saved to history!',
+    toastAddedToList: 'Added to list', toastOpeningWalmart: 'Opening Walmart — order saved to history!',
     viewOnWalmart: 'View on Walmart',
     // History
     btnBack: 'Back', noHistory: 'No order history yet', loading: 'Loading...',
@@ -935,13 +929,13 @@ const LANG = {
     orderHistory: 'Historial de pedidos', shared: 'Compartida',
     // Scan / main view
     scanLabel: 'Escanea o ingresa código de barras', scanPlaceholder: 'ej. 078742434032',
-    btnAdd: 'Agregar', btnOrderAll: 'Pedir todo', btnClear: 'Borrar',
+    btnAdd: 'Agregar', btnOrderAll: 'Pedir todo en Walmart', btnClear: 'Borrar',
     reorderList: 'Lista de pedidos', emptyList: 'Escanea un artículo para agregarlo a tu lista',
     statusReady: 'Listo — escanea con tu lector Bluetooth o escribe un UPC',
     statusSearching: 'Buscando en catálogo de Walmart...', statusQtyUpdated: 'Cantidad actualizada',
     statusNotFound: 'Producto no encontrado — intenta con otro artículo',
     statusFound: '✓ Encontrado: ', statusItemsReady: ' artículos listos para pedir', statusItemReady: ' artículo listo para pedir',
-    toastAddedToList: 'Agregado a la lista', toastOpeningWalmart: '¡Abriendo páginas de tienda — pedido guardado en historial!',
+    toastAddedToList: 'Agregado a la lista', toastOpeningWalmart: '¡Abriendo Walmart — pedido guardado en historial!',
     viewOnWalmart: 'Ver en Walmart',
     // History
     btnBack: 'Atrás', noHistory: 'Sin historial de pedidos', loading: 'Cargando...',
@@ -1024,14 +1018,12 @@ function applyLang() {
   // Update camera hint (not in data-i18n)
   const cameraHint = document.querySelector('.camera-hint');
   if (cameraHint) cameraHint.textContent = t('cameraHint');
-  // Update drawer language toggle
-  const drawerLangLabel = document.getElementById('drawer-lang-label');
-  const drawerLangFlag = document.getElementById('drawer-lang-flag');
-  if (drawerLangLabel) drawerLangLabel.textContent = currentLang === 'en' ? 'Switch to Spanish' : 'Switch to English';
-  if (drawerLangFlag) drawerLangFlag.textContent = currentLang === 'en' ? '🇪🇸' : '🇺🇸';
-  // Legacy home screen lang button
+  // Update lang toggle buttons
+  const label = currentLang === 'en' ? 'ES' : 'EN';
+  const btn = document.getElementById('lang-toggle-btn');
+  if (btn) btn.textContent = label;
   const homeBtn = document.getElementById('home-lang-btn');
-  if (homeBtn) homeBtn.textContent = currentLang === 'en' ? 'ES' : 'EN';
+  if (homeBtn) homeBtn.textContent = label;
   // Update html lang attribute
   document.documentElement.lang = currentLang;
 }
@@ -1117,16 +1109,7 @@ function hideSplash() {
   }
 }
 
-setTimeout(() => { splashReady = true; hideSplash(); }, 2500);
-
-// Handle Google redirect sign-in result
-getRedirectResult(auth).then(result => {
-  // Sign-in successful via redirect - handled by onAuthStateChanged
-}).catch(e => {
-  if (e && e.code) {
-    document.getElementById('auth-error').textContent = e.code;
-  }
-});
+setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
 
 onAuthStateChanged(auth, async user => {
   authReady = true;
@@ -1303,16 +1286,11 @@ window.handleEmailAuth = async function() {
 };
 
 window.handleGoogleAuth = async function() {
-  document.getElementById('auth-error').textContent = '';
-  try { await signInWithPopup(auth, googleProvider); }
-  catch(e) { 
-    if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
-      document.getElementById('auth-error').textContent = t('authGoogleFail');
-    }
-  }
+  try { await signInWithPopup(auth,googleProvider); }
+  catch(e) { document.getElementById('auth-error').textContent=t('authGoogleFail'); }
 };
 
-window.handleSignOut = async function() { await signOut(auth); closeDrawer(); window.location.reload(); };
+window.handleSignOut = async function() { await signOut(auth); closeDrawer(); window.location.href='/'; };
 
 // ── DRAWER ──
 window.openDrawer = ()=>{ document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); };
@@ -1859,7 +1837,14 @@ function renderList() {
         <span class="qty-num">${item.qty}</span>
         <button class="qty-btn" onclick="changeQty('${item.upc}',1)">+</button>
         <button class="del-btn" onclick="removeItem('${item.upc}')">×</button>
-      </div></div>`;
+      </div></div>
+      <div class="item-walmart">
+        <button class="btn-walmart" onclick="window.open('${walmartUrl}','_blank')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
+          ${t('viewOnWalmart')}
+        </button>
+        <span class="walmart-badge">${item.source==='walmart_exact'?'✓ exact':'search'}</span>
+      </div>`;
     itemList.appendChild(div);
   });
   if(!empty) setStatus(items.length+(items.length>1?t('statusItemsReady'):t('statusItemReady')),'success');
@@ -1894,7 +1879,7 @@ function showRecipeView(title, source) {
       backBtn.onclick = () => showRecipeBook();
     } else {
       backBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back';
-      backBtn.onclick = () => showHomeScreen();
+      backBtn.onclick = () => showMainView();
     }
   }
 }
@@ -2422,25 +2407,6 @@ async function handleCameraScan(code) {
 
 // ── APPLY LANGUAGE ON STARTUP ──
 applyLang();
-
-// ── PWA BACK BUTTON HANDLER ──
-// Push a state so back button never exits the app
-history.pushState(null, '', window.location.href);
-window.addEventListener('popstate', function(e) {
-  history.pushState(null, '', window.location.href);
-});
-
-// ── FULLSCREEN / HIDE NAVIGATION BAR ──
-function requestFullscreen() {
-  const el = document.documentElement;
-  if (el.requestFullscreen) el.requestFullscreen();
-  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-}
-// Request fullscreen on first tap (required by browser policy)
-document.addEventListener('click', function onFirstTap() {
-  requestFullscreen();
-  document.removeEventListener('click', onFirstTap);
-}, { once: true });
 </script>
 </body>
 </html>
