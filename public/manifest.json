@@ -3,9 +3,9 @@
   "short_name": "ReOrderly",
   "description": "Scan. List. Order. The smart household reordering app.",
   "start_url": "/app.html",
-  "scope": "/app.html",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#F5F4EF",
+  "background_color": "#1D9E75",
   "theme_color": "#1D9E75",
   "orientation": "portrait",
   "icons": [
