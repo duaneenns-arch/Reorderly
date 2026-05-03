@@ -425,7 +425,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div class="home-logo">ReOrderly<span class="home-logo-dot"></span><span class="home-version">v2.6</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <button id="home-lang-btn" onclick="toggleLanguage()" style="height:30px;padding:0 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);transition:background .15s;" title="Switch language / Cambiar idioma">ES</button>
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -587,6 +586,12 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <span class="drawer-item-name" data-i18n="orderHistory">Order history</span>
     </div>
   </div>
+  <div class="drawer-item" onclick="toggleLanguage(); closeDrawer();" style="cursor:pointer;">
+    <div class="drawer-item-left">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+      <span class="drawer-item-name" id="drawer-lang-label">Switch to Spanish</span>
+    </div>
+  </div>
   <div class="drawer-footer">
     <button class="drawer-signout" onclick="handleSignOut()" data-i18n="btnSignOut">Sign out</button>
   </div>
@@ -601,7 +606,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div class="logo">ReOrderly<span class="logo-dot"></span><span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Mono',monospace;vertical-align:middle;">v2.6</span></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
-        <button id="lang-toggle-btn" onclick="toggleLanguage()" style="height:30px;padding:0 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;font-weight:600;cursor:pointer;color:var(--text2);transition:background .15s;" title="Switch language / Cambiar idioma">ES</button>
         <div class="shared-indicator" id="shared-indicator">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
           <span data-i18n="shared">Shared</span>
@@ -1019,12 +1023,9 @@ function applyLang() {
   // Update camera hint (not in data-i18n)
   const cameraHint = document.querySelector('.camera-hint');
   if (cameraHint) cameraHint.textContent = t('cameraHint');
-  // Update lang toggle buttons
-  const label = currentLang === 'en' ? 'ES' : 'EN';
-  const btn = document.getElementById('lang-toggle-btn');
-  if (btn) btn.textContent = label;
-  const homeBtn = document.getElementById('home-lang-btn');
-  if (homeBtn) homeBtn.textContent = label;
+  // Update drawer language label
+  const drawerLangLabel = document.getElementById('drawer-lang-label');
+  if (drawerLangLabel) drawerLangLabel.textContent = currentLang === 'en' ? 'Switch to Spanish' : 'Cambiar a inglés';
   // Update html lang attribute
   document.documentElement.lang = currentLang;
 }
