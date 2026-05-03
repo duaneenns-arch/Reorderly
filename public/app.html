@@ -2410,11 +2410,23 @@ async function handleCameraScan(code) {
 applyLang();
 
 // ── PWA BACK BUTTON HANDLER ──
-// Prevent back button from navigating to blank splash screen
-history.pushState(null, '', window.location.href);
+// Replace history so there's nothing to go back to
+history.replaceState(null, '', window.location.href);
 window.addEventListener('popstate', function() {
-  history.pushState(null, '', window.location.href);
+  history.replaceState(null, '', window.location.href);
 });
+
+// ── FULLSCREEN / HIDE NAVIGATION BAR ──
+function requestFullscreen() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}
+// Request fullscreen on first tap (required by browser policy)
+document.addEventListener('click', function onFirstTap() {
+  requestFullscreen();
+  document.removeEventListener('click', onFirstTap);
+}, { once: true });
 </script>
 </body>
 </html>
