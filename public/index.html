@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReOrderly — Scan. List. Order.</title>
 <script>
-  // Redirect to app if running as PWA standalone
-  if (window.matchMedia('(display-mode: standalone)').matches || 
-      window.navigator.standalone === true) {
+  if (window.matchMedia('(display-mode: standalone)').matches) {
     window.location.replace('/app.html');
   }
 </script>

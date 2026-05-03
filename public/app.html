@@ -2410,10 +2410,10 @@ async function handleCameraScan(code) {
 applyLang();
 
 // ── PWA BACK BUTTON HANDLER ──
-// Replace history so there's nothing to go back to
-history.replaceState(null, '', window.location.href);
-window.addEventListener('popstate', function() {
-  history.replaceState(null, '', window.location.href);
+// Push a state so back button never exits the app
+history.pushState(null, '', window.location.href);
+window.addEventListener('popstate', function(e) {
+  history.pushState(null, '', window.location.href);
 });
 
 // ── FULLSCREEN / HIDE NAVIGATION BAR ──
