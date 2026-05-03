@@ -1117,7 +1117,7 @@ function hideSplash() {
   }
 }
 
-setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
+setTimeout(() => { splashReady = true; hideSplash(); }, 2500);
 
 // Handle Google redirect sign-in result
 getRedirectResult(auth).then(result => {
@@ -1303,8 +1303,13 @@ window.handleEmailAuth = async function() {
 };
 
 window.handleGoogleAuth = async function() {
+  document.getElementById('auth-error').textContent = '';
   try { await signInWithPopup(auth, googleProvider); }
-  catch(e) { document.getElementById('auth-error').textContent=t('authGoogleFail'); }
+  catch(e) { 
+    if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+      document.getElementById('auth-error').textContent = t('authGoogleFail');
+    }
+  }
 };
 
 window.handleSignOut = async function() { await signOut(auth); closeDrawer(); window.location.reload(); };
