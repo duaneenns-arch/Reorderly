@@ -1305,7 +1305,7 @@ window.handleGoogleAuth = async function() {
   catch(e) { document.getElementById('auth-error').textContent=t('authGoogleFail'); }
 };
 
-window.handleSignOut = async function() { await signOut(auth); closeDrawer(); };
+window.handleSignOut = async function() { await signOut(auth); closeDrawer(); window.location.reload(); };
 
 // ── DRAWER ──
 window.openDrawer = ()=>{ document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); };
