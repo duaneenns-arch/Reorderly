@@ -650,7 +650,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- History view -->
     <div id="history-view" class="history-view">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
-        <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
+        <button onclick="showHomeScreen()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="btnBack">Back</span>
         </button>
         <div style="font-size:16px;font-weight:800;color:var(--text);" data-i18n="orderHistory">Order history</div>
@@ -661,7 +661,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- Library view -->
     <div id="library-view" class="library-view">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
-        <button onclick="showMainView()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
+        <button onclick="showHomeScreen()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="btnBack">Back</span>
         </button>
         <div style="font-size:16px;font-weight:800;color:var(--text);" data-i18n="productLibrary">Product library</div>
@@ -675,7 +675,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- Recipe view -->
     <div id="recipe-view" class="recipe-view">
       <div class="recipe-back-bar">
-        <button class="recipe-back-btn" onclick="showRecipeBook()">
+        <button class="recipe-back-btn" onclick="showHomeScreen()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           Back
         </button>
@@ -1880,7 +1880,7 @@ function showRecipeView(title, source) {
       backBtn.onclick = () => showRecipeBook();
     } else {
       backBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back';
-      backBtn.onclick = () => showMainView();
+      backBtn.onclick = () => showHomeScreen();
     }
   }
 }
