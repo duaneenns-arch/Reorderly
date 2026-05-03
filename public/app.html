@@ -518,7 +518,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
     <div class="about-section">
       <div class="about-section-title" data-i18n="aboutVersionTitle">Version</div>
-      <div class="about-section-body">ReOrderly v2.10 — Built with Firebase, Netlify, and Anthropic AI.</div>
+      <div class="about-section-body">ReOrderly v2.11 — Built with Firebase, Netlify, and Anthropic AI.</div>
     </div>
     <div class="about-section">
       <div class="about-section-title">Legal</div>
@@ -551,7 +551,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <button class="auth-btn" id="auth-submit-btn" onclick="handleEmailAuth()" data-i18n="btnSignIn">Sign in</button>
       <div class="auth-divider"><div class="auth-divider-line"></div><div class="auth-divider-text" data-i18n="or">or</div><div class="auth-divider-line"></div></div>
       <button class="auth-google-btn" onclick="handleGoogleAuth()">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.107h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.104C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.117h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.114C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         <span data-i18n="btnGoogleSignIn">Continue with Google</span>
       </button>
     </div>
@@ -566,7 +566,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="drawer-header">
     <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
-    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v2.10</div>
+    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v2.11</div>
   </div>
   <div class="drawer-item" onclick="showHomeScreen(); closeDrawer();">
     <div class="drawer-item-left">
@@ -655,7 +655,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <div class="order-bar">
         <button class="btn-order-all" id="order-btn" disabled onclick="orderAllOnWalmart()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/><circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/><circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/></svg>
-          <span data-i18n="btnOrderAll">Order all on Walmart</span>
+          <span data-i18n="btnOrderAll">Review on Walmart</span>
         </button>
         <button class="btn-clear" onclick="clearList()" data-i18n="btnClear">Clear</button>
       </div>
@@ -837,7 +837,7 @@ const LANG = {
     orderHistory: 'Order history', shared: 'Shared',
     // Scan / main view
     scanLabel: 'Scan or enter barcode', scanPlaceholder: 'e.g. 078742434032',
-    btnAdd: 'Add', btnOrderAll: 'Order all on Walmart', btnClear: 'Clear',
+    btnAdd: 'Add', btnOrderAll: 'Review on Walmart', btnClear: 'Clear',
     reorderList: 'Reorder list', emptyList: 'Scan an item to add it to your list',
     statusReady: 'Ready — scan with your Bluetooth scanner or type a UPC',
     statusSearching: 'Searching Walmart catalog...', statusQtyUpdated: 'Quantity updated',
@@ -948,7 +948,7 @@ const LANG = {
     orderHistory: 'Historial de pedidos', shared: 'Compartida',
     // Scan / main view
     scanLabel: 'Escanea o ingresa código de barras', scanPlaceholder: 'ej. 078742434032',
-    btnAdd: 'Agregar', btnOrderAll: 'Pedir todo en Walmart', btnClear: 'Borrar',
+    btnAdd: 'Agregar', btnOrderAll: 'Revisar en Walmart', btnClear: 'Borrar',
     reorderList: 'Lista de pedidos', emptyList: 'Escanea un artículo para agregarlo a tu lista',
     statusReady: 'Listo — escanea con tu lector Bluetooth o escribe un UPC',
     statusSearching: 'Buscando en catálogo de Walmart...', statusQtyUpdated: 'Cantidad actualizada',
