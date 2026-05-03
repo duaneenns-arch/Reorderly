@@ -2408,6 +2408,13 @@ async function handleCameraScan(code) {
 
 // ── APPLY LANGUAGE ON STARTUP ──
 applyLang();
+
+// ── PWA BACK BUTTON HANDLER ──
+// Prevent back button from navigating to blank splash screen
+history.pushState(null, '', window.location.href);
+window.addEventListener('popstate', function() {
+  history.pushState(null, '', window.location.href);
+});
 </script>
 </body>
 </html>
