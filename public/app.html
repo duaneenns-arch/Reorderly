@@ -760,7 +760,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, deleteDoc, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // ── PASTE YOUR FIREBASE CONFIG HERE ──
@@ -1119,6 +1119,13 @@ function hideSplash() {
 
 setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
 
+// Handle Google redirect sign-in result
+getRedirectResult(auth).catch(e => {
+  if (e && e.code !== 'auth/no-current-user') {
+    document.getElementById('auth-error').textContent = t('authGoogleFail');
+  }
+});
+
 onAuthStateChanged(auth, async user => {
   authReady = true;
   hideSplash();
@@ -1294,11 +1301,11 @@ window.handleEmailAuth = async function() {
 };
 
 window.handleGoogleAuth = async function() {
-  try { await signInWithPopup(auth,googleProvider); }
+  try { await signInWithRedirect(auth, googleProvider); }
   catch(e) { document.getElementById('auth-error').textContent=t('authGoogleFail'); }
 };
 
-window.handleSignOut = async function() { await signOut(auth); closeDrawer(); window.location.href='/'; };
+window.handleSignOut = async function() { await signOut(auth); closeDrawer(); };
 
 // ── DRAWER ──
 window.openDrawer = ()=>{ document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); };
