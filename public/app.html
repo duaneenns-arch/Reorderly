@@ -1120,9 +1120,11 @@ function hideSplash() {
 setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
 
 // Handle Google redirect sign-in result
-getRedirectResult(auth).catch(e => {
-  if (e && e.code !== 'auth/no-current-user') {
-    document.getElementById('auth-error').textContent = t('authGoogleFail');
+getRedirectResult(auth).then(result => {
+  // Sign-in successful via redirect - handled by onAuthStateChanged
+}).catch(e => {
+  if (e && e.code) {
+    document.getElementById('auth-error').textContent = e.code;
   }
 });
 
