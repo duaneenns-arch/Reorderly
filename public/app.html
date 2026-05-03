@@ -1303,7 +1303,7 @@ window.handleEmailAuth = async function() {
 };
 
 window.handleGoogleAuth = async function() {
-  try { await signInWithRedirect(auth, googleProvider); }
+  try { await signInWithPopup(auth, googleProvider); }
   catch(e) { document.getElementById('auth-error').textContent=t('authGoogleFail'); }
 };
 
