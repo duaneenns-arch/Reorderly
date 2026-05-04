@@ -626,23 +626,14 @@ body::before {
 
   <!-- LEFT: ReOrderly -->
   <div class="panel-left">
-    <a class="reorderly-panel" href="/app.html">
-      <div>
-        <div class="ro-label">Your hub app</div>
-        <div class="ro-logo">ReOrderly<span class="ro-dot"></span></div>
-      </div>
-      <div class="ro-middle">
-        <div class="ro-stat-row">
-          <div class="ro-badge" id="item-count">0 items</div>
-          <div class="ro-badge-text">ready to reorder</div>
-        </div>
-        <div class="ro-scanner">
-          <div class="ro-scanner-dot"></div>
-          <div class="ro-scanner-text">Scan any barcode to add</div>
-        </div>
-      </div>
-      <div class="ro-cta">Open ReOrderly →</div>
-    </a>
+    <div class="reorderly-panel" style="padding:0;overflow:hidden;">
+      <iframe
+        src="/app.html"
+        style="width:100%;height:100%;border:none;border-radius:20px;"
+        allow="camera; microphone"
+        id="ro-iframe"
+      ></iframe>
+    </div>
     <div class="scanner-mini">
       <div class="scanner-mini-dot"></div>
       <div class="scanner-mini-text">USB-C Scanner</div>
