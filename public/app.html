@@ -1114,6 +1114,8 @@ function updateListBadge(name) {
   const display = (name === 'My List' || name === 'Mi Lista') ? t('myList') : name;
   document.getElementById('list-name-badge').textContent = display;
 }
+
+function getCategory(name) {
   if (!name) return 'other';
   const lower = name.toLowerCase();
   // Sort by key length descending so longer/more specific phrases match first
