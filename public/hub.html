@@ -1064,7 +1064,7 @@ const APPS = {
     url: 'https://www.youtube.com',
     iframe: false,
     blockedTitle: 'Open YouTube',
-    blockedText: 'YouTube cannot be embedded. Tap below to open it in the browser — use the ← Hub button to return here.'
+    blockedText: 'YouTube cannot be embedded. Tap below to open it — press the back button or home button to return to the hub.'
   },
   spotify: {
     name: 'Spotify',
@@ -1072,7 +1072,7 @@ const APPS = {
     url: 'https://open.spotify.com',
     iframe: false,
     blockedTitle: 'Open Spotify',
-    blockedText: 'Spotify requires the app or a separate browser tab. Tap below to open it.'
+    blockedText: 'Spotify cannot be embedded. Tap below to open it — press the back button or home button to return to the hub.'
   },
   ring: {
     name: 'Ring',
@@ -1080,7 +1080,7 @@ const APPS = {
     url: 'https://account.ring.com/account/dashboard',
     iframe: false,
     blockedTitle: 'Open Ring',
-    blockedText: 'Ring cannot be embedded. Tap below to open it in the browser — use the ← Hub button to return here.'
+    blockedText: 'Ring cannot be embedded. Tap below to open it — press the back button or home button to return to the hub.'
   },
   weather: {
     name: 'Weather',
@@ -1145,7 +1145,16 @@ function launchApp(app) {
     document.getElementById('float-blocked-title').textContent = config.blockedTitle || config.name;
     document.getElementById('float-blocked-text').textContent = config.blockedText || 'This app needs to open in a separate browser window.';
     const btn = document.getElementById('float-open-btn');
-    btn.onclick = () => { window.open(config.url, '_blank'); };
+    btn.onclick = () => {
+      // Use Fully Kiosk's built-in browser overlay if available (returns to hub automatically)
+      // Otherwise fall back to opening in same tab so user can use back button
+      if (window.fully && fully.loadURL) {
+        fully.loadURL(config.url);
+      } else {
+        // Open in same tab — user can use browser back to return to hub
+        window.location.href = config.url;
+      }
+    };
   }
 }
 
