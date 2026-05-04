@@ -645,6 +645,158 @@ body::before {
 
 .overlay-open-btn:hover { background: var(--green-light); }
 
+
+/* ── FLOATING WINDOW ── */
+.float-window {
+  display: none;
+  position: fixed;
+  z-index: 300;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  transition: width 0.25s ease, height 0.25s ease, border-radius 0.25s ease;
+  /* Default: mini size, bottom-right */
+  width: 380px;
+  height: 240px;
+  bottom: 70px;
+  right: 20px;
+  top: auto;
+  left: auto;
+}
+
+.float-window.active { display: flex; flex-direction: column; }
+
+.float-window.maximized {
+  width: calc(100vw - 40px) !important;
+  height: calc(100vh - 100px) !important;
+  bottom: 70px !important;
+  right: 20px !important;
+  top: auto !important;
+  left: 20px !important;
+  border-radius: 20px;
+}
+
+.float-window.fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  border-radius: 0;
+}
+
+.float-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  cursor: grab;
+  gap: 8px;
+}
+
+.float-header:active { cursor: grabbing; }
+
+.float-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  flex: 1;
+  min-width: 0;
+}
+
+.float-title-icon { font-size: 14px; flex-shrink: 0; }
+.float-title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.float-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.float-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface3);
+  color: var(--text2);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.float-btn:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
+.float-btn.close:hover { border-color: #dc2626; color: #dc2626; background: rgba(220,38,38,0.1); }
+.float-btn.home-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+
+.float-body {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+
+.float-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.float-blocked {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  text-align: center;
+  gap: 10px;
+}
+
+.float-blocked-icon { font-size: 32px; }
+.float-blocked-title { font-size: 14px; font-weight: 800; color: var(--text); }
+.float-blocked-text { font-size: 11px; color: var(--text2); line-height: 1.5; }
+.float-open-btn {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+/* Drag indicator line */
+.float-drag-hint {
+  width: 32px;
+  height: 3px;
+  background: var(--border2);
+  border-radius: 2px;
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
 </style>
 </head>
 <body>
@@ -795,6 +947,32 @@ body::before {
   </div>
 </div>
 
+
+<!-- Floating Window -->
+<div class="float-window" id="float-window">
+  <div class="float-header" id="float-header">
+    <div class="float-title">
+      <span class="float-title-icon" id="float-icon"></span>
+      <span class="float-title-text" id="float-title-text"></span>
+    </div>
+    <div class="float-controls">
+      <div class="float-btn home-btn" id="float-min-btn" onclick="toggleFloatSize('mini')" title="Minimize">⬇</div>
+      <div class="float-btn" id="float-max-btn" onclick="toggleFloatSize('max')" title="Maximize">⬆</div>
+      <div class="float-btn" onclick="toggleFloatSize('full')" title="Fullscreen">⛶</div>
+      <div class="float-btn close" onclick="closeFloat()" title="Close">✕</div>
+    </div>
+  </div>
+  <div class="float-body">
+    <iframe class="float-iframe" id="float-iframe" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
+    <div class="float-blocked" id="float-blocked">
+      <div class="float-blocked-icon" id="float-blocked-icon"></div>
+      <div class="float-blocked-title" id="float-blocked-title"></div>
+      <div class="float-blocked-text" id="float-blocked-text"></div>
+      <button class="float-open-btn" id="float-open-btn">Open in Browser</button>
+    </div>
+  </div>
+</div>
+
 <!-- Screensaver -->
 <div class="screensaver" id="screensaver" onclick="deactivateScreensaver()">
   <div class="screensaver-time" id="screensaver-time">12:00</div>
@@ -918,6 +1096,12 @@ const APPS = {
   }
 };
 
+// Current float state
+let floatState = 'mini'; // mini | max | full
+let floatPos = { x: null, y: null };
+let isDragging = false;
+let dragOffset = { x: 0, y: 0 };
+
 function launchApp(app) {
   const config = APPS[app];
   if (!config) return;
@@ -928,15 +1112,25 @@ function launchApp(app) {
     return;
   }
 
-  // Show overlay
-  const overlay = document.getElementById('app-overlay');
-  const iframe = document.getElementById('overlay-iframe');
-  const blocked = document.getElementById('overlay-blocked');
+  const win = document.getElementById('float-window');
+  const iframe = document.getElementById('float-iframe');
+  const blocked = document.getElementById('float-blocked');
 
-  document.getElementById('overlay-icon').textContent = config.icon;
-  document.getElementById('overlay-title-text').textContent = config.name;
+  document.getElementById('float-icon').textContent = config.icon;
+  document.getElementById('float-title-text').textContent = config.name;
 
-  overlay.classList.add('active');
+  // Reset to mini size, bottom-right
+  floatState = 'mini';
+  win.classList.remove('maximized', 'fullscreen');
+  win.style.cssText = '';
+  win.style.width = '380px';
+  win.style.height = '240px';
+  win.style.bottom = '70px';
+  win.style.right = '20px';
+  win.style.top = 'auto';
+  win.style.left = 'auto';
+
+  win.classList.add('active');
   resetIdleTimer();
 
   if (config.iframe) {
@@ -944,25 +1138,98 @@ function launchApp(app) {
     blocked.style.display = 'none';
     iframe.src = config.url;
   } else {
-    // App blocks iframes — show fallback with open button
     iframe.style.display = 'none';
     iframe.src = '';
     blocked.style.display = 'flex';
-    document.getElementById('blocked-icon').textContent = config.icon;
-    document.getElementById('blocked-title').textContent = config.blockedTitle || config.name;
-    document.getElementById('blocked-text').textContent = config.blockedText || 'This app needs to open in a separate window.';
-    const btn = document.getElementById('blocked-btn');
-    btn.onclick = () => { window.open(config.url, '_blank'); closeOverlay(); };
+    document.getElementById('float-blocked-icon').textContent = config.icon;
+    document.getElementById('float-blocked-title').textContent = config.blockedTitle || config.name;
+    document.getElementById('float-blocked-text').textContent = config.blockedText || 'This app needs to open in a separate browser window.';
+    const btn = document.getElementById('float-open-btn');
+    btn.onclick = () => { window.open(config.url, '_blank'); };
   }
 }
 
-function closeOverlay() {
-  const overlay = document.getElementById('app-overlay');
-  const iframe = document.getElementById('overlay-iframe');
-  overlay.classList.remove('active');
-  // Clear iframe to stop any playing media
+function toggleFloatSize(mode) {
+  const win = document.getElementById('float-window');
+
+  if (mode === 'mini') {
+    floatState = 'mini';
+    win.classList.remove('maximized', 'fullscreen');
+    win.style.width = '380px';
+    win.style.height = '240px';
+    win.style.bottom = '70px';
+    win.style.right = '20px';
+    win.style.top = 'auto';
+    win.style.left = 'auto';
+  } else if (mode === 'max') {
+    floatState = 'max';
+    win.classList.remove('fullscreen');
+    win.classList.add('maximized');
+    win.style.cssText = '';
+  } else if (mode === 'full') {
+    floatState = 'full';
+    win.classList.remove('maximized');
+    win.classList.add('fullscreen');
+    win.style.cssText = '';
+  }
+}
+
+function closeFloat() {
+  const win = document.getElementById('float-window');
+  const iframe = document.getElementById('float-iframe');
+  win.classList.remove('active', 'maximized', 'fullscreen');
+  win.style.cssText = '';
   setTimeout(() => { iframe.src = ''; }, 300);
   resetIdleTimer();
+}
+
+// ── DRAG TO REPOSITION (mini mode only) ──
+const floatHeader = document.getElementById('float-header');
+
+floatHeader.addEventListener('mousedown', startDrag);
+floatHeader.addEventListener('touchstart', startDrag, { passive: true });
+
+function startDrag(e) {
+  const win = document.getElementById('float-window');
+  if (floatState !== 'mini') return;
+  isDragging = true;
+  const rect = win.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  dragOffset.x = clientX - rect.left;
+  dragOffset.y = clientY - rect.top;
+  win.style.bottom = 'auto';
+  win.style.right = 'auto';
+  win.style.left = rect.left + 'px';
+  win.style.top = rect.top + 'px';
+  e.preventDefault && e.preventDefault();
+}
+
+document.addEventListener('mousemove', onDrag);
+document.addEventListener('touchmove', onDrag, { passive: false });
+
+function onDrag(e) {
+  if (!isDragging) return;
+  const win = document.getElementById('float-window');
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  const newX = clientX - dragOffset.x;
+  const newY = clientY - dragOffset.y;
+  // Keep within screen bounds
+  const maxX = window.innerWidth - win.offsetWidth;
+  const maxY = window.innerHeight - win.offsetHeight;
+  win.style.left = Math.max(0, Math.min(newX, maxX)) + 'px';
+  win.style.top = Math.max(0, Math.min(newY, maxY)) + 'px';
+  e.preventDefault && e.preventDefault();
+}
+
+document.addEventListener('mouseup', stopDrag);
+document.addEventListener('touchend', stopDrag);
+
+function stopDrag() { isDragging = false; }
+
+function closeOverlay() {
+  closeFloat();
 }
 
 // ── SCREENSAVER ──
