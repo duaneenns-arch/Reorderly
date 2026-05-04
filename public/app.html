@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReOrderly — My App</title>
+<title>ReOrderly</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#1D9E75">
@@ -421,7 +421,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="home-inner">
     <div class="home-header">
       <div>
-        <div class="home-greeting" id="home-greeting">Welcome back</div>
+        <div class="home-greeting" id="home-greeting" data-i18n="greetMorning">Good morning</div>
         <div class="home-logo" onclick="showHomeScreen()" style="cursor:pointer;">ReOrderly<span class="home-logo-dot"></span></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
@@ -691,9 +691,9 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <div class="recipe-back-bar">
         <button class="recipe-back-btn" onclick="showHomeScreen()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-          Back
+          <span data-i18n="btnBack">Back</span>
         </button>
-        <div class="recipe-view-title" id="recipe-view-title">Recipe book</div>
+        <div class="recipe-view-title" id="recipe-view-title" data-i18n="recipeBook">Recipe book</div>
       </div>
       <div id="recipe-content"></div>
     </div>
@@ -714,7 +714,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       </div>
     </div>
   </div>
-  <div class="camera-hint">Point at any product barcode</div>
+  <div class="camera-hint" data-i18n="cameraHint">Point at any product barcode</div>
   <div class="camera-status" id="camera-status"></div>
 </div>
 
@@ -735,7 +735,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <div class="modal-wrap" id="delete-list-modal">
   <div class="modal">
     <div class="modal-title" data-i18n="deleteListTitle">Delete list?</div>
-    <div class="modal-subtitle" id="delete-list-msg">This will permanently delete the list and all its items. This cannot be undone.</div>
+    <div class="modal-subtitle" id="delete-list-msg" data-i18n="deleteListMsg">This will permanently delete the list and all its items. This cannot be undone.</div>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal('delete-list-modal')" data-i18n="btnCancel">Cancel</button>
       <button class="modal-confirm danger" onclick="confirmDeleteList()" data-i18n="btnDelete">Delete</button>
@@ -862,6 +862,7 @@ const LANG = {
     newListTitle: 'New list', newListSub: 'Give your list a name like "Weekly Groceries" or "Costco Run"',
     listNamePlaceholder: 'List name', btnCancel: 'Cancel', btnCreate: 'Create',
     deleteListTitle: 'Delete list?', btnDelete: 'Delete',
+    deleteListMsg: 'This will permanently delete the list and all its items. This cannot be undone.',
     shareListTitle: 'Share list',
     shareListSub: "Invite someone by their email address. They'll need a ReOrderly account to access the list.",
     btnDone: 'Done', btnInvite: 'Invite', noMembersYet: 'No members yet',
@@ -973,6 +974,7 @@ const LANG = {
     newListTitle: 'Nueva lista', newListSub: 'Ponle un nombre como "Súper semanal" o "Costco"',
     listNamePlaceholder: 'Nombre de la lista', btnCancel: 'Cancelar', btnCreate: 'Crear',
     deleteListTitle: '¿Eliminar lista?', btnDelete: 'Eliminar',
+    deleteListMsg: 'Esto eliminará permanentemente la lista y todos sus artículos. Esta acción no se puede deshacer.',
     shareListTitle: 'Compartir lista',
     shareListSub: 'Invita a alguien con su correo electrónico. Necesitan una cuenta de ReOrderly.',
     btnDone: 'Listo', btnInvite: 'Invitar', noMembersYet: 'Sin miembros aún',
@@ -1053,6 +1055,14 @@ window.toggleLanguage = function() {
   currentLang = currentLang === 'en' ? 'es' : 'en';
   localStorage.setItem('reorderly_lang', currentLang);
   applyLang();
+  // Refresh time-based greeting with new language
+  if (currentUser) {
+    const name = currentUser.displayName ? currentUser.displayName.split(' ')[0] : currentUser.email.split('@')[0];
+    const greetEl = document.getElementById('home-greeting');
+    const hour = new Date().getHours();
+    const timeGreet = hour < 12 ? t('greetMorning') : hour < 17 ? t('greetAfternoon') : t('greetEvening');
+    if (greetEl) greetEl.textContent = timeGreet + ', ' + name;
+  }
   // Re-render dynamic views that may be visible
   if (document.getElementById('main-view').style.display !== 'none') {
     renderList();
