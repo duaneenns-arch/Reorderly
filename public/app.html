@@ -523,9 +523,9 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <div class="about-section">
       <div class="about-section-title">Legal</div>
       <div class="about-section-body" style="display:flex;gap:16px;">
-        <a href="/privacy.html" target="_blank" style="color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">Privacy Policy</a>
-        <a href="/terms.html" target="_blank" style="color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">Terms of Use</a>
-        <a href="mailto:support@reorderlysolutions.com" style="color:var(--green);font-weight:700;text-decoration:none;font-size:13px;">Contact</a>
+        <a href="/privacy.html" target="_blank" style="color:var(--green);font-weight:700;text-decoration:none;font-size:13px;" data-i18n="ftPrivacy">Privacy Policy</a>
+        <a href="/terms.html" target="_blank" style="color:var(--green);font-weight:700;text-decoration:none;font-size:13px;" data-i18n="ftTerms">Terms of Use</a>
+        <a href="mailto:support@reorderlysolutions.com" style="color:var(--green);font-weight:700;text-decoration:none;font-size:13px;" data-i18n="ftContact">Contact</a>
       </div>
     </div>
     <button class="about-close" onclick="closeAbout()" data-i18n="btnClose">Close</button>
@@ -821,6 +821,7 @@ const LANG = {
     aboutAffiliateTitle: 'Affiliate Disclosure',
     aboutAffiliateBody: 'ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.',
     aboutVersionTitle: 'Version', btnClose: 'Close',
+    ftPrivacy: 'Privacy Policy', ftTerms: 'Terms of Use', ftContact: 'Contact',
     // Auth
     btnSignIn: 'Sign in', btnCreateAccount: 'Create account',
     placeholderEmail: 'Email address', placeholderPassword: 'Password', placeholderConfirmPassword: 'Confirm password',
@@ -934,6 +935,7 @@ const LANG = {
     aboutAffiliateTitle: 'Divulgación de Afiliados',
     aboutAffiliateBody: 'ReOrderly participa en el programa de afiliados de Walmart. Podemos ganar una comisión cuando realizas compras a través de enlaces en esta app. Esto no afecta el precio que pagas.',
     aboutVersionTitle: 'Versión', btnClose: 'Cerrar',
+    ftPrivacy: 'Política de Privacidad', ftTerms: 'Términos de Uso', ftContact: 'Contacto',
     // Auth
     btnSignIn: 'Iniciar sesión', btnCreateAccount: 'Crear cuenta',
     placeholderEmail: 'Correo electrónico', placeholderPassword: 'Contraseña', placeholderConfirmPassword: 'Confirmar contraseña',
