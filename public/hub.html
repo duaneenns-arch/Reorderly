@@ -513,6 +513,138 @@ body::before {
 }
 
 .hub { animation: fadeInUp 0.5s ease; }
+
+/* ── APP OVERLAY ── */
+.app-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  flex-direction: column;
+  background: #000;
+  animation: overlayIn 0.25s ease;
+}
+
+.app-overlay.active { display: flex; }
+
+@keyframes overlayIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.overlay-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.overlay-back:hover { background: var(--surface3); }
+
+.overlay-back-icon { font-size: 16px; }
+
+.overlay-back-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.overlay-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  flex: 1;
+  text-align: center;
+}
+
+.overlay-title-icon { margin-right: 6px; }
+
+.overlay-home {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.overlay-home:hover { background: var(--green-light); }
+
+.overlay-home-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.overlay-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: #000;
+}
+
+.overlay-blocked {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  gap: 16px;
+}
+
+.overlay-blocked-icon { font-size: 48px; }
+
+.overlay-blocked-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.overlay-blocked-text {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+.overlay-open-btn {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.overlay-open-btn:hover { background: var(--green-light); }
+
 </style>
 </head>
 <body>
@@ -638,6 +770,31 @@ body::before {
 
 </div>
 
+
+<!-- App Overlay -->
+<div class="app-overlay" id="app-overlay">
+  <div class="overlay-header">
+    <div class="overlay-back" onclick="closeOverlay()">
+      <span class="overlay-back-icon">←</span>
+      <span class="overlay-back-label">Hub</span>
+    </div>
+    <div class="overlay-title">
+      <span class="overlay-title-icon" id="overlay-icon"></span>
+      <span id="overlay-title-text"></span>
+    </div>
+    <div class="overlay-home" onclick="closeOverlay()">
+      <span class="overlay-home-label">⌂ Home</span>
+    </div>
+  </div>
+  <iframe class="overlay-iframe" id="overlay-iframe" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen"></iframe>
+  <div class="overlay-blocked" id="overlay-blocked">
+    <div class="overlay-blocked-icon" id="blocked-icon"></div>
+    <div class="overlay-blocked-title" id="blocked-title"></div>
+    <div class="overlay-blocked-text" id="blocked-text"></div>
+    <button class="overlay-open-btn" id="blocked-btn" onclick="">Open in Browser</button>
+  </div>
+</div>
+
 <!-- Screensaver -->
 <div class="screensaver" id="screensaver" onclick="deactivateScreensaver()">
   <div class="screensaver-time" id="screensaver-time">12:00</div>
@@ -722,25 +879,86 @@ loadWeather();
 setInterval(loadWeather, 10 * 60 * 1000); // refresh every 10 min
 
 // ── APP LAUNCHER ──
-const APP_URLS = {
-  youtube: 'https://www.youtube.com',
-  spotify: 'https://open.spotify.com',
-  ring: 'https://account.ring.com',
-  photos: null, // handled as screensaver
-  weather: 'https://forecast.weather.gov/MapClick.php?CityName=Warren&state=OH&site=CLE&textField1=41.2373&textField2=-80.8184'
+const APPS = {
+  youtube: {
+    name: 'YouTube',
+    icon: '▶️',
+    url: 'https://www.youtube.com',
+    iframe: true
+  },
+  spotify: {
+    name: 'Spotify',
+    icon: '🎵',
+    url: 'https://open.spotify.com',
+    iframe: false,
+    blockedTitle: 'Open Spotify',
+    blockedText: 'Spotify requires the app or a separate browser tab. Tap below to open it.'
+  },
+  ring: {
+    name: 'Ring',
+    icon: '🔔',
+    url: 'https://account.ring.com/account/dashboard',
+    iframe: true
+  },
+  weather: {
+    name: 'Weather',
+    icon: '🌤️',
+    url: 'https://forecast.weather.gov/MapClick.php?CityName=Warren&state=OH&site=CLE&textField1=41.2373&textField2=-80.8184',
+    iframe: true
+  },
+  photos: {
+    name: 'Photo Frame',
+    icon: '🖼️',
+    url: null,
+    iframe: false
+  }
 };
 
 function launchApp(app) {
+  const config = APPS[app];
+  if (!config) return;
+
   if (app === 'photos') {
     activateScreensaver();
     showToast('Photo frame mode — tap to return');
     return;
   }
-  const url = APP_URLS[app];
-  if (url) {
-    showToast(`Opening ${app.charAt(0).toUpperCase() + app.slice(1)}...`);
-    setTimeout(() => { window.open(url, '_blank'); }, 400);
+
+  // Show overlay
+  const overlay = document.getElementById('app-overlay');
+  const iframe = document.getElementById('overlay-iframe');
+  const blocked = document.getElementById('overlay-blocked');
+
+  document.getElementById('overlay-icon').textContent = config.icon;
+  document.getElementById('overlay-title-text').textContent = config.name;
+
+  overlay.classList.add('active');
+  resetIdleTimer();
+
+  if (config.iframe) {
+    iframe.style.display = 'block';
+    blocked.style.display = 'none';
+    iframe.src = config.url;
+  } else {
+    // App blocks iframes — show fallback with open button
+    iframe.style.display = 'none';
+    iframe.src = '';
+    blocked.style.display = 'flex';
+    document.getElementById('blocked-icon').textContent = config.icon;
+    document.getElementById('blocked-title').textContent = config.blockedTitle || config.name;
+    document.getElementById('blocked-text').textContent = config.blockedText || 'This app needs to open in a separate window.';
+    const btn = document.getElementById('blocked-btn');
+    btn.onclick = () => { window.open(config.url, '_blank'); closeOverlay(); };
   }
+}
+
+function closeOverlay() {
+  const overlay = document.getElementById('app-overlay');
+  const iframe = document.getElementById('overlay-iframe');
+  overlay.classList.remove('active');
+  // Clear iframe to stop any playing media
+  setTimeout(() => { iframe.src = ''; }, 300);
+  resetIdleTimer();
 }
 
 // ── SCREENSAVER ──
