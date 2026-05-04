@@ -575,16 +575,31 @@ body::before {
 
 .ss-time {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(100px, 20vw, 180px);
-  color: rgba(255,255,255,0.06);
-  letter-spacing: 8px; line-height: 1;
+  font-size: clamp(80px, 14vw, 140px);
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 6px; line-height: 1;
+  animation: float 8s ease-in-out infinite;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+
+.ss-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px; color: rgba(255,255,255,0.6);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  margin-top: 10px;
   animation: float 8s ease-in-out infinite;
 }
 
 .ss-logo {
-  font-size: 13px; font-weight: 800;
-  color: rgba(255,255,255,0.05);
-  letter-spacing: 0.1em; margin-top: 12px;
+  font-size: 12px; font-weight: 800;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.1em; margin-top: 20px;
+}
+
+.ss-hint {
+  font-size: 11px; color: rgba(255,255,255,0.2);
+  font-family: 'DM Mono', monospace;
+  margin-top: 8px; letter-spacing: 0.1em;
 }
 
 @keyframes float {
@@ -661,14 +676,13 @@ body::before {
       </div>
     </div>
 
-    <div class="photo-panel" onclick="openApp('photos')">
-      <div class="photo-slideshow" id="photo-slideshow">
-        <div class="photo-placeholder">
-          <div class="photo-placeholder-icon">🖼️</div>
-          <div class="photo-placeholder-text">Photo Frame</div>
-          <div class="photo-placeholder-sub">Your family photos display here<br>when the station is idle</div>
-        </div>
-      </div>
+    <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;">
+      <iframe
+        src="https://www.walmart.com"
+        style="width:100%;height:100%;border:none;"
+        allow="autoplay; encrypted-media"
+        id="walmart-iframe"
+      ></iframe>
     </div>
   </div>
 
@@ -695,17 +709,6 @@ body::before {
       <div class="ring-status">Front door · Tap to view cameras</div>
     </div>
 
-    <div class="walmart-widget" onclick="openApp('walmart')">
-      <div class="walmart-top">
-        <div class="walmart-spark">⭐</div>
-        <div class="walmart-badge">Shop</div>
-      </div>
-      <div>
-        <div class="walmart-title">Walmart</div>
-        <div class="walmart-sub">Browse · Order · Track</div>
-      </div>
-      <div class="walmart-cta">Open Walmart →</div>
-    </div>
 
   </div>
 </div>
@@ -740,7 +743,9 @@ body::before {
 <!-- Screensaver -->
 <div class="screensaver" id="screensaver" onclick="ssOff()">
   <div class="ss-time" id="ss-time">12:00</div>
+  <div class="ss-date" id="ss-date">Monday, January 1</div>
   <div class="ss-logo">ReOrderly Station</div>
+  <div class="ss-hint">Tap to wake</div>
 </div>
 
 <!-- Toast -->
@@ -759,6 +764,8 @@ function tick() {
   document.getElementById('clock-time').textContent = timeStr;
   document.getElementById('clock-date').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
   document.getElementById('ss-time').textContent = timeStr;
+  const ssDate = document.getElementById('ss-date');
+  if (ssDate) ssDate.textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
 }
 tick();
 setInterval(tick, 1000);
