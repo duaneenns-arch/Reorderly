@@ -8,7 +8,6 @@
 <meta name="theme-color" content="#0a0c0b">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,17 +18,17 @@
   --surface2: #1a1e1c;
   --surface3: #202420;
   --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
+  --border2: rgba(255,255,255,0.13);
   --green: #1D9E75;
   --green-light: #25c490;
   --green-dim: rgba(29,158,117,0.12);
-  --green-glow: rgba(29,158,117,0.25);
   --text: #f0f2f0;
   --text2: #8a9490;
   --text3: #3d4440;
   --youtube: #ff2020;
   --spotify: #1ed760;
   --ring: #e8621a;
+  --walmart: #0071CE;
   --photos: #4a9eff;
 }
 
@@ -43,940 +42,714 @@ html, body {
   user-select: none;
 }
 
-/* ── BACKGROUND TEXTURE ── */
 body::before {
   content: '';
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 15% 90%, rgba(29,158,117,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 85% 10%, rgba(74,158,255,0.04) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
+    radial-gradient(ellipse 60% 60% at 0% 100%, rgba(29,158,117,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 100% 0%, rgba(0,113,206,0.04) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
 }
 
 /* ── MAIN LAYOUT ── */
 .hub {
+  position: relative; z-index: 1;
+  width: 100vw; height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 10px;
+  padding: 12px;
+}
+
+/* ── PANELS ── */
+.panel {
+  border-radius: 20px;
+  overflow: hidden;
   position: relative;
-  z-index: 1;
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  grid-template-columns: 1fr;
-  gap: 0;
-  padding: 20px;
 }
 
-/* ── TOP BAR ── */
-.top-bar {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.top-logo {
+/* ── LEFT PANEL — ReOrderly ── */
+.panel-left {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.top-logo-text {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--text2);
-  letter-spacing: -0.3px;
-}
-
-.top-logo-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-  animation: pulse-dot 3s ease-in-out infinite;
-}
-
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--green); }
-  50% { opacity: 0.5; box-shadow: 0 0 3px var(--green); }
-}
-
-/* ── CLOCK CENTER ── */
-.clock-center {
-  text-align: center;
-}
-
-.clock-time {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(52px, 8vw, 80px);
-  color: var(--text);
-  letter-spacing: 4px;
-  line-height: 1;
-  text-shadow: 0 0 40px rgba(240,242,240,0.1);
-}
-
-.clock-date {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: var(--text2);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
-
-/* ── WEATHER TOP RIGHT ── */
-.weather-chip {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
-.weather-icon { font-size: 22px; }
-
-.weather-info { text-align: right; }
-
-.weather-temp {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text);
-  line-height: 1;
-}
-
-.weather-desc {
-  font-size: 10px;
-  color: var(--text2);
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.05em;
-  margin-top: 1px;
-}
-
-.weather-loading {
-  font-size: 11px;
-  color: var(--text3);
-  font-family: 'DM Mono', monospace;
-}
-
-/* ── MIDDLE GRID ── */
-.middle-grid {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 12px;
-  min-height: 0;
-}
-
-/* ── HERO TILE ── */
-.hero-tile {
-  grid-row: 1 / 3;
-  background: linear-gradient(145deg, var(--green) 0%, #0d6b50 100%);
-  border-radius: 22px;
-  padding: 24px;
+.reorderly-panel {
+  flex: 1;
+  background: linear-gradient(145deg, #1a6b52 0%, #0d4a39 100%);
+  border-radius: 20px;
+  padding: 22px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 8px 32px rgba(29,158,117,0.2);
   text-decoration: none;
+  transition: transform 0.15s;
+  box-shadow: 0 8px 32px rgba(29,158,117,0.15);
 }
 
-.hero-tile:hover, .hero-tile:active {
-  transform: scale(0.985);
-  box-shadow: 0 4px 16px rgba(29,158,117,0.3);
-}
+.reorderly-panel:active { transform: scale(0.99); }
 
-.hero-tile::before {
+.reorderly-panel::before {
   content: '';
   position: absolute;
-  top: -40px; right: -40px;
-  width: 160px; height: 160px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-}
-
-.hero-tile::after {
-  content: '';
-  position: absolute;
-  bottom: -30px; left: 20px;
-  width: 100px; height: 100px;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
   border-radius: 50%;
   background: rgba(255,255,255,0.04);
 }
 
-.hero-top {}
-
-.hero-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 6px;
+.ro-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom: 6px;
 }
 
-.hero-title {
-  font-size: clamp(28px, 4vw, 40px);
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -1px;
-  line-height: 1;
+.ro-logo {
+  font-size: clamp(30px, 3.5vw, 44px);
+  font-weight: 800; color: #fff;
+  letter-spacing: -1.5px; line-height: 1;
 }
 
-.hero-title-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.7);
-  vertical-align: middle;
-  position: relative;
-  top: -3px;
-  margin-left: 2px;
+.ro-dot {
+  display: inline-block; width: 9px; height: 9px;
+  border-radius: 50%; background: rgba(255,255,255,0.7);
+  vertical-align: middle; position: relative; top: -3px; margin-left: 2px;
 }
 
-.hero-bottom {
-  position: relative;
-  z-index: 1;
-}
-
-.hero-stat-row {
+.ro-middle {
+  flex: 1;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   gap: 10px;
-  margin-bottom: 14px;
+  padding: 16px 0;
 }
 
-.hero-stat-badge {
-  background: rgba(255,255,255,0.2);
-  border-radius: 10px;
-  padding: 5px 12px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
+.ro-stat-row {
+  display: flex; align-items: center; gap: 10px;
 }
 
-.hero-stat-text {
-  font-size: 12px;
-  color: rgba(255,255,255,0.7);
+.ro-badge {
+  background: rgba(255,255,255,0.18);
+  border-radius: 10px; padding: 5px 12px;
+  font-size: 14px; font-weight: 700; color: #fff;
 }
 
-.hero-scan-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(0,0,0,0.2);
-  border-radius: 12px;
-  padding: 10px 14px;
+.ro-badge-text {
+  font-size: 12px; color: rgba(255,255,255,0.65);
 }
 
-.hero-scan-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.ro-scanner {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 10px; padding: 9px 12px;
+}
+
+.ro-scanner-dot {
+  width: 7px; height: 7px; border-radius: 50%;
   background: #fff;
   box-shadow: 0 0 8px rgba(255,255,255,0.8);
-  animation: pulse-dot 2s ease-in-out infinite;
+  animation: blink 2s ease-in-out infinite;
   flex-shrink: 0;
 }
 
-.hero-scan-text {
-  font-size: 11px;
-  font-family: 'DM Mono', monospace;
-  color: rgba(255,255,255,0.8);
+@keyframes blink {
+  0%,100% { opacity:1; } 50% { opacity:0.3; }
+}
+
+.ro-scanner-text {
+  font-size: 10px; font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,0.75); letter-spacing: 0.03em;
+}
+
+.ro-cta {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px; padding: 10px;
+  text-align: center;
+  font-size: 12px; font-weight: 700; color: #fff;
   letter-spacing: 0.05em;
 }
 
-/* ── APP TILES ── */
-.app-tile {
+/* ── SCANNER STATUS MINI ── */
+.scanner-mini {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-  text-decoration: none;
-}
-
-.app-tile:hover, .app-tile:active {
-  transform: scale(0.97);
-  border-color: var(--border2);
-  background: var(--surface2);
-}
-
-.app-tile::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  border-radius: 18px 18px 0 0;
-}
-
-.app-tile.youtube::before { background: var(--youtube); }
-.app-tile.music::before { background: var(--spotify); }
-.app-tile.photos::before { background: var(--photos); }
-.app-tile.ring::before { background: var(--ring); }
-
-.tile-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.tile-icon { font-size: 26px; line-height: 1; }
-
-.tile-badge {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 3px 7px;
-  border-radius: 6px;
-}
-
-.badge-live { background: rgba(232,98,26,0.2); color: var(--ring); }
-.badge-ready { background: rgba(30,215,96,0.15); color: var(--spotify); }
-.badge-on { background: rgba(255,32,32,0.15); color: var(--youtube); }
-.badge-idle { background: rgba(74,158,255,0.15); color: var(--photos); }
-
-.tile-bottom {}
-
-.tile-name {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 2px;
-}
-
-.tile-desc {
-  font-size: 10px;
-  color: var(--text2);
-  font-family: 'DM Mono', monospace;
-  line-height: 1.4;
-}
-
-/* ── BOTTOM BAR ── */
-.bottom-bar {
-  margin-top: 14px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 10px;
-  align-items: center;
-}
-
-/* ── QUICK ACTIONS ── */
-.quick-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.quick-btn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-decoration: none;
-}
-
-.quick-btn:hover, .quick-btn:active {
-  border-color: var(--border2);
-  background: var(--surface2);
-}
-
-.quick-btn-icon { font-size: 15px; }
-
-.quick-btn-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text2);
-  white-space: nowrap;
-  letter-spacing: 0.03em;
-}
-
-/* ── SCANNER STATUS ── */
-.scanner-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 10px 14px;
+  display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0;
 }
 
-.scanner-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
+.scanner-mini-dot {
+  width: 7px; height: 7px; border-radius: 50%;
   background: var(--green);
   box-shadow: 0 0 6px var(--green);
-  animation: pulse-dot 2s ease-in-out infinite;
+  animation: blink 2s ease-in-out infinite;
   flex-shrink: 0;
 }
 
-.scanner-dot.offline {
-  background: var(--text3);
-  box-shadow: none;
-  animation: none;
+.scanner-mini-text {
+  font-size: 10px; font-family: 'DM Mono', monospace;
+  color: var(--text2); flex: 1;
 }
 
-.scanner-text {
-  font-size: 10px;
-  font-family: 'DM Mono', monospace;
-  color: var(--text2);
-  white-space: nowrap;
+.scanner-mini-ready {
+  font-size: 10px; font-weight: 700;
+  color: var(--green); font-family: 'DM Mono', monospace;
 }
 
-.scanner-ready {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--green);
-  font-family: 'DM Mono', monospace;
+/* ── CENTER PANEL ── */
+.panel-center {
+  display: flex; flex-direction: column; gap: 10px;
 }
 
-/* ── SCREENSAVER ── */
-.screensaver {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: #000;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+/* ── APP LAUNCHERS ROW ── */
+.app-launchers {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
-.screensaver.active { display: flex; }
-
-.screensaver-time {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(80px, 18vw, 160px);
-  color: rgba(255,255,255,0.08);
-  letter-spacing: 8px;
-  line-height: 1;
-  animation: float 8s ease-in-out infinite;
-}
-
-.screensaver-logo {
-  font-size: 14px;
-  font-weight: 800;
-  color: rgba(255,255,255,0.06);
-  letter-spacing: 0.1em;
-  margin-top: 16px;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
-}
-
-/* ── TOAST ── */
-.toast {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  color: var(--text);
-  font-size: 13px;
-  font-family: 'Syne', sans-serif;
-  padding: 11px 20px;
-  border-radius: 99px;
-  transition: transform 0.25s ease;
-  white-space: nowrap;
-  pointer-events: none;
-  z-index: 999;
-}
-
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-/* ── ANIMATIONS ── */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hub { animation: fadeInUp 0.5s ease; }
-
-/* ── APP OVERLAY ── */
-.app-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  flex-direction: column;
-  background: #000;
-  animation: overlayIn 0.25s ease;
-}
-
-.app-overlay.active { display: flex; }
-
-@keyframes overlayIn {
-  from { opacity: 0; transform: scale(0.98); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.overlay-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
+.app-btn {
   background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 12px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 7px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+  text-decoration: none;
+  position: relative; overflow: hidden;
 }
 
-.overlay-back {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.app-btn::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; border-radius: 16px 16px 0 0;
+}
+
+.app-btn.youtube::before { background: var(--youtube); }
+.app-btn.spotify::before { background: var(--spotify); }
+.app-btn.walmart::before { background: var(--walmart); }
+
+.app-btn:hover, .app-btn:active {
+  transform: scale(0.96);
+  border-color: var(--border2);
   background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  padding: 8px 14px;
+}
+
+.app-btn-icon { font-size: 24px; }
+
+.app-btn-name {
+  font-size: 12px; font-weight: 800;
+  color: var(--text); text-align: center;
+}
+
+.app-btn-desc {
+  font-size: 9px; color: var(--text2);
+  font-family: 'DM Mono', monospace;
+  text-align: center; line-height: 1.3;
+}
+
+/* ── PHOTO PANEL ── */
+.photo-panel {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
   cursor: pointer;
-  transition: background 0.15s;
+  min-height: 0;
+}
+
+.photo-slideshow {
+  width: 100%; height: 100%;
+  position: relative;
+}
+
+.photo-slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.photo-slide.active { opacity: 1; }
+
+.photo-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+  display: flex; align-items: flex-end;
+  padding: 16px;
+}
+
+.photo-label {
+  font-size: 11px; font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+}
+
+.photo-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px; padding: 20px; text-align: center;
+}
+
+.photo-placeholder-icon { font-size: 40px; opacity: 0.3; }
+.photo-placeholder-text { font-size: 13px; font-weight: 700; color: var(--text2); }
+.photo-placeholder-sub { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; line-height: 1.5; }
+
+/* ── RIGHT PANEL ── */
+.panel-right {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+/* ── CLOCK WIDGET ── */
+.clock-widget {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
   flex-shrink: 0;
 }
 
-.overlay-back:hover { background: var(--surface3); }
-
-.overlay-back-icon { font-size: 16px; }
-
-.overlay-back-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text);
+.clock-time {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 5.5vw, 72px);
+  color: var(--text); letter-spacing: 3px;
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(240,242,240,0.08);
 }
 
-.overlay-title {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text);
-  flex: 1;
-  text-align: center;
+.clock-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--text2);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-top: 5px;
 }
 
-.overlay-title-icon { margin-right: 6px; }
+/* ── WEATHER WIDGET ── */
+.weather-widget {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px 20px;
+  display: flex; align-items: center;
+  gap: 14px; flex-shrink: 0;
+}
 
-.overlay-home {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--green);
-  border: none;
-  border-radius: 10px;
-  padding: 8px 14px;
+.weather-icon-big { font-size: 36px; }
+
+.weather-details { flex: 1; }
+
+.weather-temp {
+  font-size: 28px; font-weight: 800;
+  color: var(--text); line-height: 1;
+}
+
+.weather-desc {
+  font-size: 11px; color: var(--text2);
+  font-family: 'DM Mono', monospace;
+  margin-top: 3px;
+}
+
+.weather-location {
+  font-size: 9px; color: var(--text3);
+  font-family: 'DM Mono', monospace;
+  margin-top: 2px; letter-spacing: 0.05em;
+}
+
+.weather-loading {
+  font-size: 11px; color: var(--text3);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── RING WIDGET ── */
+.ring-widget {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px 20px;
+  display: flex; flex-direction: column;
+  gap: 10px; flex-shrink: 0;
   cursor: pointer;
-  transition: background 0.15s;
-  flex-shrink: 0;
+  transition: border-color 0.15s, transform 0.15s;
+  position: relative; overflow: hidden;
 }
 
-.overlay-home:hover { background: var(--green-light); }
-
-.overlay-home-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
+.ring-widget::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; border-radius: 20px 20px 0 0;
+  background: var(--ring);
 }
 
-.overlay-iframe {
+.ring-widget:active { transform: scale(0.98); border-color: var(--border2); }
+
+.ring-top {
+  display: flex; align-items: center;
+  justify-content: space-between;
+}
+
+.ring-title-row {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.ring-icon { font-size: 20px; }
+
+.ring-title { font-size: 14px; font-weight: 800; color: var(--text); }
+
+.ring-live {
+  font-size: 9px; font-weight: 700;
+  background: rgba(232,98,26,0.2); color: var(--ring);
+  padding: 3px 8px; border-radius: 6px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  animation: blink 2s ease-in-out infinite;
+}
+
+.ring-status {
+  font-size: 10px; color: var(--text2);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── WALMART WIDGET ── */
+.walmart-widget {
   flex: 1;
-  width: 100%;
-  border: none;
-  background: #000;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px 20px;
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+  text-decoration: none;
+  position: relative; overflow: hidden;
 }
 
-.overlay-blocked {
-  flex: 1;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  text-align: center;
-  gap: 16px;
+.walmart-widget::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; border-radius: 20px 20px 0 0;
+  background: var(--walmart);
 }
 
-.overlay-blocked-icon { font-size: 48px; }
+.walmart-widget:active { transform: scale(0.98); border-color: var(--border2); }
 
-.overlay-blocked-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text);
+.walmart-top {
+  display: flex; align-items: flex-start;
+  justify-content: space-between;
 }
 
-.overlay-blocked-text {
-  font-size: 14px;
-  color: var(--text2);
-  line-height: 1.6;
-  max-width: 320px;
+.walmart-spark { font-size: 28px; }
+
+.walmart-badge {
+  font-size: 9px; font-weight: 700;
+  background: rgba(0,113,206,0.15); color: var(--walmart);
+  padding: 3px 8px; border-radius: 6px;
+  letter-spacing: 0.06em; text-transform: uppercase;
 }
 
-.overlay-open-btn {
-  background: var(--green);
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
+.walmart-title { font-size: 18px; font-weight: 800; color: var(--text); }
+.walmart-sub { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; margin-top: 3px; }
+
+.walmart-cta {
+  background: var(--walmart);
+  color: #fff; border: none;
+  border-radius: 10px; padding: 9px;
   font-family: 'Syne', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s;
+  font-size: 12px; font-weight: 700;
+  text-align: center; width: 100%;
+  cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
 }
 
-.overlay-open-btn:hover { background: var(--green-light); }
-
+.walmart-cta:hover { background: #005fa3; }
 
 /* ── FLOATING WINDOW ── */
 .float-window {
   display: none;
-  position: fixed;
-  z-index: 300;
+  position: fixed; z-index: 400;
   background: var(--surface);
   border: 1px solid var(--border2);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-  transition: width 0.25s ease, height 0.25s ease, border-radius 0.25s ease;
-  /* Default: mini size, bottom-right */
-  width: 380px;
-  height: 240px;
-  bottom: 70px;
-  right: 20px;
-  top: auto;
-  left: auto;
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  width: 420px; height: 280px;
+  bottom: 20px; right: 20px;
+  flex-direction: column;
 }
 
-.float-window.active { display: flex; flex-direction: column; }
+.float-window.active { display: flex; }
 
-.float-window.maximized {
+.float-window.size-max {
   width: calc(100vw - 40px) !important;
-  height: calc(100vh - 100px) !important;
-  bottom: 70px !important;
-  right: 20px !important;
-  top: auto !important;
-  left: 20px !important;
-  border-radius: 20px;
-}
-
-.float-window.fullscreen {
-  width: 100vw !important;
-  height: 100vh !important;
-  bottom: 0 !important;
-  right: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
-  border-radius: 0;
+  height: calc(100vh - 40px) !important;
+  bottom: 20px !important; right: 20px !important;
+  top: auto !important; left: 20px !important;
 }
 
 .float-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
+  display: flex; align-items: center;
+  padding: 8px 10px;
   background: var(--surface2);
   border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  cursor: grab;
-  gap: 8px;
+  gap: 8px; cursor: grab; flex-shrink: 0;
 }
 
 .float-header:active { cursor: grabbing; }
 
-.float-title {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text2);
-  flex: 1;
-  min-width: 0;
+.float-app-info {
+  display: flex; align-items: center; gap: 6px; flex: 1;
 }
 
-.float-title-icon { font-size: 14px; flex-shrink: 0; }
-.float-title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.float-app-icon { font-size: 14px; }
 
-.float-controls {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
+.float-app-name {
+  font-size: 12px; font-weight: 700; color: var(--text2);
 }
 
-.float-btn {
-  width: 28px;
-  height: 28px;
+.float-btns {
+  display: flex; gap: 4px;
+}
+
+.fbtn {
+  width: 26px; height: 26px;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface3);
-  color: var(--text2);
-  font-size: 13px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 7px; background: var(--surface3);
+  color: var(--text2); font-size: 12px;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
   transition: all 0.15s;
-  flex-shrink: 0;
 }
 
-.float-btn:hover { border-color: var(--border2); color: var(--text); background: var(--surface2); }
-.float-btn.close:hover { border-color: #dc2626; color: #dc2626; background: rgba(220,38,38,0.1); }
-.float-btn.home-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+.fbtn:hover { border-color: var(--border2); color: var(--text); }
+.fbtn.x:hover { border-color: #dc2626; color: #dc2626; background: rgba(220,38,38,0.1); }
 
 .float-body {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  background: #000;
+  flex: 1; position: relative; overflow: hidden; background: #000;
 }
 
-.float-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+.float-iframe { width: 100%; height: 100%; border: none; }
+
+.float-fallback {
+  display: none; width: 100%; height: 100%;
+  flex-direction: column; align-items: center;
+  justify-content: center; gap: 10px;
+  padding: 1.5rem; text-align: center;
 }
 
-.float-blocked {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 1rem;
-  text-align: center;
-  gap: 10px;
+.fallback-icon { font-size: 36px; }
+.fallback-title { font-size: 15px; font-weight: 800; color: var(--text); }
+.fallback-text { font-size: 11px; color: var(--text2); line-height: 1.5; max-width: 280px; }
+
+.fallback-btn {
+  background: var(--green); color: #fff; border: none;
+  border-radius: 10px; padding: 9px 20px;
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s; margin-top: 4px;
 }
 
-.float-blocked-icon { font-size: 32px; }
-.float-blocked-title { font-size: 14px; font-weight: 800; color: var(--text); }
-.float-blocked-text { font-size: 11px; color: var(--text2); line-height: 1.5; }
-.float-open-btn {
-  background: var(--green);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 8px 18px;
+.fallback-btn:hover { background: var(--green-light); }
+
+/* ── SCREENSAVER ── */
+.screensaver {
+  display: none; position: fixed; inset: 0;
+  z-index: 500; background: #000;
+  flex-direction: column; align-items: center;
+  justify-content: center; cursor: pointer;
+}
+
+.screensaver.active { display: flex; }
+
+.ss-time {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(100px, 20vw, 180px);
+  color: rgba(255,255,255,0.06);
+  letter-spacing: 8px; line-height: 1;
+  animation: float 8s ease-in-out infinite;
+}
+
+.ss-logo {
+  font-size: 13px; font-weight: 800;
+  color: rgba(255,255,255,0.05);
+  letter-spacing: 0.1em; margin-top: 12px;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--surface2); border: 1px solid var(--border2);
+  color: var(--text); font-size: 12px;
   font-family: 'Syne', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 4px;
+  padding: 10px 20px; border-radius: 99px;
+  transition: transform 0.25s ease;
+  white-space: nowrap; pointer-events: none; z-index: 600;
 }
 
-/* Drag indicator line */
-.float-drag-hint {
-  width: 32px;
-  height: 3px;
-  background: var(--border2);
-  border-radius: 2px;
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── SLEEP BTN ── */
+.sleep-btn {
+  position: fixed; bottom: 14px; right: 14px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 7px 12px;
+  font-size: 11px; font-weight: 700; color: var(--text3);
+  cursor: pointer; z-index: 10;
+  transition: all 0.15s; font-family: 'Syne', sans-serif;
 }
 
+.sleep-btn:hover { color: var(--text2); border-color: var(--border2); }
 </style>
 </head>
 <body>
 
 <!-- Main Hub -->
-<div class="hub" id="hub">
+<div class="hub">
 
-  <!-- Top Bar -->
-  <div class="top-bar">
-    <div class="top-logo">
-      <div class="top-logo-dot"></div>
-      <div class="top-logo-text">ReOrderly Station</div>
+  <!-- LEFT: ReOrderly -->
+  <div class="panel-left">
+    <a class="reorderly-panel" href="/app.html">
+      <div>
+        <div class="ro-label">Your hub app</div>
+        <div class="ro-logo">ReOrderly<span class="ro-dot"></span></div>
+      </div>
+      <div class="ro-middle">
+        <div class="ro-stat-row">
+          <div class="ro-badge" id="item-count">0 items</div>
+          <div class="ro-badge-text">ready to reorder</div>
+        </div>
+        <div class="ro-scanner">
+          <div class="ro-scanner-dot"></div>
+          <div class="ro-scanner-text">Scan any barcode to add</div>
+        </div>
+      </div>
+      <div class="ro-cta">Open ReOrderly →</div>
+    </a>
+    <div class="scanner-mini">
+      <div class="scanner-mini-dot"></div>
+      <div class="scanner-mini-text">USB-C Scanner</div>
+      <div class="scanner-mini-ready">Ready</div>
+    </div>
+  </div>
+
+  <!-- CENTER: App launchers + Photo frame -->
+  <div class="panel-center">
+    <div class="app-launchers">
+      <div class="app-btn youtube" onclick="openApp('youtube')">
+        <div class="app-btn-icon">▶️</div>
+        <div class="app-btn-name">YouTube</div>
+        <div class="app-btn-desc">Recipes & tutorials</div>
+      </div>
+      <div class="app-btn spotify" onclick="openApp('spotify')">
+        <div class="app-btn-icon">🎵</div>
+        <div class="app-btn-name">Spotify</div>
+        <div class="app-btn-desc">Kitchen playlist</div>
+      </div>
+      <div class="app-btn walmart" onclick="openApp('walmart')">
+        <div class="app-btn-icon">🛍️</div>
+        <div class="app-btn-name">Walmart</div>
+        <div class="app-btn-desc">Shop & browse</div>
+      </div>
     </div>
 
-    <div class="clock-center">
-      <div class="clock-time" id="clock-time">12:00</div>
+    <div class="photo-panel" onclick="openApp('photos')">
+      <div class="photo-slideshow" id="photo-slideshow">
+        <div class="photo-placeholder">
+          <div class="photo-placeholder-icon">🖼️</div>
+          <div class="photo-placeholder-text">Photo Frame</div>
+          <div class="photo-placeholder-sub">Your family photos display here<br>when the station is idle</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Clock, Weather, Ring, Walmart -->
+  <div class="panel-right">
+
+    <div class="clock-widget">
+      <div class="clock-time" id="clock-time">12:00 PM</div>
       <div class="clock-date" id="clock-date">Monday, January 1</div>
     </div>
 
-    <div class="weather-chip" id="weather-area">
+    <div class="weather-widget" id="weather-widget">
       <div class="weather-loading">Loading weather...</div>
     </div>
-  </div>
 
-  <!-- Middle Grid -->
-  <div class="middle-grid">
-
-    <!-- ReOrderly Hero -->
-    <a class="hero-tile" href="/app.html" id="hero-tile">
-      <div class="hero-top">
-        <div class="hero-label">Your hub app</div>
-        <div class="hero-title">ReOrderly<span class="hero-title-dot"></span></div>
-      </div>
-      <div class="hero-bottom">
-        <div class="hero-stat-row">
-          <div class="hero-stat-badge" id="hero-item-count">0 items</div>
-          <div class="hero-stat-text">ready to reorder</div>
+    <div class="ring-widget" onclick="openApp('ring')">
+      <div class="ring-top">
+        <div class="ring-title-row">
+          <div class="ring-icon">🔔</div>
+          <div class="ring-title">Ring</div>
         </div>
-        <div class="hero-scan-row">
-          <div class="hero-scan-indicator"></div>
-          <div class="hero-scan-text">Scanner ready — scan any barcode</div>
-        </div>
+        <div class="ring-live">Live</div>
       </div>
-    </a>
-
-    <!-- YouTube -->
-    <div class="app-tile youtube" onclick="launchApp('youtube')">
-      <div class="tile-top">
-        <div class="tile-icon">▶️</div>
-        <div class="tile-badge badge-on">Watch</div>
-      </div>
-      <div class="tile-bottom">
-        <div class="tile-name">YouTube</div>
-        <div class="tile-desc">Recipes & tutorials</div>
-      </div>
+      <div class="ring-status">Front door · Tap to view cameras</div>
     </div>
 
-    <!-- Music -->
-    <div class="app-tile music" onclick="launchApp('spotify')">
-      <div class="tile-top">
-        <div class="tile-icon">🎵</div>
-        <div class="tile-badge badge-ready">Music</div>
+    <div class="walmart-widget" onclick="openApp('walmart')">
+      <div class="walmart-top">
+        <div class="walmart-spark">⭐</div>
+        <div class="walmart-badge">Shop</div>
       </div>
-      <div class="tile-bottom">
-        <div class="tile-name">Spotify</div>
-        <div class="tile-desc">Kitchen playlist</div>
+      <div>
+        <div class="walmart-title">Walmart</div>
+        <div class="walmart-sub">Browse · Order · Track</div>
       </div>
+      <div class="walmart-cta">Open Walmart →</div>
     </div>
 
-    <!-- Photos -->
-    <div class="app-tile photos" onclick="launchApp('photos')">
-      <div class="tile-top">
-        <div class="tile-icon">🖼️</div>
-        <div class="tile-badge badge-idle">Slideshow</div>
-      </div>
-      <div class="tile-bottom">
-        <div class="tile-name">Photo Frame</div>
-        <div class="tile-desc">Family album</div>
-      </div>
-    </div>
-
-    <!-- Ring -->
-    <div class="app-tile ring" onclick="launchApp('ring')">
-      <div class="tile-top">
-        <div class="tile-icon">🔔</div>
-        <div class="tile-badge badge-live">Live</div>
-      </div>
-      <div class="tile-bottom">
-        <div class="tile-name">Ring</div>
-        <div class="tile-desc">Front door · All clear</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Bottom Bar -->
-  <div class="bottom-bar">
-    <div class="quick-actions">
-      <a class="quick-btn" href="/app.html#lists">
-        <span class="quick-btn-icon">📋</span>
-        <span class="quick-btn-label">My Lists</span>
-      </a>
-      <a class="quick-btn" href="/app.html#recipes">
-        <span class="quick-btn-icon">📖</span>
-        <span class="quick-btn-label">Recipes</span>
-      </a>
-      <div class="quick-btn" onclick="launchApp('weather')">
-        <span class="quick-btn-icon">🌤️</span>
-        <span class="quick-btn-label" id="weather-quick">Weather</span>
-      </div>
-      <div class="quick-btn" onclick="activateScreensaver()">
-        <span class="quick-btn-icon">🌙</span>
-        <span class="quick-btn-label">Sleep</span>
-      </div>
-    </div>
-
-    <div class="scanner-status" id="scanner-status">
-      <div class="scanner-dot" id="scanner-dot"></div>
-      <div class="scanner-text" id="scanner-text">USB-C Scanner</div>
-      <div class="scanner-ready">Ready</div>
-    </div>
-  </div>
-
-</div>
-
-
-<!-- App Overlay -->
-<div class="app-overlay" id="app-overlay">
-  <div class="overlay-header">
-    <div class="overlay-back" onclick="closeOverlay()">
-      <span class="overlay-back-icon">←</span>
-      <span class="overlay-back-label">Hub</span>
-    </div>
-    <div class="overlay-title">
-      <span class="overlay-title-icon" id="overlay-icon"></span>
-      <span id="overlay-title-text"></span>
-    </div>
-    <div class="overlay-home" onclick="closeOverlay()">
-      <span class="overlay-home-label">⌂ Home</span>
-    </div>
-  </div>
-  <iframe class="overlay-iframe" id="overlay-iframe" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen"></iframe>
-  <div class="overlay-blocked" id="overlay-blocked">
-    <div class="overlay-blocked-icon" id="blocked-icon"></div>
-    <div class="overlay-blocked-title" id="blocked-title"></div>
-    <div class="overlay-blocked-text" id="blocked-text"></div>
-    <button class="overlay-open-btn" id="blocked-btn" onclick="">Open in Browser</button>
   </div>
 </div>
-
 
 <!-- Floating Window -->
-<div class="float-window" id="float-window">
+<div class="float-window" id="float-win">
   <div class="float-header" id="float-header">
-    <div class="float-title">
-      <span class="float-title-icon" id="float-icon"></span>
-      <span class="float-title-text" id="float-title-text"></span>
+    <div class="float-app-info">
+      <span class="float-app-icon" id="float-icon"></span>
+      <span class="float-app-name" id="float-name"></span>
     </div>
-    <div class="float-controls">
-      <div class="float-btn home-btn" id="float-min-btn" onclick="toggleFloatSize('mini')" title="Minimize">⬇</div>
-      <div class="float-btn" id="float-max-btn" onclick="toggleFloatSize('max')" title="Maximize">⬆</div>
-      <div class="float-btn" onclick="toggleFloatSize('full')" title="Fullscreen">⛶</div>
-      <div class="float-btn close" onclick="closeFloat()" title="Close">✕</div>
+    <div class="float-btns">
+      <div class="fbtn" onclick="floatResize('mini')" title="Mini">⬇</div>
+      <div class="fbtn" onclick="floatResize('max')" title="Maximize">⬆</div>
+      <div class="fbtn x" onclick="floatClose()" title="Close">✕</div>
     </div>
   </div>
   <div class="float-body">
-    <iframe class="float-iframe" id="float-iframe" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
-    <div class="float-blocked" id="float-blocked">
-      <div class="float-blocked-icon" id="float-blocked-icon"></div>
-      <div class="float-blocked-title" id="float-blocked-title"></div>
-      <div class="float-blocked-text" id="float-blocked-text"></div>
-      <button class="float-open-btn" id="float-open-btn">Open in Browser</button>
+    <iframe class="float-iframe" id="float-iframe" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen"></iframe>
+    <div class="float-fallback" id="float-fallback">
+      <div class="fallback-icon" id="fb-icon"></div>
+      <div class="fallback-title" id="fb-title"></div>
+      <div class="fallback-text" id="fb-text"></div>
+      <button class="fallback-btn" id="fb-btn">Open →</button>
     </div>
   </div>
 </div>
 
+<!-- Sleep button -->
+<div class="sleep-btn" onclick="ssOn()">🌙 Sleep</div>
+
 <!-- Screensaver -->
-<div class="screensaver" id="screensaver" onclick="deactivateScreensaver()">
-  <div class="screensaver-time" id="screensaver-time">12:00</div>
-  <div class="screensaver-logo">ReOrderly Station</div>
+<div class="screensaver" id="screensaver" onclick="ssOff()">
+  <div class="ss-time" id="ss-time">12:00</div>
+  <div class="ss-logo">ReOrderly Station</div>
 </div>
 
 <!-- Toast -->
@@ -984,310 +757,196 @@ body::before {
 
 <script>
 // ── CLOCK ──
-function updateClock() {
+function tick() {
   const now = new Date();
-  const h = now.getHours();
-  const m = String(now.getMinutes()).padStart(2, '0');
+  const h = now.getHours(), m = String(now.getMinutes()).padStart(2,'0');
   const ampm = h >= 12 ? 'PM' : 'AM';
   const h12 = h % 12 || 12;
-  const timeStr = `${h12}:${m} ${ampm}`;
-
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const dateStr = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
-
+  const timeStr = `${h12}:${m} ${ampm}`;
   document.getElementById('clock-time').textContent = timeStr;
-  document.getElementById('clock-date').textContent = dateStr;
-  document.getElementById('screensaver-time').textContent = timeStr;
+  document.getElementById('clock-date').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+  document.getElementById('ss-time').textContent = timeStr;
 }
-
-updateClock();
-setInterval(updateClock, 1000);
+tick();
+setInterval(tick, 1000);
 
 // ── WEATHER ──
 async function loadWeather() {
   try {
-    // Open-Meteo free API — no key needed, using Warren OH coords
-    const lat = 41.2373;
-    const lon = -80.8184;
-    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`);
-    const data = await res.json();
-    const temp = Math.round(data.current_weather.temperature);
-    const code = data.current_weather.weathercode;
-
-    const icons = {
-      0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️',
-      45:'🌫️', 48:'🌫️',
-      51:'🌦️', 53:'🌦️', 55:'🌧️',
-      61:'🌧️', 63:'🌧️', 65:'🌧️',
-      71:'🌨️', 73:'🌨️', 75:'❄️',
-      80:'🌦️', 81:'🌧️', 82:'⛈️',
-      95:'⛈️', 96:'⛈️', 99:'⛈️'
-    };
-
-    const descs = {
-      0:'Clear', 1:'Mostly clear', 2:'Partly cloudy', 3:'Overcast',
-      45:'Foggy', 48:'Foggy',
-      51:'Light drizzle', 53:'Drizzle', 55:'Heavy drizzle',
-      61:'Light rain', 63:'Rain', 65:'Heavy rain',
-      71:'Light snow', 73:'Snow', 75:'Heavy snow',
-      80:'Showers', 81:'Rain showers', 82:'Thunderstorms',
-      95:'Thunderstorm', 96:'Thunderstorm', 99:'Thunderstorm'
-    };
-
-    const icon = icons[code] || '🌡️';
-    const desc = descs[code] || 'Unknown';
-
-    document.getElementById('weather-area').innerHTML = `
-      <div class="weather-info">
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.2373&longitude=-80.8184&current_weather=true&temperature_unit=fahrenheit');
+    const d = await r.json();
+    const temp = Math.round(d.current_weather.temperature);
+    const code = d.current_weather.weathercode;
+    const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
+    const descs = {0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Foggy',51:'Drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',80:'Showers',81:'Rain showers',82:'Thunderstorms',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
+    document.getElementById('weather-widget').innerHTML = `
+      <div class="weather-icon-big">${icons[code]||'🌡️'}</div>
+      <div class="weather-details">
         <div class="weather-temp">${temp}°F</div>
-        <div class="weather-desc">${desc}</div>
-      </div>
-      <div class="weather-icon">${icon}</div>
-    `;
-
-    document.getElementById('weather-quick').textContent = `${temp}°F`;
-
+        <div class="weather-desc">${descs[code]||'Unknown'}</div>
+        <div class="weather-location">Warren, OH</div>
+      </div>`;
   } catch(e) {
-    document.getElementById('weather-area').innerHTML = `<div class="weather-loading">Weather unavailable</div>`;
+    document.getElementById('weather-widget').innerHTML = '<div class="weather-loading">Weather unavailable</div>';
   }
 }
-
 loadWeather();
-setInterval(loadWeather, 10 * 60 * 1000); // refresh every 10 min
+setInterval(loadWeather, 10 * 60 * 1000);
 
-// ── APP LAUNCHER ──
+// ── APP CONFIG ──
 const APPS = {
-  youtube: {
-    name: 'YouTube',
-    icon: '▶️',
-    url: 'https://www.youtube.com',
-    iframe: false,
-    blockedTitle: 'Open YouTube',
-    blockedText: 'YouTube cannot be embedded. Tap below to open it — press the back button or home button to return to the hub.'
-  },
-  spotify: {
-    name: 'Spotify',
-    icon: '🎵',
-    url: 'https://open.spotify.com',
-    iframe: false,
-    blockedTitle: 'Open Spotify',
-    blockedText: 'Spotify cannot be embedded. Tap below to open it — press the back button or home button to return to the hub.'
-  },
-  ring: {
-    name: 'Ring',
-    icon: '🔔',
-    url: 'https://account.ring.com/account/dashboard',
-    iframe: false,
-    blockedTitle: 'Open Ring',
-    blockedText: 'Ring cannot be embedded. Tap below to open it — press the back button or home button to return to the hub.'
-  },
-  weather: {
-    name: 'Weather',
-    icon: '🌤️',
-    url: 'https://forecast.weather.gov/MapClick.php?CityName=Warren&state=OH&site=CLE&textField1=41.2373&textField2=-80.8184',
-    iframe: true
-  },
-  photos: {
-    name: 'Photo Frame',
-    icon: '🖼️',
-    url: null,
-    iframe: false
-  }
+  youtube:  { name:'YouTube', icon:'▶️', url:'https://www.youtube.com', iframe:false, fbTitle:'Open YouTube', fbText:'YouTube cannot be embedded. Opens in browser — use back button to return.' },
+  spotify:  { name:'Spotify',  icon:'🎵', url:'https://open.spotify.com', iframe:false, fbTitle:'Open Spotify', fbText:'Spotify cannot be embedded. Opens in browser — use back button to return.' },
+  walmart:  { name:'Walmart',  icon:'🛍️', url:'https://www.walmart.com', iframe:true },
+  ring:     { name:'Ring',     icon:'🔔', url:'https://account.ring.com/account/dashboard', iframe:false, fbTitle:'Open Ring', fbText:'Ring cannot be embedded. Opens in browser — use back button to return.' },
+  photos:   { name:'Photos',   icon:'🖼️', url:null, iframe:false, isPhotos:true },
 };
 
-// Current float state
-let floatState = 'mini'; // mini | max | full
-let floatPos = { x: null, y: null };
-let isDragging = false;
-let dragOffset = { x: 0, y: 0 };
+// ── OPEN APP ──
+function openApp(id) {
+  const app = APPS[id];
+  if (!app) return;
+  if (app.isPhotos) { ssOn(); toast('Photo frame — tap to return'); return; }
 
-function launchApp(app) {
-  const config = APPS[app];
-  if (!config) return;
-
-  if (app === 'photos') {
-    activateScreensaver();
-    showToast('Photo frame mode — tap to return');
-    return;
-  }
-
-  const win = document.getElementById('float-window');
+  const win = document.getElementById('float-win');
   const iframe = document.getElementById('float-iframe');
-  const blocked = document.getElementById('float-blocked');
+  const fallback = document.getElementById('float-fallback');
 
-  document.getElementById('float-icon').textContent = config.icon;
-  document.getElementById('float-title-text').textContent = config.name;
+  document.getElementById('float-icon').textContent = app.icon;
+  document.getElementById('float-name').textContent = app.name;
 
-  // Reset to mini size, bottom-right
-  floatState = 'mini';
-  win.classList.remove('maximized', 'fullscreen');
+  // Reset to mini
+  win.classList.remove('size-max');
   win.style.cssText = '';
-  win.style.width = '380px';
-  win.style.height = '240px';
-  win.style.bottom = '70px';
-  win.style.right = '20px';
-  win.style.top = 'auto';
-  win.style.left = 'auto';
-
   win.classList.add('active');
-  resetIdleTimer();
+  resetIdle();
 
-  if (config.iframe) {
+  if (app.iframe) {
     iframe.style.display = 'block';
-    blocked.style.display = 'none';
-    iframe.src = config.url;
+    fallback.style.display = 'none';
+    iframe.src = app.url;
   } else {
     iframe.style.display = 'none';
     iframe.src = '';
-    blocked.style.display = 'flex';
-    document.getElementById('float-blocked-icon').textContent = config.icon;
-    document.getElementById('float-blocked-title').textContent = config.blockedTitle || config.name;
-    document.getElementById('float-blocked-text').textContent = config.blockedText || 'This app needs to open in a separate browser window.';
-    const btn = document.getElementById('float-open-btn');
+    fallback.style.display = 'flex';
+    document.getElementById('fb-icon').textContent = app.icon;
+    document.getElementById('fb-title').textContent = app.fbTitle;
+    document.getElementById('fb-text').textContent = app.fbText;
+    const btn = document.getElementById('fb-btn');
     btn.onclick = () => {
-      // Use Fully Kiosk's built-in browser overlay if available (returns to hub automatically)
-      // Otherwise fall back to opening in same tab so user can use back button
       if (window.fully && fully.loadURL) {
-        fully.loadURL(config.url);
+        fully.loadURL(app.url);
       } else {
-        // Open in same tab — user can use browser back to return to hub
-        window.location.href = config.url;
+        window.open(app.url, '_blank', 'width=900,height=600');
       }
     };
   }
 }
 
-function toggleFloatSize(mode) {
-  const win = document.getElementById('float-window');
+// ── FLOAT CONTROLS ──
+let floatSize = 'mini';
 
+function floatResize(mode) {
+  const win = document.getElementById('float-win');
   if (mode === 'mini') {
-    floatState = 'mini';
-    win.classList.remove('maximized', 'fullscreen');
-    win.style.width = '380px';
-    win.style.height = '240px';
-    win.style.bottom = '70px';
-    win.style.right = '20px';
-    win.style.top = 'auto';
-    win.style.left = 'auto';
+    floatSize = 'mini';
+    win.classList.remove('size-max');
+    win.style.cssText = '';
   } else if (mode === 'max') {
-    floatState = 'max';
-    win.classList.remove('fullscreen');
-    win.classList.add('maximized');
+    floatSize = 'max';
     win.style.cssText = '';
-  } else if (mode === 'full') {
-    floatState = 'full';
-    win.classList.remove('maximized');
-    win.classList.add('fullscreen');
-    win.style.cssText = '';
+    win.classList.add('size-max');
   }
 }
 
-function closeFloat() {
-  const win = document.getElementById('float-window');
+function floatClose() {
+  const win = document.getElementById('float-win');
   const iframe = document.getElementById('float-iframe');
-  win.classList.remove('active', 'maximized', 'fullscreen');
+  win.classList.remove('active','size-max');
   win.style.cssText = '';
   setTimeout(() => { iframe.src = ''; }, 300);
-  resetIdleTimer();
+  resetIdle();
 }
 
-// ── DRAG TO REPOSITION (mini mode only) ──
-const floatHeader = document.getElementById('float-header');
+// ── DRAG ──
+let dragging = false, dragOff = {x:0,y:0};
 
-floatHeader.addEventListener('mousedown', startDrag);
-floatHeader.addEventListener('touchstart', startDrag, { passive: true });
+document.getElementById('float-header').addEventListener('mousedown', e => {
+  if (floatSize !== 'mini') return;
+  dragging = true;
+  const win = document.getElementById('float-win');
+  const r = win.getBoundingClientRect();
+  dragOff = { x: e.clientX - r.left, y: e.clientY - r.top };
+  win.style.bottom = 'auto'; win.style.right = 'auto';
+  win.style.left = r.left + 'px'; win.style.top = r.top + 'px';
+});
 
-function startDrag(e) {
-  const win = document.getElementById('float-window');
-  if (floatState !== 'mini') return;
-  isDragging = true;
-  const rect = win.getBoundingClientRect();
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-  dragOffset.x = clientX - rect.left;
-  dragOffset.y = clientY - rect.top;
-  win.style.bottom = 'auto';
-  win.style.right = 'auto';
-  win.style.left = rect.left + 'px';
-  win.style.top = rect.top + 'px';
-  e.preventDefault && e.preventDefault();
-}
+document.getElementById('float-header').addEventListener('touchstart', e => {
+  if (floatSize !== 'mini') return;
+  dragging = true;
+  const win = document.getElementById('float-win');
+  const r = win.getBoundingClientRect();
+  const t = e.touches[0];
+  dragOff = { x: t.clientX - r.left, y: t.clientY - r.top };
+  win.style.bottom = 'auto'; win.style.right = 'auto';
+  win.style.left = r.left + 'px'; win.style.top = r.top + 'px';
+}, {passive:true});
 
-document.addEventListener('mousemove', onDrag);
-document.addEventListener('touchmove', onDrag, { passive: false });
+document.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const win = document.getElementById('float-win');
+  const x = Math.max(0, Math.min(e.clientX - dragOff.x, window.innerWidth - win.offsetWidth));
+  const y = Math.max(0, Math.min(e.clientY - dragOff.y, window.innerHeight - win.offsetHeight));
+  win.style.left = x + 'px'; win.style.top = y + 'px';
+});
 
-function onDrag(e) {
-  if (!isDragging) return;
-  const win = document.getElementById('float-window');
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-  const newX = clientX - dragOffset.x;
-  const newY = clientY - dragOffset.y;
-  // Keep within screen bounds
-  const maxX = window.innerWidth - win.offsetWidth;
-  const maxY = window.innerHeight - win.offsetHeight;
-  win.style.left = Math.max(0, Math.min(newX, maxX)) + 'px';
-  win.style.top = Math.max(0, Math.min(newY, maxY)) + 'px';
-  e.preventDefault && e.preventDefault();
-}
+document.addEventListener('touchmove', e => {
+  if (!dragging) return;
+  const win = document.getElementById('float-win');
+  const t = e.touches[0];
+  const x = Math.max(0, Math.min(t.clientX - dragOff.x, window.innerWidth - win.offsetWidth));
+  const y = Math.max(0, Math.min(t.clientY - dragOff.y, window.innerHeight - win.offsetHeight));
+  win.style.left = x + 'px'; win.style.top = y + 'px';
+}, {passive:true});
 
-document.addEventListener('mouseup', stopDrag);
-document.addEventListener('touchend', stopDrag);
-
-function stopDrag() { isDragging = false; }
-
-function closeOverlay() {
-  closeFloat();
-}
+document.addEventListener('mouseup', () => dragging = false);
+document.addEventListener('touchend', () => dragging = false);
 
 // ── SCREENSAVER ──
-let idleTimer = null;
-const IDLE_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+let idleTimer;
+const IDLE_MS = 5 * 60 * 1000;
 
-function activateScreensaver() {
+function ssOn() {
   document.getElementById('screensaver').classList.add('active');
 }
 
-function deactivateScreensaver() {
+function ssOff() {
   document.getElementById('screensaver').classList.remove('active');
-  resetIdleTimer();
+  resetIdle();
 }
 
-function resetIdleTimer() {
+function resetIdle() {
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(activateScreensaver, IDLE_TIMEOUT);
+  idleTimer = setTimeout(ssOn, IDLE_MS);
 }
 
-// Start idle timer on any interaction
-['touchstart', 'touchend', 'mousedown', 'keydown'].forEach(evt => {
-  document.addEventListener(evt, resetIdleTimer, { passive: true });
+['mousedown','touchstart','keydown'].forEach(e => {
+  document.addEventListener(e, resetIdle, {passive:true});
 });
 
-resetIdleTimer();
+resetIdle();
 
 // ── TOAST ──
-let toastTimer = null;
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
 }
-
-// ── REORDERLY ITEM COUNT ──
-// Reads from localStorage if user is signed into ReOrderly
-function updateItemCount() {
-  try {
-    const keys = Object.keys(localStorage).filter(k => k.startsWith('reorderly'));
-    // Simple count badge update — will show actual count when app is in use
-    const badge = document.getElementById('hero-item-count');
-    if (badge) badge.textContent = '0 items';
-  } catch(e) {}
-}
-
-updateItemCount();
 </script>
 </body>
 </html>
