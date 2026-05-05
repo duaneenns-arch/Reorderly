@@ -118,7 +118,7 @@ body::before {
 /* ── TOP ROW: Clock + Weather ── */
 .top-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   flex-shrink: 0;
 }
@@ -178,7 +178,7 @@ body::before {
 /* ── APP GRID ── */
 .app-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   flex-shrink: 0;
 }
@@ -237,7 +237,7 @@ body::before {
 .bottom-row {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   min-height: 0;
 }
@@ -620,21 +620,10 @@ body::before {
 
     </div>
 
-    <!-- Ring detail + Slideshow tab -->
+    <!-- Slideshow panel -->
     <div class="bottom-row">
 
-      <div class="ring-panel" onclick="openApp('ring')">
-        <div class="ring-top">
-          <div class="ring-icon-title">
-            <div class="ring-emoji">🔔</div>
-            <div class="ring-name">Ring</div>
-          </div>
-          <div class="ring-live-badge">Live</div>
-        </div>
-        <div class="ring-status">Front door · Tap to view cameras</div>
-      </div>
-
-      <div class="slideshow-panel" id="slideshow-panel">
+      <div class="slideshow-panel" id="slideshow-panel" style="grid-column:1/-1;">
         <div class="slideshow-header">
           <div class="slideshow-title">
             <span class="slideshow-title-icon">🖼️</span>
@@ -1040,5 +1029,22 @@ function showToast(msg) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
 }
 </script>
+
+<!-- YouTube Mini Player -->
+<div id="yt-mini" class="yt-mini">
+  <div class="yt-drag-bar" id="yt-drag"></div>
+  <div class="yt-controls">
+    <button class="yt-btn" id="yt-size-btn" onclick="ytToggleSize()" title="Expand">⬆</button>
+    <button class="yt-btn" onclick="ytClose()" title="Close">✕</button>
+  </div>
+  <iframe
+    id="yt-frame"
+    title="YouTube"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen>
+  </iframe>
+</div>
+
 </body>
 </html>
