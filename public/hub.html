@@ -675,7 +675,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="sb-txt"> items on list</div>
     <div class="sb-sep" id="sb-sep2" style="display:none;">·</div>
     <div class="sb-txt" id="sb-last-scan"></div>
-    <div style="margin-left:auto;font-size:9px;font-family:'DM Mono',monospace;color:var(--t3);" id="sb-version">v2.12 · hub</div>
+    <div style="margin-left:auto;font-size:9px;font-family:'DM Mono',monospace;color:var(--t3);" id="sb-version">v2.13 · hub</div>
   </div>
 
   <div class="home-body">
@@ -1122,7 +1122,7 @@ window.closeLegal = function(){};
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const fbApp = initializeApp({
@@ -1173,6 +1173,7 @@ onAuthStateChanged(auth, async user => {
     try { const s=await getDoc(doc(db,'users',cu.uid,'pinned')); pinned=s.exists()?s.data():{}; } catch(e){}
     subList();
     loadTodos();
+    initAI();
     if (activePg==='login-page'||activePg==='photo-mode') nav('home-page','fi');
   } else {
     cu=null; items=[]; todos=[];
@@ -1307,6 +1308,27 @@ function renderTodos() {
     el.appendChild(d);
   });
 }
+
+window.saveTodoEdit = async (id) => {
+  const inp = document.getElementById('rt-edit-'+id);
+  if (!inp) return;
+  const text = inp.value.trim();
+  if (!text) return;
+  const t = todos.find(t=>t.id===id);
+  if (t) t.text = text;
+  expandedTodoId = null;
+  await saveTodos();
+  renderTodos();
+};
+
+window.libAdd = async (upc, name, price, image, btn) => {
+  const ex = items.find(i=>i.upc===upc);
+  if (ex) { ex.qty++; }
+  else { items.push({upc, name, price, image, qty:1, category:getCat(name), walmartUrl:'https://www.walmart.com/search?q='+encodeURIComponent(name)}); }
+  await saveList();
+  if (btn) { btn.textContent='✓ In list'; btn.classList.add('added'); }
+  toast('Added: '+name.substring(0,28));
+};
 
 window.toggleRtItem=(id)=>{
   expandedTodoId=(expandedTodoId===id)?null:id;
@@ -1493,8 +1515,8 @@ function renderListPage(){
 }
 
 function updateCounts(){
-  const n=document.getElementById('nav-cnt');
-  if(n){n.style.display=items.length?'block':'none';n.textContent=items.length;}
+  // Item count is shown in the status bar via updateStatusBar()
+  // Keep this as a no-op to avoid errors from any callers
 }
 
 function updateStatusBar(){
@@ -1702,7 +1724,7 @@ window.closeAbout=()=>{
 };
 window.doSignOut=async()=>{
   try{
-    await auth.signOut();
+    await signOut(auth);
     toast('Signed out');
   }catch(e){toast('Sign out failed');}
 };
