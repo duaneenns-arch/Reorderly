@@ -547,6 +547,78 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .about-close{width:100%;height:40px;background:var(--s2);border:1px solid var(--b2);border-radius:10px;color:var(--t2);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;}
 .about-close:hover{border-color:var(--green);color:var(--text);}
 
+
+/* ── AI VOICE SYSTEM ── */
+
+/* Mic button in header */
+.hdr-mic-btn{width:38px;height:38px;border-radius:50%;background:var(--s2);border:1.5px solid var(--b2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:16px;flex-shrink:0;}
+.hdr-mic-btn:hover{background:var(--s3);border-color:var(--green);}
+.hdr-mic-btn.listening{background:rgba(29,158,117,0.2);border-color:var(--green);animation:micPulse 1s ease-in-out infinite;}
+.hdr-mic-btn.processing{background:rgba(0,113,206,0.15);border-color:#0071CE;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(29,158,117,0.4);}50%{box-shadow:0 0 0 8px rgba(29,158,117,0);}}
+
+/* Voice overlay — full screen listening indicator */
+.voice-overlay{position:fixed;inset:0;z-index:8000;background:rgba(8,10,9,0.88);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;backdrop-filter:blur(4px);}
+.voice-overlay.active{display:flex;}
+.voice-status{font-family:'DM Mono',monospace;font-size:11px;color:var(--t2);letter-spacing:0.12em;text-transform:uppercase;}
+.voice-transcript{font-size:18px;font-weight:600;color:var(--text);max-width:500px;text-align:center;min-height:28px;line-height:1.4;}
+.voice-cancel{margin-top:8px;background:none;border:1px solid var(--b2);border-radius:99px;padding:8px 20px;color:var(--t2);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.voice-cancel:hover{border-color:var(--b3);color:var(--text);}
+
+/* Waveform orb */
+.voice-orb{position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;}
+.orb-ring{position:absolute;border-radius:50%;border:2px solid rgba(29,158,117,0.3);}
+.orb-ring-1{width:140px;height:140px;animation:orbRing 2s ease-in-out infinite;}
+.orb-ring-2{width:110px;height:110px;animation:orbRing 2s ease-in-out infinite 0.3s;}
+.orb-ring-3{width:80px;height:80px;animation:orbRing 2s ease-in-out infinite 0.6s;}
+.orb-core{width:52px;height:52px;border-radius:50%;background:radial-gradient(circle,var(--green2),var(--green));box-shadow:0 0 20px rgba(29,158,117,0.6);}
+.voice-orb.listening .orb-ring{border-color:rgba(29,158,117,0.5);}
+.voice-orb.listening .orb-core{animation:orbBreath 0.6s ease-in-out infinite alternate;}
+.voice-orb.processing .orb-core{background:radial-gradient(circle,#60a5fa,#0071CE);box-shadow:0 0 20px rgba(0,113,206,0.6);animation:orbSpin 1s linear infinite;}
+.voice-orb.speaking .orb-core{background:radial-gradient(circle,#a78bfa,#7c3aed);box-shadow:0 0 20px rgba(124,58,237,0.6);animation:orbBreath 0.3s ease-in-out infinite alternate;}
+@keyframes orbRing{0%{transform:scale(1);opacity:0.6;}50%{transform:scale(1.08);opacity:0.3;}100%{transform:scale(1);opacity:0.6;}}
+@keyframes orbBreath{from{transform:scale(1);}to{transform:scale(1.25);}}
+@keyframes orbSpin{to{filter:hue-rotate(360deg);}}
+
+/* AI response card overlaid on photo frame */
+.ai-frame-overlay{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(8,10,9,0.82);backdrop-filter:blur(2px);padding:20px;}
+.ai-frame-overlay.active{display:flex;}
+.ai-frame-orb{position:relative;width:100px;height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.afo-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(124,58,237,0.4);}
+.afo-ring-1{width:100px;height:100px;animation:orbRing 2s ease-in-out infinite;}
+.afo-ring-2{width:74px;height:74px;animation:orbRing 2s ease-in-out infinite 0.4s;}
+.afo-core{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle,#a78bfa,#7c3aed);box-shadow:0 0 16px rgba(124,58,237,0.7);animation:orbBreath 0.35s ease-in-out infinite alternate;}
+.ai-response-text{color:var(--text);font-size:14px;font-weight:600;text-align:center;line-height:1.5;max-width:280px;margin-bottom:12px;}
+.ai-response-action{font-size:10px;font-family:'DM Mono',monospace;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;}
+.ai-dismiss-btn{margin-top:10px;background:none;border:1px solid var(--b2);border-radius:99px;padding:6px 16px;color:var(--t2);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;}
+
+/* Settings modal */
+.settings-overlay{position:fixed;inset:0;z-index:5999;background:rgba(0,0,0,0.55);display:none;backdrop-filter:blur(3px);}
+.settings-overlay.open{display:block;}
+.settings-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);opacity:0;pointer-events:none;z-index:6000;width:min(480px,92vw);transition:transform 0.2s cubic-bezier(0.34,1.2,0.64,1),opacity 0.15s ease;}
+.settings-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
+.settings-box{background:var(--s1);border:1px solid var(--b2);border-radius:20px;padding:1.5rem;position:relative;overflow:hidden;max-height:85vh;overflow-y:auto;}
+.settings-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.settings-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:16px;}
+.settings-section{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);margin:14px 0 8px;}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.settings-label{font-size:13px;font-weight:600;color:var(--text);}
+.settings-sub{font-size:10px;color:var(--t2);font-family:'DM Mono',monospace;margin-top:2px;}
+.settings-inp{flex:1;height:36px;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:0 10px;font-family:'Syne',sans-serif;font-size:13px;color:var(--text);outline:none;max-width:200px;}
+.settings-inp:focus{border-color:var(--green);}
+.settings-select{flex:1;height:36px;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:0 10px;font-family:'Syne',sans-serif;font-size:12px;color:var(--text);outline:none;max-width:200px;cursor:pointer;}
+.settings-select:focus{border-color:var(--green);}
+.settings-save{width:100%;height:42px;background:var(--green);color:#fff;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:14px;transition:background 0.15s;}
+.settings-save:hover{background:var(--green2);}
+.settings-close{position:absolute;top:14px;right:14px;background:var(--s2);border:1px solid var(--b2);border-radius:7px;padding:4px 10px;font-size:11px;color:var(--t3);cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;}
+.settings-close:hover{color:var(--text);}
+.avatar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;}
+.avatar-opt{border:2px solid var(--b2);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--s2);}
+.avatar-opt:hover{border-color:var(--b3);}
+.avatar-opt.selected{border-color:var(--green);background:var(--gdim);}
+.avatar-opt-ico{font-size:22px;margin-bottom:4px;}
+.avatar-opt-lbl{font-size:9px;font-weight:700;color:var(--t2);font-family:'DM Mono',monospace;letter-spacing:0.06em;}
+
 /* overlay backdrop for clock menu */
 .overlay-bg{position:fixed;inset:0;z-index:4999;display:none;}
 .overlay-bg.open{display:block;}
@@ -588,6 +660,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       </div>
       <div class="hdr-weather" id="hdr-weather"><div style="font-size:10px;color:var(--t3);font-family:'DM Mono',monospace;">...</div></div>
       <div class="hdr-user" id="hdr-user"></div>
+      <button class="hdr-mic-btn" id="hdr-mic-btn" onclick="tapMic()" title="Voice assistant">🎤</button>
       <button class="hdr-sleep" onclick="goPhotoMode()">🌙</button>
       <button class="hdr-menu-btn" id="hdr-menu-btn" onclick="toggleHMenu()">≡</button>
     </div>
@@ -679,6 +752,16 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           <div class="pt-rc-ov">
             <div class="pt-rc-fs" onclick="goPhotoMode()">⛶ Fullscreen</div>
           </div>
+        </div>
+        <div class="ai-frame-overlay" id="ai-frame-overlay">
+          <div class="ai-frame-orb" id="ai-frame-orb">
+            <div class="afo-ring afo-ring-1"></div>
+            <div class="afo-ring afo-ring-2"></div>
+            <div class="afo-core"></div>
+          </div>
+          <div class="ai-response-text" id="ai-response-text"></div>
+          <div class="ai-response-action" id="ai-response-action"></div>
+          <button class="ai-dismiss-btn" onclick="dismissAiFrame()">Dismiss</button>
         </div>
       </div>
     </div>
@@ -836,6 +919,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div><div class="hmenu-label">Ring</div><div class="hmenu-sub">Cameras &amp; doorbell</div></div>
   </div>
   <div class="hmenu-divider"></div>
+  <div class="hmenu-item" onclick="openSettings();closeHMenu()">
+    <div class="hmenu-ico">⚙️</div>
+    <div><div class="hmenu-label">Settings</div><div class="hmenu-sub">Voice, avatar, wake word</div></div>
+  </div>
+  <div class="hmenu-divider"></div>
   <div class="hmenu-section">Device</div>
   <div class="hmenu-item" onclick="openWifi();closeHMenu()">
     <div class="hmenu-ico">📶</div>
@@ -907,6 +995,65 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
 </div>
 
+
+<!-- VOICE OVERLAY -->
+<div class="voice-overlay" id="voice-overlay">
+  <div class="voice-orb" id="voice-orb">
+    <div class="orb-ring orb-ring-1"></div>
+    <div class="orb-ring orb-ring-2"></div>
+    <div class="orb-ring orb-ring-3"></div>
+    <div class="orb-core"></div>
+  </div>
+  <div class="voice-status" id="voice-status">Listening…</div>
+  <div class="voice-transcript" id="voice-transcript"></div>
+  <button class="voice-cancel" onclick="cancelVoice()">✕ Cancel</button>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="settings-overlay" id="settings-overlay" onclick="closeSettings()"></div>
+<div class="settings-modal" id="settings-modal">
+  <div class="settings-box">
+    <button class="settings-close" onclick="closeSettings()">✕ Close</button>
+    <div class="settings-title">⚙️ Settings</div>
+
+    <div class="settings-section">Voice Assistant</div>
+    <div class="settings-row">
+      <div><div class="settings-label">Wake Word</div><div class="settings-sub">Say this to activate</div></div>
+      <input class="settings-inp" type="text" id="set-wakeword" value="Hey ReOrderly" placeholder="Hey ReOrderly" />
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">Voice</div><div class="settings-sub">Speaking voice</div></div>
+      <select class="settings-select" id="set-voice"></select>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">Speed</div><div class="settings-sub">Speech rate</div></div>
+      <select class="settings-select" id="set-rate">
+        <option value="0.8">Slow</option>
+        <option value="1.0" selected>Normal</option>
+        <option value="1.2">Fast</option>
+      </select>
+    </div>
+
+    <div class="settings-section">Assistant Avatar</div>
+    <div class="avatar-grid">
+      <div class="avatar-opt selected" data-avatar="orb" onclick="selectAvatar(this)">
+        <div class="avatar-opt-ico">🔮</div>
+        <div class="avatar-opt-lbl">Orb</div>
+      </div>
+      <div class="avatar-opt" data-avatar="face" onclick="selectAvatar(this)">
+        <div class="avatar-opt-ico">🙂</div>
+        <div class="avatar-opt-lbl">Face</div>
+      </div>
+      <div class="avatar-opt" data-avatar="wave" onclick="selectAvatar(this)">
+        <div class="avatar-opt-ico">〰️</div>
+        <div class="avatar-opt-lbl">Wave</div>
+      </div>
+    </div>
+
+    <button class="settings-save" onclick="saveSettings()">Save Settings</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -957,6 +1104,13 @@ window.deleteTodoItem = function(){};
 window.toggleTodoItem = function(){};
 window.closeHMenu = function(){};
 window.closeClockMenu = function(){};
+window.tapMic = function(){};
+window.cancelVoice = function(){};
+window.openSettings = function(){};
+window.closeSettings = function(){};
+window.saveSettings = function(){};
+window.selectAvatar = function(){};
+window.dismissAiFrame = function(){};
 window.showAbout = function(){};
 window.closeAbout = function(){};
 window.doSignOut = function(){};
@@ -1549,6 +1703,330 @@ window.doSignOut=async()=>{
     toast('Signed out');
   }catch(e){toast('Sign out failed');}
 };
+
+
+// ══════════════════════════════════════════════════════
+// AI VOICE ASSISTANT
+// ══════════════════════════════════════════════════════
+
+let aiSettings = {
+  wakeWord: 'hey reorderly',
+  voiceURI: '',
+  rate: 1.0,
+  avatar: 'orb'
+};
+
+let voiceState = 'idle'; // idle | listening | processing | speaking
+let recognition = null;
+let wakeRecognition = null;
+let speechSynth = window.speechSynthesis;
+let voices = [];
+let aiActive = false;
+
+// Load settings from Firebase
+async function loadAiSettings(){
+  if(!cu) return;
+  try{
+    const s = await getDoc(doc(db,'users',cu.uid,'settings','ai'));
+    if(s.exists()){
+      const d = s.data();
+      if(d.wakeWord) aiSettings.wakeWord = d.wakeWord.toLowerCase();
+      if(d.voiceURI) aiSettings.voiceURI = d.voiceURI;
+      if(d.rate) aiSettings.rate = parseFloat(d.rate);
+      if(d.avatar) aiSettings.avatar = d.avatar;
+    }
+  }catch(e){}
+  applyAvatarStyle(aiSettings.avatar);
+}
+
+async function saveAiSettingsToDb(){
+  if(!cu) return;
+  try{
+    await setDoc(doc(db,'users',cu.uid,'settings','ai'), aiSettings);
+  }catch(e){}
+}
+
+// ── SETTINGS MODAL ──
+window.openSettings = () => {
+  populateVoices();
+  const ww = document.getElementById('set-wakeword');
+  const vsel = document.getElementById('set-voice');
+  const rsel = document.getElementById('set-rate');
+  if(ww) ww.value = aiSettings.wakeWord || 'Hey ReOrderly';
+  if(rsel) rsel.value = String(aiSettings.rate || 1.0);
+  // Set avatar
+  document.querySelectorAll('.avatar-opt').forEach(o=>{
+    o.classList.toggle('selected', o.dataset.avatar === aiSettings.avatar);
+  });
+  document.getElementById('settings-overlay').classList.add('open');
+  document.getElementById('settings-modal').classList.add('open');
+};
+
+window.closeSettings = () => {
+  document.getElementById('settings-overlay').classList.remove('open');
+  document.getElementById('settings-modal').classList.remove('open');
+};
+
+window.saveSettings = async () => {
+  const ww = document.getElementById('set-wakeword')?.value.trim();
+  const voice = document.getElementById('set-voice')?.value;
+  const rate = document.getElementById('set-rate')?.value;
+  if(ww) aiSettings.wakeWord = ww.toLowerCase();
+  if(voice !== undefined) aiSettings.voiceURI = voice;
+  if(rate) aiSettings.rate = parseFloat(rate);
+  await saveAiSettingsToDb();
+  closeSettings();
+  toast('Settings saved');
+  restartWakeWord();
+};
+
+window.selectAvatar = (el) => {
+  document.querySelectorAll('.avatar-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  aiSettings.avatar = el.dataset.avatar;
+  applyAvatarStyle(aiSettings.avatar);
+};
+
+function applyAvatarStyle(avatar){
+  const core = document.querySelector('.orb-core');
+  const afcore = document.querySelector('.afo-core');
+  const styles = {
+    orb: {bg:'radial-gradient(circle,var(--green2),var(--green))', shadow:'rgba(29,158,117,0.7)'},
+    face: {bg:'radial-gradient(circle,#fbbf24,#f59e0b)', shadow:'rgba(251,191,36,0.7)'},
+    wave: {bg:'radial-gradient(circle,#60a5fa,#3b82f6)', shadow:'rgba(96,165,250,0.7)'}
+  };
+  const s = styles[avatar] || styles.orb;
+  if(core){ core.style.background=s.bg; core.style.boxShadow='0 0 20px '+s.shadow; }
+  if(afcore){ afcore.style.background=s.bg; afcore.style.boxShadow='0 0 16px '+s.shadow; }
+}
+
+function populateVoices(){
+  const sel = document.getElementById('set-voice');
+  if(!sel) return;
+  voices = speechSynth.getVoices().filter(v=>v.lang.startsWith('en'));
+  sel.innerHTML = '';
+  voices.forEach(v=>{
+    const o = document.createElement('option');
+    o.value = v.voiceURI;
+    o.textContent = v.name.replace('Google ','').replace('Microsoft ','');
+    if(v.voiceURI === aiSettings.voiceURI) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+speechSynth.onvoiceschanged = populateVoices;
+
+// ── WAKE WORD LISTENER ──
+function startWakeWord(){
+  if(!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  wakeRecognition = new SR();
+  wakeRecognition.continuous = true;
+  wakeRecognition.interimResults = true;
+  wakeRecognition.lang = 'en-US';
+  wakeRecognition.onresult = (e) => {
+    if(voiceState !== 'idle') return;
+    const transcript = Array.from(e.results).map(r=>r[0].transcript).join(' ').toLowerCase();
+    if(transcript.includes(aiSettings.wakeWord || 'hey reorderly')){
+      wakeRecognition.stop();
+      startListening();
+    }
+  };
+  wakeRecognition.onend = () => {
+    if(voiceState === 'idle') setTimeout(startWakeWord, 1000);
+  };
+  wakeRecognition.onerror = () => {
+    setTimeout(startWakeWord, 3000);
+  };
+  try{ wakeRecognition.start(); }catch(e){}
+}
+
+function restartWakeWord(){
+  try{ wakeRecognition?.stop(); }catch(e){}
+  setTimeout(startWakeWord, 500);
+}
+
+window.tapMic = () => {
+  if(voiceState === 'idle') startListening();
+  else cancelVoice();
+};
+
+// ── ACTIVE LISTENING ──
+function startListening(){
+  if(!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)){
+    toast('Voice not supported in this browser');
+    return;
+  }
+  voiceState = 'listening';
+  aiActive = true;
+  setVoiceUI('listening', 'Listening…', '');
+  resetIdle();
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = (e) => {
+    const transcript = e.results[0][0].transcript;
+    document.getElementById('voice-transcript').textContent = transcript;
+    if(e.results[0].isFinal){
+      recognition.stop();
+      processCommand(transcript);
+    }
+  };
+  recognition.onerror = (e) => {
+    if(e.error !== 'no-speech') toast('Voice error: ' + e.error);
+    cancelVoice();
+  };
+  recognition.onend = () => {
+    if(voiceState === 'listening') cancelVoice();
+  };
+  recognition.start();
+  document.getElementById('hdr-mic-btn').classList.add('listening');
+}
+
+window.cancelVoice = () => {
+  try{ recognition?.stop(); }catch(e){}
+  voiceState = 'idle';
+  aiActive = false;
+  document.getElementById('voice-overlay').classList.remove('active');
+  document.getElementById('hdr-mic-btn').classList.remove('listening','processing');
+  setTimeout(startWakeWord, 500);
+};
+
+function setVoiceUI(state, status, transcript){
+  const overlay = document.getElementById('voice-overlay');
+  const orb = document.getElementById('voice-orb');
+  const statusEl = document.getElementById('voice-status');
+  const transcriptEl = document.getElementById('voice-transcript');
+  overlay.classList.add('active');
+  orb.className = 'voice-orb ' + state;
+  if(statusEl) statusEl.textContent = status;
+  if(transcriptEl) transcriptEl.textContent = transcript;
+}
+
+// ── PROCESS COMMAND VIA CLAUDE API ──
+async function processCommand(transcript){
+  voiceState = 'processing';
+  setVoiceUI('processing', 'Thinking…', transcript);
+  document.getElementById('hdr-mic-btn').classList.remove('listening');
+  document.getElementById('hdr-mic-btn').classList.add('processing');
+
+  const listSummary = items.length
+    ? items.map(i=>i.name+(i.qty>1?' x'+i.qty:'')).join(', ')
+    : 'empty';
+  const todoSummary = todos.length
+    ? todos.filter(t=>!t.done).map(t=>t.text).join(', ')
+    : 'none';
+
+  try{
+    const res = await fetch('/.netlify/functions/ai', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        transcript,
+        list: listSummary,
+        todos: todoSummary,
+        userName: cu?.displayName?.split(' ')[0] || 'there'
+      })
+    });
+    const data = await res.json();
+    await handleAiResponse(data);
+  }catch(e){
+    speak("Sorry, I couldn't connect right now.");
+    showAiFrame("Connection error — try again.", '');
+    cancelVoice();
+  }
+}
+
+async function handleAiResponse(data){
+  const { action, item, text, response } = data;
+  const spoken = text || response || '';
+
+  voiceState = 'speaking';
+  setVoiceUI('speaking', 'Responding…', '');
+  document.getElementById('hdr-mic-btn').classList.remove('processing');
+  document.getElementById('voice-overlay').classList.remove('active');
+
+  // Show AI frame overlay on photo
+  showAiFrame(spoken, action);
+
+  // Execute action
+  if(action === 'add_item' && item){
+    await addNamedItem(item);
+  } else if(action === 'remove_item' && item){
+    const found = items.find(i=>i.name.toLowerCase().includes(item.toLowerCase()));
+    if(found){ await delItem(found.upc); }
+  } else if(action === 'add_todo' && item){
+    todos.push({id:Date.now().toString(), text:item, done:false});
+    await saveTodos();
+    renderTodos();
+  } else if(action === 'clear_list'){
+    await clearItems();
+  } else if(action === 'read_list'){
+    // spoken response handles this
+  }
+
+  // Speak the response
+  speak(spoken, ()=>{
+    voiceState = 'idle';
+    document.getElementById('hdr-mic-btn').classList.remove('listening','processing');
+    setTimeout(startWakeWord, 500);
+  });
+}
+
+function showAiFrame(text, action){
+  const overlay = document.getElementById('ai-frame-overlay');
+  const textEl = document.getElementById('ai-response-text');
+  const actionEl = document.getElementById('ai-response-action');
+  if(textEl) textEl.textContent = text;
+  if(actionEl){
+    const labels = {
+      add_item:'✓ Item added to list',
+      remove_item:'✓ Item removed',
+      add_todo:'✓ Task added',
+      clear_list:'✓ List cleared',
+      read_list:'📋 Reading your list',
+      chat:''
+    };
+    actionEl.textContent = labels[action] || '';
+  }
+  overlay.classList.add('active');
+  // Auto dismiss after 8 seconds
+  clearTimeout(window._aiDismissT);
+  window._aiDismissT = setTimeout(dismissAiFrame, 8000);
+}
+
+window.dismissAiFrame = () => {
+  document.getElementById('ai-frame-overlay')?.classList.remove('active');
+};
+
+function speak(text, onDone){
+  if(!text || !speechSynth) { if(onDone) onDone(); return; }
+  speechSynth.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate = aiSettings.rate || 1.0;
+  if(aiSettings.voiceURI){
+    const v = speechSynth.getVoices().find(v=>v.voiceURI===aiSettings.voiceURI);
+    if(v) utt.voice = v;
+  }
+  utt.onend = () => { if(onDone) onDone(); };
+  utt.onerror = () => { if(onDone) onDone(); };
+  speechSynth.speak(utt);
+}
+
+// ── INIT ──
+async function initAI(){
+  await loadAiSettings();
+  // Request mic permission and start wake word
+  try{
+    await navigator.mediaDevices?.getUserMedia({audio:true});
+    startWakeWord();
+  }catch(e){
+    console.log('Mic permission denied — wake word disabled');
+  }
+}
 
 // ── CLOCK ──
 function tick(){
