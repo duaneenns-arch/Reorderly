@@ -1007,6 +1007,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   <div class="voice-status" id="voice-status">Listening…</div>
   <div class="voice-transcript" id="voice-transcript"></div>
   <button class="voice-cancel" onclick="cancelVoice()">✕ Cancel</button>
+  <button class="voice-cancel" onclick="testAI()" style="margin-top:6px;border-color:var(--green);color:var(--green);">🧪 Test AI (no voice)</button>
 </div>
 
 <!-- SETTINGS MODAL -->
@@ -1111,6 +1112,7 @@ window.closeSettings = function(){};
 window.saveSettings = function(){};
 window.selectAvatar = function(){};
 window.dismissAiFrame = function(){};
+window.testAI = function(){};
 window.showAbout = function(){};
 window.closeAbout = function(){};
 window.doSignOut = function(){};
@@ -1138,6 +1140,7 @@ const gProv = new GoogleAuthProvider();
 let cu = null, items = [], unsubList = null, lMode = 'in', libTab = 'usual', pinned = {};
 let activePg = 'photo-mode';
 let expandedUpc = null;
+let expandedTodoId = null;
 let todos = [];
 let lastScanTime = null;
 
@@ -1930,6 +1933,7 @@ function startListening(){
     }
   };
   recognition.onstart = () => {
+    window._netRetries = 0;
     console.log('Recognition started successfully');
     document.getElementById('voice-status').textContent = 'Listening… speak now';
   };
@@ -1942,8 +1946,16 @@ function startListening(){
       console.log('Network error on speech recognition');
       voiceState = 'idle';
       recognition = null;
-      setVoiceUI('listening', 'Retrying…', '');
-      setTimeout(startListening, 1500);
+      if(!window._netRetries) window._netRetries = 0;
+      window._netRetries++;
+      if(window._netRetries <= 2){
+        setVoiceUI('listening', 'Retrying (' + window._netRetries + '/2)…', '');
+        setTimeout(startListening, 2000);
+      } else {
+        window._netRetries = 0;
+        toast('Voice unavailable — check your connection');
+        cancelVoice();
+      }
       return;
     }
     toast('Voice error: ' + e.error);
@@ -2119,6 +2131,16 @@ function speak(text, onDone){
     }, 8000);
   }, 100);
 }
+
+
+// ── TEST AI WITHOUT VOICE ──
+window.testAI = async () => {
+  document.getElementById('voice-overlay').classList.remove('active');
+  voiceState = 'processing';
+  const micBtn = document.getElementById('hdr-mic-btn');
+  if(micBtn){ micBtn.classList.add('processing'); micBtn.textContent='⏳'; }
+  await processCommand('Add bread to my list');
+};
 
 // ── INIT ──
 async function initAI(){
