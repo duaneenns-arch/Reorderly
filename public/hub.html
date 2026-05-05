@@ -79,11 +79,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .hdr-timer-badge.alarm .htb-time{color:var(--ring);}
 
 /* ── STATUS BAR ── */
-.status-bar{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:4px 16px;background:var(--bg);border-bottom:1px solid var(--b1);}
-.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);}
-.sb-txt{font-size:9px;font-family:'DM Mono',monospace;color:var(--t3);}
+.status-bar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:5px 16px;background:var(--s1);border-bottom:1px solid var(--b2);}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);flex-shrink:0;animation:glow 2s ease-in-out infinite;}
+.sb-txt{font-size:10px;font-family:'DM Mono',monospace;color:var(--t2);}
 .sb-sep{color:var(--t3);font-size:9px;}
-.sb-cnt{font-size:9px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace;}
+.sb-cnt{font-size:10px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace;}
 
 /* ── HOME BODY ── */
 .home-body{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px;min-height:0;overflow:hidden;padding:6px;background:var(--bg);}
@@ -429,8 +429,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-tab-icon{font-size:15px;line-height:1;}
 
 /* Right panel overhaul */
-.right-col{display:flex;flex-direction:column;gap:0;overflow:hidden;background:var(--bg);}
-.right-todo{flex:0 0 26%;display:flex;flex-direction:column;min-height:0;background:var(--wb-bg);position:relative;border:2px solid #1a1a1a;overflow:hidden;margin-bottom:6px;}
+.right-col{display:flex;flex-direction:column;gap:6px;overflow:hidden;background:var(--bg);}
+.right-todo{flex:0 0 26%;display:flex;flex-direction:column;min-height:0;background:var(--wb-bg);position:relative;border:2px solid #1a1a1a;overflow:hidden;}
 .right-todo::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 27px,var(--wb-line) 27px,var(--wb-line) 28px);pointer-events:none;z-index:0;}
 .rt-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:5px 10px 4px;border-bottom:1px solid var(--wb-line);background:rgba(245,242,235,0.97);position:relative;z-index:1;}
 .rt-title{font-family:'Caveat',cursive;font-size:17px;font-weight:700;color:var(--wb-ink);display:flex;align-items:center;gap:5px;}
@@ -468,7 +468,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .rt-card-btn.save{background:rgba(42,50,40,0.07);border-color:rgba(42,50,40,0.14);color:var(--wb-ink2);}
 .rt-card-btn.done-btn{background:rgba(26,122,90,0.08);border-color:rgba(26,122,90,0.2);color:var(--wb-green);}
 .rt-card-btn.del-btn{background:rgba(192,57,43,0.07);border-color:rgba(192,57,43,0.18);color:rgba(170,50,35,0.8);}
-.right-bottom{flex:1;position:relative;overflow:hidden;margin:3px 6px 6px 6px;border-radius:4px;border:1px solid var(--b1);}
+.right-bottom{flex:1;position:relative;overflow:hidden;border:2px solid #1a1a1a;min-height:0;}
 .photo-frame-rc{position:absolute;inset:0;cursor:pointer;}
 .pt-rc-s{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1.5s ease;}
 .pt-rc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,transparent 45%);display:flex;align-items:flex-end;justify-content:space-between;padding:7px 9px;}
@@ -519,6 +519,26 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .spinner{display:inline-block;width:22px;height:22px;border:2px solid var(--b2);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
+
+/* ── ABOUT MODAL ── */
+.about-overlay{position:fixed;inset:0;z-index:5999;background:rgba(0,0,0,0.55);display:none;backdrop-filter:blur(3px);}
+.about-overlay.open{display:block;}
+.about-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);opacity:0;pointer-events:none;z-index:6000;width:320px;transition:transform 0.2s cubic-bezier(0.34,1.2,0.64,1),opacity 0.15s ease;}
+.about-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
+.about-box{background:var(--s1);border:1px solid var(--b2);border-radius:20px;padding:1.5rem;position:relative;overflow:hidden;}
+.about-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.about-logo{font-size:26px;font-weight:800;color:var(--text);letter-spacing:-1px;text-align:center;margin-bottom:3px;}
+.about-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);margin-left:2px;vertical-align:middle;position:relative;top:-3px;}
+.about-version{text-align:center;font-size:11px;color:var(--t2);font-family:'DM Mono',monospace;margin-bottom:12px;}
+.about-divider{height:1px;background:var(--b1);margin:10px 0;}
+.about-text{font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:7px;}
+.about-links{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.about-link{font-size:11px;color:var(--green);cursor:pointer;font-weight:600;}
+.about-link:hover{text-decoration:underline;}
+.about-sep{font-size:10px;color:var(--t3);}
+.about-close{width:100%;height:40px;background:var(--s2);border:1px solid var(--b2);border-radius:10px;color:var(--t2);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.about-close:hover{border-color:var(--green);color:var(--text);}
+
 /* overlay backdrop for clock menu */
 .overlay-bg{position:fixed;inset:0;z-index:4999;display:none;}
 .overlay-bg.open{display:block;}
@@ -565,12 +585,13 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   <!-- STATUS BAR -->
   <div class="status-bar">
     <div class="sb-dot"></div>
-    <div class="scn-lbl" style="font-size:9px;font-family:'DM Mono',monospace;color:var(--t3);">USB-C Scanner</div>
+    <div class="sb-txt">Scanner ready</div>
     <div class="sb-sep">·</div>
-    <div class="sb-cnt" id="sb-item-cnt" style="display:none;"></div>
-    <div class="sb-txt" id="sb-item-label" style="display:none;"> items ready</div>
+    <div class="sb-cnt" id="sb-item-cnt">0</div>
+    <div class="sb-txt"> items on list</div>
     <div class="sb-sep" id="sb-sep2" style="display:none;">·</div>
     <div class="sb-txt" id="sb-last-scan"></div>
+    <div style="margin-left:auto;font-size:9px;font-family:'DM Mono',monospace;color:var(--t3);" id="sb-version">v2.12 · hub</div>
   </div>
 
   <div class="home-body">
@@ -671,7 +692,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="l-order-bar">
       <button class="l-order-btn" id="list-order-btn" disabled onclick="orderAll()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-        Review on Walmart
+        🛍 Order on Walmart
       </button>
       <button class="l-clear-btn" onclick="clearItems()">Clear list</button>
     </div>
@@ -820,10 +841,50 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div><div class="hmenu-label">Bluetooth</div><div class="hmenu-sub">Paired devices</div></div>
   </div>
   <div class="hmenu-divider"></div>
+  <div class="hmenu-section">Legal &amp; Info</div>
+  <div class="hmenu-item" onclick="window.open('/privacy.html','_blank');closeHMenu()">
+    <div class="hmenu-ico">📄</div>
+    <div><div class="hmenu-label">Privacy Policy</div></div>
+  </div>
+  <div class="hmenu-item" onclick="window.open('/terms.html','_blank');closeHMenu()">
+    <div class="hmenu-ico">📄</div>
+    <div><div class="hmenu-label">Terms of Use</div></div>
+  </div>
+  <div class="hmenu-item" onclick="showAbout();closeHMenu()">
+    <div class="hmenu-ico">ℹ️</div>
+    <div><div class="hmenu-label">About ReOrderly</div><div class="hmenu-sub">v2.12 · Walmart affiliate</div></div>
+  </div>
+  <div class="hmenu-divider"></div>
   <button class="hmenu-sleep" onclick="goPhotoMode();closeHMenu()">
     <div class="hmenu-ico">🌙</div>
     <div><div class="hmenu-label" style="font-size:13px;font-weight:700;color:var(--text);">Sleep / Photo Mode</div></div>
   </button>
+  <button class="hmenu-sleep" onclick="doSignOut();closeHMenu()">
+    <div class="hmenu-ico">🚪</div>
+    <div><div class="hmenu-label" style="font-size:13px;font-weight:700;color:#f87171;">Sign Out</div></div>
+  </button>
+</div>
+
+<!-- ABOUT MODAL -->
+<div class="about-overlay" id="about-overlay" onclick="closeAbout()"></div>
+<div class="about-modal" id="about-modal">
+  <div class="about-box">
+    <div class="about-logo">ReOrderly<span class="about-dot"></span></div>
+    <div class="about-version">Version 2.12 · Station Hub</div>
+    <div class="about-divider"></div>
+    <div class="about-text">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
+    <div class="about-text">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc.</div>
+    <div class="about-text">Product prices and availability are confirmed on Walmart.com.</div>
+    <div class="about-divider"></div>
+    <div class="about-links">
+      <span class="about-link" onclick="window.open('/privacy.html','_blank')">Privacy Policy</span>
+      <span class="about-sep">·</span>
+      <span class="about-link" onclick="window.open('/terms.html','_blank')">Terms of Use</span>
+      <span class="about-sep">·</span>
+      <span class="about-link" onclick="window.open('mailto:support@reorderlysolutions.com')">Contact</span>
+    </div>
+    <button class="about-close" onclick="closeAbout()">Close</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -876,6 +937,9 @@ window.deleteTodoItem = function(){};
 window.toggleTodoItem = function(){};
 window.closeHMenu = function(){};
 window.closeClockMenu = function(){};
+window.showAbout = function(){};
+window.closeAbout = function(){};
+window.doSignOut = function(){};
 </script>
 
 <script type="module">
@@ -1255,15 +1319,13 @@ function updateCounts(){
 
 function updateStatusBar(){
   const cnt=document.getElementById('sb-item-cnt');
-  const lbl=document.getElementById('sb-item-label');
   const sep=document.getElementById('sb-sep2');
   const last=document.getElementById('sb-last-scan');
-  if(cnt){cnt.style.display=items.length?'inline':'none';cnt.textContent=items.length;}
-  if(lbl){lbl.style.display=items.length?'inline':'none';}
-  if(sep){sep.style.display=(items.length&&lastScanTime)?'inline':'none';}
+  if(cnt)cnt.textContent=items.length;
+  if(sep)sep.style.display=lastScanTime?'inline':'none';
   if(last&&lastScanTime){
     const mins=Math.round((new Date()-lastScanTime)/60000);
-    last.textContent=mins<1?'Last scan: just now':`Last scan: ${mins}m ago`;
+    last.textContent=mins<1?'just scanned':`scanned ${mins}m ago`;
   }
 }
 
@@ -1428,6 +1490,23 @@ window.switchTab = (tab) => {
   else if(tab==='hist') loadHistory();
   else if(tab==='lib') loadLibrary();
   resetIdle();
+};
+
+
+// ── ABOUT + SIGN OUT ──
+window.showAbout=()=>{
+  document.getElementById('about-overlay').classList.add('open');
+  document.getElementById('about-modal').classList.add('open');
+};
+window.closeAbout=()=>{
+  document.getElementById('about-overlay').classList.remove('open');
+  document.getElementById('about-modal').classList.remove('open');
+};
+window.doSignOut=async()=>{
+  try{
+    await auth.signOut();
+    toast('Signed out');
+  }catch(e){toast('Sign out failed');}
 };
 
 // ── CLOCK ──
