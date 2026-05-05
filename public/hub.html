@@ -1846,6 +1846,13 @@ function restartWakeWord(){
 }
 
 window.tapMic = () => {
+  // Unlock speech synthesis on first user gesture (Chrome requirement)
+  if(!speechUnlocked){
+    const u = new SpeechSynthesisUtterance('');
+    speechSynth.speak(u);
+    speechSynth.cancel();
+    speechUnlocked = true;
+  }
   if(voiceState === 'idle') startListening();
   else cancelVoice();
 };
@@ -1883,16 +1890,19 @@ function startListening(){
     if(voiceState === 'listening') cancelVoice();
   };
   recognition.start();
-  document.getElementById('hdr-mic-btn').classList.add('listening');
+  const micBtn = document.getElementById('hdr-mic-btn');
+  if(micBtn){ micBtn.classList.add('listening'); micBtn.textContent='🔴'; }
 }
 
 window.cancelVoice = () => {
   try{ recognition?.stop(); }catch(e){}
+  try{ speechSynth.cancel(); }catch(e){}
   voiceState = 'idle';
   aiActive = false;
-  document.getElementById('voice-overlay').classList.remove('active');
-  document.getElementById('hdr-mic-btn').classList.remove('listening','processing');
-  setTimeout(startWakeWord, 500);
+  document.getElementById('voice-overlay')?.classList.remove('active');
+  const mic = document.getElementById('hdr-mic-btn');
+  if(mic){ mic.classList.remove('listening','processing'); mic.textContent='🎤'; }
+  setTimeout(startWakeWord, 800);
 };
 
 function setVoiceUI(state, status, transcript){
@@ -1910,8 +1920,8 @@ function setVoiceUI(state, status, transcript){
 async function processCommand(transcript){
   voiceState = 'processing';
   setVoiceUI('processing', 'Thinking…', transcript);
-  document.getElementById('hdr-mic-btn').classList.remove('listening');
-  document.getElementById('hdr-mic-btn').classList.add('processing');
+  const micBtnP = document.getElementById('hdr-mic-btn');
+  if(micBtnP){ micBtnP.classList.remove('listening'); micBtnP.classList.add('processing'); micBtnP.textContent='⏳'; }
 
   const listSummary = items.length
     ? items.map(i=>i.name+(i.qty>1?' x'+i.qty:'')).join(', ')
@@ -1946,7 +1956,8 @@ async function handleAiResponse(data){
 
   voiceState = 'speaking';
   setVoiceUI('speaking', 'Responding…', '');
-  document.getElementById('hdr-mic-btn').classList.remove('processing');
+  const micBtnS = document.getElementById('hdr-mic-btn');
+  if(micBtnS){ micBtnS.classList.remove('processing'); micBtnS.textContent='🎤'; }
   document.getElementById('voice-overlay').classList.remove('active');
 
   // Show AI frame overlay on photo
@@ -2003,17 +2014,33 @@ window.dismissAiFrame = () => {
 };
 
 function speak(text, onDone){
-  if(!text || !speechSynth) { if(onDone) onDone(); return; }
+  if(!text){ if(onDone) onDone(); return; }
   speechSynth.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.rate = aiSettings.rate || 1.0;
-  if(aiSettings.voiceURI){
-    const v = speechSynth.getVoices().find(v=>v.voiceURI===aiSettings.voiceURI);
-    if(v) utt.voice = v;
-  }
-  utt.onend = () => { if(onDone) onDone(); };
-  utt.onerror = () => { if(onDone) onDone(); };
-  speechSynth.speak(utt);
+  // Small delay to let cancel settle
+  setTimeout(()=>{
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.rate = aiSettings.rate || 1.0;
+    utt.volume = 1.0;
+    utt.pitch = 1.0;
+    // Try to use selected voice
+    const allVoices = speechSynth.getVoices();
+    if(aiSettings.voiceURI && allVoices.length){
+      const v = allVoices.find(v=>v.voiceURI===aiSettings.voiceURI);
+      if(v) utt.voice = v;
+    } else if(allVoices.length){
+      // Default to first English voice
+      const eng = allVoices.find(v=>v.lang.startsWith('en'));
+      if(eng) utt.voice = eng;
+    }
+    utt.onend = () => { if(onDone) onDone(); };
+    utt.onerror = (e) => { console.log('Speech error:', e); if(onDone) onDone(); };
+    speechSynth.speak(utt);
+    // Chrome sometimes silently fails - watchdog
+    setTimeout(()=>{
+      if(speechSynth.speaking) return;
+      if(onDone) onDone();
+    }, 8000);
+  }, 100);
 }
 
 // ── INIT ──
