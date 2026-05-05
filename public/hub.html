@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>ReOrderly Station</title>
 <link rel="icon" type="image/png" href="/icon.png">
-<meta name="theme-color" content="#0a0c0b">
+<meta name="theme-color" content="#080a09">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -13,22 +13,24 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #0a0c0b;
-  --surface: #131614;
-  --surface2: #1a1e1c;
-  --surface3: #222622;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.13);
+  --bg: #080a09;
+  --surface: #0f1210;
+  --surface2: #161a17;
+  --surface3: #1d221e;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --border3: rgba(255,255,255,0.18);
   --green: #1D9E75;
-  --green-light: #25c490;
-  --green-dim: rgba(29,158,117,0.12);
-  --text: #f0f2f0;
-  --text2: #8a9490;
-  --text3: #3d4440;
+  --green2: #25c490;
+  --green-dim: rgba(29,158,117,0.1);
+  --green-glow: rgba(29,158,117,0.2);
+  --text: #eef0ee;
+  --text2: #7a8880;
+  --text3: #323a35;
   --youtube: #ff2020;
-  --spotify: #1ed760;
   --ring: #e8621a;
-  --walmart: #0071CE;
+  --gold: #c9a84c;
+  --gold-dim: rgba(201,168,76,0.1);
 }
 
 html, body {
@@ -41,19 +43,34 @@ html, body {
   user-select: none;
 }
 
+/* ── RICH BACKGROUND ── */
 body::before {
   content: '';
   position: fixed; inset: 0;
-  background: radial-gradient(ellipse 50% 70% at 0% 100%, rgba(29,158,117,0.07) 0%, transparent 60%);
+  background:
+    radial-gradient(ellipse 60% 80% at -10% 110%, rgba(29,158,117,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 110% -10%, rgba(201,168,76,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 30% at 50% 50%, rgba(29,158,117,0.02) 0%, transparent 70%);
   pointer-events: none; z-index: 0;
 }
 
-/* ── MAIN 2-COLUMN LAYOUT ── */
+/* Subtle grid texture */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
+}
+
+/* ── LAYOUT ── */
 .hub {
   position: relative; z-index: 1;
   width: 100vw; height: 100vh;
   display: grid;
-  grid-template-columns: 380px 1fr;
+  grid-template-columns: 420px 1fr;
   gap: 10px;
   padding: 10px;
 }
@@ -64,28 +81,337 @@ body::before {
   min-height: 0;
 }
 
-/* ReOrderly iframe panel */
-.ro-panel {
+/* ── KIOSK SCAN PANEL ── */
+.kiosk-panel {
   flex: 1;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  min-height: 0;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 22px;
+  display: flex; flex-direction: column;
+  overflow: hidden; min-height: 0;
   position: relative;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
-.ro-panel iframe {
-  width: 100%; height: 100%;
-  border: none; display: block;
+/* Green accent line top */
+.kiosk-panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
 }
 
-/* Scanner bar */
+/* Kiosk header */
+.kiosk-header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.kiosk-logo-row {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.kiosk-logo {
+  font-size: 26px; font-weight: 800;
+  color: var(--text); letter-spacing: -1px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.kiosk-logo-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 10px var(--green);} 50%{opacity:0.5;box-shadow:0 0 4px var(--green);} }
+
+.kiosk-user {
+  font-size: 11px; font-family: 'DM Mono', monospace;
+  color: var(--text3);
+}
+
+/* Scan input */
+.scan-area {
+  display: flex; gap: 8px; align-items: center;
+}
+
+.scan-input {
+  flex: 1;
+  height: 48px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 0 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 15px; color: var(--text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  caret-color: var(--green);
+}
+
+.scan-input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px var(--green-dim);
+}
+
+.scan-input::placeholder { color: var(--text3); }
+
+.scan-btn {
+  height: 48px; padding: 0 20px;
+  background: var(--green);
+  color: #fff; border: none;
+  border-radius: 12px;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(29,158,117,0.3);
+}
+
+.scan-btn:hover { background: var(--green2); }
+.scan-btn:active { transform: scale(0.97); }
+.scan-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.scan-status {
+  font-size: 11px; font-family: 'DM Mono', monospace;
+  color: var(--text3); margin-top: 8px;
+  min-height: 16px; padding: 0 2px;
+  transition: color 0.15s;
+}
+
+.scan-status.loading { color: var(--green); }
+.scan-status.success { color: var(--green2); }
+.scan-status.error { color: #f87171; }
+
+/* List area */
+.kiosk-list-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 12px 22px 8px;
+  flex-shrink: 0;
+}
+
+.kiosk-list-title {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text3);
+}
+
+.kiosk-list-count {
+  font-size: 11px; font-weight: 700;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(29,158,117,0.2);
+  padding: 2px 10px; border-radius: 99px;
+}
+
+.kiosk-items {
+  flex: 1; overflow-y: auto;
+  padding: 0 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface3) transparent;
+}
+
+.kiosk-items::-webkit-scrollbar { width: 4px; }
+.kiosk-items::-webkit-scrollbar-track { background: transparent; }
+.kiosk-items::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+
+.kiosk-empty {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 100%; gap: 10px; padding: 2rem;
+  text-align: center;
+}
+
+.kiosk-empty-icon { font-size: 36px; opacity: 0.2; }
+.kiosk-empty-text { font-size: 13px; color: var(--text3); line-height: 1.5; }
+
+.kiosk-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 4px;
+  background: transparent;
+  transition: background 0.15s;
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn { from{opacity:0;transform:translateY(-6px);} to{opacity:1;transform:translateY(0);} }
+
+.kiosk-item:hover { background: var(--surface2); }
+
+.kiosk-item-img {
+  width: 44px; height: 44px;
+  border-radius: 10px; object-fit: contain;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.kiosk-item-ph {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+
+.kiosk-item-info { flex: 1; min-width: 0; }
+
+.kiosk-item-name {
+  font-size: 13px; font-weight: 700;
+  color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.kiosk-item-price {
+  font-size: 12px; font-weight: 800;
+  color: var(--green); margin-top: 2px;
+}
+
+.kiosk-item-controls {
+  display: flex; align-items: center; gap: 6px;
+  flex-shrink: 0;
+}
+
+.qty-btn {
+  width: 28px; height: 28px;
+  border: 1px solid var(--border2);
+  border-radius: 8px; background: var(--surface2);
+  color: var(--text2); font-size: 16px;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+
+.qty-btn:hover { border-color: var(--green); color: var(--green); }
+
+.qty-num {
+  font-size: 14px; font-weight: 800;
+  min-width: 20px; text-align: center;
+}
+
+.del-btn {
+  width: 28px; height: 28px;
+  border: none; background: none;
+  color: var(--text3); font-size: 16px;
+  cursor: pointer; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.15s;
+}
+
+.del-btn:hover { color: #f87171; }
+
+/* Order button */
+.kiosk-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex; gap: 8px;
+}
+
+.order-btn {
+  flex: 1; height: 52px;
+  background: linear-gradient(135deg, #0071CE 0%, #005fa3 100%);
+  color: #fff; border: none;
+  border-radius: 14px;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity 0.15s, transform 0.1s;
+  box-shadow: 0 4px 16px rgba(0,113,206,0.25);
+}
+
+.order-btn:hover { opacity: 0.9; }
+.order-btn:active { transform: scale(0.98); }
+.order-btn:disabled { background: var(--surface3); box-shadow: none; color: var(--text3); cursor: not-allowed; }
+
+.clear-btn {
+  height: 52px; padding: 0 16px;
+  background: none; border: 1px solid var(--border2);
+  border-radius: 14px; color: var(--text2);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+}
+
+.clear-btn:hover { border-color: #f87171; color: #f87171; }
+
+/* Login panel */
+.kiosk-login {
+  display: none;
+  flex: 1; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 2rem; gap: 16px; text-align: center;
+}
+
+.kiosk-login.visible { display: flex; }
+
+.login-icon { font-size: 40px; opacity: 0.3; margin-bottom: 6px; }
+.login-title { font-size: 18px; font-weight: 800; color: var(--text); }
+.login-sub { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+.login-input {
+  width: 100%; height: 46px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 12px; padding: 0 16px;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px; color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.login-input:focus { border-color: var(--green); }
+.login-input::placeholder { color: var(--text3); }
+
+.login-btn {
+  width: 100%; height: 46px;
+  background: var(--green); color: #fff; border: none;
+  border-radius: 12px;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s;
+}
+
+.login-btn:hover { background: var(--green2); }
+.login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.login-error {
+  font-size: 12px; color: #f87171;
+  min-height: 16px; font-family: 'DM Mono', monospace;
+}
+
+.login-google-btn {
+  width: 100%; height: 46px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 12px; color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center; gap: 10px;
+  transition: border-color 0.15s;
+}
+
+.login-google-btn:hover { border-color: var(--green); }
+
+/* ── SCANNER STATUS BAR ── */
 .scanner-bar {
   flex-shrink: 0;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 10px 14px;
+  padding: 10px 16px;
   display: flex; align-items: center; gap: 8px;
 }
 
@@ -93,11 +419,9 @@ body::before {
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--green);
   box-shadow: 0 0 6px var(--green);
-  animation: blink 2s ease-in-out infinite;
+  animation: pulse 2s ease-in-out infinite;
   flex-shrink: 0;
 }
-
-@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
 .scanner-text {
   font-size: 10px; font-family: 'DM Mono', monospace;
@@ -115,26 +439,29 @@ body::before {
   min-height: 0;
 }
 
-/* ── TOP ROW: Clock + Weather ── */
+/* ── CLOCK + WEATHER ── */
 .top-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
-  flex-shrink: 0;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; flex-shrink: 0;
 }
 
 .clock-widget {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 18px 20px;
-  display: flex; flex-direction: column;
-  justify-content: center;
+  border: 1px solid var(--border2);
+  border-radius: 20px; padding: 20px 22px;
+  position: relative; overflow: hidden;
+}
+
+.clock-widget::before {
+  content: '';
+  position: absolute; bottom: -20px; right: -20px;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(29,158,117,0.05);
 }
 
 .clock-time {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(44px, 5vw, 64px);
+  font-size: clamp(42px, 4.5vw, 60px);
   color: var(--text); letter-spacing: 3px; line-height: 1;
 }
 
@@ -142,21 +469,28 @@ body::before {
   font-family: 'DM Mono', monospace;
   font-size: 10px; color: var(--text2);
   letter-spacing: 0.12em; text-transform: uppercase;
-  margin-top: 5px;
+  margin-top: 6px;
 }
 
 .weather-widget {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 18px 20px;
-  display: flex; align-items: center; gap: 12px;
+  border: 1px solid var(--border2);
+  border-radius: 20px; padding: 20px 22px;
+  display: flex; align-items: center; gap: 14px;
+  position: relative; overflow: hidden;
 }
 
-.weather-icon { font-size: 32px; flex-shrink: 0; }
+.weather-widget::before {
+  content: '';
+  position: absolute; top: -20px; left: -20px;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(201,168,76,0.04);
+}
+
+.weather-icon { font-size: 34px; flex-shrink: 0; }
 
 .weather-temp {
-  font-size: 26px; font-weight: 800;
+  font-size: 28px; font-weight: 800;
   color: var(--text); line-height: 1;
 }
 
@@ -168,6 +502,7 @@ body::before {
 .weather-loc {
   font-size: 9px; color: var(--text3);
   font-family: 'DM Mono', monospace; margin-top: 2px;
+  letter-spacing: 0.05em;
 }
 
 .weather-loading {
@@ -175,19 +510,16 @@ body::before {
   font-family: 'DM Mono', monospace;
 }
 
-/* ── APP GRID ── */
-.app-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
-  flex-shrink: 0;
+/* ── APP TILES ── */
+.app-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; flex-shrink: 0;
 }
 
 .app-tile {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 16px 18px;
+  border: 1px solid var(--border2);
+  border-radius: 18px; padding: 16px 18px;
   display: flex; align-items: center; gap: 14px;
   cursor: pointer;
   transition: transform 0.15s, border-color 0.15s, background 0.15s;
@@ -197,17 +529,15 @@ body::before {
 .app-tile::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0;
-  height: 2px; border-radius: 18px 18px 0 0;
+  height: 1px;
 }
 
-.app-tile.yt::before { background: var(--youtube); }
-.app-tile.sp::before { background: var(--spotify); }
-.app-tile.wm::before { background: var(--walmart); }
-.app-tile.rg::before { background: var(--ring); }
+.app-tile.yt::before { background: linear-gradient(90deg, transparent, var(--youtube), transparent); }
+.app-tile.rg::before { background: linear-gradient(90deg, transparent, var(--ring), transparent); }
 
 .app-tile:hover, .app-tile:active {
   transform: scale(0.97);
-  border-color: var(--border2);
+  border-color: var(--border3);
   background: var(--surface2);
 }
 
@@ -224,240 +554,71 @@ body::before {
   font-family: 'DM Mono', monospace; margin-top: 2px;
 }
 
-.app-tile-badge {
+.live-badge {
   font-size: 9px; font-weight: 700;
-  padding: 2px 7px; border-radius: 6px;
-  letter-spacing: 0.06em; text-transform: uppercase;
+  background: rgba(232,98,26,0.15); color: var(--ring);
+  padding: 3px 8px; border-radius: 6px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  animation: pulse 2s ease-in-out infinite;
   flex-shrink: 0;
 }
 
-.badge-live { background: rgba(232,98,26,0.2); color: var(--ring); }
-
-/* ── BOTTOM ROW: Ring + Slideshow tab ── */
-.bottom-row {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
-  min-height: 0;
-}
-
-.ring-panel {
+/* ── PHOTO FRAME ── */
+.photo-panel {
+  flex: 1; min-height: 0;
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 18px;
-  display: flex; flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: transform 0.15s, border-color 0.15s;
-  position: relative; overflow: hidden;
-}
-
-.ring-panel::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 2px; background: var(--ring);
-}
-
-.ring-panel:active { transform: scale(0.98); }
-
-.ring-top {
-  display: flex; align-items: center;
-  justify-content: space-between;
-}
-
-.ring-icon-title {
-  display: flex; align-items: center; gap: 8px;
-}
-
-.ring-emoji { font-size: 22px; }
-.ring-name { font-size: 16px; font-weight: 800; color: var(--text); }
-
-.ring-live-badge {
-  font-size: 9px; font-weight: 700;
-  background: rgba(232,98,26,0.2); color: var(--ring);
-  padding: 3px 8px; border-radius: 6px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  animation: blink 2s ease-in-out infinite;
-}
-
-.ring-status {
-  font-size: 11px; color: var(--text2);
-  font-family: 'DM Mono', monospace;
-}
-
-.ring-btn {
-  background: var(--surface2);
   border: 1px solid var(--border2);
-  border-radius: 10px; padding: 9px;
-  font-family: 'Syne', sans-serif;
-  font-size: 12px; font-weight: 700;
-  color: var(--text2); text-align: center;
-  cursor: pointer; transition: all 0.15s;
-}
-
-.ring-btn:hover { color: var(--ring); border-color: var(--ring); }
-
-/* ── SLIDESHOW TAB ── */
-.slideshow-panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  overflow: hidden;
-  display: flex; flex-direction: column;
-  cursor: pointer;
-  transition: border-color 0.15s;
+  border-radius: 20px; overflow: hidden;
   position: relative;
 }
 
-.slideshow-panel:hover { border-color: var(--border2); }
+.photo-panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  z-index: 2;
+}
 
-.slideshow-header {
-  padding: 10px 14px;
-  display: flex; align-items: center;
+.slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: opacity 1.5s ease;
+}
+
+.photo-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 45%);
+  display: flex; align-items: flex-end;
   justify-content: space-between;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+  padding: 14px 16px; z-index: 2;
 }
 
-.slideshow-title {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13px; font-weight: 800; color: var(--text);
-}
-
-.slideshow-title-icon { font-size: 16px; }
-
-.slideshow-fullscreen-btn {
+.photo-label {
   font-size: 10px; font-weight: 700;
-  color: var(--text3); letter-spacing: 0.06em;
-  text-transform: uppercase;
-  background: var(--surface3);
-  border: 1px solid var(--border);
-  border-radius: 6px; padding: 3px 8px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+}
+
+.photo-full-btn {
+  font-size: 10px; font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px; padding: 3px 9px;
   cursor: pointer; transition: all 0.15s;
   font-family: 'Syne', sans-serif;
 }
 
-.slideshow-fullscreen-btn:hover { color: var(--text2); border-color: var(--border2); }
-
-.slideshow-body {
-  flex: 1;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 10px; padding: 16px; text-align: center;
-}
-
-.ss-panel-icon { font-size: 32px; opacity: 0.3; }
-
-.ss-panel-text {
-  font-size: 12px; font-weight: 700; color: var(--text2);
-}
-
-.ss-panel-sub {
-  font-size: 10px; color: var(--text3);
-  font-family: 'DM Mono', monospace;
-  line-height: 1.5;
-}
-
-.ss-panel-btn {
-  background: var(--green);
-  color: #fff; border: none;
-  border-radius: 10px; padding: 8px 18px;
-  font-family: 'Syne', sans-serif;
-  font-size: 12px; font-weight: 700;
-  cursor: pointer; transition: background 0.15s;
-  margin-top: 4px;
-}
-
-.ss-panel-btn:hover { background: var(--green-light); }
-
-/* ── FLOATING MINI WINDOW ── */
-.float-win {
-  display: none;
-  position: fixed; z-index: 400;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 14px; overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-  width: 400px; height: 260px;
-  bottom: 20px; right: 20px;
-  flex-direction: column;
-}
-
-.float-win.active { display: flex; }
-.float-win.big {
-  width: calc(100vw - 410px) !important;
-  height: calc(100vh - 20px) !important;
-  top: 10px !important; right: 10px !important;
-  bottom: auto !important; left: auto !important;
-}
-
-.float-bar {
-  display: flex; align-items: center;
-  padding: 7px 10px; gap: 8px;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  cursor: grab; flex-shrink: 0;
-}
-
-.float-bar:active { cursor: grabbing; }
-
-.float-info {
-  display: flex; align-items: center; gap: 6px; flex: 1;
-}
-
-.float-ico { font-size: 13px; }
-.float-lbl { font-size: 12px; font-weight: 700; color: var(--text2); }
-
-.float-ctrls { display: flex; gap: 4px; }
-
-.fctl {
-  width: 26px; height: 26px;
-  border: 1px solid var(--border);
-  border-radius: 7px; background: var(--surface3);
-  color: var(--text2); font-size: 11px;
-  cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: all 0.15s;
-}
-
-.fctl:hover { border-color: var(--border2); color: var(--text); }
-.fctl.cls:hover { border-color: #dc2626; color: #dc2626; }
-
-.float-body {
-  flex: 1; position: relative;
-  overflow: hidden; background: #000;
-}
-
-.float-iframe { width: 100%; height: 100%; border: none; }
-
-.float-fallback {
-  display: none; width: 100%; height: 100%;
-  flex-direction: column; align-items: center;
-  justify-content: center; gap: 10px;
-  padding: 1.5rem; text-align: center;
-}
-
-.fb-icon { font-size: 32px; }
-.fb-title { font-size: 14px; font-weight: 800; color: var(--text); }
-.fb-text { font-size: 11px; color: var(--text2); line-height: 1.5; max-width: 260px; }
-
-.fb-btn {
-  background: var(--green); color: #fff; border: none;
-  border-radius: 10px; padding: 9px 20px;
-  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-  cursor: pointer; margin-top: 4px;
-}
+.photo-full-btn:hover { color: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.3); }
 
 /* ── SCREENSAVER ── */
 .screensaver {
   display: none; position: fixed; inset: 0;
   z-index: 500; background: #000;
   flex-direction: column; align-items: center;
-  justify-content: center; cursor: pointer;
-  gap: 0;
+  justify-content: center; cursor: pointer; gap: 0;
 }
 
 .screensaver.active { display: flex; }
@@ -473,7 +634,7 @@ body::before {
 
 .ss-date {
   font-family: 'DM Mono', monospace;
-  font-size: 14px; color: rgba(255,255,255,0.5);
+  font-size: 14px; color: rgba(255,255,255,0.45);
   letter-spacing: 0.15em; text-transform: uppercase;
   margin-top: 12px;
   animation: ssFloat 8s ease-in-out infinite;
@@ -481,12 +642,12 @@ body::before {
 
 .ss-brand {
   font-size: 11px; font-weight: 800;
-  color: rgba(255,255,255,0.15);
-  letter-spacing: 0.15em; margin-top: 24px;
+  color: rgba(255,255,255,0.12);
+  letter-spacing: 0.2em; margin-top: 28px;
 }
 
 .ss-hint {
-  font-size: 10px; color: rgba(255,255,255,0.12);
+  font-size: 10px; color: rgba(255,255,255,0.1);
   font-family: 'DM Mono', monospace;
   margin-top: 6px; letter-spacing: 0.1em;
 }
@@ -500,85 +661,86 @@ body::before {
 .toast {
   position: fixed; bottom: 20px; left: 50%;
   transform: translateX(-50%) translateY(80px);
-  background: var(--surface2); border: 1px solid var(--border2);
-  color: var(--text); font-size: 12px; font-family: 'Syne', sans-serif;
-  padding: 9px 18px; border-radius: 99px;
+  background: var(--surface2);
+  border: 1px solid var(--border3);
+  color: var(--text); font-size: 12px;
+  font-family: 'Syne', sans-serif;
+  padding: 9px 20px; border-radius: 99px;
   transition: transform 0.25s ease;
   white-space: nowrap; pointer-events: none; z-index: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 
 .toast.show { transform: translateX(-50%) translateY(0); }
-
-/* ── YOUTUBE MINI PLAYER ── */
-.yt-mini {
-  display: none;
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  width: min(420px, 38vw);
-  aspect-ratio: 16 / 9;
-  background: #000;
-  border-radius: 14px;
-  overflow: hidden;
-  z-index: 9999;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.1);
-}
-
-.yt-mini.active { display: block; }
-
-.yt-mini.big {
-  width: min(860px, 75vw) !important;
-  bottom: 20px !important;
-  right: 20px !important;
-}
-
-.yt-mini iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  display: block;
-}
-
-.yt-controls {
-  position: absolute;
-  top: 8px; right: 8px;
-  display: flex; gap: 4px;
-  z-index: 2;
-}
-
-.yt-btn {
-  width: 28px; height: 28px;
-  background: rgba(0,0,0,0.65);
-  color: #fff; border: none;
-  border-radius: 999px;
-  font-size: 13px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s;
-}
-
-.yt-btn:hover { background: rgba(0,0,0,0.9); }
-
-.yt-drag-bar {
-  position: absolute;
-  top: 0; left: 0; right: 48px;
-  height: 36px;
-  cursor: grab;
-  z-index: 2;
-}
-
-.yt-drag-bar:active { cursor: grabbing; }
-
 </style>
 </head>
 <body>
 
 <div class="hub">
 
-  <!-- LEFT: ReOrderly -->
+  <!-- LEFT: Kiosk scan panel -->
   <div class="col-left">
-    <div class="ro-panel">
-      <iframe src="/app.html" allow="camera; microphone" id="ro-frame"></iframe>
+    <div class="kiosk-panel" id="kiosk-panel">
+
+      <!-- Login view -->
+      <div class="kiosk-login" id="login-view">
+        <div class="login-icon">🛒</div>
+        <div class="kiosk-logo-row" style="justify-content:center;">
+          <div class="kiosk-logo">ReOrderly<div class="kiosk-logo-dot"></div></div>
+        </div>
+        <div class="login-sub">Sign in to start scanning</div>
+        <input class="login-input" type="email" id="login-email" placeholder="Email address" />
+        <input class="login-input" type="password" id="login-pass" placeholder="Password" />
+        <div class="login-error" id="login-error"></div>
+        <button class="login-btn" id="login-btn" onclick="doLogin()">Sign in</button>
+        <div style="display:flex;align-items:center;gap:10px;width:100%;">
+          <div style="flex:1;height:1px;background:var(--border2);"></div>
+          <span style="font-size:11px;color:var(--text3);">or</span>
+          <div style="flex:1;height:1px;background:var(--border2);"></div>
+        </div>
+        <button class="login-google-btn" onclick="doGoogleLogin()">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+
+      <!-- Scan view -->
+      <div id="scan-view" style="display:none;flex-direction:column;flex:1;min-height:0;">
+        <div class="kiosk-header">
+          <div class="kiosk-logo-row">
+            <div class="kiosk-logo">ReOrderly<div class="kiosk-logo-dot"></div></div>
+            <div class="kiosk-user" id="kiosk-user"></div>
+          </div>
+          <div class="scan-area">
+            <input class="scan-input" type="text" id="scan-input" placeholder="Scan or enter barcode..." autocomplete="off" />
+            <button class="scan-btn" id="scan-btn" onclick="doScan()">Add</button>
+          </div>
+          <div class="scan-status" id="scan-status">Ready — scan with USB-C scanner</div>
+        </div>
+
+        <div class="kiosk-list-header">
+          <div class="kiosk-list-title">Reorder list</div>
+          <div class="kiosk-list-count" id="list-count" style="display:none;">0 items</div>
+        </div>
+
+        <div class="kiosk-items" id="kiosk-items">
+          <div class="kiosk-empty" id="kiosk-empty">
+            <div class="kiosk-empty-icon">🛒</div>
+            <div class="kiosk-empty-text">Scan an item to add it<br>to your reorder list</div>
+          </div>
+        </div>
+
+        <div class="kiosk-footer">
+          <button class="order-btn" id="order-btn" disabled onclick="orderAll()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6" stroke="white" stroke-width="2"/><path d="M16 10a4 4 0 01-8 0" stroke="white" stroke-width="2" fill="none"/></svg>
+            Review on Walmart
+          </button>
+          <button class="clear-btn" onclick="clearList()">Clear</button>
+        </div>
+      </div>
+
     </div>
+
     <div class="scanner-bar">
       <div class="scanner-dot"></div>
       <div class="scanner-text">USB-C Scanner connected</div>
@@ -586,10 +748,9 @@ body::before {
     </div>
   </div>
 
-  <!-- RIGHT: Everything else -->
+  <!-- RIGHT: Clock, Weather, Apps, Photos -->
   <div class="col-right">
 
-    <!-- Clock + Weather -->
     <div class="top-row">
       <div class="clock-widget">
         <div class="clock-time" id="clock-time">12:00 PM</div>
@@ -600,75 +761,37 @@ body::before {
       </div>
     </div>
 
-    <!-- App tiles -->
-    <div class="app-grid">
-      <div class="app-tile yt" onclick="openYouTube()">
+    <div class="app-row">
+      <div class="app-tile yt" onclick="launchApp('youtube')">
         <div class="app-tile-icon">▶️</div>
         <div class="app-tile-info">
           <div class="app-tile-name">YouTube</div>
-          <div class="app-tile-desc">Play in corner</div>
+          <div class="app-tile-desc">Opens native app</div>
         </div>
       </div>
-      <div class="app-tile sp" onclick="openApp('spotify')">
-        <div class="app-tile-icon">🎵</div>
+      <div class="app-tile rg" onclick="launchApp('ring')">
+        <div class="app-tile-icon">🔔</div>
         <div class="app-tile-info">
-          <div class="app-tile-name">Spotify</div>
-          <div class="app-tile-desc">Kitchen playlist</div>
+          <div class="app-tile-name">Ring</div>
+          <div class="app-tile-desc">Front door cameras</div>
         </div>
+        <div class="live-badge">Live</div>
       </div>
-
-
     </div>
 
-    <!-- Slideshow panel -->
-    <div class="bottom-row">
-
-      <div class="slideshow-panel" id="slideshow-panel" style="grid-column:1/-1;">
-        <div class="slideshow-header">
-          <div class="slideshow-title">
-            <span class="slideshow-title-icon">🖼️</span>
-            Photo Frame
-          </div>
-        </div>
-        <div class="slideshow-body" id="slideshow-body" style="padding:0;position:relative;overflow:hidden;">
-          <div id="slide-a" class="slide" style="position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1.5s ease;opacity:1;"></div>
-          <div id="slide-b" class="slide" style="position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1.5s ease;opacity:0;"></div>
-          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 12px;background:linear-gradient(to top,rgba(0,0,0,0.5),transparent);display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;">Photo Frame</span>
-            <button onclick="ssOn()" style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.7);background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.2);border-radius:5px;padding:3px 8px;cursor:pointer;font-family:'Syne',sans-serif;">⛶ Full</button>
-          </div>
-        </div>
+    <div class="photo-panel">
+      <div class="slide" id="slide-a"></div>
+      <div class="slide" id="slide-b" style="opacity:0;"></div>
+      <div class="photo-overlay">
+        <div class="photo-label">Photo Frame</div>
+        <button class="photo-full-btn" onclick="ssOn()">⛶ Fullscreen</button>
       </div>
-
     </div>
 
   </div>
 </div>
 
-<!-- Floating Mini Window -->
-<div class="float-win" id="float-win">
-  <div class="float-bar" id="float-bar">
-    <div class="float-info">
-      <span class="float-ico" id="float-ico"></span>
-      <span class="float-lbl" id="float-lbl"></span>
-    </div>
-    <div class="float-ctrls">
-      <div class="fctl" onclick="floatToggleSize()" id="fctl-size" title="Expand">⬆</div>
-      <div class="fctl cls" onclick="floatClose()" title="Close">✕</div>
-    </div>
-  </div>
-  <div class="float-body">
-    <iframe class="float-iframe" id="float-frame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen"></iframe>
-    <div class="float-fallback" id="float-fallback">
-      <div class="fb-icon" id="fb-ico"></div>
-      <div class="fb-title" id="fb-ttl"></div>
-      <div class="fb-text" id="fb-txt"></div>
-      <button class="fb-btn" id="fb-btn">Open →</button>
-    </div>
-  </div>
-</div>
-
-<!-- Screensaver / Slideshow -->
+<!-- Screensaver -->
 <div class="screensaver" id="screensaver" onclick="ssOff()">
   <div class="ss-time" id="ss-time">12:00 PM</div>
   <div class="ss-date" id="ss-date">Monday, January 1</div>
@@ -678,11 +801,255 @@ body::before {
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, onSnapshot, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
+  authDomain: "reorderly-b152f.firebaseapp.com",
+  projectId: "reorderly-b152f",
+  storageBucket: "reorderly-b152f.firebasestorage.app",
+  messagingSenderId: "690816543799",
+  appId: "1:690816543799:web:5c0d7573ab04cc009d23b2"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+
+let currentUser = null;
+let items = [];
+let unsubscribe = null;
+
+// ── AUTH ──
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    currentUser = user;
+    document.getElementById('login-view').classList.remove('visible');
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('scan-view').style.display = 'flex';
+    const name = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
+    document.getElementById('kiosk-user').textContent = name;
+    subscribeToList();
+  } else {
+    currentUser = null;
+    document.getElementById('login-view').style.display = 'flex';
+    document.getElementById('scan-view').style.display = 'none';
+    if (unsubscribe) unsubscribe();
+  }
+});
+
+window.doLogin = async function() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  if (!email || !pass) { err.textContent = 'Please fill in all fields'; return; }
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    err.textContent = '';
+  } catch(e) {
+    err.textContent = 'Incorrect email or password';
+    btn.disabled = false; btn.textContent = 'Sign in';
+  }
+};
+
+window.doGoogleLogin = async function() {
+  try {
+    await signInWithPopup(auth, googleProvider);
+  } catch(e) {
+    document.getElementById('login-error').textContent = 'Google sign-in failed';
+  }
+};
+
+// ── LIST SYNC ──
+function subscribeToList() {
+  if (!currentUser) return;
+  if (unsubscribe) unsubscribe();
+  const ref = doc(db, 'users', currentUser.uid, 'lists', 'default', 'data', 'items');
+  unsubscribe = onSnapshot(ref, snap => {
+    if (snap.exists()) {
+      items = snap.data().items || [];
+    } else {
+      items = [];
+    }
+    renderItems();
+  });
+}
+
+async function saveList() {
+  if (!currentUser) return;
+  const ref = doc(db, 'users', currentUser.uid, 'lists', 'default', 'data', 'items');
+  await setDoc(ref, { items, updatedAt: new Date() });
+}
+
+// ── SCAN ──
+window.doScan = async function() {
+  const input = document.getElementById('scan-input');
+  const upc = input.value.trim().replace(/\D/g, '');
+  if (!upc) return;
+  input.value = '';
+  input.focus();
+
+  const existing = items.find(i => i.upc === upc);
+  if (existing) {
+    existing.qty++;
+    await saveList();
+    setStatus('Quantity updated', 'success');
+    return;
+  }
+
+  setStatus('Searching Walmart catalog...', 'loading');
+  document.getElementById('scan-btn').disabled = true;
+
+  const result = await lookupProduct(upc);
+  if (result) {
+    items.push({ upc, ...result, qty: 1, checked: false });
+    await saveList();
+    setStatus('✓ Found: ' + result.name.substring(0, 40), 'success');
+    showToast('Added to list');
+  } else {
+    setStatus('Product not found — try a different item', 'error');
+  }
+  document.getElementById('scan-btn').disabled = false;
+  input.focus();
+};
+
+document.getElementById('scan-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') window.doScan();
+});
+
+// ── PRODUCT LOOKUP ──
+async function lookupProduct(upc) {
+  try {
+    const res = await fetch(`/api/lookup?upc=${upc}`, { signal: AbortSignal.timeout(10000) });
+    const data = await res.json();
+    if (data.found && data.name) return data;
+  } catch(e) {}
+  try {
+    const res = await fetch('https://api.upcitemdb.com/prod/trial/lookup?upc=' + upc, { signal: AbortSignal.timeout(8000) });
+    const data = await res.json();
+    if (data.items && data.items.length > 0) {
+      const p = data.items[0];
+      const name = p.title || p.brand;
+      if (name && name.trim()) return {
+        found: true, name: name.trim(),
+        image: (p.images && p.images[0]) ? p.images[0] : null,
+        price: null,
+        walmartUrl: `https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`
+      };
+    }
+  } catch(e) {}
+  try {
+    const res = await fetch('https://world.openfoodfacts.org/api/v0/product/' + upc + '.json', { signal: AbortSignal.timeout(7000) });
+    const data = await res.json();
+    if (data.status === 1 && data.product) {
+      const p = data.product;
+      const name = p.product_name || p.product_name_en || p.brands;
+      if (name && name.trim()) return {
+        found: true, name: name.trim(),
+        image: p.image_front_small_url || null,
+        price: null,
+        walmartUrl: `https://www.walmart.com/search?q=${encodeURIComponent(name.trim())}`
+      };
+    }
+  } catch(e) {}
+  return null;
+}
+
+// ── RENDER ITEMS ──
+function renderItems() {
+  const container = document.getElementById('kiosk-items');
+  const empty = document.getElementById('kiosk-empty');
+  const countEl = document.getElementById('list-count');
+  const orderBtn = document.getElementById('order-btn');
+
+  if (items.length === 0) {
+    container.innerHTML = '';
+    container.appendChild(empty);
+    empty.style.display = 'flex';
+    countEl.style.display = 'none';
+    orderBtn.disabled = true;
+    return;
+  }
+
+  empty.style.display = 'none';
+  countEl.style.display = 'block';
+  countEl.textContent = items.length + (items.length === 1 ? ' item' : ' items');
+  orderBtn.disabled = false;
+
+  container.innerHTML = '';
+  items.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'kiosk-item';
+    div.innerHTML = `
+      ${item.image
+        ? `<img class="kiosk-item-img" src="${item.image}" alt="" onerror="this.style.display='none'">`
+        : `<div class="kiosk-item-ph">🛍️</div>`}
+      <div class="kiosk-item-info">
+        <div class="kiosk-item-name">${item.name}</div>
+        ${item.price ? `<div class="kiosk-item-price">$${item.price}</div>` : ''}
+      </div>
+      <div class="kiosk-item-controls">
+        <button class="qty-btn" onclick="changeQty(${idx}, -1)">−</button>
+        <div class="qty-num">${item.qty}</div>
+        <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+        <button class="del-btn" onclick="removeItem(${idx})">×</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+window.changeQty = async function(idx, delta) {
+  items[idx].qty = Math.max(1, items[idx].qty + delta);
+  await saveList();
+};
+
+window.removeItem = async function(idx) {
+  items.splice(idx, 1);
+  await saveList();
+};
+
+window.clearList = async function() {
+  items = [];
+  await saveList();
+};
+
+window.orderAll = function() {
+  if (items.length === 0) return;
+  const urls = items.map(i => i.walmartUrl).filter(Boolean);
+  if (urls.length > 0) {
+    urls.forEach((url, i) => {
+      setTimeout(() => window.open(url, '_blank'), i * 300);
+    });
+    showToast('Opening Walmart — ' + items.length + ' items');
+  }
+};
+
+// ── HELPERS ──
+function setStatus(msg, type = '') {
+  const el = document.getElementById('scan-status');
+  el.textContent = msg;
+  el.className = 'scan-status ' + type;
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
 // ── CLOCK ──
 function tick() {
   const now = new Date();
-  const h = now.getHours(), m = String(now.getMinutes()).padStart(2,'0');
+  const h = now.getHours(), m = String(now.getMinutes()).padStart(2, '0');
   const ampm = h >= 12 ? 'PM' : 'AM';
   const h12 = h % 12 || 12;
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -707,10 +1074,10 @@ async function loadWeather() {
     const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
     const descs = {0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Foggy',51:'Drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',80:'Showers',81:'Rain showers',82:'Thunderstorms',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
     document.getElementById('weather-widget').innerHTML = `
-      <div class="weather-icon">${icons[code]||'🌡️'}</div>
+      <div class="weather-icon">${icons[code] || '🌡️'}</div>
       <div>
         <div class="weather-temp">${temp}°F</div>
-        <div class="weather-desc">${descs[code]||'Unknown'}</div>
+        <div class="weather-desc">${descs[code] || 'Unknown'}</div>
         <div class="weather-loc">Warren, OH</div>
       </div>`;
   } catch(e) {
@@ -720,331 +1087,67 @@ async function loadWeather() {
 loadWeather();
 setInterval(loadWeather, 10 * 60 * 1000);
 
-// ── APP CONFIG ──
-const APPS = {
-  spotify:  { name:'Spotify',  ico:'🎵', url:'https://open.spotify.com', embed:false, fbTitle:'Open Spotify', fbText:'Spotify cannot be embedded. Tap to open — use back button to return to hub.' },
-  ring:     { name:'Ring',     ico:'🔔', url:'https://account.ring.com/account/dashboard', embed:false, fbTitle:'Open Ring', fbText:'Tap to open Ring cameras — use back button to return to hub.' },
+// ── APP LAUNCHERS (Android intent links) ──
+window.launchApp = function(id) {
+  const intents = {
+    youtube: 'intent://www.youtube.com#Intent;scheme=https;package=com.google.android.youtube;end',
+    ring: 'intent://app.ring.com#Intent;scheme=https;package=com.ringapp;end',
+  };
+  const fallbacks = {
+    youtube: 'https://www.youtube.com',
+    ring: 'https://account.ring.com',
+  };
+  // Try native app first, fall back to browser
+  window.location.href = intents[id];
+  setTimeout(() => { window.open(fallbacks[id], '_blank'); }, 1500);
 };
 
-// ── OPEN APP ──
-let floatBig = false;
-
-function openApp(id) {
-  const app = APPS[id];
-  if (!app) return;
-
-  const win = document.getElementById('float-win');
-  const frame = document.getElementById('float-frame');
-  const fallback = document.getElementById('float-fallback');
-
-  document.getElementById('float-ico').textContent = app.ico;
-  document.getElementById('float-lbl').textContent = app.name;
-
-  floatBig = false;
-  win.classList.remove('big');
-  win.style.cssText = '';
-  win.classList.add('active');
-  document.getElementById('fctl-size').textContent = '⬆';
-  resetIdle();
-
-  if (app.embed) {
-    frame.style.display = 'block';
-    fallback.style.display = 'none';
-    frame.src = app.url;
-  } else {
-    frame.style.display = 'none';
-    frame.src = '';
-    fallback.style.display = 'flex';
-    document.getElementById('fb-ico').textContent = app.ico;
-    document.getElementById('fb-ttl').textContent = app.fbTitle;
-    document.getElementById('fb-txt').textContent = app.fbText;
-    const btn = document.getElementById('fb-btn');
-    btn.onclick = () => {
-      if (window.fully && fully.loadURL) {
-        fully.loadURL(app.url);
-      } else {
-        // On Android tablet: try intent to open native app
-        const intents = {
-          youtube: 'intent://www.youtube.com#Intent;scheme=https;package=com.google.android.youtube;end',
-          spotify: 'intent://open.spotify.com#Intent;scheme=https;package=com.spotify.music;end',
-        };
-        if (intents[id]) {
-          window.location.href = intents[id];
-          setTimeout(() => { window.open(app.url, '_blank'); }, 1500);
-        } else {
-          window.open(app.url, '_blank');
-        }
-      }
-    };
-  }
-}
-
-// ── FLOAT CONTROLS ──
-function floatToggleSize() {
-  const win = document.getElementById('float-win');
-  const btn = document.getElementById('fctl-size');
-  floatBig = !floatBig;
-  if (floatBig) {
-    win.classList.add('big');
-    win.style.cssText = '';
-    btn.textContent = '⬇';
-  } else {
-    win.classList.remove('big');
-    win.style.cssText = '';
-    btn.textContent = '⬆';
-  }
-}
-
-function floatClose() {
-  const win = document.getElementById('float-win');
-  const frame = document.getElementById('float-frame');
-  win.classList.remove('active','big');
-  win.style.cssText = '';
-  floatBig = false;
-  setTimeout(() => { frame.src = ''; }, 300);
-  resetIdle();
-}
-
-// ── DRAG ──
-let dragging = false, dragOff = {x:0,y:0};
-
-const floatBar = document.getElementById('float-bar');
-
-if (floatBar) floatBar.addEventListener('mousedown', e => {
-  if (floatBig) return;
-  dragging = true;
-  const win = document.getElementById('float-win');
-  const r = win.getBoundingClientRect();
-  dragOff = {x: e.clientX - r.left, y: e.clientY - r.top};
-  win.style.bottom = 'auto'; win.style.right = 'auto';
-  win.style.left = r.left+'px'; win.style.top = r.top+'px';
-});
-
-if (floatBar) floatBar.addEventListener('touchstart', e => {
-  if (floatBig) return;
-  dragging = true;
-  const win = document.getElementById('float-win');
-  const r = win.getBoundingClientRect();
-  const t = e.touches[0];
-  dragOff = {x: t.clientX - r.left, y: t.clientY - r.top};
-  win.style.bottom = 'auto'; win.style.right = 'auto';
-  win.style.left = r.left+'px'; win.style.top = r.top+'px';
-}, {passive:true});
-
-document.addEventListener('mousemove', e => {
-  if (!dragging) return;
-  const win = document.getElementById('float-win');
-  win.style.left = Math.max(0, Math.min(e.clientX - dragOff.x, window.innerWidth - win.offsetWidth))+'px';
-  win.style.top  = Math.max(0, Math.min(e.clientY - dragOff.y, window.innerHeight - win.offsetHeight))+'px';
-});
-
-document.addEventListener('touchmove', e => {
-  if (!dragging) return;
-  const win = document.getElementById('float-win');
-  const t = e.touches[0];
-  win.style.left = Math.max(0, Math.min(t.clientX - dragOff.x, window.innerWidth - win.offsetWidth))+'px';
-  win.style.top  = Math.max(0, Math.min(t.clientY - dragOff.y, window.innerHeight - win.offsetHeight))+'px';
-}, {passive:true});
-
-document.addEventListener('mouseup', () => dragging = false);
-document.addEventListener('touchend', () => dragging = false);
-
-// ── SCREENSAVER ──
-let idleTimer;
-const IDLE_MS = 5 * 60 * 1000;
-
-function ssOn() {
-  document.getElementById('screensaver').classList.add('active');
-}
-
-function ssOff() {
-  document.getElementById('screensaver').classList.remove('active');
-  resetIdle();
-}
-
-function resetIdle() {
-  clearTimeout(idleTimer);
-  idleTimer = setTimeout(ssOn, IDLE_MS);
-}
-
-['mousedown','touchstart','keydown'].forEach(e => {
-  document.addEventListener(e, resetIdle, {passive:true});
-});
-
-resetIdle();
-
-// ── YOUTUBE MINI PLAYER ──
-// Default: Kitchen & Cooking playlist
-// Swap VIDEO_ID for any YouTube video or playlist ID
-const YT_DEFAULT = 'PLCBqpBFOlZNBHPNOuXfWS7IiZeqXFgKx0'; // Cooking playlist
-let ytBig = false;
-let ytDragging = false;
-let ytDragOff = {x:0, y:0};
-
-function openYouTube(videoId) {
-  const mini = document.getElementById('yt-mini');
-  const frame = document.getElementById('yt-frame');
-  const id = videoId || YT_DEFAULT;
-  // Detect if it's a playlist or video ID
-  const src = id.startsWith('PL') || id.startsWith('RD') || id.startsWith('UU')
-    ? `https://www.youtube.com/embed/videoseries?list=${id}&playsinline=1&rel=0&autoplay=1`
-    : `https://www.youtube.com/embed/${id}?playsinline=1&rel=0&autoplay=1`;
-  frame.src = src;
-  mini.classList.add('active');
-  ytBig = false;
-  mini.classList.remove('big');
-  document.getElementById('yt-size-btn').textContent = '⬆';
-  resetIdle();
-}
-
-function ytClose() {
-  const mini = document.getElementById('yt-mini');
-  const frame = document.getElementById('yt-frame');
-  mini.classList.remove('active', 'big');
-  mini.style.cssText = '';
-  frame.src = '';
-  ytBig = false;
-  resetIdle();
-}
-
-function ytToggleSize() {
-  const mini = document.getElementById('yt-mini');
-  const btn = document.getElementById('yt-size-btn');
-  ytBig = !ytBig;
-  if (ytBig) {
-    mini.classList.add('big');
-    mini.style.bottom = '20px';
-    mini.style.right = '20px';
-    mini.style.top = 'auto';
-    mini.style.left = 'auto';
-    btn.textContent = '⬇';
-  } else {
-    mini.classList.remove('big');
-    mini.style.cssText = '';
-    btn.textContent = '⬆';
-  }
-}
-
-// Drag YouTube mini player
-const ytDragBar = document.getElementById('yt-drag');
-
-if (ytDragBar) ytDragBar.addEventListener('mousedown', e => {
-  if (ytBig) return;
-  ytDragging = true;
-  const mini = document.getElementById('yt-mini');
-  const r = mini.getBoundingClientRect();
-  ytDragOff = {x: e.clientX - r.left, y: e.clientY - r.top};
-  mini.style.right = 'auto';
-  mini.style.bottom = 'auto';
-  mini.style.left = r.left + 'px';
-  mini.style.top = r.top + 'px';
-});
-
-if (ytDragBar) ytDragBar.addEventListener('touchstart', e => {
-  if (ytBig) return;
-  ytDragging = true;
-  const mini = document.getElementById('yt-mini');
-  const r = mini.getBoundingClientRect();
-  const t = e.touches[0];
-  ytDragOff = {x: t.clientX - r.left, y: t.clientY - r.top};
-  mini.style.right = 'auto';
-  mini.style.bottom = 'auto';
-  mini.style.left = r.left + 'px';
-  mini.style.top = r.top + 'px';
-}, {passive: true});
-
-document.addEventListener('mousemove', e => {
-  if (!ytDragging) return;
-  const mini = document.getElementById('yt-mini');
-  mini.style.left = Math.max(0, Math.min(e.clientX - ytDragOff.x, window.innerWidth - mini.offsetWidth)) + 'px';
-  mini.style.top  = Math.max(0, Math.min(e.clientY - ytDragOff.y, window.innerHeight - mini.offsetHeight)) + 'px';
-});
-
-document.addEventListener('touchmove', e => {
-  if (!ytDragging) return;
-  const mini = document.getElementById('yt-mini');
-  const t = e.touches[0];
-  mini.style.left = Math.max(0, Math.min(t.clientX - ytDragOff.x, window.innerWidth - mini.offsetWidth)) + 'px';
-  mini.style.top  = Math.max(0, Math.min(t.clientY - ytDragOff.y, window.innerHeight - mini.offsetHeight)) + 'px';
-}, {passive: true});
-
-document.addEventListener('mouseup', () => ytDragging = false);
-document.addEventListener('touchend', () => ytDragging = false);
-
 // ── PHOTO SLIDESHOW ──
-// Replace these URLs with local photo paths on the tablet
-// e.g. 'file:///sdcard/Pictures/photo1.jpg' or a Google Photos shared album
 const PHOTOS = [
-  'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80', // kitchen
-  'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800&q=80', // home
-  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80', // living room
-  'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&q=80', // family dinner
-  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80', // friends
+  'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80',
+  'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800&q=80',
+  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80',
+  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80',
+  'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&q=80',
 ];
 
-let slideIndex = 0;
-let activeSlide = 'a';
+let slideIdx = 0, activeSlide = 'a';
 
-function initSlideshow() {
-  const a = document.getElementById('slide-a');
-  const b = document.getElementById('slide-b');
-  if (!a || !b || PHOTOS.length === 0) return;
-  a.style.backgroundImage = `url('${PHOTOS[0]}')`;
-  b.style.backgroundImage = `url('${PHOTOS[1] || PHOTOS[0]}')`;
-  setInterval(nextSlide, 6000);
-}
-
-function nextSlide() {
-  slideIndex = (slideIndex + 1) % PHOTOS.length;
-  const nextIndex = (slideIndex + 1) % PHOTOS.length;
+function initSlides() {
   const a = document.getElementById('slide-a');
   const b = document.getElementById('slide-b');
   if (!a || !b) return;
-
-  if (activeSlide === 'a') {
-    b.style.backgroundImage = `url('${PHOTOS[slideIndex]}')`;
-    b.style.opacity = '1';
-    a.style.opacity = '0';
-    activeSlide = 'b';
-  } else {
-    a.style.backgroundImage = `url('${PHOTOS[slideIndex]}')`;
-    a.style.opacity = '1';
-    b.style.opacity = '0';
-    activeSlide = 'a';
-  }
-  // Preload next
-  const img = new Image();
-  img.src = PHOTOS[nextIndex];
+  a.style.backgroundImage = `url('${PHOTOS[0]}')`;
+  b.style.backgroundImage = `url('${PHOTOS[1]}')`;
+  setInterval(() => {
+    slideIdx = (slideIdx + 1) % PHOTOS.length;
+    const next = (slideIdx + 1) % PHOTOS.length;
+    if (activeSlide === 'a') {
+      b.style.backgroundImage = `url('${PHOTOS[slideIdx]}')`;
+      b.style.opacity = '1'; a.style.opacity = '0';
+      activeSlide = 'b';
+    } else {
+      a.style.backgroundImage = `url('${PHOTOS[slideIdx]}')`;
+      a.style.opacity = '1'; b.style.opacity = '0';
+      activeSlide = 'a';
+    }
+    new Image().src = PHOTOS[next];
+  }, 6000);
 }
+initSlides();
 
-initSlideshow();
+// ── SCREENSAVER ──
+let idleTimer;
+window.ssOn = function() { document.getElementById('screensaver').classList.add('active'); };
+window.ssOff = function() { document.getElementById('screensaver').classList.remove('active'); resetIdle(); };
 
-// ── TOAST ──
-let toastTimer;
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+function resetIdle() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(ssOn, 5 * 60 * 1000);
 }
+['mousedown','touchstart','keydown'].forEach(e => document.addEventListener(e, resetIdle, {passive:true}));
+resetIdle();
+
 </script>
-
-<!-- YouTube Mini Player -->
-<div id="yt-mini" class="yt-mini">
-  <div class="yt-drag-bar" id="yt-drag"></div>
-  <div class="yt-controls">
-    <button class="yt-btn" id="yt-size-btn" onclick="ytToggleSize()" title="Expand">⬆</button>
-    <button class="yt-btn" onclick="ytClose()" title="Close">✕</button>
-  </div>
-  <iframe
-    id="yt-frame"
-    title="YouTube"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen>
-  </iframe>
-</div>
-
 </body>
 </html>
