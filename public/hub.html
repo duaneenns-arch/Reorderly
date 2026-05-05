@@ -1886,19 +1886,52 @@ function startListening(){
   setVoiceUI('listening', 'Listening… say your command', '');
   resetIdle();
 
+  // Auto-hint if nothing heard after 5 seconds
+  clearTimeout(window._listenHint);
+  window._listenHint = setTimeout(()=>{
+    if(voiceState==='listening'){
+      setVoiceUI('listening','Still listening — speak clearly…','');
+    }
+  }, 5000);
+
+  // Auto-cancel after 15 seconds of silence
+  clearTimeout(window._listenTimeout);
+  window._listenTimeout = setTimeout(()=>{
+    if(voiceState==='listening'){ cancelVoice(); toast('No speech detected'); }
+  }, 15000);
+
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SR();
   recognition.lang = 'en-US';
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
+  recognition.continuous = false;
+
+  recognition.onsoundstart = () => {
+    document.getElementById('voice-status').textContent = 'Sound detected…';
+    document.getElementById('voice-orb').style.transform = 'scale(1.1)';
+  };
+  recognition.onspeechstart = () => {
+    document.getElementById('voice-status').textContent = 'Speech detected…';
+    document.getElementById('voice-orb').style.transform = 'scale(1.2)';
+  };
+  recognition.onsoundend = () => {
+    document.getElementById('voice-orb').style.transform = 'scale(1)';
+  };
 
   recognition.onresult = (e) => {
+    clearTimeout(window._listenHint);
+    clearTimeout(window._listenTimeout);
     const transcript = e.results[0][0].transcript;
     document.getElementById('voice-transcript').textContent = transcript;
     if(e.results[0].isFinal){
       recognition.stop();
       processCommand(transcript);
     }
+  };
+  recognition.onstart = () => {
+    console.log('Recognition started successfully');
+    document.getElementById('voice-status').textContent = 'Listening… speak now';
   };
   recognition.onerror = (e) => {
     console.log('Recognition error:', e.error);
