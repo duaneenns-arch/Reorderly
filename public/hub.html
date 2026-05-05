@@ -527,7 +527,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <body>
 
 <!-- PHOTO MODE -->
-<div class="page active" id="photo-mode">
+<div class="page active" id="photo-mode" onclick="window.wakeHub()">
   <div class="pm-slide" id="pm-a"></div>
   <div class="pm-slide" id="pm-b" style="opacity:0;"></div>
   <div class="pm-clock">
@@ -831,7 +831,14 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <script>
 // Synchronous stubs — available immediately before the module loads
 // Prevents "X is not defined" errors from inline onclick handlers
-window.wakeHub = function(){ document.getElementById('photo-mode')?.classList.remove('active'); document.getElementById('home-page')?.classList.add('active'); };
+window.wakeHub = function(){
+  var pm = document.getElementById('photo-mode');
+  var hp = document.getElementById('home-page');
+  var lp = document.getElementById('login-page');
+  if(pm) pm.classList.remove('active');
+  // Show home if it has content, otherwise login
+  if(hp) { hp.classList.add('active'); }
+};
 window.goPhotoMode = function(){ document.getElementById('home-page')?.classList.remove('active'); document.getElementById('photo-mode')?.classList.add('active'); };
 window.toggleClockMenu = function(){};
 window.toggleHMenu = function(){};
@@ -1156,40 +1163,48 @@ function renderWbList(){
   const c=document.getElementById('wb-list');
   const em=document.getElementById('wb-empty');
   const gs=document.getElementById('go-shop-btn');
-  if(!items.length){if(c){c.innerHTML='';c.appendChild(em);}if(em)em.style.display='flex';if(gs)gs.disabled=true;expandedUpc=null;return;}
-  if(em)em.style.display='none';if(gs)gs.disabled=false;
+  if(!items.length){
+    if(c){c.innerHTML='';c.appendChild(em);}
+    if(em)em.style.display='flex';
+    if(gs)gs.disabled=true;
+    expandedUpc=null;return;
+  }
+  if(em)em.style.display='none';
+  if(gs)gs.disabled=false;
   c.innerHTML='';c.appendChild(em);
   items.forEach(it=>{
-    const isExp = expandedUpc===it.upc;
+    const isExp=expandedUpc===it.upc;
+    const wu=it.walmartUrl||('https://www.walmart.com/search?q='+encodeURIComponent(it.name));
     const d=document.createElement('div');
     d.className='wb-item'+(isExp?' expanded':'');
     d.dataset.upc=it.upc;
-    const wu=it.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(it.name)}`;
-    d.innerHTML=`
-      <div class="wb-bullet-col"><div class="wb-bullet"></div></div>
-      <div class="wb-item-main" onclick="toggleWbItem('${it.upc}')">
-        <div class="wb-item-name">${esc(it.name)}<span class="wb-item-qty">${it.qty>1?' ×'+it.qty:''}</span></div>
-
-      </div>
-      <button class="wb-del" onclick="delItem('${it.upc}')">×</button>
-      <div class="wb-card" onclick="toggleWbItem('${it.upc}')">
-        ${it.image?`<img class="wbc-img" src="${esc(it.image)}" alt="" onerror="this.style.display='none'">`:`<div class="wbc-ph">📦</div>`}
-        <div class="wbc-info">
-          <div class="wbc-name">${esc(it.name)}</div>
-          ${it.price?`<div class="wbc-price">$${it.price}</div>`:''}
-          <div class="wbc-actions">
-            <button class="wbc-wm" onclick="event.stopPropagation();window.open('${wu}','_blank')">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-              View on Walmart
-            </button>
-            <div class="wbc-qty">
-              <button class="wbc-qb" onclick="event.stopPropagation();chQty('${it.upc}',-1)">−</button>
-              <div class="wbc-qn">${it.qty}</div>
-              <button class="wbc-qb" onclick="event.stopPropagation();chQty('${it.upc}',1)">+</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
+    const imgHtml=it.image?('<img class="wbc-img" src="'+it.image+'" alt="" onerror="this.hidden=true">'):'<div class="wbc-ph">\u{1F4E6}</div>';
+    const priceHtml=it.price?('<div class="wbc-price">$'+it.price+'</div>'):'';
+    d.innerHTML=
+      '<div class="wb-bullet-col"><div class="wb-bullet"></div></div>'+
+      '<div class="wb-item-body wb-toggle">'+
+        '<div class="wb-item-name">'+esc(it.name)+(it.qty>1?'<span class="wb-item-qty"> ×'+it.qty+'</span>':'')+'</div>'+
+      '</div>'+
+      '<button class="wb-del wb-del-btn">×</button>'+
+      '<div class="wb-card wb-toggle">'+
+        imgHtml+
+        '<div class="wbc-info">'+
+          '<div class="wbc-name">'+esc(it.name)+'</div>'+priceHtml+
+          '<div class="wbc-actions">'+
+            '<button class="wbc-wm wbc-shop-btn">View on Walmart</button>'+
+            '<div class="wbc-qty">'+
+              '<button class="wbc-qb wbc-minus">−</button>'+
+              '<div class="wbc-qn">'+it.qty+'</div>'+
+              '<button class="wbc-qb wbc-plus">+</button>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    d.querySelectorAll('.wb-toggle').forEach(el=>el.addEventListener('click',()=>toggleWbItem(it.upc)));
+    d.querySelector('.wb-del-btn').addEventListener('click',(e)=>{e.stopPropagation();delItem(it.upc);});
+    d.querySelector('.wbc-shop-btn').addEventListener('click',(e)=>{e.stopPropagation();window.open(wu,'_blank');});
+    d.querySelector('.wbc-minus').addEventListener('click',(e)=>{e.stopPropagation();chQty(it.upc,-1);});
+    d.querySelector('.wbc-plus').addEventListener('click',(e)=>{e.stopPropagation();chQty(it.upc,1);});
     c.appendChild(d);
   });
 }
@@ -1204,16 +1219,32 @@ function renderListPage(){
   const ob=document.getElementById('list-order-btn');
   if(!c)return;
   if(ob)ob.disabled=!items.length;
-  if(!items.length){c.innerHTML='<div class="pg-empty"><div class="pg-empty-ico">🛒</div><div class="pg-empty-ttl">Your list is empty</div><div class="pg-empty-sub">Scan items from any screen</div></div>';return;}
+  if(!items.length){c.innerHTML='<div class="pg-empty"><div class="pg-empty-ico">\u{1F6D2}</div><div class="pg-empty-ttl">Your list is empty</div></div>';return;}
   c.innerHTML='';
   items.forEach(it=>{
-    const wu=it.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(it.name)}`;
-    const d=document.createElement('div');d.className='lpi';
-    d.innerHTML=`<div class="lpi-main">${it.image?`<img class="lpi-img" src="${it.image}" alt="" onerror="this.style.display='none'">`:`<div class="lpi-ph">📦</div>`}
-    <div class="lpi-info"><div class="lpi-name">${esc(it.name)}</div>${it.price?`<div class="lpi-price">$${it.price}</div>`:''}</div>
-    <div class="lpi-ctrl"><button class="lpi-qb" onclick="event.stopPropagation();chQty('${it.upc}',-1)">−</button><div class="lpi-qn">${it.qty}</div><button class="lpi-qb" onclick="event.stopPropagation();chQty('${it.upc}',1)">+</button><button class="lpi-db" onclick="delItem('${it.upc}')">×</button></div></div>
-    <div class="lpi-wm"><button class="lpi-wbtn" onclick="event.stopPropagation();window.open('${wu}','_blank')"><svg width="11" height="11" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>View on Walmart</button></div>`;
-    d.appendChild; c.appendChild(d);
+    const wu=it.walmartUrl||('https://www.walmart.com/search?q='+encodeURIComponent(it.name));
+    const d=document.createElement('div');
+    d.className='lpi';
+    d.dataset.upc=it.upc;
+    const imgHtml=it.image?('<img class="lpi-img" src="'+it.image+'" alt="" onerror="this.hidden=true">'):'<div class="lpi-ph">\u{1F4E6}</div>';
+    const priceHtml=it.price?('<div class="lpi-price">$'+it.price+'</div>'):'';
+    d.innerHTML=
+      '<div class="lpi-main">'+imgHtml+
+      '<div class="lpi-info"><div class="lpi-name">'+esc(it.name)+'</div>'+priceHtml+'</div>'+
+      '<div class="lpi-ctrl">'+
+        '<button class="lpi-qb lpi-minus">−</button>'+
+        '<div class="lpi-qn">'+it.qty+'</div>'+
+        '<button class="lpi-qb lpi-plus">+</button>'+
+        '<button class="lpi-db lpi-del">×</button>'+
+      '</div></div>'+
+      '<div class="lpi-wm"><button class="lpi-wbtn lpi-walmart">'+
+        '<svg width="11" height="11" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>'+
+        'View on Walmart</button></div>';
+    d.querySelector('.lpi-minus').addEventListener('click',()=>chQty(it.upc,-1));
+    d.querySelector('.lpi-plus').addEventListener('click',()=>chQty(it.upc,1));
+    d.querySelector('.lpi-del').addEventListener('click',()=>delItem(it.upc));
+    d.querySelector('.lpi-walmart').addEventListener('click',()=>window.open(wu,'_blank'));
+    c.appendChild(d);
   });
 }
 
@@ -1276,8 +1307,9 @@ async function loadRecipes(){
       const stars=r.rating?'⭐'.repeat(r.rating):'';
       const ing=r.ingredients?r.ingredients.length:0;
       const c=document.createElement('div');c.className='wb-rcp-card';
-      c.innerHTML=`<div class="wb-rcp-thumb">${r.image?`<img src="${r.image}" alt="" onerror="this.outerHTML='🍽️'">`:(r.emoji||'🍽️')}</div>
-      <div><div class="wb-rcp-name">${esc(r.name)}</div><div class="wb-rcp-meta">${ing} ingredients${r.rating?' · '+stars:''}</div></div>`;
+      const thumbHtml=r.image?('<img src="'+r.image+'" alt="" onerror="this.hidden=true">'):(r.emoji||'🍽️');
+      c.innerHTML='<div class="wb-rcp-thumb">'+thumbHtml+'</div>'+
+      '<div><div class="wb-rcp-name">'+esc(r.name)+'</div><div class="wb-rcp-meta">'+ing+' ingredients'+(r.rating?' · '+stars:'')+'</div></div>';
       b.appendChild(c);
     });
     b.dataset.loaded='1';
@@ -1298,7 +1330,7 @@ async function loadHistory(){
     orders.forEach(o=>{
       const dt=o.orderedAt?.toDate?o.orderedAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'Unknown';
       const c=document.createElement('div');c.className='wb-hist-card';
-      const iHtml=(o.items||[]).map(it=>`<div class="wb-hist-row"><div class="wb-hist-iname">${esc(it.name)} ×${it.qty}</div><button class="wb-hist-readd" onclick="reAdd('${esc(it.upc)}','${esc(it.name)}',${it.price?`'${it.price}'`:'null'});switchTab('list')">+ Add</button></div>`).join('');
+      const iHtml=(o.items||[]).map(it=>'<div class="wb-hist-row"><div class="wb-hist-iname">'+esc(it.name)+' ×'+it.qty+'</div><button class="wb-hist-readd" onclick="reAdd(\''+esc(it.upc)+'\',\''+esc(it.name)+'\','+(it.price?"'"+it.price+"'":'null')+');switchTab(\'list\')">+ Add</button></div>').join('');
       c.innerHTML=`<div class="wb-hist-hdr"><div class="wb-hist-date">${dt}</div><div class="wb-hist-meta">${o.itemCount||0} items</div></div><div class="wb-hist-items">${iHtml}</div>`;
       b.appendChild(c);
     });
@@ -1307,7 +1339,7 @@ async function loadHistory(){
 
 window.reAdd=async(u,n,p)=>{
   const ex=items.find(i=>i.upc===u);
-  if(ex)ex.qty++;else items.push({upc:u,name:n,price:p,qty:1,category:getCat(n),walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(n)}`});
+  if(ex)ex.qty++;else items.push({upc:u,name:n,price:p,qty:1,category:getCat(n),walmartUrl:'https://www.walmart.com/search?q='+encodeURIComponent(n)});
   await saveList();toast('Added: '+n.substring(0,28));
 };
 
@@ -1323,9 +1355,8 @@ async function loadLibrary(){
 }
 
 window.filterLib=async(f)=>{
-  const el=document.getElementById('lib-list');
-  if(!el||!cu)return;
-  try {
+  const el=document.getElementById('lib-list');if(!el||!cu)return;
+  try{
     const snap=await getDocs(collection(db,'users',cu.uid,'history'));
     const seen=new Map();const sc={};
     snap.forEach(d=>(d.data().items||[]).forEach(it=>{if(it.name&&it.upc){sc[it.upc]=(sc[it.upc]||0)+1;if(!seen.has(it.upc))seen.set(it.upc,it);}}));
@@ -1335,47 +1366,23 @@ window.filterLib=async(f)=>{
     if(libTab==='usual')prods=prods.filter(p=>p.pinned||p.scanCount>=2);
     else if(libTab!=='all')prods=prods.filter(p=>p.category===libTab);
     prods.sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0)||b.scanCount-a.scanCount);
-    if(!prods.length){el.innerHTML='<div class="pg-empty"><div class="pg-empty-ico">📦</div><div class="pg-empty-ttl">No products found</div></div>';return;}
-    el.innerHTML='';
-    prods.forEach(p=>{
-      const inL=items.some(i=>i.upc===p.upc);
-      const r=document.createElement('div');r.className='lib-row';
-      r.innerHTML=`${p.image?`<img class="lib-img" src="${p.image}" alt="" onerror="this.style.display='none'">`:`<div class="lib-ph">📦</div>`}
-      <div class="lib-iname">${esc(p.name)}</div>
-      <button class="lib-add${inL?' added':''}" onclick="libAdd('${esc(p.upc)}','${esc(p.name)}',${p.price?`'${p.price}'`:'null'},${p.image?`'${esc(p.image)}'`:'null'},this)">${inL?'✓ In list':'+ Add'}</button>`;
-      el.appendChild(r);
-    });
-  } catch(e){el.innerHTML='<div class="pg-empty"><div class="pg-empty-ico">😕</div><div class="pg-empty-ttl">Could not load library</div></div>';}
-};
-
-window.libAdd=async(u,n,p,img,btn)=>{
-  const ex=items.find(i=>i.upc===u);
-  if(ex)ex.qty++;else items.push({upc:u,name:n,price:p,image:img,qty:1,category:getCat(n),walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(n)}`});
-  await saveList();
-  if(btn){btn.textContent='✓ In list';btn.className='lib-add added';}
-  toast('Added: '+n.substring(0,28));
-};
-
-
-    snap.forEach(d=>(d.data().items||[]).forEach(it=>{if(it.name&&it.upc){sc[it.upc]=(sc[it.upc]||0)+1;if(!seen.has(it.upc))seen.set(it.upc,it);}}));
-    items.forEach(it=>{if(!seen.has(it.upc))seen.set(it.upc,it);sc[it.upc]=(sc[it.upc]||0)+1;});
-    let prods=Array.from(seen.values()).map(p=>({...p,category:p.category||getCat(p.name),scanCount:sc[p.upc]||1,pinned:!!pinned[p.upc]}));
-    if(f)prods=prods.filter(p=>p.name.toLowerCase().includes(f.toLowerCase()));
-    if(wbLibTab==='usual')prods=prods.filter(p=>p.pinned||p.scanCount>=2);
-    else if(wbLibTab!=='all')prods=prods.filter(p=>p.category===wbLibTab);
-    prods.sort((a,b)=>(b.pinned?1:0)-(a.pinned?1:0)||b.scanCount-a.scanCount);
     if(!prods.length){el.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">📦</div><div class="wb-tab-empty-ttl">No products found</div></div>';return;}
     el.innerHTML='';
     prods.forEach(p=>{
       const inL=items.some(i=>i.upc===p.upc);
       const r=document.createElement('div');r.className='wb-lib-row';
-      r.innerHTML=`${p.image?`<img class="wb-lib-img" src="${p.image}" alt="" onerror="this.style.display='none'">`:`<div class="wb-lib-ph">📦</div>`}
-      <div class="wb-lib-iname">${esc(p.name)}</div>
-      <button class="wb-lib-add${inL?' added':''}" onclick="libAdd('${esc(p.upc)}','${esc(p.name)}',${p.price?`'${p.price}'`:'null'},${p.image?`'${esc(p.image)}'`:'null'},this);switchTab('list')">${inL?'✓ In list':'+ Add'}</button>`;
+      const pImg=p.image?('<img class="wb-lib-img" src="'+p.image+'" alt="" onerror="this.hidden=true">'):'<div class="wb-lib-ph">📦</div>';
+      r.innerHTML=pImg+'<div class="wb-lib-iname">'+esc(p.name)+'</div>'+
+        '<button class="wb-lib-add'+(inL?' added':'')+'">'+(inL?'✓ In list':'+ Add')+'</button>';
+      r.querySelector('button').addEventListener('click',()=>{
+        libAdd(p.upc,p.name,p.price||null,p.image||null,r.querySelector('button'));
+        switchTab('list');
+      });
       el.appendChild(r);
     });
   }catch(e){el.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">Could not load</div></div>';}
 };
+
 
 // ── APP LAUNCHERS ──
 window.launchApp=id=>{
@@ -1617,6 +1624,9 @@ function initPhotos(){
   },6000);
 }
 initPhotos();
+
+// ── PHOTO MODE CLICK ──
+document.getElementById('photo-mode')?.addEventListener('click', ()=> window.wakeHub());
 
 // ── IDLE ──
 let idleT;
