@@ -1716,12 +1716,13 @@ let aiSettings = {
   avatar: 'orb'
 };
 
-let voiceState = 'idle'; // idle | listening | processing | speaking
+let voiceState = 'idle';
 let recognition = null;
 let wakeRecognition = null;
 let speechSynth = window.speechSynthesis;
 let voices = [];
 let aiActive = false;
+let speechUnlocked = false;;
 
 // Load settings from Firebase
 async function loadAiSettings(){
