@@ -2295,17 +2295,9 @@ window.testAI = async () => {
 // ── INIT ──
 async function initAI(){
   await loadAiSettings();
-  // Pre-request mic permission so button works immediately
-  try{
-    const stream = await navigator.mediaDevices?.getUserMedia({audio:true});
-    // Got permission — release the stream, don't hold it
-    stream?.getTracks().forEach(t=>t.stop());
-    console.log('Mic permission granted');
-    // Start wake word after a clean pause
-    setTimeout(startWakeWord, 2000);
-  }catch(e){
-    console.log('Mic permission denied:', e);
-  }
+  // Start wake word listener — SpeechRecognition manages its own mic access
+  // and does NOT trigger the browser tab recording indicator
+  setTimeout(startWakeWord, 2000);
 }
 
 // ── CLOCK ──
