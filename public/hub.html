@@ -86,10 +86,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .sb-cnt{font-size:9px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace;}
 
 /* ── HOME BODY ── */
-.home-body{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:0;overflow:hidden;}
+.home-body{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px;min-height:0;overflow:hidden;padding:6px;background:var(--bg);}
 
 /* ── WHITEBOARD COLUMN ── */
-.wb-col{display:flex;flex-direction:column;background:var(--wb-bg);position:relative;min-height:0;border:2px solid #1a1a1a;border-radius:2px;}
+.wb-col{display:flex;flex-direction:column;background:var(--wb-bg);position:relative;min-height:0;border:2px solid #1a1a1a;overflow:hidden;}
 .wb-col::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(transparent,transparent 31px,var(--wb-line) 31px,var(--wb-line) 32px);pointer-events:none;z-index:0;}
 /* faint left margin line */
 .wb-col::after{content:'';position:absolute;top:0;left:52px;bottom:0;width:1px;background:rgba(220,100,100,0.15);pointer-events:none;z-index:0;}
@@ -110,7 +110,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-sts{position:relative;z-index:1;font-size:9px;font-family:'DM Mono',monospace;color:rgba(42,50,40,0.4);padding:3px 16px 2px;min-height:16px;}
 .wb-sts.loading{color:var(--wb-green);}.wb-sts.success{color:var(--wb-green);}.wb-sts.error{color:#c0392b;}
 
-.wb-list{flex:1;overflow-y:auto;padding:4px 16px 12px;position:relative;z-index:1;scrollbar-width:thin;scrollbar-color:rgba(42,50,40,0.1) transparent;}
+.wb-list{flex:1;overflow-y:auto;padding:4px 12px 8px;position:relative;z-index:1;scrollbar-width:thin;scrollbar-color:rgba(42,50,40,0.1) transparent;}
 .wb-list::-webkit-scrollbar{width:3px;}
 .wb-list::-webkit-scrollbar-thumb{background:rgba(42,50,40,0.1);border-radius:2px;}
 
@@ -160,7 +160,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-clear-sm:hover{border-color:rgba(192,57,43,0.35);color:rgba(192,57,43,0.6);}
 
 /* ── RIGHT COLUMN ── */
-.right-col{display:flex;flex-direction:column;padding:10px;gap:9px;overflow-y:auto;border-left:1px solid var(--b1);background:var(--bg);scrollbar-width:none;}
+.right-col{display:flex;flex-direction:column;background:var(--bg);min-height:0;gap:0;}
 .right-col::-webkit-scrollbar{display:none;}
 .rc-label{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);padding:0 2px;}
 
@@ -373,8 +373,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 
 /* ── WHITEBOARD TAB PANELS ── */
-.wb-tab-panel{display:none;flex:1;min-height:0;flex-direction:column;}
-.wb-tab-panel.active{display:flex;}
+.wb-tab-panel{display:none;flex:1;min-height:0;flex-direction:column;overflow:hidden;}
+.wb-tab-panel.active{display:flex;flex-direction:column;}
 .wb-inner-body{flex:1;overflow-y:auto;padding:10px 12px;scrollbar-width:thin;scrollbar-color:rgba(42,50,40,0.1) transparent;position:relative;z-index:1;}
 .wb-inner-body::-webkit-scrollbar{width:3px;}
 .wb-inner-body::-webkit-scrollbar-thumb{background:rgba(42,50,40,0.1);border-radius:2px;}
@@ -430,7 +430,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 /* Right panel overhaul */
 .right-col{display:flex;flex-direction:column;gap:0;overflow:hidden;background:var(--bg);}
-.right-todo{flex:0 0 28%;display:flex;flex-direction:column;min-height:0;background:var(--wb-bg);position:relative;border:2px solid #1a1a1a;border-radius:2px;margin:6px 6px 3px 6px;overflow:hidden;}
+.right-todo{flex:0 0 26%;display:flex;flex-direction:column;min-height:0;background:var(--wb-bg);position:relative;border:2px solid #1a1a1a;overflow:hidden;margin-bottom:6px;}
 .right-todo::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 27px,var(--wb-line) 27px,var(--wb-line) 28px);pointer-events:none;z-index:0;}
 .rt-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:5px 10px 4px;border-bottom:1px solid var(--wb-line);background:rgba(245,242,235,0.97);position:relative;z-index:1;}
 .rt-title{font-family:'Caveat',cursive;font-size:17px;font-weight:700;color:var(--wb-ink);display:flex;align-items:center;gap:5px;}
@@ -469,7 +469,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .rt-card-btn.done-btn{background:rgba(26,122,90,0.08);border-color:rgba(26,122,90,0.2);color:var(--wb-green);}
 .rt-card-btn.del-btn{background:rgba(192,57,43,0.07);border-color:rgba(192,57,43,0.18);color:rgba(170,50,35,0.8);}
 .right-bottom{flex:1;position:relative;overflow:hidden;margin:3px 6px 6px 6px;border-radius:4px;border:1px solid var(--b1);}
-.photo-frame-rc{width:100%;height:100%;position:relative;cursor:pointer;}
+.photo-frame-rc{position:absolute;inset:0;cursor:pointer;}
 .pt-rc-s{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1.5s ease;}
 .pt-rc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,transparent 45%);display:flex;align-items:flex-end;justify-content:space-between;padding:7px 9px;}
 .pt-rc-lbl{font-size:8px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;font-family:'DM Mono',monospace;}
@@ -558,6 +558,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="hdr-weather" id="hdr-weather"><div style="font-size:10px;color:var(--t3);font-family:'DM Mono',monospace;">...</div></div>
       <div class="hdr-user" id="hdr-user"></div>
       <button class="hdr-sleep" onclick="goPhotoMode()">🌙</button>
+      <button class="hdr-menu-btn" id="hdr-menu-btn" onclick="toggleHMenu()">≡</button>
     </div>
   </div>
 
@@ -685,7 +686,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="pg-title">Recipe Book</div>
     <div style="width:70px;"></div>
   </div>
-  <div class="pg-body" id="rcp-body"><div class="pg-empty"><div class="spinner"></div></div></div>
+  <div class="pg-body" id="rcp-page-body"><div class="pg-empty"><div class="spinner"></div></div></div>
 </div>
 
 <!-- HISTORY PAGE -->
@@ -695,7 +696,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="pg-title">Order History</div>
     <div style="width:70px;"></div>
   </div>
-  <div class="pg-body" id="hist-body"><div class="pg-empty"><div class="spinner"></div></div></div>
+  <div class="pg-body" id="hist-page-body"><div class="pg-empty"><div class="spinner"></div></div></div>
 </div>
 
 <!-- LIBRARY PAGE -->
@@ -705,7 +706,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="pg-title">Product Library</div>
     <div style="width:70px;"></div>
   </div>
-  <div class="pg-body" id="lib-body"><div class="pg-empty"><div class="spinner"></div></div></div>
+  <div class="pg-body" id="lib-page-body"><div class="pg-empty"><div class="spinner"></div></div></div>
 </div>
 
 <!-- LOGIN PAGE -->
@@ -1202,6 +1203,12 @@ window.delItem=async(u)=>{
   await saveList();
 };
 window.clearItems=async()=>{items=[];expandedUpc=null;await saveList();setSts('Ready — scanner connected','');};
+window.goShop=async()=>{
+  if(!items.length){toast('Add items first');return;}
+  await saveHistory();
+  items.forEach((it,i)=>setTimeout(()=>window.open(it.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(it.name)}`,'_blank'),i*350));
+  toast('Opening Walmart — '+items.length+' items');
+};
 window.orderAll=async()=>{
   if(!items.length)return;
   await saveHistory();
