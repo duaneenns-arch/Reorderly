@@ -1854,34 +1854,37 @@ function restartWakeWord(){
 }
 
 window.tapMic = () => {
-  // Unlock speech synthesis on first user gesture (Chrome requirement)
+  // Unlock speech synthesis on first user gesture
   if(!speechUnlocked){
-    const u = new SpeechSynthesisUtterance('');
-    speechSynth.speak(u);
-    speechSynth.cancel();
-    speechUnlocked = true;
+    try{
+      const u = new SpeechSynthesisUtterance('');
+      speechSynth.speak(u);
+      setTimeout(()=>speechSynth.cancel(), 100);
+      speechUnlocked = true;
+    }catch(e){}
   }
-  if(voiceState === 'idle') startListening();
-  else cancelVoice();
+  if(voiceState !== 'idle'){ cancelVoice(); return; }
+  // Kill ANY existing recognition before starting fresh
+  try{ wakeRecognition?.abort(); }catch(e){}
+  try{ wakeRecognition?.stop(); }catch(e){}
+  wakeRecognition = null;
+  try{ recognition?.abort(); }catch(e){}
+  recognition = null;
+  // Clean slate - wait then start
+  voiceState = 'idle';
+  setTimeout(startListening, 500);
 };
 
 // ── ACTIVE LISTENING ──
-async function startListening(){
+function startListening(){
   if(!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)){
     toast('Voice not supported in this browser');
     return;
   }
-  // Kill wake word listener completely before starting active listening
-  try{ wakeRecognition?.abort(); }catch(e){}
-  try{ wakeRecognition?.stop(); }catch(e){}
-  wakeRecognition = null;
   voiceState = 'listening';
   aiActive = true;
   setVoiceUI('listening', 'Listening… say your command', '');
   resetIdle();
-
-  // Short delay for mic handoff
-  await new Promise(r => setTimeout(r, 400));
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SR();
@@ -1903,10 +1906,11 @@ async function startListening(){
     if(e.error === 'no-speech'){ cancelVoice(); return; }
     if(e.error === 'not-allowed'){ toast('Mic permission denied — check browser settings'); cancelVoice(); return; }
     if(e.error === 'network'){
-      // Retry once after brief delay
-      console.log('Network error — retrying...');
-      setVoiceUI('listening', 'Reconnecting…', '');
-      setTimeout(()=>{ try{ recognition.start(); }catch(ex){ toast('Voice unavailable — check connection'); cancelVoice(); } }, 1000);
+      console.log('Network error on speech recognition');
+      voiceState = 'idle';
+      recognition = null;
+      setVoiceUI('listening', 'Retrying…', '');
+      setTimeout(startListening, 1500);
       return;
     }
     toast('Voice error: ' + e.error);
@@ -2075,12 +2079,16 @@ function speak(text, onDone){
 // ── INIT ──
 async function initAI(){
   await loadAiSettings();
-  // Request mic permission and start wake word
+  // Pre-request mic permission so button works immediately
   try{
-    await navigator.mediaDevices?.getUserMedia({audio:true});
-    startWakeWord();
+    const stream = await navigator.mediaDevices?.getUserMedia({audio:true});
+    // Got permission — release the stream, don't hold it
+    stream?.getTracks().forEach(t=>t.stop());
+    console.log('Mic permission granted');
+    // Start wake word after a clean pause
+    setTimeout(startWakeWord, 2000);
   }catch(e){
-    console.log('Mic permission denied — wake word disabled');
+    console.log('Mic permission denied:', e);
   }
 }
 
