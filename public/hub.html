@@ -1819,26 +1819,33 @@ speechSynth.onvoiceschanged = populateVoices;
 // ── WAKE WORD LISTENER ──
 function startWakeWord(){
   if(!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) return;
+  if(voiceState !== 'idle') return;
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   wakeRecognition = new SR();
-  wakeRecognition.continuous = true;
-  wakeRecognition.interimResults = true;
+  wakeRecognition.continuous = false; // Short burst — less mic holding
+  wakeRecognition.interimResults = false;
   wakeRecognition.lang = 'en-US';
   wakeRecognition.onresult = (e) => {
     if(voiceState !== 'idle') return;
-    const transcript = Array.from(e.results).map(r=>r[0].transcript).join(' ').toLowerCase();
-    if(transcript.includes(aiSettings.wakeWord || 'hey reorderly')){
-      wakeRecognition.stop();
+    const transcript = (e.results[0]?.[0]?.transcript || '').toLowerCase();
+    const ww = (aiSettings.wakeWord || 'hey reorderly').toLowerCase();
+    if(transcript.includes(ww)){
       startListening();
+      return;
     }
+    // Not wake word — restart listening burst
+    setTimeout(startWakeWord, 200);
   };
   wakeRecognition.onend = () => {
-    if(voiceState === 'idle') setTimeout(startWakeWord, 1000);
+    if(voiceState === 'idle') setTimeout(startWakeWord, 300);
   };
-  wakeRecognition.onerror = () => {
-    setTimeout(startWakeWord, 3000);
+  wakeRecognition.onerror = (e) => {
+    const retryDelay = e.error === 'network' ? 5000 : 2000;
+    if(voiceState === 'idle') setTimeout(startWakeWord, retryDelay);
   };
-  try{ wakeRecognition.start(); }catch(e){}
+  try{ wakeRecognition.start(); }catch(e){
+    setTimeout(startWakeWord, 2000);
+  }
 }
 
 function restartWakeWord(){
@@ -1873,8 +1880,8 @@ async function startListening(){
   setVoiceUI('listening', 'Listening… say your command', '');
   resetIdle();
 
-  // Wait for wake word to fully release mic
-  await new Promise(r => setTimeout(r, 600));
+  // Short delay for mic handoff
+  await new Promise(r => setTimeout(r, 400));
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SR();
@@ -1892,9 +1899,16 @@ async function startListening(){
   };
   recognition.onerror = (e) => {
     console.log('Recognition error:', e.error);
-    if(e.error === 'aborted') return; // Ignore abort - it restarts
+    if(e.error === 'aborted') return;
     if(e.error === 'no-speech'){ cancelVoice(); return; }
-    if(e.error === 'not-allowed'){ toast('Microphone permission denied'); cancelVoice(); return; }
+    if(e.error === 'not-allowed'){ toast('Mic permission denied — check browser settings'); cancelVoice(); return; }
+    if(e.error === 'network'){
+      // Retry once after brief delay
+      console.log('Network error — retrying...');
+      setVoiceUI('listening', 'Reconnecting…', '');
+      setTimeout(()=>{ try{ recognition.start(); }catch(ex){ toast('Voice unavailable — check connection'); cancelVoice(); } }, 1000);
+      return;
+    }
     toast('Voice error: ' + e.error);
     cancelVoice();
   };
