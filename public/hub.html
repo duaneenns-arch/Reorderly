@@ -178,7 +178,7 @@ body::before {
 /* ── APP GRID ── */
 .app-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   flex-shrink: 0;
 }
@@ -314,7 +314,7 @@ body::before {
 .slideshow-panel:hover { border-color: var(--border2); }
 
 .slideshow-header {
-  padding: 12px 16px;
+  padding: 10px 14px;
   display: flex; align-items: center;
   justify-content: space-between;
   background: var(--surface2);
@@ -556,13 +556,7 @@ body::before {
           <div class="app-tile-desc">Kitchen playlist</div>
         </div>
       </div>
-      <div class="app-tile wm" onclick="openApp('walmart')">
-        <div class="app-tile-icon">🛍️</div>
-        <div class="app-tile-info">
-          <div class="app-tile-name">Walmart</div>
-          <div class="app-tile-desc">Shop & browse</div>
-        </div>
-      </div>
+
       <div class="app-tile rg" onclick="openApp('ring')">
         <div class="app-tile-icon">🔔</div>
         <div class="app-tile-info">
@@ -584,23 +578,23 @@ body::before {
           </div>
           <div class="ring-live-badge">Live</div>
         </div>
-        <div class="ring-status">Front door · All clear</div>
-        <div class="ring-btn">View cameras →</div>
+        <div class="ring-status">Front door · Tap to view cameras</div>
       </div>
 
-      <div class="slideshow-panel">
+      <div class="slideshow-panel" id="slideshow-panel">
         <div class="slideshow-header">
           <div class="slideshow-title">
             <span class="slideshow-title-icon">🖼️</span>
             Photo Frame
           </div>
-          <button class="slideshow-fullscreen-btn" onclick="ssOn()">⛶ Fullscreen</button>
         </div>
-        <div class="slideshow-body">
-          <div class="ss-panel-icon">🌙</div>
-          <div class="ss-panel-text">Slideshow mode</div>
-          <div class="ss-panel-sub">Photos display when the station is idle, or tap Fullscreen to activate now</div>
-          <button class="ss-panel-btn" onclick="ssOn()">Start slideshow →</button>
+        <div class="slideshow-body" id="slideshow-body" style="padding:0;position:relative;overflow:hidden;">
+          <div id="slide-a" class="slide" style="position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1.5s ease;opacity:1;"></div>
+          <div id="slide-b" class="slide" style="position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1.5s ease;opacity:0;"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 12px;background:linear-gradient(to top,rgba(0,0,0,0.5),transparent);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;">Photo Frame</span>
+            <button onclick="ssOn()" style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.7);background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.2);border-radius:5px;padding:3px 8px;cursor:pointer;font-family:'Syne',sans-serif;">⛶ Full</button>
+          </div>
         </div>
       </div>
 
@@ -688,7 +682,6 @@ setInterval(loadWeather, 10 * 60 * 1000);
 const APPS = {
   youtube: { name:'YouTube', ico:'▶️', url:'https://www.youtube.com', embed:false, fbTitle:'Open YouTube', fbText:'YouTube cannot be embedded. Tap to open — use back button to return to hub.' },
   spotify:  { name:'Spotify',  ico:'🎵', url:'https://open.spotify.com', embed:false, fbTitle:'Open Spotify', fbText:'Spotify cannot be embedded. Tap to open — use back button to return to hub.' },
-  walmart:  { name:'Walmart',  ico:'🛍️', url:'https://www.walmart.com', embed:false, fbTitle:'Open Walmart', fbText:'Tap to open Walmart — use back button to return to hub.' },
   ring:     { name:'Ring',     ico:'🔔', url:'https://account.ring.com/account/dashboard', embed:false, fbTitle:'Open Ring', fbText:'Tap to open Ring cameras — use back button to return to hub.' },
 };
 
@@ -838,6 +831,54 @@ function resetIdle() {
 });
 
 resetIdle();
+
+// ── PHOTO SLIDESHOW ──
+// Replace these URLs with local photo paths on the tablet
+// e.g. 'file:///sdcard/Pictures/photo1.jpg' or a Google Photos shared album
+const PHOTOS = [
+  'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80', // kitchen
+  'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800&q=80', // home
+  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80', // living room
+  'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&q=80', // family dinner
+  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80', // friends
+];
+
+let slideIndex = 0;
+let activeSlide = 'a';
+
+function initSlideshow() {
+  const a = document.getElementById('slide-a');
+  const b = document.getElementById('slide-b');
+  if (!a || !b || PHOTOS.length === 0) return;
+  a.style.backgroundImage = `url('${PHOTOS[0]}')`;
+  b.style.backgroundImage = `url('${PHOTOS[1] || PHOTOS[0]}')`;
+  setInterval(nextSlide, 6000);
+}
+
+function nextSlide() {
+  slideIndex = (slideIndex + 1) % PHOTOS.length;
+  const nextIndex = (slideIndex + 1) % PHOTOS.length;
+  const a = document.getElementById('slide-a');
+  const b = document.getElementById('slide-b');
+  if (!a || !b) return;
+
+  if (activeSlide === 'a') {
+    b.style.backgroundImage = `url('${PHOTOS[slideIndex]}')`;
+    b.style.opacity = '1';
+    a.style.opacity = '0';
+    activeSlide = 'b';
+  } else {
+    a.style.backgroundImage = `url('${PHOTOS[slideIndex]}')`;
+    a.style.opacity = '1';
+    b.style.opacity = '0';
+    activeSlide = 'a';
+  }
+  // Preload next
+  const img = new Image();
+  img.src = PHOTOS[nextIndex];
+}
+
+initSlideshow();
 
 // ── TOAST ──
 let toastTimer;
