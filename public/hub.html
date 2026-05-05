@@ -1422,6 +1422,33 @@ function getCat(name) {
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+// Smart name display — strips filler words, keeps brand + product type
+function smartName(name, maxLen=32) {
+  if (!name) return '';
+  let s = name;
+  // Remove anything in parentheses or after a comma that looks like a variant
+  s = s.replace(/\s*\([^)]*\)/g, '');
+  // Remove size/weight/count patterns: 5.2oz, 6 lb, 12-pack, 3 count, etc.
+  s = s.replace(/\b\d+(\.\d+)?\s*(oz|fl\.?\s*oz|lb|lbs|g|kg|ml|l|ct|count|pk|pack|packs|piece|pieces|inch|in|ft|mm|cm|capsules?|tablets?|servings?|gummies?)\b/gi, '');
+  // Remove trailing descriptors after comma
+  s = s.replace(/,\s*(Black|White|Blue|Red|Green|Clear|Original|Natural|Regular|Large|Small|Medium|XL|XXL|\d+.*)/gi, '');
+  // Remove filler phrases
+  s = s.replace(/\b(pack of|set of|bundle of|box of|case of|value pack|multipack|variety pack|with|and more|plus|made with|made from|new|improved|advanced|formula|infused|enriched|fortified|ultra|extra|super|original|classic|premium|professional|pro|deluxe|genuine|authentic|real|pure|natural|organic|regenerative|non-gmo|gluten.free|sugar.free|fat.free|calorie.free|preservative.free)\b/gi, '');
+  // Collapse multiple spaces
+  s = s.replace(/\s{2,}/g, ' ').trim();
+  // Remove trailing punctuation
+  s = s.replace(/[,\-–|+&]+$/, '').trim();
+  // If still too long, cut at a word boundary
+  if (s.length > maxLen) {
+    const cut = s.substring(0, maxLen);
+    const lastSpace = cut.lastIndexOf(' ');
+    let trimmed = (lastSpace > maxLen * 0.6 ? cut.substring(0, lastSpace) : cut);
+    trimmed = trimmed.replace(/[,\-–|+&\s]+$/, '');
+    s = trimmed + '…';
+  }
+  return s || name.substring(0, maxLen);
+}
+
 // ── ALWAYS-ON SCANNER ──
 let buf='',bufTimer=null;
 document.addEventListener('keydown',e=>{
@@ -1510,7 +1537,7 @@ function renderWbList(){
     d.innerHTML=
       '<div class="wb-bullet-col"><div class="wb-bullet"></div></div>'+
       '<div class="wb-item-body wb-toggle">'+
-        '<div class="wb-item-name">'+esc(it.name.length>36?it.name.substring(0,34)+'…':it.name)+(it.qty>1?'<span class="wb-item-qty"> ×'+it.qty+'</span>':'')+'</div>'+
+        '<div class="wb-item-name">'+esc(smartName(it.name))+(it.qty>1?'<span class="wb-item-qty"> ×'+it.qty+'</span>':'')+'</div>'+
       '</div>'+
       '<button class="wb-del wb-del-btn">×</button>'+
       '<div class="wb-card wb-toggle">'+
