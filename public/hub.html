@@ -622,6 +622,34 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 /* overlay backdrop for clock menu */
 .overlay-bg{position:fixed;inset:0;z-index:4999;display:none;}
 .overlay-bg.open{display:block;}
+
+/* ── PHOTO MANAGER ── */
+.photo-mgr-overlay{position:fixed;inset:0;z-index:5999;background:rgba(0,0,0,0.6);display:none;backdrop-filter:blur(3px);}
+.photo-mgr-overlay.open{display:block;}
+.photo-mgr-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);opacity:0;pointer-events:none;z-index:6000;width:min(540px,94vw);transition:transform 0.2s cubic-bezier(0.34,1.2,0.64,1),opacity 0.15s ease;}
+.photo-mgr-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
+.photo-mgr-box{background:var(--s1);border:1px solid var(--b2);border-radius:20px;padding:1.4rem;position:relative;overflow:hidden;max-height:85vh;overflow-y:auto;}
+.photo-mgr-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.pmgr-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.pmgr-sub{font-size:10px;color:var(--t2);font-family:'DM Mono',monospace;margin-bottom:14px;}
+.pmgr-upload-area{border:2px dashed var(--b2);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:border-color 0.15s;margin-bottom:14px;position:relative;}
+.pmgr-upload-area:hover{border-color:var(--green);}
+.pmgr-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.pmgr-upload-ico{font-size:28px;margin-bottom:6px;}
+.pmgr-upload-lbl{font-size:13px;font-weight:700;color:var(--t2);}
+.pmgr-upload-hint{font-size:10px;color:var(--t3);font-family:'DM Mono',monospace;margin-top:3px;}
+.pmgr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.pmgr-thumb{position:relative;aspect-ratio:16/9;border-radius:9px;overflow:hidden;border:1px solid var(--b2);}
+.pmgr-thumb img{width:100%;height:100%;object-fit:cover;}
+.pmgr-del{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.65);border:none;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.pmgr-del:hover{background:rgba(220,50,50,0.8);}
+.pmgr-badge{position:absolute;bottom:4px;left:4px;font-size:7px;font-weight:700;background:rgba(0,0,0,0.55);color:rgba(255,255,255,0.5);padding:1px 5px;border-radius:4px;letter-spacing:0.06em;text-transform:uppercase;}
+.pmgr-upload-status{font-size:10px;color:var(--green);font-family:'DM Mono',monospace;text-align:center;min-height:14px;margin-bottom:8px;}
+.pmgr-footer{display:flex;gap:8px;}
+.pmgr-reset{flex:1;height:38px;background:none;border:1px solid var(--b2);border-radius:9px;color:var(--t2);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.pmgr-reset:hover{border-color:#f87171;color:#f87171;}
+.pmgr-close{flex:2;height:38px;background:var(--green);border:none;border-radius:9px;color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background 0.15s;}
+.pmgr-close:hover{background:var(--green2);}
 </style>
 </head>
 <body>
@@ -923,6 +951,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="hmenu-ico">⚙️</div>
     <div><div class="hmenu-label">Settings</div><div class="hmenu-sub">Voice, avatar, wake word</div></div>
   </div>
+  <div class="hmenu-item" onclick="openPhotoManager();closeHMenu()">
+    <div class="hmenu-ico">📸</div>
+    <div><div class="hmenu-label">Slideshow Photos</div><div class="hmenu-sub">Upload your own photos</div></div>
+  </div>
   <div class="hmenu-divider"></div>
   <div class="hmenu-section">Device</div>
   <div class="hmenu-item" onclick="openWifi();closeHMenu()">
@@ -1057,6 +1089,27 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 <div class="toast" id="toast"></div>
 
+<!-- PHOTO MANAGER MODAL -->
+<div class="photo-mgr-overlay" id="photo-mgr-overlay" onclick="closePhotoManager()"></div>
+<div class="photo-mgr-modal" id="photo-mgr-modal">
+  <div class="photo-mgr-box">
+    <div class="pmgr-title">📸 Slideshow Photos</div>
+    <div class="pmgr-sub">Upload your own photos for the screensaver &amp; photo frame</div>
+    <div class="pmgr-upload-area">
+      <input type="file" accept="image/*" multiple onchange="handlePhotoUpload(this)" />
+      <div class="pmgr-upload-ico">⬆️</div>
+      <div class="pmgr-upload-lbl">Tap to upload photos</div>
+      <div class="pmgr-upload-hint">JPG, PNG, HEIC — multiple files OK</div>
+    </div>
+    <div class="pmgr-upload-status" id="photo-upload-status"></div>
+    <div class="pmgr-grid" id="photo-mgr-grid"></div>
+    <div class="pmgr-footer">
+      <button class="pmgr-reset" onclick="resetPhotos()">↩ Reset to defaults</button>
+      <button class="pmgr-close" onclick="closePhotoManager()">Done</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // Synchronous stubs — available immediately before the module loads
 // Prevents "X is not defined" errors from inline onclick handlers
@@ -1118,6 +1171,11 @@ window.closeAbout = function(){};
 window.doSignOut = function(){};
 window.showLegal = function(){};
 window.closeLegal = function(){};
+window.openPhotoManager = function(){};
+window.closePhotoManager = function(){};
+window.handlePhotoUpload = function(){};
+window.resetPhotos = function(){};
+window.removePhoto = function(){};
 </script>
 
 <script type="module">
@@ -1173,6 +1231,7 @@ onAuthStateChanged(auth, async user => {
     try { const s=await getDoc(doc(db,'users',cu.uid,'pinned')); pinned=s.exists()?s.data():{}; } catch(e){}
     subList();
     loadTodos();
+    loadCustomPhotos();
     initAI();
     if (activePg==='login-page'||activePg==='photo-mode') nav('home-page','fi');
   } else {
@@ -1391,6 +1450,9 @@ document.getElementById('scan-inp')?.addEventListener('keydown',e=>{if(e.key==='
 
 async function addNamedItem(name) {
   if(!cu)return;
+  // Check if item with same name already exists (case-insensitive)
+  const ex=items.find(i=>i.name.toLowerCase()===name.toLowerCase());
+  if(ex){ex.qty++;await saveList();showCard({name:ex.name,image:ex.image,price:ex.price});setSts('Quantity updated: '+ex.name.substring(0,32),'success');lastScanTime=new Date();updateStatusBar();return;}
   const fakeUpc='manual_'+Date.now();
   items.push({upc:fakeUpc,name,price:null,image:null,qty:1,category:getCat(name),walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name)}`});
   await saveList();
@@ -1448,7 +1510,7 @@ function renderWbList(){
     d.innerHTML=
       '<div class="wb-bullet-col"><div class="wb-bullet"></div></div>'+
       '<div class="wb-item-body wb-toggle">'+
-        '<div class="wb-item-name">'+esc(it.name)+(it.qty>1?'<span class="wb-item-qty"> ×'+it.qty+'</span>':'')+'</div>'+
+        '<div class="wb-item-name">'+esc(it.name.length>36?it.name.substring(0,34)+'…':it.name)+(it.qty>1?'<span class="wb-item-qty"> ×'+it.qty+'</span>':'')+'</div>'+
       '</div>'+
       '<button class="wb-del wb-del-btn">×</button>'+
       '<div class="wb-card wb-toggle">'+
@@ -2385,7 +2447,7 @@ async function loadWeather(){
 loadWeather();setInterval(loadWeather,600000);
 
 // ── PHOTOS ──
-const PHOTOS=[
+const DEFAULT_PHOTOS=[
   'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=80',
   'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=1200&q=80',
   'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&q=80',
@@ -2393,16 +2455,40 @@ const PHOTOS=[
   'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=1200&q=80',
   'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?w=1200&q=80',
 ];
+let PHOTOS = [...DEFAULT_PHOTOS];
 let si=0,sa='a';
 const SETS=[{a:'pm-a',b:'pm-b'},{a:'pt-a',b:'pt-b'}];
+
+async function loadCustomPhotos(){
+  if(!cu) return;
+  try{
+    const s = await getDoc(doc(db,'users',cu.uid,'settings','photos'));
+    if(s.exists() && s.data().urls?.length){
+      PHOTOS = s.data().urls;
+      si = 0; sa = 'a';
+      initPhotos();
+    }
+  }catch(e){}
+}
+
+async function saveCustomPhotos(urls){
+  if(!cu) return;
+  try{ await setDoc(doc(db,'users',cu.uid,'settings','photos'),{urls,updatedAt:new Date()}); }catch(e){}
+}
 
 function initPhotos(){
   SETS.forEach(s=>{
     const a=document.getElementById(s.a);const b=document.getElementById(s.b);
     if(a)a.style.backgroundImage=`url('${PHOTOS[0]}')`;
-    if(b)b.style.backgroundImage=`url('${PHOTOS[1]}')`;
+    if(b)b.style.backgroundImage=`url('${PHOTOS[Math.min(1,PHOTOS.length-1)]}')`;
   });
-  setInterval(()=>{
+}
+
+let photoInterval = null;
+function startPhotoSlideshow(){
+  if(photoInterval) clearInterval(photoInterval);
+  initPhotos();
+  photoInterval = setInterval(()=>{
     si=(si+1)%PHOTOS.length;const ni=(si+1)%PHOTOS.length;
     SETS.forEach(s=>{
       const a=document.getElementById(s.a);const b=document.getElementById(s.b);if(!a||!b)return;
@@ -2412,7 +2498,75 @@ function initPhotos(){
     sa=sa==='a'?'b':'a';new Image().src=PHOTOS[ni];
   },6000);
 }
-initPhotos();
+startPhotoSlideshow();
+
+// ── PHOTO MANAGER ──
+window.openPhotoManager = () => {
+  renderPhotoManager();
+  document.getElementById('photo-mgr-overlay').classList.add('open');
+  document.getElementById('photo-mgr-modal').classList.add('open');
+};
+window.closePhotoManager = () => {
+  document.getElementById('photo-mgr-overlay').classList.remove('open');
+  document.getElementById('photo-mgr-modal').classList.remove('open');
+};
+
+function renderPhotoManager(){
+  const grid = document.getElementById('photo-mgr-grid');
+  if(!grid) return;
+  grid.innerHTML='';
+  PHOTOS.forEach((url,i)=>{
+    const isDefault = DEFAULT_PHOTOS.includes(url);
+    const d = document.createElement('div');
+    d.className = 'pmgr-thumb';
+    d.innerHTML = `<img src="${url}" onerror="this.style.opacity='0.3'">
+      <button class="pmgr-del" onclick="removePhoto(${i})" title="Remove">×</button>
+      ${isDefault?'<div class="pmgr-badge">default</div>':''}`;
+    grid.appendChild(d);
+  });
+}
+
+window.removePhoto = async (i) => {
+  PHOTOS.splice(i,1);
+  if(!PHOTOS.length) PHOTOS = [...DEFAULT_PHOTOS];
+  await saveCustomPhotos(PHOTOS);
+  startPhotoSlideshow();
+  renderPhotoManager();
+  toast('Photo removed');
+};
+
+window.resetPhotos = async () => {
+  PHOTOS = [...DEFAULT_PHOTOS];
+  await saveCustomPhotos(PHOTOS);
+  startPhotoSlideshow();
+  renderPhotoManager();
+  toast('Photos reset to defaults');
+};
+
+window.handlePhotoUpload = async (input) => {
+  const files = Array.from(input.files);
+  if(!files.length) return;
+  const statusEl = document.getElementById('photo-upload-status');
+  if(statusEl) statusEl.textContent = 'Processing…';
+  for(const file of files){
+    if(!file.type.startsWith('image/')) continue;
+    const dataUrl = await new Promise((res,rej)=>{
+      const r = new FileReader();
+      r.onload = ()=>res(r.result);
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+    // Remove default photos once user adds their own
+    if(PHOTOS.every(p=>DEFAULT_PHOTOS.includes(p))) PHOTOS = [];
+    PHOTOS.push(dataUrl);
+  }
+  await saveCustomPhotos(PHOTOS);
+  startPhotoSlideshow();
+  renderPhotoManager();
+  input.value = '';
+  if(statusEl) statusEl.textContent = '';
+  toast(files.length+' photo'+(files.length>1?'s':'')+' added');
+};
 
 // ── PHOTO MODE CLICK ──
 document.getElementById('photo-mode')?.addEventListener('click', ()=> window.wakeHub());
