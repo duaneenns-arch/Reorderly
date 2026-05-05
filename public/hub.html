@@ -116,6 +116,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-list::-webkit-scrollbar{width:3px;}
 .wb-list::-webkit-scrollbar-thumb{background:rgba(42,50,40,0.1);border-radius:2px;}
 
+.wb-board-title{position:relative;z-index:1;text-align:center;font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--wb-ink);padding:8px 16px 6px;flex-shrink:0;}
+.wb-board-title::after{content:'';display:block;width:60%;height:1.5px;background:rgba(42,50,40,0.2);margin:4px auto 0;}
 .wb-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;text-align:center;}
 .wb-empty-txt{font-family:'Caveat',cursive;font-size:20px;color:rgba(42,50,40,0.2);line-height:1.5;}
 
@@ -615,6 +617,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="wb-sts" id="scan-sts"></div>
       <!-- TAB PANELS -->
       <div class="wb-tab-panel active" id="tbp-list">
+        <div class="wb-board-title">What do we need?</div>
         <div class="wb-list" id="wb-list">
           <div class="wb-empty" id="wb-empty">
             <div class="wb-empty-txt">Nothing on the list yet…<br>scan something to get started</div>
