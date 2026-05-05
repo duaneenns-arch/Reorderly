@@ -6,6 +6,7 @@
 <title>ReOrderly Station</title>
 <link rel="icon" type="image/png" href="/icon.png">
 <meta name="theme-color" content="#080a09">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -96,16 +97,16 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 .wb-header{position:relative;z-index:1;display:flex;align-items:center;padding:7px 10px 7px;border-bottom:1px solid var(--wb-line);background:rgba(245,242,235,0.95);}
 .wb-title{font-family:'Caveat',cursive;font-size:19px;font-weight:700;color:var(--wb-ink);letter-spacing:0.02em;}
-.wb-title-sm{font-size:22px;flex-shrink:0;line-height:1;}
+.wb-title-sm{font-size:28px;flex-shrink:0;line-height:1;}
 .wb-subtitle{font-family:'DM Mono',monospace;font-size:9px;color:rgba(42,50,40,0.35);text-transform:uppercase;letter-spacing:0.1em;}
 .wb-hdr-right{display:none;}
 .wb-scan-row{display:flex;gap:7px;align-items:center;flex:1;}
 .wb-inp{height:38px;background:rgba(255,255,255,0.7);border:1.5px solid var(--wb-line);border-radius:9px;padding:0 12px;font-family:'DM Mono',monospace;font-size:13px;color:var(--wb-ink);outline:none;width:200px;transition:border-color 0.15s;}
 .wb-inp:focus{border-color:var(--wb-green);box-shadow:0 0 0 3px rgba(26,122,90,0.1);}
 .wb-inp::placeholder{color:rgba(42,50,40,0.3);}
-.wb-add-btn{height:44px;padding:0 16px;background:var(--wb-green);color:#fff;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity 0.15s;}
+.wb-add-btn{height:46px;padding:0 18px;background:var(--wb-green);color:#fff;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity 0.15s;}
 .wb-add-btn:hover{opacity:0.85;}
-.wb-open-btn{height:44px;padding:0 18px;background:linear-gradient(135deg,#0071CE,#005fa3);border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap;transition:all 0.15s;display:flex;align-items:center;gap:6px;box-shadow:0 3px 12px rgba(0,113,206,0.35);letter-spacing:0.01em;}
+.wb-open-btn{height:46px;padding:0 18px;background:linear-gradient(135deg,#0071CE,#005fa3);border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#fff;cursor:pointer;white-space:nowrap;transition:all 0.15s;display:flex;align-items:center;gap:6px;box-shadow:0 3px 12px rgba(0,113,206,0.35);letter-spacing:0.01em;}
 .wb-open-btn:hover{opacity:0.9;transform:scale(1.02);}
 .wb-open-btn:disabled{background:rgba(42,50,40,0.12);box-shadow:none;color:rgba(42,50,40,0.3);cursor:not-allowed;transform:none;}
 
