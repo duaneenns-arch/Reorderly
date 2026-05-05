@@ -630,10 +630,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
         <div class="wb-inner-body" id="lib-body"><div class="wb-inner-loading"><div class="spinner-wb"></div></div></div>
       </div>
       <div class="scn-bar">
-        <div class="scn-dot"></div>
-        <div class="scn-lbl">Live</div>
-        <div class="scn-rdy">● Live</div>
-        <button class="wb-clear-sm" onclick="clearItems()" style="margin-left:auto;">Clear</button>
+        <button class="wb-clear-sm" onclick="clearItems()" style="margin-left:auto;">Clear list</button>
       </div>
       <div class="wb-tabs">
         <button class="wb-tab active" id="tab-list" onclick="switchTab('list')">
@@ -1270,6 +1267,7 @@ function renderWbList(){
       '<div class="wb-card wb-toggle">'+
         imgHtml+
         '<div class="wbc-info">'+
+          '<div class="wbc-name">'+esc(it.name)+'</div>'+
           priceHtml+
           '<div class="wbc-actions">'+
             '<button class="wbc-wm wbc-shop-btn">View on Walmart</button>'+
