@@ -83,7 +83,7 @@ Keep responses warm and brief. You're a kitchen assistant, not a search engine.`
 
   } catch(e) {
     return {
-      statusCode: 500,
+      statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'chat', text: "Sorry, I'm having trouble connecting right now. Please try again." })
     };
