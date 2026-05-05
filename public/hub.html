@@ -2007,12 +2007,23 @@ async function processCommand(transcript){
         userName: cu?.displayName?.split(' ')[0] || 'there'
       })
     });
+    console.log('AI function response status:', res.status);
+    if(!res.ok){
+      const errText = await res.text();
+      console.error('AI function error:', errText);
+      speak("Sorry, something went wrong. Please try again.");
+      showAiFrame("Error " + res.status + " — try again.", '');
+      setTimeout(cancelVoice, 3000);
+      return;
+    }
     const data = await res.json();
+    console.log('AI response:', data);
     await handleAiResponse(data);
   }catch(e){
-    speak("Sorry, I couldn't connect right now.");
+    console.error('AI fetch error:', e);
+    speak("Sorry, I could not connect. Please try again.");
     showAiFrame("Connection error — try again.", '');
-    cancelVoice();
+    setTimeout(cancelVoice, 3000);
   }
 }
 
