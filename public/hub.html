@@ -127,7 +127,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-item-main{flex:1;padding:5px 8px 5px 0;}
 .wb-item-name{font-family:'Caveat',cursive;font-size:21px;font-weight:500;color:var(--wb-ink);line-height:1.3;transition:all 0.15s;}
 .wb-item.checked .wb-item-name{text-decoration:line-through;color:rgba(42,50,40,0.35);}
-.wb-item-meta{font-family:'DM Mono',monospace;font-size:9px;color:rgba(42,50,40,0.4);margin-top:1px;}
+.wb-item-meta{display:none;}
 .wb-item-qty{font-family:'Caveat',cursive;font-size:14px;color:var(--wb-green);font-weight:600;margin-left:4px;}
 .wb-del{opacity:0;background:none;border:none;color:rgba(192,57,43,0.5);font-size:16px;cursor:pointer;padding:4px 8px;transition:opacity 0.15s;align-self:center;flex-shrink:0;}
 .wb-item:hover .wb-del{opacity:1;}
@@ -196,36 +196,50 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .pt-lbl{font-size:8px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;font-family:'DM Mono',monospace;}
 .pt-fs{font-size:8px;color:rgba(255,255,255,0.45);background:rgba(0,0,0,0.3);border:0.5px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 6px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;}
 
-/* ── TODO PANEL ── */
-.todo-panel{background:var(--s1);border:1px solid var(--b2);border-radius:14px;overflow:hidden;position:relative;}
-.todo-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#ec4899;}
-.todo-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 12px 7px;cursor:pointer;transition:background 0.15s;}
-.todo-hdr:hover{background:var(--s2);}
-.todo-hdr-left{display:flex;align-items:center;gap:7px;}
-.todo-hdr-icon{font-size:14px;}
-.todo-hdr-title{font-size:12px;font-weight:800;color:var(--text);}
-.todo-hdr-cnt{font-size:9px;font-weight:700;background:rgba(236,72,153,0.12);color:#ec4899;border:1px solid rgba(236,72,153,0.2);padding:1px 6px;border-radius:99px;}
-.todo-chevron{font-size:10px;color:var(--t3);transition:transform 0.2s;}
-.todo-panel.open .todo-chevron{transform:rotate(180deg);}
-.todo-body{display:none;padding:4px 10px 8px;}
-.todo-panel.open .todo-body{display:block;}
-.todo-input-row{display:flex;gap:6px;margin-bottom:7px;}
-.todo-inp{flex:1;height:32px;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:0 10px;font-family:'Syne',sans-serif;font-size:12px;color:var(--text);outline:none;}
-.todo-inp:focus{border-color:#ec4899;}
-.todo-inp::placeholder{color:var(--t3);}
-.todo-add{height:32px;padding:0 10px;background:#ec4899;color:#fff;border:none;border-radius:8px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
-.todo-item{display:flex;align-items:center;gap:8px;padding:5px 2px;border-bottom:1px solid var(--b1);cursor:pointer;transition:opacity 0.15s;}
-.todo-item:last-child{border-bottom:none;}
-.todo-item.done{opacity:0.4;}
-.todo-check{width:14px;height:14px;border:1.5px solid var(--b3);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
-.todo-item.done .todo-check{background:#ec4899;border-color:#ec4899;}
-.todo-check-mark{font-size:9px;color:#fff;display:none;}
-.todo-item.done .todo-check-mark{display:block;}
-.todo-text{flex:1;font-size:12px;color:var(--text);line-height:1.3;}
-.todo-item.done .todo-text{text-decoration:line-through;color:var(--t3);}
-.todo-del{background:none;border:none;color:var(--t3);font-size:14px;cursor:pointer;opacity:0;padding:0 3px;transition:opacity 0.15s;}
-.todo-item:hover .todo-del{opacity:1;}
-.todo-empty{font-size:10px;color:var(--t3);text-align:center;padding:8px 0;font-family:'DM Mono',monospace;}
+/* ── BOARD DIVIDER between shopping and todo sections ── */
+.wb-divider{position:relative;z-index:1;display:flex;align-items:center;gap:10px;padding:6px 16px 4px;flex-shrink:0;}
+.wb-divider-line{flex:1;height:1px;background:rgba(180,60,60,0.18);}
+.wb-divider-label{font-family:'Caveat',cursive;font-size:14px;color:rgba(42,50,40,0.3);white-space:nowrap;letter-spacing:0.04em;}
+
+/* Todo section — lives on the same whiteboard */
+.wb-todo-section{position:relative;z-index:1;flex-shrink:0;max-height:260px;display:flex;flex-direction:column;}
+.wb-todo-add-row{display:flex;gap:7px;padding:4px 16px 6px;flex-shrink:0;}
+.wb-todo-inp{flex:1;height:34px;background:rgba(255,255,255,0.6);border:1.5px solid var(--wb-line);border-radius:9px;padding:0 11px;font-family:'Caveat',cursive;font-size:17px;color:var(--wb-ink);outline:none;transition:border-color 0.15s;}
+.wb-todo-inp:focus{border-color:rgba(236,72,153,0.5);}
+.wb-todo-inp::placeholder{color:rgba(42,50,40,0.25);font-family:'Caveat',cursive;}
+.wb-todo-add{height:34px;padding:0 13px;background:rgba(236,72,153,0.15);border:1.5px solid rgba(236,72,153,0.3);border-radius:9px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:rgba(180,40,100,0.8);cursor:pointer;white-space:nowrap;transition:all 0.15s;}
+.wb-todo-add:hover{background:rgba(236,72,153,0.25);}
+.wb-todo-list{overflow-y:auto;padding:0 16px 8px;scrollbar-width:thin;scrollbar-color:rgba(42,50,40,0.1) transparent;}
+.wb-todo-list::-webkit-scrollbar{width:3px;}
+.wb-todo-list::-webkit-scrollbar-thumb{background:rgba(42,50,40,0.1);border-radius:2px;}
+
+/* Todo items — same whiteboard style as shopping items */
+.wt-item{position:relative;display:flex;align-items:flex-start;gap:0;min-height:30px;cursor:pointer;border-radius:4px;margin-bottom:1px;transition:background 0.1s;}
+.wt-item:hover{background:rgba(42,50,40,0.04);}
+.wt-item.expanded{background:rgba(255,255,255,0.65);border-radius:10px;margin-bottom:5px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.wt-item-bullet{width:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding-top:5px;}
+.wt-bullet{width:9px;height:9px;border:1.5px solid rgba(236,72,153,0.35);border-radius:3px;transition:all 0.15s;flex-shrink:0;}
+.wt-item.done .wt-bullet{background:rgba(236,72,153,0.6);border-color:rgba(236,72,153,0.6);}
+.wt-item-main{flex:1;padding:4px 8px 4px 0;}
+.wt-item-text{font-family:'Caveat',cursive;font-size:20px;font-weight:500;color:var(--wb-ink);line-height:1.3;transition:all 0.15s;}
+.wt-item.done .wt-item-text{text-decoration:line-through;color:rgba(42,50,40,0.32);}
+.wt-del{opacity:0;background:none;border:none;color:rgba(192,57,43,0.5);font-size:15px;cursor:pointer;padding:4px 8px;transition:opacity 0.15s;align-self:center;flex-shrink:0;}
+.wt-item:hover .wt-del{opacity:1;}
+
+/* Expanded todo card */
+.wt-card{display:none;padding:8px 14px 11px;border-top:1px solid var(--wb-line);animation:fadeIn 0.18s ease;}
+.wt-item.expanded .wt-card{display:block;}
+.wt-card-edit{width:100%;height:34px;background:rgba(255,255,255,0.8);border:1.5px solid var(--wb-line);border-radius:8px;padding:0 10px;font-family:'Caveat',cursive;font-size:17px;color:var(--wb-ink);outline:none;margin-bottom:8px;}
+.wt-card-edit:focus{border-color:rgba(236,72,153,0.4);}
+.wt-card-actions{display:flex;gap:7px;flex-wrap:wrap;}
+.wt-card-done{height:28px;padding:0 11px;background:rgba(29,122,90,0.1);border:1.5px solid rgba(29,122,90,0.25);border-radius:7px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--wb-green);cursor:pointer;transition:all 0.15s;}
+.wt-card-done:hover{background:rgba(29,122,90,0.2);}
+.wt-card-done.is-done{background:rgba(29,122,90,0.18);color:var(--wb-green);}
+.wt-card-delete{height:28px;padding:0 11px;background:rgba(192,57,43,0.08);border:1.5px solid rgba(192,57,43,0.2);border-radius:7px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:rgba(192,57,43,0.7);cursor:pointer;transition:all 0.15s;}
+.wt-card-delete:hover{background:rgba(192,57,43,0.15);}
+.wt-card-save{height:28px;padding:0 11px;background:rgba(42,50,40,0.08);border:1.5px solid rgba(42,50,40,0.15);border-radius:7px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--wb-ink2);cursor:pointer;transition:all 0.15s;}
+.wt-card-save:hover{background:rgba(42,50,40,0.14);}
+.wb-todo-empty{font-family:'Caveat',cursive;font-size:18px;color:rgba(42,50,40,0.2);text-align:center;padding:8px 0 4px;}
 
 /* ── INNER PAGES ── */
 .inner-page{flex-direction:column;background:var(--bg);}
@@ -357,9 +371,17 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .cm-btn.reset{background:none;border:1px solid var(--b2);color:var(--t3);}
 .cm-btn.reset:hover{border-color:#f87171;color:#f87171;}
 
-/* Stopwatch panel */
-.sw-display{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--text);letter-spacing:3px;text-align:center;line-height:1;margin-bottom:12px;}
-.sw-display.running{color:var(--green2);}
+/* Alarm panel */
+.alarm-time-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:10px;}
+.alarm-num-inp{width:64px;height:52px;background:var(--s2);border:1px solid var(--b2);border-radius:10px;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--text);outline:none;transition:border-color 0.15s;}
+.alarm-num-inp:focus{border-color:var(--green);}
+.alarm-colon{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--t3);}
+.alarm-ampm{display:flex;flex-direction:column;gap:4px;}
+.alarm-ampm-btn{padding:4px 10px;background:var(--s2);border:1px solid var(--b2);border-radius:7px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;transition:all 0.15s;}
+.alarm-ampm-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
+.alarm-status{font-family:'DM Mono',monospace;font-size:10px;color:var(--t3);text-align:center;margin-bottom:10px;min-height:14px;}
+.alarm-status.set{color:var(--green);}
+.alarm-status.ringing{color:var(--ring);animation:pulse 0.8s ease-in-out infinite;}
 
 /* Clock panel */
 .cm-bigclock{font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--text);letter-spacing:5px;text-align:center;line-height:1;}
@@ -468,6 +490,20 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           <div class="wb-empty-txt">Nothing on the list yet…<br>scan something to get started</div>
         </div>
       </div>
+      <div class="wb-divider">
+        <div class="wb-divider-line"></div>
+        <div class="wb-divider-label">to-do</div>
+        <div class="wb-divider-line"></div>
+      </div>
+      <div class="wb-todo-section">
+        <div class="wb-todo-add-row">
+          <input class="wb-todo-inp" type="text" id="todo-inp" placeholder="Add a task…" autocomplete="off" />
+          <button class="wb-todo-add" onclick="addTodo()">+ Add</button>
+        </div>
+        <div class="wb-todo-list" id="todo-list">
+          <div class="wb-todo-empty">Nothing to do yet…</div>
+        </div>
+      </div>
       <div class="wb-footer">
         <button class="wb-order-btn" id="home-order-btn" disabled onclick="orderAll()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
@@ -509,24 +545,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
         </div>
       </div>
 
-      <!-- TO-DO PANEL -->
-      <div class="todo-panel" id="todo-panel">
-        <div class="todo-hdr" onclick="toggleTodo()">
-          <div class="todo-hdr-left">
-            <div class="todo-hdr-icon">✅</div>
-            <div class="todo-hdr-title">To-Do</div>
-            <div class="todo-hdr-cnt" id="todo-cnt" style="display:none;">0</div>
-          </div>
-          <div class="todo-chevron">▼</div>
-        </div>
-        <div class="todo-body">
-          <div class="todo-input-row">
-            <input class="todo-inp" type="text" id="todo-inp" placeholder="Add a task…" />
-            <button class="todo-add" onclick="addTodo()">Add</button>
-          </div>
-          <div id="todo-list"><div class="todo-empty">No tasks yet</div></div>
-        </div>
-      </div>
+      <!-- TO-DO nav tile removed - todo now lives on the whiteboard -->
 
       <div class="rc-label">Quick Launch</div>
       <div class="app-row">
@@ -636,7 +655,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="cm-tabs">
       <button class="cm-tab active" onclick="cmTab('clock')">Clock</button>
       <button class="cm-tab" onclick="cmTab('timer')">Timer</button>
-      <button class="cm-tab" onclick="cmTab('stopwatch')">Stopwatch</button>
+      <button class="cm-tab" onclick="cmTab('alarm')">Alarm</button>
     </div>
 
     <!-- Clock panel -->
@@ -669,12 +688,21 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       </div>
     </div>
 
-    <!-- Stopwatch panel -->
-    <div class="cm-panel" id="cm-stopwatch">
-      <div class="sw-display" id="sw-display">00:00.0</div>
+    <!-- Alarm panel -->
+    <div class="cm-panel" id="cm-alarm">
+      <div class="alarm-time-row">
+        <input class="alarm-num-inp" type="number" id="alarm-hr" min="1" max="12" value="7" />
+        <div class="alarm-colon">:</div>
+        <input class="alarm-num-inp" type="number" id="alarm-min" min="0" max="59" value="00" />
+        <div class="alarm-ampm">
+          <button class="alarm-ampm-btn active" id="alarm-am" onclick="setAlarmAmPm('AM')">AM</button>
+          <button class="alarm-ampm-btn" id="alarm-pm" onclick="setAlarmAmPm('PM')">PM</button>
+        </div>
+      </div>
+      <div class="alarm-status" id="alarm-status">No alarm set</div>
       <div class="cm-btn-row">
-        <button class="cm-btn start" id="sw-start-btn" onclick="swAction()">Start</button>
-        <button class="cm-btn reset" onclick="swReset()">Reset</button>
+        <button class="cm-btn start" id="alarm-set-btn" onclick="alarmSet()">Set Alarm</button>
+        <button class="cm-btn reset" id="alarm-cancel-btn" onclick="alarmCancel()" style="display:none;">Cancel</button>
       </div>
     </div>
   </div>
@@ -848,30 +876,48 @@ window.deleteTodoItem = async (id) => {
   renderTodos();
 };
 
+let expandedTodoId = null;
+
 function renderTodos() {
   const el = document.getElementById('todo-list');
-  const cnt = document.getElementById('todo-cnt');
   if (!el) return;
-  const active = todos.filter(t=>!t.done).length;
-  if (cnt) { cnt.style.display = active>0?'inline-block':'none'; cnt.textContent = active; }
-  if (!todos.length) { el.innerHTML='<div class="todo-empty">No tasks yet</div>'; return; }
+  if (!todos.length) { el.innerHTML='<div class="wb-todo-empty">Nothing to do yet…</div>'; return; }
   el.innerHTML = '';
   todos.forEach(t => {
+    const isExp = expandedTodoId === t.id;
     const d = document.createElement('div');
-    d.className = 'todo-item' + (t.done?' done':'');
-    d.innerHTML = `<div class="todo-check" onclick="toggleTodoItem('${t.id}')"><span class="todo-check-mark">✓</span></div>
-    <div class="todo-text" onclick="toggleTodoItem('${t.id}')">${esc(t.text)}</div>
-    <button class="todo-del" onclick="deleteTodoItem('${t.id}')">×</button>`;
+    d.className = 'wt-item' + (t.done?' done':'') + (isExp?' expanded':'');
+    d.innerHTML = `
+      <div class="wt-item-bullet"><div class="wt-bullet"></div></div>
+      <div class="wt-item-main" onclick="toggleWtItem('${t.id}')">
+        <div class="wt-item-text">${esc(t.text)}</div>
+      </div>
+      <button class="wt-del" onclick="deleteTodoItem('${t.id}')">×</button>
+      <div class="wt-card">
+        <input class="wt-card-edit" type="text" id="wt-edit-${t.id}" value="${esc(t.text)}" onclick="event.stopPropagation()" onkeydown="if(event.key==='Enter')saveTodoEdit('${t.id}')" />
+        <div class="wt-card-actions">
+          <button class="wt-card-save" onclick="saveTodoEdit('${t.id}')">Save</button>
+          <button class="wt-card-done${t.done?' is-done':''}" onclick="toggleTodoItem('${t.id}')">${t.done?'↩ Undo':'✓ Done'}</button>
+          <button class="wt-card-delete" onclick="deleteTodoItem('${t.id}')">Delete</button>
+        </div>
+      </div>`;
     el.appendChild(d);
   });
 }
 
-window.toggleTodo = () => {
-  const p = document.getElementById('todo-panel');
-  p.classList.toggle('open');
+window.toggleWtItem = (id) => {
+  expandedTodoId = (expandedTodoId === id) ? null : id;
+  renderTodos();
 };
 
-document.getElementById('todo-inp')?.addEventListener('keydown', e => { if(e.key==='Enter') window.addTodo(); e.stopPropagation(); });
+window.saveTodoEdit = async (id) => {
+  const inp = document.getElementById('wt-edit-'+id);
+  if (!inp) return;
+  const text = inp.value.trim();
+  if (!text) return;
+  const t = todos.find(t=>t.id===id);
+  if (t) { t.text = text; await saveTodos(); renderTodos(); }
+};
 
 // ── PRODUCT LOOKUP ──
 async function lookup(upc) {
@@ -1194,7 +1240,7 @@ window.closeClockMenu = () => {
 window.cmTab = (tab) => {
   activeTab = tab;
   document.querySelectorAll('.cm-tab').forEach((t,i)=>{
-    const tabs=['clock','timer','stopwatch'];
+    const tabs=['clock','timer','alarm'];
     t.classList.toggle('active', tabs[i]===tab);
   });
   document.querySelectorAll('.cm-panel').forEach(p=>p.classList.remove('active'));
@@ -1280,34 +1326,56 @@ function updateHeaderTimer(){
   }
 }
 
-// ── STOPWATCH ──
-let swRunning=false, swStart=0, swElapsed=0, swInterval=null;
+// ── ALARM ──
+let alarmAmPm = 'AM', alarmInterval = null, alarmSet = false;
 
-window.swAction = () => {
-  if(!swRunning){
-    swRunning=true; swStart=Date.now()-swElapsed;
-    document.getElementById('sw-start-btn').textContent='Stop';
-    document.getElementById('sw-display').classList.add('running');
-    swInterval=setInterval(()=>{
-      swElapsed=Date.now()-swStart;
-      const tot=Math.floor(swElapsed/100);
-      const h=Math.floor(tot/36000);const m=Math.floor((tot%36000)/600);
-      const s=Math.floor((tot%600)/10);const ds=tot%10;
-      document.getElementById('sw-display').textContent=
-        h>0?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${ds}`;
-    },100);
-  } else {
-    clearInterval(swInterval);swRunning=false;
-    document.getElementById('sw-start-btn').textContent='Start';
-    document.getElementById('sw-display').classList.remove('running');
-  }
+window.setAlarmAmPm = (ap) => {
+  alarmAmPm = ap;
+  document.getElementById('alarm-am').classList.toggle('active', ap==='AM');
+  document.getElementById('alarm-pm').classList.toggle('active', ap==='PM');
 };
 
-window.swReset = () => {
-  clearInterval(swInterval);swRunning=false;swElapsed=0;
-  document.getElementById('sw-start-btn').textContent='Start';
-  document.getElementById('sw-display').textContent='00:00.0';
-  document.getElementById('sw-display').classList.remove('running');
+window.alarmSet = () => {
+  let hr = parseInt(document.getElementById('alarm-hr').value)||12;
+  let mn = parseInt(document.getElementById('alarm-min').value)||0;
+  hr = Math.min(12, Math.max(1, hr));
+  mn = Math.min(59, Math.max(0, mn));
+  document.getElementById('alarm-hr').value = hr;
+  document.getElementById('alarm-min').value = String(mn).padStart(2,'0');
+  alarmSet = true;
+  const label = `${hr}:${String(mn).padStart(2,'0')} ${alarmAmPm}`;
+  document.getElementById('alarm-status').textContent = `⏰ Alarm set for ${label}`;
+  document.getElementById('alarm-status').className = 'alarm-status set';
+  document.getElementById('alarm-set-btn').style.display = 'none';
+  document.getElementById('alarm-cancel-btn').style.display = 'flex';
+  if (alarmInterval) clearInterval(alarmInterval);
+  alarmInterval = setInterval(()=>{
+    if (!alarmSet) return;
+    const now = new Date();
+    let nh = now.getHours(); const nm = now.getMinutes();
+    const ap = nh >= 12 ? 'PM' : 'AM';
+    const h12 = nh % 12 || 12;
+    if (h12 === hr && nm === mn && ap === alarmAmPm) {
+      alarmSet = false;
+      clearInterval(alarmInterval);
+      document.getElementById('alarm-status').textContent = '🔔 Alarm ringing!';
+      document.getElementById('alarm-status').className = 'alarm-status ringing';
+      document.getElementById('alarm-set-btn').style.display = 'flex';
+      document.getElementById('alarm-cancel-btn').style.display = 'none';
+      toast('🔔 Alarm! ' + label);
+      if (navigator.vibrate) navigator.vibrate([600,300,600,300,600]);
+    }
+  }, 10000);
+};
+
+window.alarmCancel = () => {
+  alarmSet = false;
+  if (alarmInterval) clearInterval(alarmInterval);
+  document.getElementById('alarm-status').textContent = 'Alarm cancelled';
+  document.getElementById('alarm-status').className = 'alarm-status';
+  document.getElementById('alarm-set-btn').style.display = 'flex';
+  document.getElementById('alarm-cancel-btn').style.display = 'none';
+  setTimeout(()=>{ const el=document.getElementById('alarm-status'); if(el) el.textContent='No alarm set'; }, 1500);
 };
 
 // ── WEATHER ──
@@ -1362,8 +1430,10 @@ resetIdle();
 function setSts(m,t=''){const el=document.getElementById('scan-sts');if(el){el.textContent=m;el.className='wb-sts '+t;}}
 function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>el.classList.remove('show'),2500);}
 
+document.getElementById('todo-inp')?.addEventListener('keydown', e => { if(e.key==='Enter') window.addTodo(); e.stopPropagation(); });
+
 document.addEventListener('click',e=>{
-  if(activePg==='home-page'&&!e.target.closest('input,button,.wb-item,.nav-tile,.app-tile,.photo-thumb,.todo-panel,.clock-menu'))
+  if(activePg==='home-page'&&!e.target.closest('input,button,.wb-item,.wt-item,.nav-tile,.app-tile,.photo-thumb,.clock-menu'))
     setTimeout(()=>document.getElementById('scan-inp')?.focus(),50);
 });
 </script>
