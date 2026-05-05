@@ -94,8 +94,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 /* faint left margin line */
 .wb-col::after{content:'';position:absolute;top:0;left:52px;bottom:0;width:1px;background:rgba(220,100,100,0.15);pointer-events:none;z-index:0;}
 
-.wb-header{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:10px 16px 8px;border-bottom:1px solid var(--wb-line);background:rgba(245,242,235,0.95);}
-.wb-title{font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:var(--wb-ink);letter-spacing:0.02em;}
+.wb-header{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:7px 12px 6px;border-bottom:1px solid var(--wb-line);background:rgba(245,242,235,0.95);}
+.wb-title{font-family:'Caveat',cursive;font-size:19px;font-weight:700;color:var(--wb-ink);letter-spacing:0.02em;}
 .wb-subtitle{font-family:'DM Mono',monospace;font-size:9px;color:rgba(42,50,40,0.35);text-transform:uppercase;letter-spacing:0.1em;}
 .wb-hdr-right{display:flex;align-items:center;gap:8px;}
 .wb-scan-row{display:flex;gap:7px;align-items:center;}
@@ -107,7 +107,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-open-btn{height:38px;padding:0 12px;background:rgba(42,50,40,0.08);border:1.5px solid var(--wb-line);border-radius:9px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--wb-ink2);cursor:pointer;white-space:nowrap;transition:all 0.15s;display:flex;align-items:center;gap:5px;}
 .wb-open-btn:hover{background:rgba(42,50,40,0.14);}
 
-.wb-sts{position:relative;z-index:1;font-size:9px;font-family:'DM Mono',monospace;color:rgba(42,50,40,0.4);padding:3px 16px 2px;min-height:16px;}
+.wb-sts{position:relative;z-index:1;font-size:9px;font-family:'DM Mono',monospace;color:rgba(42,50,40,0.4);padding:1px 16px;min-height:0;line-height:1.4;}
 .wb-sts.loading{color:var(--wb-green);}.wb-sts.success{color:var(--wb-green);}.wb-sts.error{color:#c0392b;}
 
 .wb-list{flex:1;overflow-y:auto;padding:4px 12px 8px;position:relative;z-index:1;scrollbar-width:thin;scrollbar-color:rgba(42,50,40,0.1) transparent;}
@@ -422,11 +422,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-tab-empty-sub{font-size:10px;color:rgba(42,50,40,0.2);line-height:1.5;max-width:180px;}
 
 /* ── LEFT PANEL BOTTOM TABS ── */
-.wb-tabs{position:relative;z-index:2;flex-shrink:0;display:flex;border-top:1px solid var(--wb-line);background:rgba(245,242,235,0.98);}
-.wb-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 4px;cursor:pointer;border:none;background:none;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:rgba(42,50,40,0.38);letter-spacing:0.04em;text-transform:uppercase;border-top:2px solid transparent;transition:all 0.15s;}
-.wb-tab:hover{color:rgba(42,50,40,0.6);}
+.wb-tabs{position:relative;z-index:2;flex-shrink:0;display:flex;border-top:2px solid rgba(42,50,40,0.15);background:#ede9e0;}
+.wb-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 4px;cursor:pointer;border:none;background:none;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:rgba(42,50,40,0.55);letter-spacing:0.04em;text-transform:uppercase;border-top:2px solid transparent;transition:all 0.15s;}
+.wb-tab:hover{color:rgba(42,50,40,0.8);}
 .wb-tab.active{color:var(--wb-green);border-top-color:var(--wb-green);}
-.wb-tab-icon{font-size:15px;line-height:1;}
+.wb-tab-icon{font-size:17px;line-height:1;}
 
 /* Right panel overhaul */
 .right-col{display:flex;flex-direction:column;gap:6px;overflow:hidden;background:var(--bg);}
@@ -600,14 +600,13 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="wb-header">
         <div>
           <div class="wb-title">🛒 What do we need?</div>
-          <div class="wb-subtitle">Tap item to view · Scan or type to add</div>
         </div>
         <div class="wb-hdr-right">
           <div class="wb-scan-row">
             <input class="wb-inp" type="text" id="scan-inp" placeholder="Barcode or item name…" autocomplete="off" />
             <button class="wb-add-btn" id="scan-btn" onclick="doScan()">Add</button>
           </div>
-          <button class="wb-open-btn" id="go-shop-btn" onclick="goShop()" disabled>🛍 Go Shop</button>
+          <button class="wb-open-btn" id="go-shop-btn" onclick="goShop()" disabled>🛍 Review &amp; Order</button>
         </div>
       </div>
       <div class="wb-sts" id="scan-sts">Ready — scanner connected</div>
@@ -671,8 +670,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           <div class="pt-rc-s" id="pt-a"></div>
           <div class="pt-rc-s" id="pt-b" style="opacity:0;"></div>
           <div class="pt-rc-ov">
-            <div class="pt-rc-lbl">Photo Frame</div>
-            <div class="pt-rc-fs">⛶ Fullscreen</div>
+            <div class="pt-rc-fs" onclick="goPhotoMode()">⛶ Fullscreen</div>
           </div>
         </div>
       </div>
@@ -842,11 +840,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
   <div class="hmenu-divider"></div>
   <div class="hmenu-section">Legal &amp; Info</div>
-  <div class="hmenu-item" onclick="window.open('/privacy.html','_blank');closeHMenu()">
+  <div class="hmenu-item" onclick="showLegal('privacy');closeHMenu()">
     <div class="hmenu-ico">📄</div>
     <div><div class="hmenu-label">Privacy Policy</div></div>
   </div>
-  <div class="hmenu-item" onclick="window.open('/terms.html','_blank');closeHMenu()">
+  <div class="hmenu-item" onclick="showLegal('terms');closeHMenu()">
     <div class="hmenu-ico">📄</div>
     <div><div class="hmenu-label">Terms of Use</div></div>
   </div>
@@ -865,6 +863,21 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </button>
 </div>
 
+
+<!-- LEGAL MODAL -->
+<div class="about-overlay" id="legal-overlay" onclick="closeLegal()"></div>
+<div class="about-modal" id="legal-modal">
+  <div class="about-box" style="max-height:80vh;overflow:hidden;display:flex;flex-direction:column;">
+    <div class="about-logo" id="legal-title" style="font-size:18px;margin-bottom:8px;">Privacy Policy</div>
+    <div style="flex:1;overflow-y:auto;scrollbar-width:thin;" id="legal-content">
+      <iframe id="legal-iframe" src="" style="width:100%;height:400px;border:none;background:#fff;border-radius:8px;"></iframe>
+    </div>
+    <div style="padding-top:10px;">
+      <button class="about-close" onclick="closeLegal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- ABOUT MODAL -->
 <div class="about-overlay" id="about-overlay" onclick="closeAbout()"></div>
 <div class="about-modal" id="about-modal">
@@ -877,9 +890,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="about-text">Product prices and availability are confirmed on Walmart.com.</div>
     <div class="about-divider"></div>
     <div class="about-links">
-      <span class="about-link" onclick="window.open('/privacy.html','_blank')">Privacy Policy</span>
+      <span class="about-link" onclick="showLegal('privacy')">Privacy Policy</span>
       <span class="about-sep">·</span>
-      <span class="about-link" onclick="window.open('/terms.html','_blank')">Terms of Use</span>
+      <span class="about-link" onclick="showLegal('terms')">Terms of Use</span>
       <span class="about-sep">·</span>
       <span class="about-link" onclick="window.open('mailto:support@reorderlysolutions.com')">Contact</span>
     </div>
@@ -940,6 +953,8 @@ window.closeClockMenu = function(){};
 window.showAbout = function(){};
 window.closeAbout = function(){};
 window.doSignOut = function(){};
+window.showLegal = function(){};
+window.closeLegal = function(){};
 </script>
 
 <script type="module">
@@ -1492,6 +1507,22 @@ window.switchTab = (tab) => {
   resetIdle();
 };
 
+
+
+// ── LEGAL MODAL ──
+window.showLegal=(page)=>{
+  const titles={privacy:'Privacy Policy',terms:'Terms of Use'};
+  const urls={privacy:'/privacy.html',terms:'/terms.html'};
+  document.getElementById('legal-title').textContent=titles[page]||page;
+  document.getElementById('legal-iframe').src=urls[page]||'/';
+  document.getElementById('legal-overlay').classList.add('open');
+  document.getElementById('legal-modal').classList.add('open');
+};
+window.closeLegal=()=>{
+  document.getElementById('legal-overlay').classList.remove('open');
+  document.getElementById('legal-modal').classList.remove('open');
+  document.getElementById('legal-iframe').src='';
+};
 
 // ── ABOUT + SIGN OUT ──
 window.showAbout=()=>{
