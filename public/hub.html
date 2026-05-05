@@ -828,20 +828,53 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 <div class="toast" id="toast"></div>
 
+<script>
+// Synchronous stubs — available immediately before the module loads
+// Prevents "X is not defined" errors from inline onclick handlers
+window.wakeHub = function(){ document.getElementById('photo-mode')?.classList.remove('active'); document.getElementById('home-page')?.classList.add('active'); };
+window.goPhotoMode = function(){ document.getElementById('home-page')?.classList.remove('active'); document.getElementById('photo-mode')?.classList.add('active'); };
+window.toggleClockMenu = function(){};
+window.toggleHMenu = function(){};
+window.doScan = function(){};
+window.switchTab = function(){};
+window.addTodo = function(){};
+window.nav = function(){};
+window.lTab = function(){};
+window.doLogin = function(){};
+window.doGoogle = function(){};
+window.toggleWbItem = function(){};
+window.toggleRtItem = function(){};
+window.chQty = function(){};
+window.delItem = function(){};
+window.clearItems = function(){};
+window.goShop = function(){};
+window.orderAll = function(){};
+window.reAdd = function(){};
+window.filterLib = function(){};
+window.libAdd = function(){};
+window.launchApp = function(){};
+window.openWifi = function(){};
+window.openBluetooth = function(){};
+window.setTimerPreset = function(){};
+window.timerAction = function(){};
+window.timerPause = function(){};
+window.timerReset = function(){};
+window.cmTab = function(){};
+window.setAlarmAmPm = function(){};
+window.doAlarmSet = function(){};
+window.alarmCancel = function(){};
+window.toggleRtItem = function(){};
+window.saveTodoEdit = function(){};
+window.deleteTodoItem = function(){};
+window.toggleTodoItem = function(){};
+window.closeHMenu = function(){};
+window.closeClockMenu = function(){};
+</script>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-// Make key functions available immediately before module fully loads
-// so inline onclick handlers don't throw ReferenceError
-window.wakeHub = ()=> { /* will be overwritten once module loads */ };
-window.goPhotoMode = ()=> { /* will be overwritten */ };
-window.toggleClockMenu = ()=> { /* will be overwritten */ };
-window.toggleHMenu = ()=> { /* will be overwritten */ };
-window.doScan = ()=> { /* will be overwritten */ };
-window.switchTab = ()=> { /* will be overwritten */ };
-window.addTodo = ()=> { /* will be overwritten */ };
 
 const fbApp = initializeApp({
   apiKey:"AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
