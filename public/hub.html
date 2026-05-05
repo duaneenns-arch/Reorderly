@@ -133,7 +133,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-bullet{width:10px;height:10px;border:2px solid rgba(26,122,90,0.4);border-radius:50%;transition:all 0.15s;flex-shrink:0;}
 .wb-item.checked .wb-bullet{background:var(--wb-green);border-color:var(--wb-green);}
 .wb-item-main{flex:1;padding:5px 8px 5px 0;}
-.wb-item-name{font-family:'Caveat',cursive;font-size:21px;font-weight:500;color:var(--wb-ink);line-height:1.3;transition:all 0.15s;}
+.wb-item-name{font-family:'Caveat',cursive;font-size:19px;font-weight:500;color:var(--wb-ink);line-height:1.25;transition:all 0.15s;word-break:break-word;}
 .wb-item.checked .wb-item-name{text-decoration:line-through;color:rgba(42,50,40,0.35);}
 .wb-item-meta{font-family:'DM Mono',monospace;font-size:9px;color:rgba(42,50,40,0.4);margin-top:1px;}
 .wb-item-qty{font-family:'Caveat',cursive;font-size:14px;color:var(--wb-green);font-weight:600;margin-left:4px;}
@@ -1537,7 +1537,7 @@ function renderWbList(){
     d.innerHTML=
       '<div class="wb-bullet-col"><div class="wb-bullet"></div></div>'+
       '<div class="wb-item-body wb-toggle">'+
-        '<div class="wb-item-name">'+esc(smartName(it.name))+(it.qty>1?'<span class="wb-item-qty"> ×'+it.qty+'</span>':'')+'</div>'+
+        '<div class="wb-item-name">'+esc(it.name)+(it.qty>1?'<span class="wb-item-qty"> ×'+it.qty+'</span>':'')+'</div>'+
       '</div>'+
       '<button class="wb-del wb-del-btn">×</button>'+
       '<div class="wb-card wb-toggle">'+
@@ -1892,7 +1892,6 @@ window.saveSettings = async () => {
   await saveAiSettingsToDb();
   closeSettings();
   toast('Settings saved');
-  restartWakeWord();
 };
 
 window.selectAvatar = (el) => {
@@ -2092,8 +2091,7 @@ window.cancelVoice = () => {
   document.getElementById('voice-overlay')?.classList.remove('active');
   const mic = document.getElementById('hdr-mic-btn');
   if(mic){ mic.classList.remove('listening','processing'); mic.textContent='🎤'; }
-  // Restart wake word after a clean pause
-  setTimeout(startWakeWord, 1000);
+  // Do NOT auto-restart wake word — prevents always-on mic indicator
 };
 
 function setVoiceUI(state, status, transcript){
@@ -2185,7 +2183,7 @@ async function handleAiResponse(data){
   speak(spoken, ()=>{
     voiceState = 'idle';
     document.getElementById('hdr-mic-btn').classList.remove('listening','processing');
-    setTimeout(startWakeWord, 500);
+    // Do NOT auto-restart wake word here
   });
 }
 
@@ -2295,9 +2293,8 @@ window.testAI = async () => {
 // ── INIT ──
 async function initAI(){
   await loadAiSettings();
-  // Start wake word listener — SpeechRecognition manages its own mic access
-  // and does NOT trigger the browser tab recording indicator
-  setTimeout(startWakeWord, 2000);
+  // Wake word is OFF by default — user must tap 🎤 to activate voice.
+  // This prevents the browser recording indicator from showing on load.
 }
 
 // ── CLOCK ──
