@@ -16,7 +16,7 @@
   --bg: #0a0c0b;
   --surface: #131614;
   --surface2: #1a1e1c;
-  --surface3: #202420;
+  --surface3: #222622;
   --border: rgba(255,255,255,0.07);
   --border2: rgba(255,255,255,0.13);
   --green: #1D9E75;
@@ -29,7 +29,6 @@
   --spotify: #1ed760;
   --ring: #e8621a;
   --walmart: #0071CE;
-  --photos: #4a9eff;
 }
 
 html, body {
@@ -45,148 +44,52 @@ html, body {
 body::before {
   content: '';
   position: fixed; inset: 0;
-  background:
-    radial-gradient(ellipse 60% 60% at 0% 100%, rgba(29,158,117,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 100% 0%, rgba(0,113,206,0.04) 0%, transparent 60%);
+  background: radial-gradient(ellipse 50% 70% at 0% 100%, rgba(29,158,117,0.07) 0%, transparent 60%);
   pointer-events: none; z-index: 0;
 }
 
-/* ── MAIN LAYOUT ── */
+/* ── MAIN 2-COLUMN LAYOUT ── */
 .hub {
   position: relative; z-index: 1;
   width: 100vw; height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 1.6fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: 380px 1fr;
   gap: 10px;
-  padding: 12px;
+  padding: 10px;
 }
 
-/* ── PANELS ── */
-.panel {
+/* ── LEFT COLUMN ── */
+.col-left {
+  display: flex; flex-direction: column; gap: 10px;
+  min-height: 0;
+}
+
+/* ReOrderly iframe panel */
+.ro-panel {
+  flex: 1;
   border-radius: 20px;
   overflow: hidden;
+  border: 1px solid var(--border);
+  min-height: 0;
   position: relative;
 }
 
-/* ── LEFT PANEL — ReOrderly ── */
-.panel-left {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.ro-panel iframe {
+  width: 100%; height: 100%;
+  border: none; display: block;
 }
 
-.reorderly-panel {
-  flex: 1;
-  background: linear-gradient(145deg, #1a6b52 0%, #0d4a39 100%);
-  border-radius: 20px;
-  padding: 22px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  text-decoration: none;
-  transition: transform 0.15s;
-  box-shadow: 0 8px 32px rgba(29,158,117,0.15);
-}
-
-.reorderly-panel:active { transform: scale(0.99); }
-
-.reorderly-panel::before {
-  content: '';
-  position: absolute;
-  top: -60px; right: -60px;
-  width: 200px; height: 200px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.04);
-}
-
-.ro-label {
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(255,255,255,0.5); margin-bottom: 6px;
-}
-
-.ro-logo {
-  font-size: clamp(30px, 3.5vw, 44px);
-  font-weight: 800; color: #fff;
-  letter-spacing: -1.5px; line-height: 1;
-}
-
-.ro-dot {
-  display: inline-block; width: 9px; height: 9px;
-  border-radius: 50%; background: rgba(255,255,255,0.7);
-  vertical-align: middle; position: relative; top: -3px; margin-left: 2px;
-}
-
-.ro-middle {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px 0;
-}
-
-.ro-stat-row {
-  display: flex; align-items: center; gap: 10px;
-}
-
-.ro-badge {
-  background: rgba(255,255,255,0.18);
-  border-radius: 10px; padding: 5px 12px;
-  font-size: 14px; font-weight: 700; color: #fff;
-}
-
-.ro-badge-text {
-  font-size: 12px; color: rgba(255,255,255,0.65);
-}
-
-.ro-scanner {
-  display: flex; align-items: center; gap: 8px;
-  background: rgba(0,0,0,0.25);
-  border-radius: 10px; padding: 9px 12px;
-}
-
-.ro-scanner-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 8px rgba(255,255,255,0.8);
-  animation: blink 2s ease-in-out infinite;
+/* Scanner bar */
+.scanner-bar {
   flex-shrink: 0;
-}
-
-@keyframes blink {
-  0%,100% { opacity:1; } 50% { opacity:0.3; }
-}
-
-.ro-scanner-text {
-  font-size: 10px; font-family: 'DM Mono', monospace;
-  color: rgba(255,255,255,0.75); letter-spacing: 0.03em;
-}
-
-.ro-cta {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 10px; padding: 10px;
-  text-align: center;
-  font-size: 12px; font-weight: 700; color: #fff;
-  letter-spacing: 0.05em;
-}
-
-/* ── SCANNER STATUS MINI ── */
-.scanner-mini {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 10px 14px;
   display: flex; align-items: center; gap: 8px;
-  flex-shrink: 0;
 }
 
-.scanner-mini-dot {
+.scanner-dot {
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--green);
   box-shadow: 0 0 6px var(--green);
@@ -194,143 +97,45 @@ body::before {
   flex-shrink: 0;
 }
 
-.scanner-mini-text {
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+.scanner-text {
   font-size: 10px; font-family: 'DM Mono', monospace;
   color: var(--text2); flex: 1;
 }
 
-.scanner-mini-ready {
+.scanner-ready {
   font-size: 10px; font-weight: 700;
   color: var(--green); font-family: 'DM Mono', monospace;
 }
 
-/* ── CENTER PANEL ── */
-.panel-center {
+/* ── RIGHT COLUMN ── */
+.col-right {
   display: flex; flex-direction: column; gap: 10px;
+  min-height: 0;
 }
 
-/* ── APP LAUNCHERS ROW ── */
-.app-launchers {
+/* ── TOP ROW: Clock + Weather ── */
+.top-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   flex-shrink: 0;
 }
 
-.app-btn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 14px 12px;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 7px;
-  cursor: pointer;
-  transition: transform 0.15s, border-color 0.15s, background 0.15s;
-  text-decoration: none;
-  position: relative; overflow: hidden;
-}
-
-.app-btn::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 2px; border-radius: 16px 16px 0 0;
-}
-
-.app-btn.youtube::before { background: var(--youtube); }
-.app-btn.spotify::before { background: var(--spotify); }
-.app-btn.walmart::before { background: var(--walmart); }
-
-.app-btn:hover, .app-btn:active {
-  transform: scale(0.96);
-  border-color: var(--border2);
-  background: var(--surface2);
-}
-
-.app-btn-icon { font-size: 24px; }
-
-.app-btn-name {
-  font-size: 12px; font-weight: 800;
-  color: var(--text); text-align: center;
-}
-
-.app-btn-desc {
-  font-size: 9px; color: var(--text2);
-  font-family: 'DM Mono', monospace;
-  text-align: center; line-height: 1.3;
-}
-
-/* ── PHOTO PANEL ── */
-.photo-panel {
-  flex: 1;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-  min-height: 0;
-}
-
-.photo-slideshow {
-  width: 100%; height: 100%;
-  position: relative;
-}
-
-.photo-slide {
-  position: absolute; inset: 0;
-  background-size: cover; background-position: center;
-  opacity: 0;
-  transition: opacity 1.5s ease;
-}
-
-.photo-slide.active { opacity: 1; }
-
-.photo-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
-  display: flex; align-items: flex-end;
-  padding: 16px;
-}
-
-.photo-label {
-  font-size: 11px; font-weight: 700;
-  color: rgba(255,255,255,0.7);
-  letter-spacing: 0.08em; text-transform: uppercase;
-  font-family: 'DM Mono', monospace;
-}
-
-.photo-placeholder {
-  width: 100%; height: 100%;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 12px; padding: 20px; text-align: center;
-}
-
-.photo-placeholder-icon { font-size: 40px; opacity: 0.3; }
-.photo-placeholder-text { font-size: 13px; font-weight: 700; color: var(--text2); }
-.photo-placeholder-sub { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; line-height: 1.5; }
-
-/* ── RIGHT PANEL ── */
-.panel-right {
-  display: flex; flex-direction: column; gap: 10px;
-}
-
-/* ── CLOCK WIDGET ── */
 .clock-widget {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 20px;
-  text-align: center;
-  flex-shrink: 0;
+  border-radius: 18px;
+  padding: 18px 20px;
+  display: flex; flex-direction: column;
+  justify-content: center;
 }
 
 .clock-time {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(48px, 5.5vw, 72px);
-  color: var(--text); letter-spacing: 3px;
-  line-height: 1;
-  text-shadow: 0 0 30px rgba(240,242,240,0.08);
+  font-size: clamp(44px, 5vw, 64px);
+  color: var(--text); letter-spacing: 3px; line-height: 1;
 }
 
 .clock-date {
@@ -340,35 +145,29 @@ body::before {
   margin-top: 5px;
 }
 
-/* ── WEATHER WIDGET ── */
 .weather-widget {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 18px;
   padding: 18px 20px;
-  display: flex; align-items: center;
-  gap: 14px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 12px;
 }
 
-.weather-icon-big { font-size: 36px; }
-
-.weather-details { flex: 1; }
+.weather-icon { font-size: 32px; flex-shrink: 0; }
 
 .weather-temp {
-  font-size: 28px; font-weight: 800;
+  font-size: 26px; font-weight: 800;
   color: var(--text); line-height: 1;
 }
 
 .weather-desc {
   font-size: 11px; color: var(--text2);
-  font-family: 'DM Mono', monospace;
-  margin-top: 3px;
+  font-family: 'DM Mono', monospace; margin-top: 3px;
 }
 
-.weather-location {
+.weather-loc {
   font-size: 9px; color: var(--text3);
-  font-family: 'DM Mono', monospace;
-  margin-top: 2px; letter-spacing: 0.05em;
+  font-family: 'DM Mono', monospace; margin-top: 2px;
 }
 
 .weather-loading {
@@ -376,42 +175,106 @@ body::before {
   font-family: 'DM Mono', monospace;
 }
 
-/* ── RING WIDGET ── */
-.ring-widget {
+/* ── APP GRID ── */
+.app-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.app-tile {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 18px 20px;
-  display: flex; flex-direction: column;
-  gap: 10px; flex-shrink: 0;
+  border-radius: 18px;
+  padding: 16px 18px;
+  display: flex; align-items: center; gap: 14px;
   cursor: pointer;
-  transition: border-color 0.15s, transform 0.15s;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
   position: relative; overflow: hidden;
 }
 
-.ring-widget::before {
+.app-tile::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0;
-  height: 2px; border-radius: 20px 20px 0 0;
-  background: var(--ring);
+  height: 2px; border-radius: 18px 18px 0 0;
 }
 
-.ring-widget:active { transform: scale(0.98); border-color: var(--border2); }
+.app-tile.yt::before { background: var(--youtube); }
+.app-tile.sp::before { background: var(--spotify); }
+.app-tile.wm::before { background: var(--walmart); }
+.app-tile.rg::before { background: var(--ring); }
+
+.app-tile:hover, .app-tile:active {
+  transform: scale(0.97);
+  border-color: var(--border2);
+  background: var(--surface2);
+}
+
+.app-tile-icon { font-size: 26px; flex-shrink: 0; }
+
+.app-tile-info { flex: 1; min-width: 0; }
+
+.app-tile-name {
+  font-size: 14px; font-weight: 800; color: var(--text);
+}
+
+.app-tile-desc {
+  font-size: 10px; color: var(--text2);
+  font-family: 'DM Mono', monospace; margin-top: 2px;
+}
+
+.app-tile-badge {
+  font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 6px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.badge-live { background: rgba(232,98,26,0.2); color: var(--ring); }
+
+/* ── BOTTOM ROW: Ring + Slideshow tab ── */
+.bottom-row {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  min-height: 0;
+}
+
+.ring-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  position: relative; overflow: hidden;
+}
+
+.ring-panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--ring);
+}
+
+.ring-panel:active { transform: scale(0.98); }
 
 .ring-top {
   display: flex; align-items: center;
   justify-content: space-between;
 }
 
-.ring-title-row {
+.ring-icon-title {
   display: flex; align-items: center; gap: 8px;
 }
 
-.ring-icon { font-size: 20px; }
+.ring-emoji { font-size: 22px; }
+.ring-name { font-size: 16px; font-weight: 800; color: var(--text); }
 
-.ring-title { font-size: 14px; font-weight: 800; color: var(--text); }
-
-.ring-live {
+.ring-live-badge {
   font-size: 9px; font-weight: 700;
   background: rgba(232,98,26,0.2); color: var(--ring);
   padding: 3px 8px; border-radius: 6px;
@@ -420,125 +283,152 @@ body::before {
 }
 
 .ring-status {
-  font-size: 10px; color: var(--text2);
+  font-size: 11px; color: var(--text2);
   font-family: 'DM Mono', monospace;
 }
 
-/* ── WALMART WIDGET ── */
-.walmart-widget {
-  flex: 1;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 18px 20px;
-  display: flex; flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: border-color 0.15s, transform 0.15s;
-  text-decoration: none;
-  position: relative; overflow: hidden;
-}
-
-.walmart-widget::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 2px; border-radius: 20px 20px 0 0;
-  background: var(--walmart);
-}
-
-.walmart-widget:active { transform: scale(0.98); border-color: var(--border2); }
-
-.walmart-top {
-  display: flex; align-items: flex-start;
-  justify-content: space-between;
-}
-
-.walmart-spark { font-size: 28px; }
-
-.walmart-badge {
-  font-size: 9px; font-weight: 700;
-  background: rgba(0,113,206,0.15); color: var(--walmart);
-  padding: 3px 8px; border-radius: 6px;
-  letter-spacing: 0.06em; text-transform: uppercase;
-}
-
-.walmart-title { font-size: 18px; font-weight: 800; color: var(--text); }
-.walmart-sub { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; margin-top: 3px; }
-
-.walmart-cta {
-  background: var(--walmart);
-  color: #fff; border: none;
+.ring-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
   border-radius: 10px; padding: 9px;
   font-family: 'Syne', sans-serif;
   font-size: 12px; font-weight: 700;
-  text-align: center; width: 100%;
-  cursor: pointer; transition: background 0.15s;
-  display: block; text-decoration: none;
+  color: var(--text2); text-align: center;
+  cursor: pointer; transition: all 0.15s;
 }
 
-.walmart-cta:hover { background: #005fa3; }
+.ring-btn:hover { color: var(--ring); border-color: var(--ring); }
 
-/* ── FLOATING WINDOW ── */
-.float-window {
+/* ── SLIDESHOW TAB ── */
+.slideshow-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  position: relative;
+}
+
+.slideshow-panel:hover { border-color: var(--border2); }
+
+.slideshow-header {
+  padding: 12px 16px;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.slideshow-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 800; color: var(--text);
+}
+
+.slideshow-title-icon { font-size: 16px; }
+
+.slideshow-fullscreen-btn {
+  font-size: 10px; font-weight: 700;
+  color: var(--text3); letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 6px; padding: 3px 8px;
+  cursor: pointer; transition: all 0.15s;
+  font-family: 'Syne', sans-serif;
+}
+
+.slideshow-fullscreen-btn:hover { color: var(--text2); border-color: var(--border2); }
+
+.slideshow-body {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; padding: 16px; text-align: center;
+}
+
+.ss-panel-icon { font-size: 32px; opacity: 0.3; }
+
+.ss-panel-text {
+  font-size: 12px; font-weight: 700; color: var(--text2);
+}
+
+.ss-panel-sub {
+  font-size: 10px; color: var(--text3);
+  font-family: 'DM Mono', monospace;
+  line-height: 1.5;
+}
+
+.ss-panel-btn {
+  background: var(--green);
+  color: #fff; border: none;
+  border-radius: 10px; padding: 8px 18px;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s;
+  margin-top: 4px;
+}
+
+.ss-panel-btn:hover { background: var(--green-light); }
+
+/* ── FLOATING MINI WINDOW ── */
+.float-win {
   display: none;
   position: fixed; z-index: 400;
   background: var(--surface);
   border: 1px solid var(--border2);
-  border-radius: 16px; overflow: hidden;
+  border-radius: 14px; overflow: hidden;
   box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-  width: 420px; height: 280px;
+  width: 400px; height: 260px;
   bottom: 20px; right: 20px;
   flex-direction: column;
 }
 
-.float-window.active { display: flex; }
-
-.float-window.size-max {
-  width: calc(100vw - 40px) !important;
-  height: calc(100vh - 40px) !important;
-  bottom: 20px !important; right: 20px !important;
-  top: auto !important; left: 20px !important;
+.float-win.active { display: flex; }
+.float-win.big {
+  width: calc(100vw - 410px) !important;
+  height: calc(100vh - 20px) !important;
+  top: 10px !important; right: 10px !important;
+  bottom: auto !important; left: auto !important;
 }
 
-.float-header {
+.float-bar {
   display: flex; align-items: center;
-  padding: 8px 10px;
+  padding: 7px 10px; gap: 8px;
   background: var(--surface2);
   border-bottom: 1px solid var(--border);
-  gap: 8px; cursor: grab; flex-shrink: 0;
+  cursor: grab; flex-shrink: 0;
 }
 
-.float-header:active { cursor: grabbing; }
+.float-bar:active { cursor: grabbing; }
 
-.float-app-info {
+.float-info {
   display: flex; align-items: center; gap: 6px; flex: 1;
 }
 
-.float-app-icon { font-size: 14px; }
+.float-ico { font-size: 13px; }
+.float-lbl { font-size: 12px; font-weight: 700; color: var(--text2); }
 
-.float-app-name {
-  font-size: 12px; font-weight: 700; color: var(--text2);
-}
+.float-ctrls { display: flex; gap: 4px; }
 
-.float-btns {
-  display: flex; gap: 4px;
-}
-
-.fbtn {
+.fctl {
   width: 26px; height: 26px;
   border: 1px solid var(--border);
   border-radius: 7px; background: var(--surface3);
-  color: var(--text2); font-size: 12px;
+  color: var(--text2); font-size: 11px;
   cursor: pointer; display: flex;
   align-items: center; justify-content: center;
   transition: all 0.15s;
 }
 
-.fbtn:hover { border-color: var(--border2); color: var(--text); }
-.fbtn.x:hover { border-color: #dc2626; color: #dc2626; background: rgba(220,38,38,0.1); }
+.fctl:hover { border-color: var(--border2); color: var(--text); }
+.fctl.cls:hover { border-color: #dc2626; color: #dc2626; }
 
 .float-body {
-  flex: 1; position: relative; overflow: hidden; background: #000;
+  flex: 1; position: relative;
+  overflow: hidden; background: #000;
 }
 
 .float-iframe { width: 100%; height: 100%; border: none; }
@@ -550,18 +440,16 @@ body::before {
   padding: 1.5rem; text-align: center;
 }
 
-.fallback-icon { font-size: 36px; }
-.fallback-title { font-size: 15px; font-weight: 800; color: var(--text); }
-.fallback-text { font-size: 11px; color: var(--text2); line-height: 1.5; max-width: 280px; }
+.fb-icon { font-size: 32px; }
+.fb-title { font-size: 14px; font-weight: 800; color: var(--text); }
+.fb-text { font-size: 11px; color: var(--text2); line-height: 1.5; max-width: 260px; }
 
-.fallback-btn {
+.fb-btn {
   background: var(--green); color: #fff; border: none;
   border-radius: 10px; padding: 9px 20px;
   font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-  cursor: pointer; transition: background 0.15s; margin-top: 4px;
+  cursor: pointer; margin-top: 4px;
 }
-
-.fallback-btn:hover { background: var(--green-light); }
 
 /* ── SCREENSAVER ── */
 .screensaver {
@@ -569,186 +457,189 @@ body::before {
   z-index: 500; background: #000;
   flex-direction: column; align-items: center;
   justify-content: center; cursor: pointer;
+  gap: 0;
 }
 
 .screensaver.active { display: flex; }
 
 .ss-time {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(80px, 14vw, 140px);
-  color: rgba(255,255,255,0.9);
+  font-size: clamp(90px, 16vw, 160px);
+  color: rgba(255,255,255,0.88);
   letter-spacing: 6px; line-height: 1;
-  animation: float 8s ease-in-out infinite;
-  text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  animation: ssFloat 8s ease-in-out infinite;
+  text-shadow: 0 4px 40px rgba(0,0,0,0.4);
 }
 
 .ss-date {
   font-family: 'DM Mono', monospace;
-  font-size: 14px; color: rgba(255,255,255,0.6);
+  font-size: 14px; color: rgba(255,255,255,0.5);
   letter-spacing: 0.15em; text-transform: uppercase;
-  margin-top: 10px;
-  animation: float 8s ease-in-out infinite;
+  margin-top: 12px;
+  animation: ssFloat 8s ease-in-out infinite;
 }
 
-.ss-logo {
-  font-size: 12px; font-weight: 800;
-  color: rgba(255,255,255,0.3);
-  letter-spacing: 0.1em; margin-top: 20px;
+.ss-brand {
+  font-size: 11px; font-weight: 800;
+  color: rgba(255,255,255,0.15);
+  letter-spacing: 0.15em; margin-top: 24px;
 }
 
 .ss-hint {
-  font-size: 11px; color: rgba(255,255,255,0.2);
+  font-size: 10px; color: rgba(255,255,255,0.12);
   font-family: 'DM Mono', monospace;
-  margin-top: 8px; letter-spacing: 0.1em;
+  margin-top: 6px; letter-spacing: 0.1em;
 }
 
-@keyframes float {
+@keyframes ssFloat {
   0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
+  50% { transform: translateY(-12px); }
 }
 
 /* ── TOAST ── */
 .toast {
-  position: fixed; bottom: 24px; left: 50%;
+  position: fixed; bottom: 20px; left: 50%;
   transform: translateX(-50%) translateY(80px);
   background: var(--surface2); border: 1px solid var(--border2);
-  color: var(--text); font-size: 12px;
-  font-family: 'Syne', sans-serif;
-  padding: 10px 20px; border-radius: 99px;
+  color: var(--text); font-size: 12px; font-family: 'Syne', sans-serif;
+  padding: 9px 18px; border-radius: 99px;
   transition: transform 0.25s ease;
   white-space: nowrap; pointer-events: none; z-index: 600;
 }
 
 .toast.show { transform: translateX(-50%) translateY(0); }
-
-/* ── SLEEP BTN ── */
-.sleep-btn {
-  position: fixed; bottom: 14px; right: 14px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 7px 12px;
-  font-size: 11px; font-weight: 700; color: var(--text3);
-  cursor: pointer; z-index: 10;
-  transition: all 0.15s; font-family: 'Syne', sans-serif;
-}
-
-.sleep-btn:hover { color: var(--text2); border-color: var(--border2); }
 </style>
 </head>
 <body>
 
-<!-- Main Hub -->
 <div class="hub">
 
   <!-- LEFT: ReOrderly -->
-  <div class="panel-left">
-    <div class="reorderly-panel" style="padding:0;overflow:hidden;">
-      <iframe
-        src="/app.html"
-        style="width:100%;height:100%;border:none;border-radius:20px;"
-        allow="camera; microphone"
-        id="ro-iframe"
-      ></iframe>
+  <div class="col-left">
+    <div class="ro-panel">
+      <iframe src="/app.html" allow="camera; microphone" id="ro-frame"></iframe>
     </div>
-    <div class="scanner-mini">
-      <div class="scanner-mini-dot"></div>
-      <div class="scanner-mini-text">USB-C Scanner</div>
-      <div class="scanner-mini-ready">Ready</div>
+    <div class="scanner-bar">
+      <div class="scanner-dot"></div>
+      <div class="scanner-text">USB-C Scanner connected</div>
+      <div class="scanner-ready">Ready</div>
     </div>
   </div>
 
-  <!-- CENTER: App launchers + Photo frame -->
-  <div class="panel-center">
-    <div class="app-launchers">
-      <div class="app-btn youtube" onclick="openApp('youtube')">
-        <div class="app-btn-icon">▶️</div>
-        <div class="app-btn-name">YouTube</div>
-        <div class="app-btn-desc">Recipes & tutorials</div>
+  <!-- RIGHT: Everything else -->
+  <div class="col-right">
+
+    <!-- Clock + Weather -->
+    <div class="top-row">
+      <div class="clock-widget">
+        <div class="clock-time" id="clock-time">12:00 PM</div>
+        <div class="clock-date" id="clock-date">Monday, January 1</div>
       </div>
-      <div class="app-btn spotify" onclick="openApp('spotify')">
-        <div class="app-btn-icon">🎵</div>
-        <div class="app-btn-name">Spotify</div>
-        <div class="app-btn-desc">Kitchen playlist</div>
-      </div>
-      <div class="app-btn walmart" onclick="openApp('walmart')">
-        <div class="app-btn-icon">🛍️</div>
-        <div class="app-btn-name">Walmart</div>
-        <div class="app-btn-desc">Shop & browse</div>
+      <div class="weather-widget" id="weather-widget">
+        <div class="weather-loading">Loading weather...</div>
       </div>
     </div>
 
-    <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;">
-      <iframe
-        src="https://www.walmart.com"
-        style="width:100%;height:100%;border:none;"
-        allow="autoplay; encrypted-media"
-        id="walmart-iframe"
-      ></iframe>
-    </div>
-  </div>
-
-  <!-- RIGHT: Clock, Weather, Ring, Walmart -->
-  <div class="panel-right">
-
-    <div class="clock-widget">
-      <div class="clock-time" id="clock-time">12:00 PM</div>
-      <div class="clock-date" id="clock-date">Monday, January 1</div>
-    </div>
-
-    <div class="weather-widget" id="weather-widget">
-      <div class="weather-loading">Loading weather...</div>
-    </div>
-
-    <div class="ring-widget" onclick="openApp('ring')">
-      <div class="ring-top">
-        <div class="ring-title-row">
-          <div class="ring-icon">🔔</div>
-          <div class="ring-title">Ring</div>
+    <!-- App tiles -->
+    <div class="app-grid">
+      <div class="app-tile yt" onclick="openApp('youtube')">
+        <div class="app-tile-icon">▶️</div>
+        <div class="app-tile-info">
+          <div class="app-tile-name">YouTube</div>
+          <div class="app-tile-desc">Recipes & tutorials</div>
         </div>
-        <div class="ring-live">Live</div>
       </div>
-      <div class="ring-status">Front door · Tap to view cameras</div>
+      <div class="app-tile sp" onclick="openApp('spotify')">
+        <div class="app-tile-icon">🎵</div>
+        <div class="app-tile-info">
+          <div class="app-tile-name">Spotify</div>
+          <div class="app-tile-desc">Kitchen playlist</div>
+        </div>
+      </div>
+      <div class="app-tile wm" onclick="openApp('walmart')">
+        <div class="app-tile-icon">🛍️</div>
+        <div class="app-tile-info">
+          <div class="app-tile-name">Walmart</div>
+          <div class="app-tile-desc">Shop & browse</div>
+        </div>
+      </div>
+      <div class="app-tile rg" onclick="openApp('ring')">
+        <div class="app-tile-icon">🔔</div>
+        <div class="app-tile-info">
+          <div class="app-tile-name">Ring</div>
+          <div class="app-tile-desc">Front door</div>
+        </div>
+        <div class="app-tile-badge badge-live">Live</div>
+      </div>
     </div>
 
+    <!-- Ring detail + Slideshow tab -->
+    <div class="bottom-row">
+
+      <div class="ring-panel" onclick="openApp('ring')">
+        <div class="ring-top">
+          <div class="ring-icon-title">
+            <div class="ring-emoji">🔔</div>
+            <div class="ring-name">Ring</div>
+          </div>
+          <div class="ring-live-badge">Live</div>
+        </div>
+        <div class="ring-status">Front door · All clear</div>
+        <div class="ring-btn">View cameras →</div>
+      </div>
+
+      <div class="slideshow-panel">
+        <div class="slideshow-header">
+          <div class="slideshow-title">
+            <span class="slideshow-title-icon">🖼️</span>
+            Photo Frame
+          </div>
+          <button class="slideshow-fullscreen-btn" onclick="ssOn()">⛶ Fullscreen</button>
+        </div>
+        <div class="slideshow-body">
+          <div class="ss-panel-icon">🌙</div>
+          <div class="ss-panel-text">Slideshow mode</div>
+          <div class="ss-panel-sub">Photos display when the station is idle, or tap Fullscreen to activate now</div>
+          <button class="ss-panel-btn" onclick="ssOn()">Start slideshow →</button>
+        </div>
+      </div>
+
+    </div>
 
   </div>
 </div>
 
-<!-- Floating Window -->
-<div class="float-window" id="float-win">
-  <div class="float-header" id="float-header">
-    <div class="float-app-info">
-      <span class="float-app-icon" id="float-icon"></span>
-      <span class="float-app-name" id="float-name"></span>
+<!-- Floating Mini Window -->
+<div class="float-win" id="float-win">
+  <div class="float-bar" id="float-bar">
+    <div class="float-info">
+      <span class="float-ico" id="float-ico"></span>
+      <span class="float-lbl" id="float-lbl"></span>
     </div>
-    <div class="float-btns">
-      <div class="fbtn" onclick="floatResize('mini')" title="Mini">⬇</div>
-      <div class="fbtn" onclick="floatResize('max')" title="Maximize">⬆</div>
-      <div class="fbtn x" onclick="floatClose()" title="Close">✕</div>
+    <div class="float-ctrls">
+      <div class="fctl" onclick="floatToggleSize()" id="fctl-size" title="Expand">⬆</div>
+      <div class="fctl cls" onclick="floatClose()" title="Close">✕</div>
     </div>
   </div>
   <div class="float-body">
-    <iframe class="float-iframe" id="float-iframe" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen"></iframe>
+    <iframe class="float-iframe" id="float-frame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen"></iframe>
     <div class="float-fallback" id="float-fallback">
-      <div class="fallback-icon" id="fb-icon"></div>
-      <div class="fallback-title" id="fb-title"></div>
-      <div class="fallback-text" id="fb-text"></div>
-      <button class="fallback-btn" id="fb-btn">Open →</button>
+      <div class="fb-icon" id="fb-ico"></div>
+      <div class="fb-title" id="fb-ttl"></div>
+      <div class="fb-text" id="fb-txt"></div>
+      <button class="fb-btn" id="fb-btn">Open →</button>
     </div>
   </div>
 </div>
 
-<!-- Sleep button -->
-<div class="sleep-btn" onclick="ssOn()">🌙 Sleep</div>
-
-<!-- Screensaver -->
+<!-- Screensaver / Slideshow -->
 <div class="screensaver" id="screensaver" onclick="ssOff()">
-  <div class="ss-time" id="ss-time">12:00</div>
+  <div class="ss-time" id="ss-time">12:00 PM</div>
   <div class="ss-date" id="ss-date">Monday, January 1</div>
-  <div class="ss-logo">ReOrderly Station</div>
-  <div class="ss-hint">Tap to wake</div>
+  <div class="ss-brand">ReOrderly Station</div>
+  <div class="ss-hint">Tap anywhere to wake</div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -761,11 +652,11 @@ function tick() {
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const timeStr = `${h12}:${m} ${ampm}`;
+  const dateStr = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
   document.getElementById('clock-time').textContent = timeStr;
-  document.getElementById('clock-date').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+  document.getElementById('clock-date').textContent = dateStr;
   document.getElementById('ss-time').textContent = timeStr;
-  const ssDate = document.getElementById('ss-date');
-  if (ssDate) ssDate.textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+  document.getElementById('ss-date').textContent = dateStr;
 }
 tick();
 setInterval(tick, 1000);
@@ -780,11 +671,11 @@ async function loadWeather() {
     const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
     const descs = {0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Foggy',51:'Drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',80:'Showers',81:'Rain showers',82:'Thunderstorms',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
     document.getElementById('weather-widget').innerHTML = `
-      <div class="weather-icon-big">${icons[code]||'🌡️'}</div>
-      <div class="weather-details">
+      <div class="weather-icon">${icons[code]||'🌡️'}</div>
+      <div>
         <div class="weather-temp">${temp}°F</div>
         <div class="weather-desc">${descs[code]||'Unknown'}</div>
-        <div class="weather-location">Warren, OH</div>
+        <div class="weather-loc">Warren, OH</div>
       </div>`;
   } catch(e) {
     document.getElementById('weather-widget').innerHTML = '<div class="weather-loading">Weather unavailable</div>';
@@ -795,118 +686,130 @@ setInterval(loadWeather, 10 * 60 * 1000);
 
 // ── APP CONFIG ──
 const APPS = {
-  youtube:  { name:'YouTube', icon:'▶️', url:'https://www.youtube.com', iframe:false, fbTitle:'Open YouTube', fbText:'YouTube cannot be embedded. Opens in browser — use back button to return.' },
-  spotify:  { name:'Spotify',  icon:'🎵', url:'https://open.spotify.com', iframe:false, fbTitle:'Open Spotify', fbText:'Spotify cannot be embedded. Opens in browser — use back button to return.' },
-  walmart:  { name:'Walmart',  icon:'🛍️', url:'https://www.walmart.com', iframe:true },
-  ring:     { name:'Ring',     icon:'🔔', url:'https://account.ring.com/account/dashboard', iframe:false, fbTitle:'Open Ring', fbText:'Ring cannot be embedded. Opens in browser — use back button to return.' },
-  photos:   { name:'Photos',   icon:'🖼️', url:null, iframe:false, isPhotos:true },
+  youtube: { name:'YouTube', ico:'▶️', url:'https://www.youtube.com', embed:false, fbTitle:'Open YouTube', fbText:'YouTube cannot be embedded. Tap to open — use back button to return to hub.' },
+  spotify:  { name:'Spotify',  ico:'🎵', url:'https://open.spotify.com', embed:false, fbTitle:'Open Spotify', fbText:'Spotify cannot be embedded. Tap to open — use back button to return to hub.' },
+  walmart:  { name:'Walmart',  ico:'🛍️', url:'https://www.walmart.com', embed:false, fbTitle:'Open Walmart', fbText:'Tap to open Walmart — use back button to return to hub.' },
+  ring:     { name:'Ring',     ico:'🔔', url:'https://account.ring.com/account/dashboard', embed:false, fbTitle:'Open Ring', fbText:'Tap to open Ring cameras — use back button to return to hub.' },
 };
 
 // ── OPEN APP ──
+let floatBig = false;
+
 function openApp(id) {
   const app = APPS[id];
   if (!app) return;
-  if (app.isPhotos) { ssOn(); toast('Photo frame — tap to return'); return; }
 
   const win = document.getElementById('float-win');
-  const iframe = document.getElementById('float-iframe');
+  const frame = document.getElementById('float-frame');
   const fallback = document.getElementById('float-fallback');
 
-  document.getElementById('float-icon').textContent = app.icon;
-  document.getElementById('float-name').textContent = app.name;
+  document.getElementById('float-ico').textContent = app.ico;
+  document.getElementById('float-lbl').textContent = app.name;
 
-  // Reset to mini
-  win.classList.remove('size-max');
+  floatBig = false;
+  win.classList.remove('big');
   win.style.cssText = '';
   win.classList.add('active');
+  document.getElementById('fctl-size').textContent = '⬆';
   resetIdle();
 
-  if (app.iframe) {
-    iframe.style.display = 'block';
+  if (app.embed) {
+    frame.style.display = 'block';
     fallback.style.display = 'none';
-    iframe.src = app.url;
+    frame.src = app.url;
   } else {
-    iframe.style.display = 'none';
-    iframe.src = '';
+    frame.style.display = 'none';
+    frame.src = '';
     fallback.style.display = 'flex';
-    document.getElementById('fb-icon').textContent = app.icon;
-    document.getElementById('fb-title').textContent = app.fbTitle;
-    document.getElementById('fb-text').textContent = app.fbText;
+    document.getElementById('fb-ico').textContent = app.ico;
+    document.getElementById('fb-ttl').textContent = app.fbTitle;
+    document.getElementById('fb-txt').textContent = app.fbText;
     const btn = document.getElementById('fb-btn');
     btn.onclick = () => {
       if (window.fully && fully.loadURL) {
         fully.loadURL(app.url);
       } else {
-        window.open(app.url, '_blank', 'width=900,height=600');
+        // On Android tablet: try intent to open native app
+        const intents = {
+          youtube: 'intent://www.youtube.com#Intent;scheme=https;package=com.google.android.youtube;end',
+          spotify: 'intent://open.spotify.com#Intent;scheme=https;package=com.spotify.music;end',
+        };
+        if (intents[id]) {
+          window.location.href = intents[id];
+          setTimeout(() => { window.open(app.url, '_blank'); }, 1500);
+        } else {
+          window.open(app.url, '_blank');
+        }
       }
     };
   }
 }
 
 // ── FLOAT CONTROLS ──
-let floatSize = 'mini';
-
-function floatResize(mode) {
+function floatToggleSize() {
   const win = document.getElementById('float-win');
-  if (mode === 'mini') {
-    floatSize = 'mini';
-    win.classList.remove('size-max');
+  const btn = document.getElementById('fctl-size');
+  floatBig = !floatBig;
+  if (floatBig) {
+    win.classList.add('big');
     win.style.cssText = '';
-  } else if (mode === 'max') {
-    floatSize = 'max';
+    btn.textContent = '⬇';
+  } else {
+    win.classList.remove('big');
     win.style.cssText = '';
-    win.classList.add('size-max');
+    btn.textContent = '⬆';
   }
 }
 
 function floatClose() {
   const win = document.getElementById('float-win');
-  const iframe = document.getElementById('float-iframe');
-  win.classList.remove('active','size-max');
+  const frame = document.getElementById('float-frame');
+  win.classList.remove('active','big');
   win.style.cssText = '';
-  setTimeout(() => { iframe.src = ''; }, 300);
+  floatBig = false;
+  setTimeout(() => { frame.src = ''; }, 300);
   resetIdle();
 }
 
 // ── DRAG ──
 let dragging = false, dragOff = {x:0,y:0};
 
-document.getElementById('float-header').addEventListener('mousedown', e => {
-  if (floatSize !== 'mini') return;
+const floatBar = document.getElementById('float-bar');
+
+floatBar.addEventListener('mousedown', e => {
+  if (floatBig) return;
   dragging = true;
   const win = document.getElementById('float-win');
   const r = win.getBoundingClientRect();
-  dragOff = { x: e.clientX - r.left, y: e.clientY - r.top };
+  dragOff = {x: e.clientX - r.left, y: e.clientY - r.top};
   win.style.bottom = 'auto'; win.style.right = 'auto';
-  win.style.left = r.left + 'px'; win.style.top = r.top + 'px';
+  win.style.left = r.left+'px'; win.style.top = r.top+'px';
 });
 
-document.getElementById('float-header').addEventListener('touchstart', e => {
-  if (floatSize !== 'mini') return;
+floatBar.addEventListener('touchstart', e => {
+  if (floatBig) return;
   dragging = true;
   const win = document.getElementById('float-win');
   const r = win.getBoundingClientRect();
   const t = e.touches[0];
-  dragOff = { x: t.clientX - r.left, y: t.clientY - r.top };
+  dragOff = {x: t.clientX - r.left, y: t.clientY - r.top};
   win.style.bottom = 'auto'; win.style.right = 'auto';
-  win.style.left = r.left + 'px'; win.style.top = r.top + 'px';
+  win.style.left = r.left+'px'; win.style.top = r.top+'px';
 }, {passive:true});
 
 document.addEventListener('mousemove', e => {
   if (!dragging) return;
   const win = document.getElementById('float-win');
-  const x = Math.max(0, Math.min(e.clientX - dragOff.x, window.innerWidth - win.offsetWidth));
-  const y = Math.max(0, Math.min(e.clientY - dragOff.y, window.innerHeight - win.offsetHeight));
-  win.style.left = x + 'px'; win.style.top = y + 'px';
+  win.style.left = Math.max(0, Math.min(e.clientX - dragOff.x, window.innerWidth - win.offsetWidth))+'px';
+  win.style.top  = Math.max(0, Math.min(e.clientY - dragOff.y, window.innerHeight - win.offsetHeight))+'px';
 });
 
 document.addEventListener('touchmove', e => {
   if (!dragging) return;
   const win = document.getElementById('float-win');
   const t = e.touches[0];
-  const x = Math.max(0, Math.min(t.clientX - dragOff.x, window.innerWidth - win.offsetWidth));
-  const y = Math.max(0, Math.min(t.clientY - dragOff.y, window.innerHeight - win.offsetHeight));
-  win.style.left = x + 'px'; win.style.top = y + 'px';
+  win.style.left = Math.max(0, Math.min(t.clientX - dragOff.x, window.innerWidth - win.offsetWidth))+'px';
+  win.style.top  = Math.max(0, Math.min(t.clientY - dragOff.y, window.innerHeight - win.offsetHeight))+'px';
 }, {passive:true});
 
 document.addEventListener('mouseup', () => dragging = false);
@@ -938,7 +841,7 @@ resetIdle();
 
 // ── TOAST ──
 let toastTimer;
-function toast(msg) {
+function showToast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
