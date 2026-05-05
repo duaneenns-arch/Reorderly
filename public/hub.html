@@ -1861,9 +1861,11 @@ window.tapMic = () => {
   if(!speechUnlocked){
     try{
       const u = new SpeechSynthesisUtterance('');
+      u.volume = 0;
       speechSynth.speak(u);
-      setTimeout(()=>speechSynth.cancel(), 100);
       speechUnlocked = true;
+      // Let it play silently for a moment then cancel
+      setTimeout(()=>{ try{speechSynth.cancel();}catch(e){} }, 200);
     }catch(e){}
   }
   if(voiceState !== 'idle'){ cancelVoice(); return; }
@@ -2104,42 +2106,79 @@ window.dismissAiFrame = () => {
 
 function speak(text, onDone){
   if(!text){ if(onDone) onDone(); return; }
-  speechSynth.cancel();
-  // Small delay to let cancel settle
-  setTimeout(()=>{
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.rate = aiSettings.rate || 1.0;
-    utt.volume = 1.0;
-    utt.pitch = 1.0;
-    // Try to use selected voice
-    const allVoices = speechSynth.getVoices();
-    if(aiSettings.voiceURI && allVoices.length){
-      const v = allVoices.find(v=>v.voiceURI===aiSettings.voiceURI);
-      if(v) utt.voice = v;
-    } else if(allVoices.length){
-      // Default to first English voice
-      const eng = allVoices.find(v=>v.lang.startsWith('en'));
-      if(eng) utt.voice = eng;
-    }
-    utt.onend = () => { if(onDone) onDone(); };
-    utt.onerror = (e) => { console.log('Speech error:', e); if(onDone) onDone(); };
-    speechSynth.speak(utt);
-    // Chrome sometimes silently fails - watchdog
-    setTimeout(()=>{
-      if(speechSynth.speaking) return;
+  try{ speechSynth.cancel(); }catch(e){}
+  
+  const trySpeak = (attempt) => {
+    try{
+      const utt = new SpeechSynthesisUtterance(text);
+      utt.rate = aiSettings.rate || 0.95;
+      utt.volume = 1.0;
+      utt.pitch = 1.0;
+      utt.lang = 'en-US';
+      
+      // Pick voice
+      const allVoices = speechSynth.getVoices();
+      if(allVoices.length){
+        let v = null;
+        if(aiSettings.voiceURI) v = allVoices.find(v=>v.voiceURI===aiSettings.voiceURI);
+        if(!v) v = allVoices.find(v=>v.lang==='en-US' && v.localService);
+        if(!v) v = allVoices.find(v=>v.lang.startsWith('en-US'));
+        if(!v) v = allVoices.find(v=>v.lang.startsWith('en'));
+        if(v) utt.voice = v;
+      }
+      
+      utt.onstart = () => console.log('Speech started:', text.substring(0,30));
+      utt.onend = () => { console.log('Speech ended'); if(onDone) onDone(); };
+      utt.onerror = (e) => {
+        console.log('Speech error:', e.error);
+        if(e.error === 'interrupted') return;
+        if(attempt < 2){
+          console.log('Retrying speech...');
+          setTimeout(()=>trySpeak(attempt+1), 500);
+        } else {
+          if(onDone) onDone();
+        }
+      };
+      
+      speechSynth.speak(utt);
+      console.log('Speaking queued, pending:', speechSynth.pending, 'speaking:', speechSynth.speaking);
+      
+      // Watchdog - Chrome sometimes gets stuck
+      setTimeout(()=>{
+        if(!speechSynth.speaking && !speechSynth.pending){
+          console.log('Speech watchdog triggered');
+          if(onDone) onDone();
+        }
+      }, 10000);
+    }catch(e){
+      console.error('Speech exception:', e);
       if(onDone) onDone();
-    }, 8000);
-  }, 100);
+    }
+  };
+  
+  // Small delay to ensure synth is ready
+  setTimeout(()=>trySpeak(0), 150);
 }
 
 
 // ── TEST AI WITHOUT VOICE ──
 window.testAI = async () => {
+  // Unlock speech on this user gesture
+  if(!speechUnlocked){
+    try{
+      const u = new SpeechSynthesisUtterance('');
+      u.volume = 0;
+      speechSynth.speak(u);
+      speechUnlocked = true;
+      await new Promise(r=>setTimeout(r,200));
+      speechSynth.cancel();
+    }catch(e){}
+  }
   document.getElementById('voice-overlay').classList.remove('active');
   voiceState = 'processing';
   const micBtn = document.getElementById('hdr-mic-btn');
   if(micBtn){ micBtn.classList.add('processing'); micBtn.textContent='⏳'; }
-  await processCommand('Add bread to my list');
+  await processCommand('What is on my shopping list?');
 };
 
 // ── INIT ──
