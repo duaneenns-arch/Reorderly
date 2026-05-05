@@ -178,7 +178,7 @@ body::before {
 /* ── APP GRID ── */
 .app-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   flex-shrink: 0;
 }
@@ -508,6 +508,66 @@ body::before {
 }
 
 .toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── YOUTUBE MINI PLAYER ── */
+.yt-mini {
+  display: none;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: min(420px, 38vw);
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 14px;
+  overflow: hidden;
+  z-index: 9999;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.1);
+}
+
+.yt-mini.active { display: block; }
+
+.yt-mini.big {
+  width: min(860px, 75vw) !important;
+  bottom: 20px !important;
+  right: 20px !important;
+}
+
+.yt-mini iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.yt-controls {
+  position: absolute;
+  top: 8px; right: 8px;
+  display: flex; gap: 4px;
+  z-index: 2;
+}
+
+.yt-btn {
+  width: 28px; height: 28px;
+  background: rgba(0,0,0,0.65);
+  color: #fff; border: none;
+  border-radius: 999px;
+  font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+
+.yt-btn:hover { background: rgba(0,0,0,0.9); }
+
+.yt-drag-bar {
+  position: absolute;
+  top: 0; left: 0; right: 48px;
+  height: 36px;
+  cursor: grab;
+  z-index: 2;
+}
+
+.yt-drag-bar:active { cursor: grabbing; }
+
 </style>
 </head>
 <body>
@@ -542,11 +602,11 @@ body::before {
 
     <!-- App tiles -->
     <div class="app-grid">
-      <div class="app-tile yt" onclick="openApp('youtube')">
+      <div class="app-tile yt" onclick="openYouTube()">
         <div class="app-tile-icon">▶️</div>
         <div class="app-tile-info">
           <div class="app-tile-name">YouTube</div>
-          <div class="app-tile-desc">Recipes & tutorials</div>
+          <div class="app-tile-desc">Play in corner</div>
         </div>
       </div>
       <div class="app-tile sp" onclick="openApp('spotify')">
@@ -557,14 +617,7 @@ body::before {
         </div>
       </div>
 
-      <div class="app-tile rg" onclick="openApp('ring')">
-        <div class="app-tile-icon">🔔</div>
-        <div class="app-tile-info">
-          <div class="app-tile-name">Ring</div>
-          <div class="app-tile-desc">Front door</div>
-        </div>
-        <div class="app-tile-badge badge-live">Live</div>
-      </div>
+
     </div>
 
     <!-- Ring detail + Slideshow tab -->
@@ -680,7 +733,6 @@ setInterval(loadWeather, 10 * 60 * 1000);
 
 // ── APP CONFIG ──
 const APPS = {
-  youtube: { name:'YouTube', ico:'▶️', url:'https://www.youtube.com', embed:false, fbTitle:'Open YouTube', fbText:'YouTube cannot be embedded. Tap to open — use back button to return to hub.' },
   spotify:  { name:'Spotify',  ico:'🎵', url:'https://open.spotify.com', embed:false, fbTitle:'Open Spotify', fbText:'Spotify cannot be embedded. Tap to open — use back button to return to hub.' },
   ring:     { name:'Ring',     ico:'🔔', url:'https://account.ring.com/account/dashboard', embed:false, fbTitle:'Open Ring', fbText:'Tap to open Ring cameras — use back button to return to hub.' },
 };
@@ -769,7 +821,7 @@ let dragging = false, dragOff = {x:0,y:0};
 
 const floatBar = document.getElementById('float-bar');
 
-floatBar.addEventListener('mousedown', e => {
+if (floatBar) floatBar.addEventListener('mousedown', e => {
   if (floatBig) return;
   dragging = true;
   const win = document.getElementById('float-win');
@@ -779,7 +831,7 @@ floatBar.addEventListener('mousedown', e => {
   win.style.left = r.left+'px'; win.style.top = r.top+'px';
 });
 
-floatBar.addEventListener('touchstart', e => {
+if (floatBar) floatBar.addEventListener('touchstart', e => {
   if (floatBig) return;
   dragging = true;
   const win = document.getElementById('float-win');
@@ -831,6 +883,104 @@ function resetIdle() {
 });
 
 resetIdle();
+
+// ── YOUTUBE MINI PLAYER ──
+// Default: Kitchen & Cooking playlist
+// Swap VIDEO_ID for any YouTube video or playlist ID
+const YT_DEFAULT = 'PLCBqpBFOlZNBHPNOuXfWS7IiZeqXFgKx0'; // Cooking playlist
+let ytBig = false;
+let ytDragging = false;
+let ytDragOff = {x:0, y:0};
+
+function openYouTube(videoId) {
+  const mini = document.getElementById('yt-mini');
+  const frame = document.getElementById('yt-frame');
+  const id = videoId || YT_DEFAULT;
+  // Detect if it's a playlist or video ID
+  const src = id.startsWith('PL') || id.startsWith('RD') || id.startsWith('UU')
+    ? `https://www.youtube.com/embed/videoseries?list=${id}&playsinline=1&rel=0&autoplay=1`
+    : `https://www.youtube.com/embed/${id}?playsinline=1&rel=0&autoplay=1`;
+  frame.src = src;
+  mini.classList.add('active');
+  ytBig = false;
+  mini.classList.remove('big');
+  document.getElementById('yt-size-btn').textContent = '⬆';
+  resetIdle();
+}
+
+function ytClose() {
+  const mini = document.getElementById('yt-mini');
+  const frame = document.getElementById('yt-frame');
+  mini.classList.remove('active', 'big');
+  mini.style.cssText = '';
+  frame.src = '';
+  ytBig = false;
+  resetIdle();
+}
+
+function ytToggleSize() {
+  const mini = document.getElementById('yt-mini');
+  const btn = document.getElementById('yt-size-btn');
+  ytBig = !ytBig;
+  if (ytBig) {
+    mini.classList.add('big');
+    mini.style.bottom = '20px';
+    mini.style.right = '20px';
+    mini.style.top = 'auto';
+    mini.style.left = 'auto';
+    btn.textContent = '⬇';
+  } else {
+    mini.classList.remove('big');
+    mini.style.cssText = '';
+    btn.textContent = '⬆';
+  }
+}
+
+// Drag YouTube mini player
+const ytDragBar = document.getElementById('yt-drag');
+
+if (ytDragBar) ytDragBar.addEventListener('mousedown', e => {
+  if (ytBig) return;
+  ytDragging = true;
+  const mini = document.getElementById('yt-mini');
+  const r = mini.getBoundingClientRect();
+  ytDragOff = {x: e.clientX - r.left, y: e.clientY - r.top};
+  mini.style.right = 'auto';
+  mini.style.bottom = 'auto';
+  mini.style.left = r.left + 'px';
+  mini.style.top = r.top + 'px';
+});
+
+if (ytDragBar) ytDragBar.addEventListener('touchstart', e => {
+  if (ytBig) return;
+  ytDragging = true;
+  const mini = document.getElementById('yt-mini');
+  const r = mini.getBoundingClientRect();
+  const t = e.touches[0];
+  ytDragOff = {x: t.clientX - r.left, y: t.clientY - r.top};
+  mini.style.right = 'auto';
+  mini.style.bottom = 'auto';
+  mini.style.left = r.left + 'px';
+  mini.style.top = r.top + 'px';
+}, {passive: true});
+
+document.addEventListener('mousemove', e => {
+  if (!ytDragging) return;
+  const mini = document.getElementById('yt-mini');
+  mini.style.left = Math.max(0, Math.min(e.clientX - ytDragOff.x, window.innerWidth - mini.offsetWidth)) + 'px';
+  mini.style.top  = Math.max(0, Math.min(e.clientY - ytDragOff.y, window.innerHeight - mini.offsetHeight)) + 'px';
+});
+
+document.addEventListener('touchmove', e => {
+  if (!ytDragging) return;
+  const mini = document.getElementById('yt-mini');
+  const t = e.touches[0];
+  mini.style.left = Math.max(0, Math.min(t.clientX - ytDragOff.x, window.innerWidth - mini.offsetWidth)) + 'px';
+  mini.style.top  = Math.max(0, Math.min(t.clientY - ytDragOff.y, window.innerHeight - mini.offsetHeight)) + 'px';
+}, {passive: true});
+
+document.addEventListener('mouseup', () => ytDragging = false);
+document.addEventListener('touchend', () => ytDragging = false);
 
 // ── PHOTO SLIDESHOW ──
 // Replace these URLs with local photo paths on the tablet
