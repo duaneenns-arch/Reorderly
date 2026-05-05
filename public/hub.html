@@ -1864,15 +1864,17 @@ async function startListening(){
     toast('Voice not supported in this browser');
     return;
   }
-  // Stop wake word listener first — can't have two mic streams
-  try{ wakeRecognition?.stop(); wakeRecognition = null; }catch(e){}
+  // Kill wake word listener completely before starting active listening
+  try{ wakeRecognition?.abort(); }catch(e){}
+  try{ wakeRecognition?.stop(); }catch(e){}
+  wakeRecognition = null;
   voiceState = 'listening';
   aiActive = true;
   setVoiceUI('listening', 'Listening… say your command', '');
   resetIdle();
 
-  // Small delay to let wake word release mic
-  await new Promise(r => setTimeout(r, 300));
+  // Wait for wake word to fully release mic
+  await new Promise(r => setTimeout(r, 600));
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SR();
@@ -1889,7 +1891,11 @@ async function startListening(){
     }
   };
   recognition.onerror = (e) => {
-    if(e.error !== 'no-speech') toast('Voice error: ' + e.error);
+    console.log('Recognition error:', e.error);
+    if(e.error === 'aborted') return; // Ignore abort - it restarts
+    if(e.error === 'no-speech'){ cancelVoice(); return; }
+    if(e.error === 'not-allowed'){ toast('Microphone permission denied'); cancelVoice(); return; }
+    toast('Voice error: ' + e.error);
     cancelVoice();
   };
   recognition.onend = () => {
@@ -1901,7 +1907,9 @@ async function startListening(){
 }
 
 window.cancelVoice = () => {
-  try{ recognition?.stop(); recognition = null; }catch(e){}
+  try{ recognition?.abort(); }catch(e){}
+  try{ recognition?.stop(); }catch(e){}
+  recognition = null;
   try{ speechSynth.cancel(); }catch(e){}
   voiceState = 'idle';
   aiActive = false;
