@@ -527,7 +527,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <body>
 
 <!-- PHOTO MODE -->
-<div class="page active" id="photo-mode" onclick="wakeHub()">
+<div class="page active" id="photo-mode">
   <div class="pm-slide" id="pm-a"></div>
   <div class="pm-slide" id="pm-b" style="opacity:0;"></div>
   <div class="pm-clock">
@@ -833,6 +833,16 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
+// Make key functions available immediately before module fully loads
+// so inline onclick handlers don't throw ReferenceError
+window.wakeHub = ()=> { /* will be overwritten once module loads */ };
+window.goPhotoMode = ()=> { /* will be overwritten */ };
+window.toggleClockMenu = ()=> { /* will be overwritten */ };
+window.toggleHMenu = ()=> { /* will be overwritten */ };
+window.doScan = ()=> { /* will be overwritten */ };
+window.switchTab = ()=> { /* will be overwritten */ };
+window.addTodo = ()=> { /* will be overwritten */ };
+
 const fbApp = initializeApp({
   apiKey:"AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
   authDomain:"reorderly-b152f.firebaseapp.com",
@@ -1112,9 +1122,9 @@ function showCard(item){
 function renderWbList(){
   const c=document.getElementById('wb-list');
   const em=document.getElementById('wb-empty');
-  const ob=document.getElementById('home-order-btn');
-  if(!items.length){c.innerHTML='';c.appendChild(em);em.style.display='flex';ob.disabled=true;const gs=document.getElementById('go-shop-btn');if(gs)gs.disabled=true;expandedUpc=null;return;}
-  em.style.display='none';ob.disabled=false;const gs=document.getElementById('go-shop-btn');if(gs)gs.disabled=false;
+  const gs=document.getElementById('go-shop-btn');
+  if(!items.length){if(c){c.innerHTML='';c.appendChild(em);}if(em)em.style.display='flex';if(gs)gs.disabled=true;expandedUpc=null;return;}
+  if(em)em.style.display='none';if(gs)gs.disabled=false;
   c.innerHTML='';c.appendChild(em);
   items.forEach(it=>{
     const isExp = expandedUpc===it.upc;
@@ -1220,45 +1230,46 @@ window.orderAll=async()=>{
 async function loadRecipes(){
   const b=document.getElementById('rcp-body');
   if(!b||!cu)return;
-  b.innerHTML='<div class="pg-empty"><div class="spinner"></div></div>';
+  if(b.dataset.loaded==='1')return;
+  b.innerHTML='<div class="wb-inner-loading"><div class="spinner-wb"></div></div>';
   try {
-    const addBtn=`<button class="rcp-add-btn" onclick="window.open('/app.html','_blank')"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add new recipe (opens app)</button>`;
+    const addBtn=`<button class="wb-rcp-add" onclick="window.open('/app.html','_blank')">+ Add Recipe (opens app)</button>`;
     const snap=await getDocs(collection(db,'users',cu.uid,'recipes'));
     const rcp=[];snap.forEach(d=>rcp.push({id:d.id,...d.data()}));
-    rcp.sort((a,b)=>(b.savedAt?.seconds||0)-(a.savedAt?.seconds||0));
-    if(!rcp.length){b.innerHTML=addBtn+'<div class="pg-empty"><div class="pg-empty-ico">📖</div><div class="pg-empty-ttl">No recipes saved yet</div><div class="pg-empty-sub">Add recipes in the ReOrderly app</div></div>';return;}
-    b.innerHTML=addBtn+'<div class="rcp-grid" id="rcp-grid"></div>';
-    const g=document.getElementById('rcp-grid');
+    rcp.sort((a,x)=>(x.savedAt?.seconds||0)-(a.savedAt?.seconds||0));
+    if(!rcp.length){b.innerHTML=addBtn+'<div class="wb-tab-empty"><div class="wb-tab-empty-ico">📖</div><div class="wb-tab-empty-ttl">No recipes yet</div><div class="wb-tab-empty-sub">Add recipes in the app</div></div>';return;}
+    b.innerHTML=addBtn;
     rcp.forEach(r=>{
       const stars=r.rating?'⭐'.repeat(r.rating):'';
       const ing=r.ingredients?r.ingredients.length:0;
-      const c=document.createElement('div');c.className='rcp-card';
-      c.innerHTML=`<div class="rcp-thumb">${r.image?`<img src="${r.image}" alt="" onerror="this.outerHTML='🍽️'">`:(r.emoji||'🍽️')}</div>
-      <div><div class="rcp-name">${esc(r.name)}</div><div class="rcp-meta">${ing} ingredients${r.category?' · '+r.category:''}</div><div class="rcp-stars">${stars}</div></div>`;
-      g.appendChild(c);
+      const c=document.createElement('div');c.className='wb-rcp-card';
+      c.innerHTML=`<div class="wb-rcp-thumb">${r.image?`<img src="${r.image}" alt="" onerror="this.outerHTML='🍽️'">`:(r.emoji||'🍽️')}</div>
+      <div><div class="wb-rcp-name">${esc(r.name)}</div><div class="wb-rcp-meta">${ing} ingredients${r.rating?' · '+stars:''}</div></div>`;
+      b.appendChild(c);
     });
-  } catch(e){b.innerHTML='<div class="pg-empty"><div class="pg-empty-ico">😕</div><div class="pg-empty-ttl">Could not load recipes</div></div>';}
+    b.dataset.loaded='1';
+  } catch(e){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">Could not load</div></div>';}
 }
 
 // ── HISTORY ──
 async function loadHistory(){
   const b=document.getElementById('hist-body');
   if(!b||!cu)return;
-  b.innerHTML='<div class="pg-empty"><div class="spinner"></div></div>';
+  b.innerHTML='<div class="wb-inner-loading"><div class="spinner-wb"></div></div>';
   try {
     const snap=await getDocs(collection(db,'users',cu.uid,'history'));
     const orders=[];snap.forEach(d=>orders.push({id:d.id,...d.data()}));
-    orders.sort((a,b)=>(b.orderedAt?.seconds||0)-(a.orderedAt?.seconds||0));
-    if(!orders.length){b.innerHTML='<div class="pg-empty"><div class="pg-empty-ico">🕐</div><div class="pg-empty-ttl">No order history yet</div></div>';return;}
+    orders.sort((a,x)=>(x.orderedAt?.seconds||0)-(a.orderedAt?.seconds||0));
+    if(!orders.length){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">🕐</div><div class="wb-tab-empty-ttl">No order history yet</div></div>';return;}
     b.innerHTML='';
     orders.forEach(o=>{
-      const dt=o.orderedAt?.toDate?o.orderedAt.toDate().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}):'Unknown date';
-      const c=document.createElement('div');c.className='hist-card';
-      const iHtml=(o.items||[]).map(it=>`<div class="hist-row"><div class="hist-iname">${esc(it.name)} ×${it.qty}</div><button class="hist-readd" onclick="reAdd('${esc(it.upc)}','${esc(it.name)}',${it.price?`'${it.price}'`:'null'})">+ Add</button></div>`).join('');
-      c.innerHTML=`<div class="hist-hdr"><div><div class="hist-date">${dt}</div><div class="hist-meta">${o.itemCount||0} items</div></div></div><div class="hist-items">${iHtml}</div>`;
+      const dt=o.orderedAt?.toDate?o.orderedAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'Unknown';
+      const c=document.createElement('div');c.className='wb-hist-card';
+      const iHtml=(o.items||[]).map(it=>`<div class="wb-hist-row"><div class="wb-hist-iname">${esc(it.name)} ×${it.qty}</div><button class="wb-hist-readd" onclick="reAdd('${esc(it.upc)}','${esc(it.name)}',${it.price?`'${it.price}'`:'null'});switchTab('list')">+ Add</button></div>`).join('');
+      c.innerHTML=`<div class="wb-hist-hdr"><div class="wb-hist-date">${dt}</div><div class="wb-hist-meta">${o.itemCount||0} items</div></div><div class="wb-hist-items">${iHtml}</div>`;
       b.appendChild(c);
     });
-  } catch(e){b.innerHTML='<div class="pg-empty"><div class="pg-empty-ico">😕</div><div class="pg-empty-ttl">Could not load history</div></div>';}
+  } catch(e){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">Could not load</div></div>';}
 }
 
 window.reAdd=async(u,n,p)=>{
@@ -1313,64 +1324,6 @@ window.libAdd=async(u,n,p,img,btn)=>{
 };
 
 
-// ── WHITEBOARD TAB LOADERS ──
-async function loadRecipesWb(){
-  const b=document.getElementById('rcp-body');if(!b||!cu)return;
-  if(b.dataset.loaded==='1')return;
-  b.innerHTML='<div class="wb-inner-loading"><div class="spinner-wb"></div></div>';
-  try{
-    const addBtn=`<button class="wb-rcp-add" onclick="window.open('/app.html','_blank')">+ Add Recipe (opens app)</button>`;
-    const snap=await getDocs(collection(db,'users',cu.uid,'recipes'));
-    const rcp=[];snap.forEach(d=>rcp.push({id:d.id,...d.data()}));
-    rcp.sort((a,x)=>(x.savedAt?.seconds||0)-(a.savedAt?.seconds||0));
-    if(!rcp.length){b.innerHTML=addBtn+'<div class="wb-tab-empty"><div class="wb-tab-empty-ico">📖</div><div class="wb-tab-empty-ttl">No recipes yet</div><div class="wb-tab-empty-sub">Add recipes in the ReOrderly app</div></div>';return;}
-    b.innerHTML=addBtn;
-    rcp.forEach(r=>{
-      const stars=r.rating?'⭐'.repeat(r.rating):'';
-      const ing=r.ingredients?r.ingredients.length:0;
-      const c=document.createElement('div');c.className='wb-rcp-card';
-      c.innerHTML=`<div class="wb-rcp-thumb">${r.image?`<img src="${r.image}" alt="" onerror="this.outerHTML='🍽️'">`:(r.emoji||'🍽️')}</div>
-      <div><div class="wb-rcp-name">${esc(r.name)}</div><div class="wb-rcp-meta">${ing} ingredients${r.rating?' · '+stars:''}</div></div>`;
-      b.appendChild(c);
-    });
-    b.dataset.loaded='1';
-  }catch(e){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">Could not load</div></div>';}
-}
-
-async function loadHistoryWb(){
-  const b=document.getElementById('hist-body');if(!b||!cu)return;
-  b.innerHTML='<div class="wb-inner-loading"><div class="spinner-wb"></div></div>';
-  try{
-    const snap=await getDocs(collection(db,'users',cu.uid,'history'));
-    const orders=[];snap.forEach(d=>orders.push({id:d.id,...d.data()}));
-    orders.sort((a,x)=>(x.orderedAt?.seconds||0)-(a.orderedAt?.seconds||0));
-    if(!orders.length){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">🕐</div><div class="wb-tab-empty-ttl">No order history yet</div></div>';return;}
-    b.innerHTML='';
-    orders.forEach(o=>{
-      const dt=o.orderedAt?.toDate?o.orderedAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'Unknown';
-      const c=document.createElement('div');c.className='wb-hist-card';
-      const iHtml=(o.items||[]).map(it=>`<div class="wb-hist-row"><div class="wb-hist-iname">${esc(it.name)} ×${it.qty}</div><button class="wb-hist-readd" onclick="reAdd('${esc(it.upc)}','${esc(it.name)}',${it.price?`'${it.price}'`:'null'});switchTab('list')">+ Add</button></div>`).join('');
-      c.innerHTML=`<div class="wb-hist-hdr"><div class="wb-hist-date">${dt}</div><div class="wb-hist-meta">${o.itemCount||0} items</div></div><div class="wb-hist-items">${iHtml}</div>`;
-      b.appendChild(c);
-    });
-  }catch(e){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">Could not load</div></div>';}
-}
-
-let wbLibTab='usual';
-async function loadLibraryWb(){
-  const b=document.getElementById('lib-body');if(!b||!cu)return;
-  const tabs=[{id:'usual',label:'⭐ Usual'},{id:'all',label:'All'},{id:'grocery',label:'Grocery'},{id:'household',label:'Household'},{id:'snacks',label:'Snacks'},{id:'health',label:'Health'}];
-  b.innerHTML=`<div class="wb-lib-tabs" id="wblib-tabs"></div><input class="wb-lib-srch" type="text" id="wblib-srch" placeholder="Search…" oninput="filterLibWb(this.value)"/><div id="wblib-list"><div class="wb-inner-loading"><div class="spinner-wb"></div></div></div>`;
-  const tr=document.getElementById('wblib-tabs');
-  tabs.forEach(t=>{const btn=document.createElement('button');btn.className='wb-lib-tab'+(t.id===wbLibTab?' active':'');btn.textContent=t.label;btn.onclick=()=>{wbLibTab=t.id;document.querySelectorAll('.wb-lib-tab').forEach(b=>b.className='wb-lib-tab');btn.className='wb-lib-tab active';filterLibWb(document.getElementById('wblib-srch')?.value||'');};tr.appendChild(btn);});
-  await filterLibWb('');
-}
-
-window.filterLibWb=async(f)=>{
-  const el=document.getElementById('wblib-list');if(!el||!cu)return;
-  try{
-    const snap=await getDocs(collection(db,'users',cu.uid,'history'));
-    const seen=new Map();const sc={};
     snap.forEach(d=>(d.data().items||[]).forEach(it=>{if(it.name&&it.upc){sc[it.upc]=(sc[it.upc]||0)+1;if(!seen.has(it.upc))seen.set(it.upc,it);}}));
     items.forEach(it=>{if(!seen.has(it.upc))seen.set(it.upc,it);sc[it.upc]=(sc[it.upc]||0)+1;});
     let prods=Array.from(seen.values()).map(p=>({...p,category:p.category||getCat(p.name),scanCount:sc[p.upc]||1,pinned:!!pinned[p.upc]}));
@@ -1429,12 +1382,11 @@ window.switchTab = (tab) => {
   if(btn) btn.classList.add('active');
   const panel = document.getElementById('tbp-'+tab);
   if(panel) panel.classList.add('active');
-  // Show/hide footer elements
   const scnBar = document.querySelector('.scn-bar');
   if(scnBar) scnBar.style.display = tab==='list' ? 'flex' : 'none';
-  if(tab==='rcp') loadRecipesWb();
-  else if(tab==='hist') loadHistoryWb();
-  else if(tab==='lib') loadLibraryWb();
+  if(tab==='rcp') loadRecipes();
+  else if(tab==='hist') loadHistory();
+  else if(tab==='lib') loadLibrary();
   resetIdle();
 };
 
