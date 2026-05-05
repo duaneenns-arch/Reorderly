@@ -609,7 +609,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           <button class="wb-open-btn" id="go-shop-btn" onclick="goShop()" disabled>🛍 Review &amp; Order</button>
         </div>
       </div>
-      <div class="wb-sts" id="scan-sts">Ready — scanner connected</div>
+      <div class="wb-sts" id="scan-sts"></div>
       <!-- TAB PANELS -->
       <div class="wb-tab-panel active" id="tbp-list">
         <div class="wb-list" id="wb-list">
@@ -629,7 +629,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       </div>
       <div class="scn-bar">
         <div class="scn-dot"></div>
-        <div class="scn-lbl">USB-C Scanner ready</div>
+        <div class="scn-lbl">Live</div>
         <div class="scn-rdy">● Live</div>
         <button class="wb-clear-sm" onclick="clearItems()" style="margin-left:auto;">Clear</button>
       </div>
@@ -1268,7 +1268,7 @@ function renderWbList(){
       '<div class="wb-card wb-toggle">'+
         imgHtml+
         '<div class="wbc-info">'+
-          '<div class="wbc-name">'+esc(it.name)+'</div>'+priceHtml+
+          priceHtml+
           '<div class="wbc-actions">'+
             '<button class="wbc-wm wbc-shop-btn">View on Walmart</button>'+
             '<div class="wbc-qty">'+
@@ -1354,11 +1354,13 @@ window.delItem=async(u)=>{
   await saveList();
 };
 window.clearItems=async()=>{items=[];expandedUpc=null;await saveList();setSts('Ready — scanner connected','');};
-window.goShop=async()=>{
-  if(!items.length){toast('Add items first');return;}
-  await saveHistory();
-  items.forEach((it,i)=>setTimeout(()=>window.open(it.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(it.name)}`,'_blank'),i*350));
-  toast('Opening Walmart — '+items.length+' items');
+window.goShop=()=>{
+  if(!items.length){toast('Nothing on the list yet');return;}
+  renderListPage();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const lp=document.getElementById('list-page');
+  if(lp){lp.classList.add('active');activePg='list-page';}
+  resetIdle();
 };
 window.orderAll=async()=>{
   if(!items.length)return;
