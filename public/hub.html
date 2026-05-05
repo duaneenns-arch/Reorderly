@@ -1858,15 +1858,20 @@ window.tapMic = () => {
 };
 
 // ── ACTIVE LISTENING ──
-function startListening(){
+async function startListening(){
   if(!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)){
     toast('Voice not supported in this browser');
     return;
   }
+  // Stop wake word listener first — can't have two mic streams
+  try{ wakeRecognition?.stop(); wakeRecognition = null; }catch(e){}
   voiceState = 'listening';
   aiActive = true;
-  setVoiceUI('listening', 'Listening…', '');
+  setVoiceUI('listening', 'Listening… say your command', '');
   resetIdle();
+
+  // Small delay to let wake word release mic
+  await new Promise(r => setTimeout(r, 300));
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SR();
@@ -1895,14 +1900,15 @@ function startListening(){
 }
 
 window.cancelVoice = () => {
-  try{ recognition?.stop(); }catch(e){}
+  try{ recognition?.stop(); recognition = null; }catch(e){}
   try{ speechSynth.cancel(); }catch(e){}
   voiceState = 'idle';
   aiActive = false;
   document.getElementById('voice-overlay')?.classList.remove('active');
   const mic = document.getElementById('hdr-mic-btn');
   if(mic){ mic.classList.remove('listening','processing'); mic.textContent='🎤'; }
-  setTimeout(startWakeWord, 800);
+  // Restart wake word after a clean pause
+  setTimeout(startWakeWord, 1000);
 };
 
 function setVoiceUI(state, status, transcript){
