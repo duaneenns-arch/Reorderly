@@ -38,7 +38,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 /* ── PHOTO MODE ── */
 #photo-mode{background:#000;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;}
-.pm-slide{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1.8s ease;}
+.pm-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.8s ease;}
 .pm-clock{position:absolute;top:32px;right:40px;text-align:right;z-index:2;}
 .pm-time{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,5vw,64px);color:rgba(255,255,255,0.78);letter-spacing:3px;line-height:1;text-shadow:0 2px 20px rgba(0,0,0,0.5);}
 .pm-date{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;}
@@ -478,7 +478,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .rt-card-btn.del-btn{background:rgba(192,57,43,0.07);border-color:rgba(192,57,43,0.18);color:rgba(170,50,35,0.8);}
 .right-bottom{flex:1;position:relative;overflow:hidden;border:2px solid #1a1a1a;min-height:0;}
 .photo-frame-rc{position:absolute;inset:0;cursor:pointer;}
-.pt-rc-s{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 1.5s ease;}
+.pt-rc-s{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.5s ease;}
 .pt-rc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,transparent 45%);display:flex;align-items:flex-end;justify-content:space-between;padding:7px 9px;}
 .pt-rc-lbl{font-size:8px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;font-family:'DM Mono',monospace;}
 .pt-rc-fs{font-size:8px;color:rgba(255,255,255,0.5);background:rgba(0,0,0,0.3);border:0.5px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 6px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;}
@@ -656,8 +656,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 <!-- PHOTO MODE -->
 <div class="page active" id="photo-mode" onclick="window.wakeHub()">
-  <div class="pm-slide" id="pm-a"></div>
-  <div class="pm-slide" id="pm-b" style="opacity:0;"></div>
+  <img class="pm-slide" id="pm-a" src="" alt="">
+  <img class="pm-slide" id="pm-b" style="opacity:0;" src="" alt="">
   <div class="pm-clock">
     <div class="pm-time" id="pm-time">12:00 PM</div>
     <div class="pm-date" id="pm-date">Monday, January 1</div>
@@ -775,8 +775,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <!-- PHOTO FRAME -->
       <div class="right-bottom">
         <div class="photo-frame-rc" onclick="goPhotoMode()">
-          <div class="pt-rc-s" id="pt-a"></div>
-          <div class="pt-rc-s" id="pt-b" style="opacity:0;"></div>
+          <img class="pt-rc-s" id="pt-a" src="" alt="">
+          <img class="pt-rc-s" id="pt-b" style="opacity:0;" src="" alt="">
           <div class="pt-rc-ov">
             <div class="pt-rc-fs" onclick="goPhotoMode()">⛶ Fullscreen</div>
           </div>
@@ -2464,12 +2464,12 @@ loadWeather();setInterval(loadWeather,600000);
 
 // ── PHOTOS ──
 const DEFAULT_PHOTOS=[
-  'linear-gradient(135deg,#0d2818 0%,#1a4a2e 50%,#0a1f12 100%)',
-  'linear-gradient(135deg,#0d1829 0%,#1a2e4a 50%,#0a1220 100%)',
-  'linear-gradient(135deg,#1a0d0d 0%,#3a1515 50%,#200a0a 100%)',
-  'linear-gradient(135deg,#0d0d1a 0%,#1a1a3a 50%,#0a0a20 100%)',
-  'linear-gradient(135deg,#1a1a0d 0%,#2e2e0d 50%,#141408 100%)',
-  'linear-gradient(135deg,#0d1a1a 0%,#0d2e2e 50%,#081414 100%)',
+  'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=80',
+  'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=1200&q=80',
+  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&q=80',
+  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=80',
+  'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=1200&q=80',
+  'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?w=1200&q=80',
 ];
 let PHOTOS = [...DEFAULT_PHOTOS];
 let si=0,sa='a';
@@ -2494,11 +2494,21 @@ async function saveCustomPhotos(urls){
 
 function setPhotoBackground(el, val){
   if(!el) return;
-  // If it's a gradient, set directly; if it's a URL, wrap in url()
-  if(val.startsWith('linear-gradient') || val.startsWith('radial-gradient')){
-    el.style.backgroundImage = val;
+  if(el.tagName === 'IMG'){
+    // For img tags, we can't use gradients — use a fallback color if gradient
+    if(val.startsWith('linear-gradient') || val.startsWith('radial-gradient')){
+      el.src = '';
+      el.style.background = val;
+    } else {
+      el.src = val;
+      el.style.background = '';
+    }
   } else {
-    el.style.backgroundImage = `url('${val}')`;
+    if(val.startsWith('linear-gradient') || val.startsWith('radial-gradient')){
+      el.style.backgroundImage = val;
+    } else {
+      el.style.backgroundImage = `url('${val}')`;
+    }
   }
 }
 
