@@ -2452,7 +2452,7 @@ window.swReset = () => {
 // ── WEATHER ──
 async function loadWeather(){
   try {
-    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.2373&longitude=-80.8184&current_weather=true&temperature_unit=fahrenheit');
+    const r=await fetch('/.netlify/functions/weather');
     const d=await r.json();const temp=Math.round(d.current_weather.temperature);const code=d.current_weather.weathercode;
     const IC={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
     const DC={0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Foggy',48:'Foggy',51:'Drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',80:'Showers',81:'Rain showers',82:'Thunderstorms',95:'Thunderstorm',96:'Thunderstorm',99:'Thunderstorm'};
@@ -2463,12 +2463,12 @@ loadWeather();setInterval(loadWeather,600000);
 
 // ── PHOTOS ──
 const DEFAULT_PHOTOS=[
-  'https://picsum.photos/id/1080/1200/800',
-  'https://picsum.photos/id/1060/1200/800',
-  'https://picsum.photos/id/403/1200/800',
-  'https://picsum.photos/id/292/1200/800',
-  'https://picsum.photos/id/431/1200/800',
-  'https://picsum.photos/id/1040/1200/800',
+  'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?w=1200',
+  'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?w=1200',
+  'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?w=1200',
+  'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?w=1200',
+  'https://images.pexels.com/photos/2062426/pexels-photo-2062426.jpeg?w=1200',
+  'https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?w=1200',
 ];
 let PHOTOS = [...DEFAULT_PHOTOS];
 let si=0,sa='a';
