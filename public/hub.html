@@ -1196,6 +1196,7 @@ const db = getFirestore(fbApp);
 const gProv = new GoogleAuthProvider();
 
 let cu = null, items = [], unsubList = null, lMode = 'in', libTab = 'usual', pinned = {};
+let idleT;
 let activePg = 'photo-mode';
 let expandedUpc = null;
 let expandedTodoId = null;
@@ -2462,25 +2463,13 @@ async function loadWeather(){
 loadWeather();setInterval(loadWeather,600000);
 
 // ── PHOTOS ──
-// Inline SVG photos — no external requests, always work in any WebView
-function makeSvgPhoto(bg1, bg2, emoji, label) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800">
-    <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" style="stop-color:${bg1}"/><stop offset="100%" style="stop-color:${bg2}"/></linearGradient></defs>
-    <rect width="1200" height="800" fill="url(#g)"/>
-    <text x="600" y="380" font-size="160" text-anchor="middle" dominant-baseline="middle">${emoji}</text>
-    <text x="600" y="520" font-size="48" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="sans-serif">${label}</text>
-  </svg>`;
-  return 'data:image/svg+xml;base64,' + btoa(svg);
-}
-
 const DEFAULT_PHOTOS=[
-  makeSvgPhoto('#1a3a2a','#0d1f15','🏡','Home'),
-  makeSvgPhoto('#1a2a3a','#0d1520','🌙','Good Night'),
-  makeSvgPhoto('#2a1a1a','#1a0d0d','☕','Good Morning'),
-  makeSvgPhoto('#1a1a2a','#0d0d1a','🛒','ReOrderly'),
-  makeSvgPhoto('#2a2a1a','#1a1a0d','🌿','Fresh & Clean'),
-  makeSvgPhoto('#1a2a2a','#0d1a1a','✨','Station'),
+  'linear-gradient(135deg,#0d2818 0%,#1a4a2e 50%,#0a1f12 100%)',
+  'linear-gradient(135deg,#0d1829 0%,#1a2e4a 50%,#0a1220 100%)',
+  'linear-gradient(135deg,#1a0d0d 0%,#3a1515 50%,#200a0a 100%)',
+  'linear-gradient(135deg,#0d0d1a 0%,#1a1a3a 50%,#0a0a20 100%)',
+  'linear-gradient(135deg,#1a1a0d 0%,#2e2e0d 50%,#141408 100%)',
+  'linear-gradient(135deg,#0d1a1a 0%,#0d2e2e 50%,#081414 100%)',
 ];
 let PHOTOS = [...DEFAULT_PHOTOS];
 let si=0,sa='a';
@@ -2503,11 +2492,21 @@ async function saveCustomPhotos(urls){
   try{ await setDoc(doc(db,'users',cu.uid,'settings','photos'),{urls,updatedAt:new Date()}); }catch(e){}
 }
 
+function setPhotoBackground(el, val){
+  if(!el) return;
+  // If it's a gradient, set directly; if it's a URL, wrap in url()
+  if(val.startsWith('linear-gradient') || val.startsWith('radial-gradient')){
+    el.style.backgroundImage = val;
+  } else {
+    el.style.backgroundImage = `url('${val}')`;
+  }
+}
+
 function initPhotos(){
   SETS.forEach(s=>{
     const a=document.getElementById(s.a);const b=document.getElementById(s.b);
-    if(a)a.style.backgroundImage=`url('${PHOTOS[0]}')`;
-    if(b)b.style.backgroundImage=`url('${PHOTOS[Math.min(1,PHOTOS.length-1)]}')`;
+    setPhotoBackground(a, PHOTOS[0]);
+    setPhotoBackground(b, PHOTOS[Math.min(1,PHOTOS.length-1)]);
   });
 }
 
@@ -2519,10 +2518,12 @@ function startPhotoSlideshow(){
     si=(si+1)%PHOTOS.length;const ni=(si+1)%PHOTOS.length;
     SETS.forEach(s=>{
       const a=document.getElementById(s.a);const b=document.getElementById(s.b);if(!a||!b)return;
-      if(sa==='a'){b.style.backgroundImage=`url('${PHOTOS[si]}')`;b.style.opacity='1';a.style.opacity='0';}
-      else{a.style.backgroundImage=`url('${PHOTOS[si]}')`;a.style.opacity='1';b.style.opacity='0';}
+      if(sa==='a'){setPhotoBackground(b,PHOTOS[si]);b.style.opacity='1';a.style.opacity='0';}
+      else{setPhotoBackground(a,PHOTOS[si]);a.style.opacity='1';b.style.opacity='0';}
     });
-    sa=sa==='a'?'b':'a';new Image().src=PHOTOS[ni];
+    sa=sa==='a'?'b':'a';
+    // Only preload if it's a real image URL
+    if(!PHOTOS[ni].startsWith('linear-gradient')) new Image().src=PHOTOS[ni];
   },6000);
 }
 startPhotoSlideshow();
@@ -2599,7 +2600,6 @@ window.handlePhotoUpload = async (input) => {
 document.getElementById('photo-mode')?.addEventListener('click', ()=> window.wakeHub());
 
 // ── IDLE ──
-let idleT;
 function resetIdle(){clearTimeout(idleT);if(activePg!=='photo-mode')idleT=setTimeout(goPhotoMode,5*60*1000);}
 ['mousedown','touchstart','keydown'].forEach(e=>document.addEventListener(e,resetIdle,{passive:true}));
 resetIdle();
