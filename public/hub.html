@@ -2299,19 +2299,18 @@ async function initAI(){
 
 // ── CLOCK ──
 function tick(){
-  const now=new Date();const h=now.getHours();const m=String(now.getMinutes()).padStart(2,'0');
-  const ap=h>=12?'PM':'AM';const h12=h%12||12;
-  const D=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const Mo=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const ts=`${h12}:${m} ${ap}`;const ds=`${D[now.getDay()]}, ${Mo[now.getMonth()]} ${now.getDate()}`;
-  document.getElementById('hdr-time').textContent=ts;
-  document.getElementById('hdr-date').textContent=ds;
-  document.getElementById('pm-time').textContent=ts;
-  document.getElementById('pm-date').textContent=ds;
-  document.getElementById('cm-bigclock').textContent=ts;
-  document.getElementById('cm-bigdate').textContent=ds;
+  try{
+    const now=new Date();const h=now.getHours();const m=String(now.getMinutes()).padStart(2,'0');
+    const ap=h>=12?'PM':'AM';const h12=h%12||12;
+    const D=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const Mo=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const ts=`${h12}:${m} ${ap}`;const ds=`${D[now.getDay()]}, ${Mo[now.getMonth()]} ${now.getDate()}`;
+    ['hdr-time','pm-time','cm-bigclock'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=ts;});
+    ['hdr-date','pm-date','cm-bigdate'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=ds;});
+  }catch(e){}
+  setTimeout(tick,1000);
 }
-tick();setInterval(tick,1000);
+tick();
 
 // ── CLOCK MENU ──
 let clockMenuOpen = false;
@@ -2601,6 +2600,24 @@ document.addEventListener('click',e=>{
   if(activePg==='home-page'&&!e.target.closest('input,button,.wb-item,.nav-tile,.app-tile,.photo-thumb,.todo-panel,.clock-menu'))
     setTimeout(()=>document.getElementById('scan-inp')?.focus(),50);
 });
+</script>
+
+<script>
+// Standalone clock — runs outside the module to guarantee it works in all WebViews
+(function startClock(){
+  try{
+    const now=new Date();
+    const h=now.getHours(),m=String(now.getMinutes()).padStart(2,'0');
+    const ap=h>=12?'PM':'AM',h12=h%12||12;
+    const D=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const Mo=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const ts=h12+':'+m+' '+ap;
+    const ds=D[now.getDay()]+', '+Mo[now.getMonth()]+' '+now.getDate();
+    ['hdr-time','pm-time','cm-bigclock'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=ts;});
+    ['hdr-date','pm-date','cm-bigdate'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=ds;});
+  }catch(e){}
+  setTimeout(startClock,1000);
+})();
 </script>
 </body>
 </html>
