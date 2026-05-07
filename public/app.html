@@ -59,6 +59,34 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 .home-logo { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -1px; }
 .home-logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: 3px; vertical-align: middle; position: relative; top: -2px; }
 .home-version { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-left: 6px; vertical-align: middle; }
+.home-tagline { font-size: 11px; color: var(--text3); margin-top: 2px; font-style: italic; }
+.home-benefit { font-size: 13px; color: var(--text2); font-weight: 600; margin-bottom: 1.25rem; line-height: 1.4; }
+/* Station card */
+.home-card.station { border-color: var(--green); background: var(--green-light); }
+.home-card.station .home-card-title { color: var(--green); }
+/* Message button in header */
+.msg-btn { background: none; border: 1px solid var(--border2); border-radius: 99px; padding: 5px 10px; font-size: 12px; cursor: pointer; color: var(--text2); display: flex; align-items: center; gap: 5px; font-family: 'Syne', sans-serif; font-weight: 700; transition: all .15s; position: relative; }
+.msg-btn:hover { border-color: var(--green); color: var(--green); }
+.msg-btn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); position: absolute; top: -2px; right: -2px; display: none; }
+.msg-btn-dot.show { display: block; }
+/* Message panel */
+.msg-panel { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg); border-top: 2px solid var(--green); border-radius: 20px 20px 0 0; padding: 1.25rem; z-index: 200; box-shadow: 0 -8px 32px rgba(0,0,0,.15); }
+.msg-panel.open { display: block; }
+.msg-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.msg-panel-title { font-size: 15px; font-weight: 800; color: var(--text); }
+.msg-panel-close { background: none; border: none; font-size: 22px; color: var(--text3); cursor: pointer; line-height: 1; }
+.msg-feed { max-height: 160px; overflow-y: auto; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+.msg-bubble { padding: 8px 12px; border-radius: 12px; font-size: 13px; max-width: 85%; line-height: 1.4; }
+.msg-bubble.sent { background: var(--green); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg-bubble.received { background: var(--bg2); color: var(--text); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg-bubble-meta { font-size: 9px; opacity: .6; margin-top: 3px; font-family: 'DM Mono', monospace; }
+.msg-input-row { display: flex; gap: 8px; }
+.msg-input { flex: 1; height: 44px; border: 1.5px solid var(--border2); border-radius: 10px; padding: 0 14px; font-family: 'Syne', sans-serif; font-size: 14px; color: var(--text); background: var(--bg2); outline: none; }
+.msg-input:focus { border-color: var(--green); }
+.msg-send-btn { height: 44px; padding: 0 18px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
+/* Incoming message banner */
+.msg-banner { position: fixed; top: -80px; left: 50%; transform: translateX(-50%); background: var(--green); color: #fff; border-radius: 14px; padding: 10px 18px; font-size: 13px; font-weight: 700; font-family: 'Syne', sans-serif; z-index: 500; transition: top .3s cubic-bezier(.34,1.3,.64,1); white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,.2); max-width: 90vw; text-overflow: ellipsis; overflow: hidden; }
+.msg-banner.show { top: 16px; }
 .home-stats { display: flex; gap: 8px; margin-bottom: 1.5rem; }
 .home-stat { flex: 1; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px 12px; text-align: center; cursor: pointer; transition: border-color .15s; }
 .home-stat:hover { border-color: var(--green); }
@@ -357,7 +385,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 
 .camera-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
 .camera-finder { width: 220px; height: 140px; border: 2px solid var(--green); border-radius: 16px; position: relative; }
-.camera-finder::before { content: ; position: absolute; inset: -2px; border-radius: 16px; border: 2px solid transparent; background: linear-gradient(var(--green),var(--green)) top left, linear-gradient(var(--green),var(--green)) top right, linear-gradient(var(--green),var(--green)) bottom left, linear-gradient(var(--green),var(--green)) bottom right; background-size: 20px 3px, 20px 3px, 20px 3px, 20px 3px; background-repeat: no-repeat; }
+.camera-finder::before { content: ""; position: absolute; inset: -2px; border-radius: 16px; border: 2px solid transparent; background: linear-gradient(var(--green),var(--green)) top left, linear-gradient(var(--green),var(--green)) top right, linear-gradient(var(--green),var(--green)) bottom left, linear-gradient(var(--green),var(--green)) bottom right; background-size: 20px 3px, 20px 3px, 20px 3px, 20px 3px; background-repeat: no-repeat; }
 .camera-scan-line { position: absolute; left: 10px; right: 10px; height: 2px; background: var(--green); top: 50%; animation: scanline 2s ease-in-out infinite; opacity: .7; }
 @keyframes scanline { 0%,100% { top: 20%; } 50% { top: 80%; } }
 .camera-hint { color: rgba(255,255,255,.6); font-size: 13px; margin-top: 1.5rem; text-align: center; }
@@ -471,11 +499,14 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <div>
         <div class="home-greeting" id="home-greeting" data-i18n="greetMorning">Good morning</div>
         <div class="home-logo" onclick="showHomeScreen()" style="cursor:pointer;">ReOrderly<span class="home-logo-dot"></span></div>
+        <div class="home-tagline" data-i18n="homeTagline">Your phone companion to the kitchen Station</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
       </div>
     </div>
+
+    <div class="home-benefit" data-i18n="homeBenefit">Scan it when it runs out. Order it when you're ready.</div>
 
     <div class="home-stats">
       <div class="home-stat" onclick="showMainView(); showAppScreen();">
@@ -501,11 +532,27 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
+      <div class="home-card station" onclick="showStationConnect();">
+        <div class="home-card-icon green">📺</div>
+        <div class="home-card-info">
+          <div class="home-card-title" data-i18n="cardStationTitle">Connect to Station</div>
+          <div class="home-card-sub" data-i18n="cardStationSub">Sync this phone with your kitchen hub</div>
+        </div>
+        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="home-card" onclick="showRecipeBook(); showAppScreen();">
+        <div class="home-card-icon amber">📖</div>
+        <div class="home-card-info">
+          <div class="home-card-title" data-i18n="cardRecipeTitle">Recipe Book</div>
+          <div class="home-card-sub" data-i18n="cardRecipeSub">Add recipes and extract ingredients</div>
+        </div>
+        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
       <div class="home-card" onclick="showLibrary(); showAppScreen();">
         <div class="home-card-icon purple">📦</div>
         <div class="home-card-info">
-          <div class="home-card-title" data-i18n="cardLibraryTitle">Product Library</div>
-          <div class="home-card-sub" data-i18n="cardLibrarySub">Browse all your scanned products</div>
+          <div class="home-card-title" data-i18n="cardLibraryTitle">My Usual Items</div>
+          <div class="home-card-sub" data-i18n="cardLibrarySub">Quickly re-add things you buy often</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
@@ -558,7 +605,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
     <div class="about-section">
       <div class="about-section-title" data-i18n="aboutVersionTitle">Version</div>
-      <div class="about-section-body">ReOrderly v2.15 — Built with Firebase, Netlify, and Anthropic AI.</div>
+      <div class="about-section-body">ReOrderly v2.16 — Built with Firebase, Netlify, and Anthropic AI.</div>
     </div>
     <div class="about-section">
       <div class="about-section-title">Legal</div>
@@ -606,7 +653,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="drawer-header">
     <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
-    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v2.15</div>
+    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v2.16</div>
   </div>
   <div class="drawer-item" onclick="showHomeScreen(); closeDrawer();">
     <div class="drawer-item-left">
@@ -671,6 +718,10 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
           <span data-i18n="shared">Shared</span>
         </div>
+        <button class="msg-btn" onclick="openMsgPanel()" title="Message Station">
+          💬
+          <div class="msg-btn-dot" id="msg-btn-dot"></div>
+        </button>
         <div class="list-badge" id="list-name-badge" onclick="showMainView(); showAppScreen();" style="cursor:pointer;" title="Go to shopping list">My List</div>
       </div>
     </div>
@@ -888,12 +939,29 @@ const LANG = {
   en: {
     // Stats
     statInList: 'In List', statRecipes: 'Recipes', statOrders: 'Orders',
+    // Home
+    homeTagline: 'Your phone companion to the kitchen Station',
+    homeBenefit: 'Scan it when it runs out. Order it when you\'re ready.',
     // Home cards
     cardListTitle: 'My Shopping List', cardListSub: 'Scan items and order on Walmart',
+    cardStationTitle: 'Connect to Station', cardStationSub: 'Sync this phone with your kitchen hub',
     cardRecipeTitle: 'Recipe Book', cardRecipeSub: 'Add recipes and extract ingredients',
     cardHistoryTitle: 'Order History', cardHistorySub: 'View and re-add past orders',
-    cardLibraryTitle: 'Product Library', cardLibrarySub: 'Browse all your scanned products',
+    cardLibraryTitle: 'My Usual Items', cardLibrarySub: 'Quickly re-add things you buy often',
     cardTodoTitle: 'To-Do List', cardTodoSub: 'Tasks synced with your Station hub',
+    // Messaging
+    msgPanelTitle: 'Message Station', msgPlaceholder: 'Send a message to the hub…', msgSend: 'Send',
+    msgFromHub: '📺 Station',
+    // Station connect
+    stationConnectTitle: 'Connect to Station', stationConnectBody: 'Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.',
+    stationConnectHow: 'How it works',
+    stationStep1: 'Scan on the hub → appears on your phone list',
+    stationStep2: 'Add a to-do on your phone → shows on the hub',
+    stationStep3: 'Send messages between phone and hub',
+    stationStep4: 'Everything syncs in real time',
+    stationConnectStatus: 'Connection Status', stationConnectLearn: 'Don\'t have a Station yet? Visit reorderlysolutions.com to learn more.',
+    stationStatusConnected: '🟢 Connected — signed in and syncing',
+    stationStatusDisconnected: '🔴 Not connected — please sign in',
     todoPlaceholder: 'Add a task...', todoAddBtn: 'Add', todoSyncNote: 'Syncs with Station hub',
     todoEmpty: 'No tasks yet — add one above',
     todoDetailTitle: 'Task Detail', todoDetailTaskLabel: 'Task', todoDetailNotesLabel: 'Notes',
@@ -1008,12 +1076,29 @@ const LANG = {
   es: {
     // Stats
     statInList: 'En Lista', statRecipes: 'Recetas', statOrders: 'Pedidos',
+    // Home
+    homeTagline: 'Tu compañero de teléfono para la Station',
+    homeBenefit: 'Escanéalo cuando se acabe. Pídelo cuando estés listo.',
     // Home cards
     cardListTitle: 'Mi Lista de Compras', cardListSub: 'Escanea artículos y pide en Walmart',
+    cardStationTitle: 'Conectar a Station', cardStationSub: 'Sincroniza tu teléfono con tu hub',
     cardRecipeTitle: 'Libro de Recetas', cardRecipeSub: 'Agrega recetas y extrae ingredientes',
     cardHistoryTitle: 'Historial de Pedidos', cardHistorySub: 'Ver y volver a agregar pedidos',
-    cardLibraryTitle: 'Biblioteca de Productos', cardLibrarySub: 'Explora todos tus productos escaneados',
+    cardLibraryTitle: 'Mis Artículos Habituales', cardLibrarySub: 'Vuelve a agregar lo que compras seguido',
     cardTodoTitle: 'Lista de Tareas', cardTodoSub: 'Tareas sincronizadas con tu Station',
+    // Messaging
+    msgPanelTitle: 'Mensaje a Station', msgPlaceholder: 'Enviar mensaje al hub…', msgSend: 'Enviar',
+    msgFromHub: '📺 Station',
+    // Station connect
+    stationConnectTitle: 'Conectar a Station', stationConnectBody: 'Tu teléfono y el hub se conectan automáticamente cuando ambos están en la misma cuenta de Google.',
+    stationConnectHow: 'Cómo funciona',
+    stationStep1: 'Escanear en el hub → aparece en tu lista del teléfono',
+    stationStep2: 'Agregar tarea en el teléfono → se muestra en el hub',
+    stationStep3: 'Enviar mensajes entre teléfono y hub',
+    stationStep4: 'Todo se sincroniza en tiempo real',
+    stationConnectStatus: 'Estado de Conexión', stationConnectLearn: '¿No tienes una Station? Visita reorderlysolutions.com para más información.',
+    stationStatusConnected: '🟢 Conectado — sincronizando',
+    stationStatusDisconnected: '🔴 No conectado — inicia sesión',
     todoPlaceholder: 'Agregar tarea...', todoAddBtn: 'Agregar', todoSyncNote: 'Sincroniza con Station',
     todoEmpty: 'Sin tareas — agrega una arriba',
     todoDetailTitle: 'Detalle de Tarea', todoDetailTaskLabel: 'Tarea', todoDetailNotesLabel: 'Notas',
@@ -1267,6 +1352,7 @@ onAuthStateChanged(auth, async user => {
     if (greetEl) greetEl.textContent = timeGreet + ', ' + name;
     await loadLists();
     subscribeToList(currentListId);
+    subscribeToMessages();
     // Show home screen on fresh page load
     if (!sessionStarted) {
       showHomeScreen();
@@ -2701,8 +2787,155 @@ function renderTodos() {
 
 document.getElementById('todo-input')?.addEventListener('keydown', e => { if(e.key==='Enter') window.addTodo(); });
 
+// ── STATION CONNECT ──
+window.showStationConnect = function() {
+  const statusEl = document.getElementById('station-status-text');
+  if (statusEl) {
+    statusEl.textContent = currentUser ? t('stationStatusConnected') : t('stationStatusDisconnected');
+  }
+  document.getElementById('station-modal').classList.add('open');
+};
+window.closeStationConnect = function() {
+  document.getElementById('station-modal').classList.remove('open');
+};
+
+// ── MESSAGING ──
+let msgUnsubscribe = null;
+let msgPanelOpen = false;
+
+function subscribeToMessages() {
+  if (!currentUser || msgUnsubscribe) return;
+  const q = collection(db, 'users', currentUser.uid, 'messages');
+  msgUnsubscribe = onSnapshot(q, snap => {
+    snap.docChanges().forEach(change => {
+      if (change.type === 'added') {
+        const msg = change.doc.data();
+        if (msg.from === 'hub' && !msg.readByApp) {
+          // Mark read
+          setDoc(change.doc.ref, {readByApp: true}, {merge: true});
+          if (msgPanelOpen) {
+            renderMsgFeed();
+          } else {
+            showMsgBanner('📺 Station: ' + msg.text);
+            document.getElementById('msg-btn-dot').classList.add('show');
+          }
+        }
+      }
+    });
+    if (msgPanelOpen) renderMsgFeed();
+  });
+}
+
+async function renderMsgFeed() {
+  if (!currentUser) return;
+  const el = document.getElementById('msg-feed');
+  if (!el) return;
+  try {
+    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'messages'));
+    const msgs = [];
+    snap.forEach(d => msgs.push({id: d.id, ...d.data()}));
+    msgs.sort((a,b) => (a.sentAt?.toMillis?.() || 0) - (b.sentAt?.toMillis?.() || 0));
+    el.innerHTML = '';
+    if (!msgs.length) {
+      el.innerHTML = '<div style="font-size:12px;color:var(--text3);text-align:center;padding:1rem;">No messages yet</div>';
+      return;
+    }
+    msgs.forEach(msg => {
+      const d = document.createElement('div');
+      d.className = 'msg-bubble ' + (msg.from === 'app' ? 'sent' : 'received');
+      const time = msg.sentAt ? new Date(msg.sentAt.toMillis()).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
+      d.innerHTML = esc(msg.text) + '<div class="msg-bubble-meta">' + (msg.from === 'hub' ? '📺 Station' : 'You') + (time ? ' · ' + time : '') + '</div>';
+      el.appendChild(d);
+    });
+    el.scrollTop = el.scrollHeight;
+  } catch(e) {}
+}
+
+window.openMsgPanel = async function() {
+  msgPanelOpen = true;
+  document.getElementById('msg-panel').classList.add('open');
+  document.getElementById('msg-btn-dot').classList.remove('show');
+  await renderMsgFeed();
+  document.getElementById('msg-input').focus();
+};
+
+window.closeMsgPanel = function() {
+  msgPanelOpen = false;
+  document.getElementById('msg-panel').classList.remove('open');
+};
+
+window.sendMsg = async function() {
+  if (!currentUser) return;
+  const inp = document.getElementById('msg-input');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  try {
+    await setDoc(doc(collection(db, 'users', currentUser.uid, 'messages')), {
+      text, from: 'app', sentAt: new Date(), readByHub: false, readByApp: true
+    });
+    await renderMsgFeed();
+  } catch(e) {}
+};
+
+function showMsgBanner(text) {
+  const el = document.getElementById('msg-banner');
+  el.textContent = text;
+  el.classList.add('show');
+  clearTimeout(window._msgBannerTimer);
+  window._msgBannerTimer = setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+document.getElementById('msg-input')?.addEventListener('keydown', e => { if(e.key==='Enter') window.sendMsg(); });
+
 // ── APPLY LANGUAGE ON STARTUP ──
 applyLang();
 </script>
+
+<!-- Message banner (incoming from hub) -->
+<div class="msg-banner" id="msg-banner"></div>
+
+<!-- Message panel -->
+<div class="msg-panel" id="msg-panel">
+  <div class="msg-panel-header">
+    <div class="msg-panel-title">💬 <span data-i18n="msgPanelTitle">Message Station</span></div>
+    <button class="msg-panel-close" onclick="closeMsgPanel()">×</button>
+  </div>
+  <div class="msg-feed" id="msg-feed"></div>
+  <div class="msg-input-row">
+    <input class="msg-input" type="text" id="msg-input" data-i18n-placeholder="msgPlaceholder" placeholder="Send a message to the hub…" />
+    <button class="msg-send-btn" onclick="sendMsg()" data-i18n="msgSend">Send</button>
+  </div>
+</div>
+
+<!-- Station Connect modal -->
+<div class="about-modal" id="station-modal">
+  <div class="about-box">
+    <div class="about-header">
+      <div class="about-logo">ReOrderly<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-left:3px;vertical-align:middle;position:relative;top:-2px;"></span></div>
+      <button class="about-close" onclick="closeStationConnect()">×</button>
+    </div>
+    <div style="padding:1.5rem;">
+      <div style="font-size:32px;text-align:center;margin-bottom:12px;">📺</div>
+      <div style="font-size:18px;font-weight:800;color:var(--text);text-align:center;margin-bottom:8px;" data-i18n="stationConnectTitle">Connect to Station</div>
+      <div style="font-size:13px;color:var(--text2);text-align:center;margin-bottom:1.5rem;line-height:1.6;" data-i18n="stationConnectBody">Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.</div>
+      <div style="background:var(--green-light);border:1px solid var(--green);border-radius:14px;padding:14px 16px;margin-bottom:1rem;">
+        <div style="font-size:12px;font-weight:800;color:var(--green);margin-bottom:4px;" data-i18n="stationConnectHow">How it works</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7;">
+          ✓ <span data-i18n="stationStep1">Scan on the hub → appears on your phone list</span><br>
+          ✓ <span data-i18n="stationStep2">Add a to-do on your phone → shows on the hub</span><br>
+          ✓ <span data-i18n="stationStep3">Send messages between phone and hub</span><br>
+          ✓ <span data-i18n="stationStep4">Everything syncs in real time</span>
+        </div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:1.5rem;">
+        <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:4px;" data-i18n="stationConnectStatus">Connection Status</div>
+        <div style="font-size:12px;color:var(--text2);" id="station-status-text">Checking…</div>
+      </div>
+      <div style="text-align:center;font-size:12px;color:var(--text3);" data-i18n="stationConnectLearn">Don't have a Station yet? Visit <strong>reorderlysolutions.com</strong> to learn more.</div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
