@@ -502,6 +502,10 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div class="home-tagline" data-i18n="homeTagline">Your phone companion to the kitchen Station</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
+        <button class="msg-btn" onclick="openMsgPanel()" title="Message Station">
+          💬
+          <div class="msg-btn-dot" id="msg-btn-dot-home"></div>
+        </button>
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -2818,6 +2822,8 @@ function subscribeToMessages() {
           } else {
             showMsgBanner('📺 Station: ' + msg.text);
             document.getElementById('msg-btn-dot').classList.add('show');
+            const homeDot = document.getElementById('msg-btn-dot-home');
+            if (homeDot) homeDot.classList.add('show');
           }
         }
       }
@@ -2855,6 +2861,8 @@ window.openMsgPanel = async function() {
   msgPanelOpen = true;
   document.getElementById('msg-panel').classList.add('open');
   document.getElementById('msg-btn-dot').classList.remove('show');
+  const homeDot = document.getElementById('msg-btn-dot-home');
+  if (homeDot) homeDot.classList.remove('show');
   await renderMsgFeed();
   document.getElementById('msg-input').focus();
 };
