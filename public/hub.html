@@ -88,7 +88,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .sb-cnt{font-size:10px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace;}
 
 /* ── HOME BODY ── */
-.home-body{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px;min-height:0;overflow:hidden;padding:6px;background:var(--bg);}
+.home-body{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px;min-height:0;overflow:hidden;padding:6px;background:var(--bg);position:relative;}
 
 /* ── WHITEBOARD COLUMN ── */
 .wb-col{display:flex;flex-direction:column;background:var(--wb-bg);position:relative;min-height:0;border:2px solid #1a1a1a;overflow:hidden;}
@@ -464,8 +464,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-tab-icon{font-size:17px;line-height:1;}
 
 /* Right panel overhaul */
-.right-col{display:flex;flex-direction:column;gap:6px;overflow:hidden;background:var(--bg);position:relative;}
-.rt-detail-overlay{display:none;position:absolute;inset:0;background:var(--wb-bg);z-index:10;flex-direction:column;border:2px solid #1a1a1a;}
+.right-col{display:flex;flex-direction:column;gap:6px;overflow:hidden;background:var(--bg);}
+.rt-detail-overlay{display:none;position:absolute;top:6px;left:6px;bottom:6px;width:calc(50% - 9px);background:var(--wb-bg);z-index:10;flex-direction:column;border:2px solid #1a1a1a;}
 .rt-detail-overlay.open{display:flex;}
 .rt-detail-overlay::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 27px,var(--wb-line) 27px,var(--wb-line) 28px);pointer-events:none;z-index:0;}
 .rt-detail-hdr{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:5px 10px 4px;border-bottom:1px solid var(--wb-line);background:rgba(245,242,235,0.97);position:relative;z-index:1;}
@@ -811,40 +811,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <!-- RIGHT COLUMN -->
     <div class="right-col">
 
-      <!-- TO-DO DETAIL OVERLAY -->
-      <div class="rt-detail-overlay" id="rt-detail-overlay">
-        <div class="rt-detail-hdr">
-          <button class="rt-detail-back" onclick="closeHubTodoDetail()">‹ Back</button>
-          <div class="rt-detail-title">Task Detail</div>
-          <div style="width:50px;"></div>
-        </div>
-        <div class="rt-detail-body">
-          <div>
-            <div class="rt-detail-label">Task</div>
-            <input class="rt-detail-field" type="text" id="rt-detail-title-inp" placeholder="Task name..." />
-          </div>
-          <div>
-            <div class="rt-detail-label">Notes</div>
-            <textarea class="rt-detail-field rt-detail-notes" id="rt-detail-notes-inp" placeholder="Add notes..."></textarea>
-          </div>
-          <div>
-            <div class="rt-detail-label">Due Date</div>
-            <input class="rt-detail-field rt-detail-date" type="date" id="rt-detail-date-inp" />
-          </div>
-          <div>
-            <div class="rt-detail-label">Priority</div>
-            <div class="rt-prio-row">
-              <button class="rt-prio-btn" id="rt-prio-low" onclick="setHubPriority('low')">Low</button>
-              <button class="rt-prio-btn" id="rt-prio-medium" onclick="setHubPriority('medium')">Medium</button>
-              <button class="rt-prio-btn" id="rt-prio-high" onclick="setHubPriority('high')">High</button>
-            </div>
-          </div>
-          <div class="rt-detail-actions">
-            <button class="rt-detail-save" onclick="saveHubTodoDetail()">Save</button>
-            <button class="rt-detail-delete" onclick="deleteHubTodoDetail()">Delete</button>
-          </div>
-        </div>
-      </div>
       <!-- TO-DO -->
       <div class="right-todo">
         <div class="rt-header">
@@ -876,6 +842,41 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           <div class="ai-response-text" id="ai-response-text"></div>
           <div class="ai-response-action" id="ai-response-action"></div>
           <button class="ai-dismiss-btn" onclick="dismissAiFrame()">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TO-DO DETAIL OVERLAY — covers left column -->
+    <div class="rt-detail-overlay" id="rt-detail-overlay">
+      <div class="rt-detail-hdr">
+        <button class="rt-detail-back" onclick="closeHubTodoDetail()">‹ Back</button>
+        <div class="rt-detail-title">Task Detail</div>
+        <div style="width:50px;"></div>
+      </div>
+      <div class="rt-detail-body">
+        <div>
+          <div class="rt-detail-label">Task</div>
+          <input class="rt-detail-field" type="text" id="rt-detail-title-inp" placeholder="Task name..." />
+        </div>
+        <div>
+          <div class="rt-detail-label">Notes</div>
+          <textarea class="rt-detail-field rt-detail-notes" id="rt-detail-notes-inp" placeholder="Add notes..."></textarea>
+        </div>
+        <div>
+          <div class="rt-detail-label">Due Date</div>
+          <input class="rt-detail-field rt-detail-date" type="date" id="rt-detail-date-inp" />
+        </div>
+        <div>
+          <div class="rt-detail-label">Priority</div>
+          <div class="rt-prio-row">
+            <button class="rt-prio-btn" id="rt-prio-low" onclick="setHubPriority('low')">Low</button>
+            <button class="rt-prio-btn" id="rt-prio-medium" onclick="setHubPriority('medium')">Medium</button>
+            <button class="rt-prio-btn" id="rt-prio-high" onclick="setHubPriority('high')">High</button>
+          </div>
+        </div>
+        <div class="rt-detail-actions">
+          <button class="rt-detail-save" onclick="saveHubTodoDetail()">Save</button>
+          <button class="rt-detail-delete" onclick="deleteHubTodoDetail()">Delete</button>
         </div>
       </div>
     </div>
