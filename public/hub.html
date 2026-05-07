@@ -2834,7 +2834,7 @@ function setSts(m,t=''){const el=document.getElementById('scan-sts');if(el){el.t
 function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>el.classList.remove('show'),2500);}
 
 document.addEventListener('click',e=>{
-  if(activePg==='home-page'&&!e.target.closest('input,button,.wb-item,.nav-tile,.app-tile,.photo-thumb,.todo-panel,.clock-menu'))
+  if(activePg==='home-page'&&!e.target.closest('input,button,.wb-item,.nav-tile,.app-tile,.photo-thumb,.todo-panel,.clock-menu,.rt-detail-overlay'))
     setTimeout(()=>document.getElementById('scan-inp')?.focus(),50);
 });
 </script>
