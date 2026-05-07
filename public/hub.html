@@ -367,9 +367,36 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .cm-btn.reset{background:none;border:1px solid var(--b2);color:var(--t3);}
 .cm-btn.reset:hover{border-color:#f87171;color:#f87171;}
 
-/* Stopwatch panel */
-.sw-display{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--text);letter-spacing:3px;text-align:center;line-height:1;margin-bottom:12px;}
-.sw-display.running{color:var(--green2);}
+/* Alarm panel */
+.alarm-time-row{display:flex;gap:8px;align-items:center;margin-bottom:12px;}
+.alarm-time-inp{flex:1;height:52px;background:var(--s2);border:1px solid var(--b2);border-radius:10px;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--text);outline:none;transition:border-color 0.15s;padding:0 10px;}
+.alarm-time-inp:focus{border-color:var(--green);}
+.alarm-list{display:flex;flex-direction:column;gap:6px;max-height:120px;overflow-y:auto;}
+.alarm-item{display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:10px 14px;}
+.alarm-item-time{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text);letter-spacing:2px;}
+.alarm-item-time.firing{color:var(--ring);animation:pulse 0.6s ease-in-out infinite;}
+.alarm-del{background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer;transition:color 0.15s;}
+.alarm-del:hover{color:#f87171;}
+.alarm-empty{text-align:center;padding:1rem 0;font-size:13px;color:var(--t3);font-family:'DM Mono',monospace;}
+
+/* Calendar panel */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cal-nav-btn{background:var(--s2);border:1px solid var(--b2);border-radius:8px;width:32px;height:32px;font-size:18px;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.cal-nav-btn:hover{border-color:var(--green);color:var(--green);}
+.cal-month-label{font-size:16px;font-weight:800;color:var(--text);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:10px;}
+.cal-day-name{text-align:center;font-size:10px;color:var(--t2);font-family:'DM Mono',monospace;padding:2px 0;}
+.cal-day{text-align:center;font-size:13px;font-weight:700;padding:5px 2px;border-radius:7px;cursor:pointer;color:var(--t2);transition:all 0.15s;position:relative;}
+.cal-day:hover{background:var(--s2);color:var(--text);}
+.cal-day.today{background:var(--green);color:#fff;}
+.cal-day.today:hover{background:var(--green2);}
+.cal-day.selected{background:var(--s3);color:var(--text);outline:1px solid var(--green);}
+.cal-day.other-month{opacity:0.25;}
+.cal-day .cal-dot{width:4px;height:4px;background:#ec4899;border-radius:50%;position:absolute;bottom:2px;left:50%;transform:translateX(-50%);}
+.cal-todo-preview{background:var(--s2);border-radius:10px;padding:8px 12px;min-height:36px;}
+.cal-preview-title{font-size:10px;color:var(--t2);font-family:'DM Mono',monospace;margin-bottom:4px;}
+.cal-preview-item{font-size:12px;color:var(--text);padding:2px 0;display:flex;align-items:center;gap:6px;}
+.cal-preview-none{font-size:11px;color:var(--t3);font-family:'DM Mono',monospace;}
 
 /* Clock panel */
 .cm-bigclock{font-family:'Bebas Neue',sans-serif;font-size:88px;color:var(--text);letter-spacing:6px;text-align:center;line-height:1;}
@@ -437,7 +464,31 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .wb-tab-icon{font-size:17px;line-height:1;}
 
 /* Right panel overhaul */
-.right-col{display:flex;flex-direction:column;gap:6px;overflow:hidden;background:var(--bg);}
+.right-col{display:flex;flex-direction:column;gap:6px;overflow:hidden;background:var(--bg);position:relative;}
+.rt-detail-overlay{display:none;position:absolute;inset:0;background:var(--wb-bg);z-index:10;flex-direction:column;border:2px solid #1a1a1a;}
+.rt-detail-overlay.open{display:flex;}
+.rt-detail-overlay::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 27px,var(--wb-line) 27px,var(--wb-line) 28px);pointer-events:none;z-index:0;}
+.rt-detail-hdr{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:5px 10px 4px;border-bottom:1px solid var(--wb-line);background:rgba(245,242,235,0.97);position:relative;z-index:1;}
+.rt-detail-back{background:none;border:none;font-family:'Caveat',cursive;font-size:15px;color:var(--wb-green);cursor:pointer;display:flex;align-items:center;gap:4px;}
+.rt-detail-title{font-family:'Caveat',cursive;font-size:17px;font-weight:700;color:var(--wb-ink);}
+.rt-detail-body{flex:1;overflow-y:auto;padding:10px 12px;position:relative;z-index:1;display:flex;flex-direction:column;gap:8px;}
+.rt-detail-label{font-size:9px;font-weight:700;color:rgba(42,50,40,0.45);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:2px;}
+.rt-detail-field{width:100%;background:rgba(255,255,255,0.7);border:1.5px solid var(--wb-line);border-radius:8px;padding:6px 10px;font-family:'Caveat',cursive;font-size:15px;color:var(--wb-ink);outline:none;transition:border-color 0.15s;box-sizing:border-box;}
+.rt-detail-field:focus{border-color:#ec4899;}
+.rt-detail-notes{resize:none;min-height:60px;font-family:'Caveat',cursive;}
+.rt-detail-date{font-family:'Syne',sans-serif;font-size:12px;}
+.rt-prio-row{display:flex;gap:5px;}
+.rt-prio-btn{flex:1;height:28px;border-radius:7px;border:1.5px solid var(--wb-line);background:rgba(255,255,255,0.5);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;cursor:pointer;color:rgba(42,50,40,0.5);transition:all 0.15s;}
+.rt-prio-btn.active-low{background:#dcfce7;border-color:#16a34a;color:#16a34a;}
+.rt-prio-btn.active-medium{background:#fef9c3;border-color:#ca8a04;color:#ca8a04;}
+.rt-prio-btn.active-high{background:#fee2e2;border-color:#dc2626;color:#dc2626;}
+.rt-detail-actions{display:flex;gap:6px;margin-top:auto;padding-top:6px;}
+.rt-detail-save{flex:1;height:34px;background:var(--wb-green);color:#fff;border:none;border-radius:8px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+.rt-detail-delete{height:34px;padding:0 12px;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:8px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#dc2626;cursor:pointer;}
+.rt-item-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.rt-item-dot.low{background:#16a34a;}
+.rt-item-dot.medium{background:#ca8a04;}
+.rt-item-dot.high{background:#dc2626;}
 .right-todo{flex:0 0 26%;display:flex;flex-direction:column;min-height:0;background:var(--wb-bg);position:relative;border:2px solid #1a1a1a;overflow:hidden;}
 .right-todo::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 27px,var(--wb-line) 27px,var(--wb-line) 28px);pointer-events:none;z-index:0;}
 .rt-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:5px 10px 4px;border-bottom:1px solid var(--wb-line);background:rgba(245,242,235,0.97);position:relative;z-index:1;}
@@ -759,6 +810,41 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
     <!-- RIGHT COLUMN -->
     <div class="right-col">
+
+      <!-- TO-DO DETAIL OVERLAY -->
+      <div class="rt-detail-overlay" id="rt-detail-overlay">
+        <div class="rt-detail-hdr">
+          <button class="rt-detail-back" onclick="closeHubTodoDetail()">‹ Back</button>
+          <div class="rt-detail-title">Task Detail</div>
+          <div style="width:50px;"></div>
+        </div>
+        <div class="rt-detail-body">
+          <div>
+            <div class="rt-detail-label">Task</div>
+            <input class="rt-detail-field" type="text" id="rt-detail-title-inp" placeholder="Task name..." />
+          </div>
+          <div>
+            <div class="rt-detail-label">Notes</div>
+            <textarea class="rt-detail-field rt-detail-notes" id="rt-detail-notes-inp" placeholder="Add notes..."></textarea>
+          </div>
+          <div>
+            <div class="rt-detail-label">Due Date</div>
+            <input class="rt-detail-field rt-detail-date" type="date" id="rt-detail-date-inp" />
+          </div>
+          <div>
+            <div class="rt-detail-label">Priority</div>
+            <div class="rt-prio-row">
+              <button class="rt-prio-btn" id="rt-prio-low" onclick="setHubPriority('low')">Low</button>
+              <button class="rt-prio-btn" id="rt-prio-medium" onclick="setHubPriority('medium')">Medium</button>
+              <button class="rt-prio-btn" id="rt-prio-high" onclick="setHubPriority('high')">High</button>
+            </div>
+          </div>
+          <div class="rt-detail-actions">
+            <button class="rt-detail-save" onclick="saveHubTodoDetail()">Save</button>
+            <button class="rt-detail-delete" onclick="deleteHubTodoDetail()">Delete</button>
+          </div>
+        </div>
+      </div>
       <!-- TO-DO -->
       <div class="right-todo">
         <div class="rt-header">
@@ -877,19 +963,13 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <div class="clock-menu" id="clock-menu">
   <div class="cm-box">
     <div class="cm-tabs">
-      <button class="cm-tab active" onclick="cmTab('clock')">Clock</button>
-      <button class="cm-tab" onclick="cmTab('timer')">Timer</button>
-      <button class="cm-tab" onclick="cmTab('stopwatch')">Stopwatch</button>
-    </div>
-
-    <!-- Clock panel -->
-    <div class="cm-panel active" id="cm-clock">
-      <div class="cm-bigclock" id="cm-bigclock">12:00 PM</div>
-      <div class="cm-bigdate" id="cm-bigdate">Monday, January 1</div>
+      <button class="cm-tab active" onclick="cmTab('timer')">Timer</button>
+      <button class="cm-tab" onclick="cmTab('alarm')">Alarm</button>
+      <button class="cm-tab" onclick="cmTab('calendar')">Calendar</button>
     </div>
 
     <!-- Timer panel -->
-    <div class="cm-panel" id="cm-timer">
+    <div class="cm-panel active" id="cm-timer">
       <div class="cm-display" id="timer-display">00:00</div>
       <div class="cm-presets">
         <div class="cm-preset" onclick="setTimerPreset(5)">5 min</div>
@@ -912,14 +992,27 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       </div>
     </div>
 
-    <!-- Stopwatch panel -->
-    <div class="cm-panel" id="cm-stopwatch">
-      <div class="sw-display" id="sw-display">00:00.0</div>
-      <div class="cm-btn-row">
-        <button class="cm-btn start" id="sw-start-btn" onclick="swAction()">Start</button>
-        <button class="cm-btn reset" onclick="swReset()">Reset</button>
+    <!-- Alarm panel -->
+    <div class="cm-panel" id="cm-alarm">
+      <div class="alarm-time-row">
+        <input class="alarm-time-inp" type="time" id="alarm-time-inp" />
+        <button class="cm-btn start" onclick="setAlarm()" style="flex:0 0 auto;padding:0 20px;">Set</button>
       </div>
+      <div id="alarm-list" class="alarm-list"></div>
+      <div class="alarm-empty" id="alarm-empty">No alarms set</div>
     </div>
+
+    <!-- Calendar panel -->
+    <div class="cm-panel" id="cm-calendar">
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="calPrev()">‹</button>
+        <div class="cal-month-label" id="cal-month-label"></div>
+        <button class="cal-nav-btn" onclick="calNext()">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-todo-preview" id="cal-todo-preview"></div>
+    </div>
+
   </div>
 </div>
 
@@ -1318,7 +1411,7 @@ window.addTodo = async () => {
   const inp = document.getElementById('todo-inp');
   const text = inp.value.trim();
   if (!text) return;
-  todos.push({id: Date.now().toString(), text, done: false});
+  todos.push({id: Date.now().toString(), text, done: false, notes:'', dueDate:'', priority:'medium'});
   inp.value = '';
   await saveTodos();
   renderTodos();
@@ -1344,41 +1437,78 @@ function renderTodos() {
   const active = todos.filter(t=>!t.done).length;
   if (cnt) { cnt.style.display=active>0?'inline-block':'none'; cnt.textContent=active; }
   if (!todos.length) { el.innerHTML='<div class="rt-empty">No tasks yet</div>'; return; }
+  const priorityOrder = {high:0,medium:1,low:2};
+  const sorted = [
+    ...todos.filter(i=>!i.done).sort((a,b)=>(priorityOrder[a.priority||'medium']||1)-(priorityOrder[b.priority||'medium']||1)),
+    ...todos.filter(i=>i.done)
+  ];
   el.innerHTML = '';
-  todos.forEach(t => {
-    const isExp = expandedTodoId === t.id;
+  sorted.forEach(t => {
+    const prio = t.priority || 'medium';
     const d = document.createElement('div');
-    d.className = 'rt-item' + (t.done?' done':'') + (isExp?' expanded':'');
+    d.className = 'rt-item' + (t.done?' done':'');
     d.innerHTML = `
-      <div class="rt-item-row" onclick="toggleRtItem('${t.id}')">
-        <div class="rt-check"><span class="rt-check-mark">✓</span></div>
+      <div class="rt-item-row" onclick="openHubTodoDetail('${t.id}')">
+        <div class="rt-check" onclick="event.stopPropagation();toggleTodoItem('${t.id}')"><span class="rt-check-mark">✓</span></div>
+        <div class="rt-item-dot ${prio}"></div>
         <div class="rt-item-text">${esc(t.text)}</div>
         <button class="rt-item-del" onclick="event.stopPropagation();deleteTodoItem('${t.id}')">×</button>
-      </div>
-      <div class="rt-card">
-        <input class="rt-card-edit" type="text" id="rt-edit-${t.id}" value="${esc(t.text)}"
-          onclick="event.stopPropagation()"
-          onkeydown="if(event.key==='Enter')saveTodoEdit('${t.id}')" />
-        <div class="rt-card-actions">
-          <button class="rt-card-btn save" onclick="event.stopPropagation();saveTodoEdit('${t.id}')">Save</button>
-          <button class="rt-card-btn done-btn" onclick="event.stopPropagation();toggleTodoItem('${t.id}')">${t.done?'↩ Undo':'✓ Done'}</button>
-          <button class="rt-card-btn del-btn" onclick="event.stopPropagation();deleteTodoItem('${t.id}')">Delete</button>
-        </div>
       </div>`;
     el.appendChild(d);
   });
+  // refresh calendar dots if open
+  if (calViewDate) renderCalGrid();
 }
 
-window.saveTodoEdit = async (id) => {
-  const inp = document.getElementById('rt-edit-'+id);
-  if (!inp) return;
-  const text = inp.value.trim();
-  if (!text) return;
-  const t = todos.find(t=>t.id===id);
-  if (t) t.text = text;
-  expandedTodoId = null;
+// ── HUB TODO DETAIL ──
+let hubDetailId = null, hubDetailPriority = 'medium';
+
+window.openHubTodoDetail = (id) => {
+  const item = todos.find(t=>t.id===id);
+  if (!item) return;
+  hubDetailId = id;
+  hubDetailPriority = item.priority || 'medium';
+  document.getElementById('rt-detail-title-inp').value = item.text || '';
+  document.getElementById('rt-detail-notes-inp').value = item.notes || '';
+  document.getElementById('rt-detail-date-inp').value = item.dueDate || '';
+  updateHubPrioButtons(hubDetailPriority);
+  document.getElementById('rt-detail-overlay').classList.add('open');
+};
+
+window.closeHubTodoDetail = () => {
+  document.getElementById('rt-detail-overlay').classList.remove('open');
+  hubDetailId = null;
+};
+
+window.setHubPriority = (p) => {
+  hubDetailPriority = p;
+  updateHubPrioButtons(p);
+};
+
+function updateHubPrioButtons(p) {
+  ['low','medium','high'].forEach(level => {
+    const btn = document.getElementById('rt-prio-'+level);
+    if (btn) btn.className = 'rt-prio-btn' + (p===level?' active-'+level:'');
+  });
+}
+
+window.saveHubTodoDetail = async () => {
+  const item = todos.find(t=>t.id===hubDetailId);
+  if (!item) return;
+  item.text = document.getElementById('rt-detail-title-inp').value.trim() || item.text;
+  item.notes = document.getElementById('rt-detail-notes-inp').value.trim();
+  item.dueDate = document.getElementById('rt-detail-date-inp').value;
+  item.priority = hubDetailPriority;
   await saveTodos();
   renderTodos();
+  closeHubTodoDetail();
+};
+
+window.deleteHubTodoDetail = async () => {
+  todos = todos.filter(t=>t.id!==hubDetailId);
+  await saveTodos();
+  renderTodos();
+  closeHubTodoDetail();
 };
 
 window.libAdd = async (upc, name, price, image, btn) => {
@@ -2315,7 +2445,7 @@ tick();
 
 // ── CLOCK MENU ──
 let clockMenuOpen = false;
-let activeTab = 'clock';
+let activeTab = 'timer';
 
 window.toggleClockMenu = () => {
   clockMenuOpen ? closeClockMenu() : openClockMenu();
@@ -2334,12 +2464,127 @@ window.closeClockMenu = () => {
 window.cmTab = (tab) => {
   activeTab = tab;
   document.querySelectorAll('.cm-tab').forEach((t,i)=>{
-    const tabs=['clock','timer','stopwatch'];
+    const tabs=['timer','alarm','calendar'];
     t.classList.toggle('active', tabs[i]===tab);
   });
   document.querySelectorAll('.cm-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('cm-'+tab).classList.add('active');
+  if (tab==='calendar') renderCalGrid();
 };
+
+// ── ALARM ──
+let alarms = [];
+
+window.setAlarm = () => {
+  const val = document.getElementById('alarm-time-inp').value;
+  if (!val) return;
+  const id = Date.now().toString();
+  alarms.push({id, time: val, firing: false});
+  document.getElementById('alarm-time-inp').value = '';
+  renderAlarms();
+};
+
+window.deleteAlarm = (id) => {
+  alarms = alarms.filter(a=>a.id!==id);
+  renderAlarms();
+};
+
+function renderAlarms() {
+  const el = document.getElementById('alarm-list');
+  const empty = document.getElementById('alarm-empty');
+  if (!el) return;
+  if (!alarms.length) { el.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  el.innerHTML='';
+  alarms.forEach(a=>{
+    const d=document.createElement('div');
+    d.className='alarm-item';
+    const [h,m]=a.time.split(':');
+    const hr=parseInt(h); const ampm=hr>=12?'PM':'AM';
+    const disp=`${hr%12||12}:${m} ${ampm}`;
+    d.innerHTML=`<div class="alarm-item-time${a.firing?' firing':''}">${disp}</div><button class="alarm-del" onclick="deleteAlarm('${a.id}')">×</button>`;
+    el.appendChild(d);
+  });
+}
+
+// Check alarms every 30s
+setInterval(()=>{
+  const now=new Date();
+  const cur=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  alarms.forEach(a=>{
+    if(a.time===cur && !a.firing){
+      a.firing=true;
+      toast('⏰ Alarm: '+a.time);
+      if(navigator.vibrate) navigator.vibrate([500,200,500,200,500]);
+      renderAlarms();
+      setTimeout(()=>{ a.firing=false; renderAlarms(); },60000);
+    }
+  });
+},30000);
+
+// ── CALENDAR ──
+let calViewDate = new Date();
+let calSelectedDate = null;
+
+function renderCalGrid() {
+  const el = document.getElementById('cal-grid');
+  const label = document.getElementById('cal-month-label');
+  if (!el) return;
+  const year = calViewDate.getFullYear();
+  const month = calViewDate.getMonth();
+  label.textContent = new Date(year,month,1).toLocaleDateString([],{month:'long',year:'numeric'});
+  const dayNames=['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const first=new Date(year,month,1).getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const daysInPrev=new Date(year,month,0).getDate();
+  const today=new Date(); today.setHours(0,0,0,0);
+
+  // Build set of days with todos
+  const todoDays=new Set();
+  todos.forEach(t=>{ if(t.dueDate){ const d=new Date(t.dueDate+'T00:00:00'); if(d.getFullYear()===year&&d.getMonth()===month) todoDays.add(d.getDate()); } });
+
+  let html=dayNames.map(n=>`<div class="cal-day-name">${n}</div>`).join('');
+  // prev month padding
+  for(let i=0;i<first;i++){
+    html+=`<div class="cal-day other-month">${daysInPrev-first+1+i}</div>`;
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const date=new Date(year,month,d);
+    const isToday=date.getTime()===today.getTime();
+    const isSel=calSelectedDate&&date.getTime()===calSelectedDate.getTime();
+    const hasTodo=todoDays.has(d);
+    html+=`<div class="cal-day${isToday?' today':''}${isSel&&!isToday?' selected':''}" onclick="calSelectDay(${d})">${d}${hasTodo?'<div class="cal-dot"></div>':''}</div>`;
+  }
+  // fill remaining cells
+  const total=first+daysInMonth;
+  const rem=(7-total%7)%7;
+  for(let i=1;i<=rem;i++) html+=`<div class="cal-day other-month">${i}</div>`;
+  el.innerHTML=html;
+  if(calSelectedDate) renderCalPreview();
+}
+
+window.calSelectDay = (d) => {
+  calSelectedDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth(), d);
+  renderCalGrid();
+  renderCalPreview();
+};
+
+window.calPrev = () => { calViewDate=new Date(calViewDate.getFullYear(),calViewDate.getMonth()-1,1); renderCalGrid(); };
+window.calNext = () => { calViewDate=new Date(calViewDate.getFullYear(),calViewDate.getMonth()+1,1); renderCalGrid(); };
+
+function renderCalPreview() {
+  const el = document.getElementById('cal-todo-preview');
+  if (!el || !calSelectedDate) return;
+  const sel=calSelectedDate;
+  const dateStr=`${sel.getFullYear()}-${String(sel.getMonth()+1).padStart(2,'0')}-${String(sel.getDate()).padStart(2,'0')}`;
+  const due=todos.filter(t=>t.dueDate===dateStr);
+  const title=sel.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
+  if(!due.length){
+    el.innerHTML=`<div class="cal-preview-title">${title}</div><div class="cal-preview-none">No tasks due</div>`;
+  } else {
+    el.innerHTML=`<div class="cal-preview-title">${title}</div>`+due.map(t=>`<div class="cal-preview-item"><div class="rt-item-dot ${t.priority||'medium'}"></div>${esc(t.text)}</div>`).join('');
+  }
+}
 
 // ── TIMER ──
 let timerSecs = 0, timerRemaining = 0, timerRunning = false, timerInterval = null;
@@ -2419,36 +2664,6 @@ function updateHeaderTimer(){
     badge.classList.remove('visible','alarm');
   }
 }
-
-// ── STOPWATCH ──
-let swRunning=false, swStart=0, swElapsed=0, swInterval=null;
-
-window.swAction = () => {
-  if(!swRunning){
-    swRunning=true; swStart=Date.now()-swElapsed;
-    document.getElementById('sw-start-btn').textContent='Stop';
-    document.getElementById('sw-display').classList.add('running');
-    swInterval=setInterval(()=>{
-      swElapsed=Date.now()-swStart;
-      const tot=Math.floor(swElapsed/100);
-      const h=Math.floor(tot/36000);const m=Math.floor((tot%36000)/600);
-      const s=Math.floor((tot%600)/10);const ds=tot%10;
-      document.getElementById('sw-display').textContent=
-        h>0?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${ds}`;
-    },100);
-  } else {
-    clearInterval(swInterval);swRunning=false;
-    document.getElementById('sw-start-btn').textContent='Start';
-    document.getElementById('sw-display').classList.remove('running');
-  }
-};
-
-window.swReset = () => {
-  clearInterval(swInterval);swRunning=false;swElapsed=0;
-  document.getElementById('sw-start-btn').textContent='Start';
-  document.getElementById('sw-display').textContent='00:00.0';
-  document.getElementById('sw-display').classList.remove('running');
-};
 
 // ── WEATHER ──
 async function loadWeather(){
