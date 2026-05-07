@@ -63,6 +63,28 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .hdr-clock-hint{font-size:8px;color:var(--t3);font-family:'DM Mono',monospace;letter-spacing:0.06em;margin-top:1px;}
 
 .hdr-right{display:flex;align-items:center;gap:10px;}
+/* Messaging */
+.hub-msg-btn{position:relative;background:none;border:1px solid var(--b2);border-radius:8px;padding:5px 10px;font-size:15px;cursor:pointer;transition:all 0.15s;line-height:1;}
+.hub-msg-btn:hover{background:var(--s2);border-color:var(--b3);}
+.hub-msg-dot{width:8px;height:8px;border-radius:50%;background:var(--ring);position:absolute;top:-3px;right:-3px;display:none;}
+.hub-msg-dot.show{display:block;}
+.hub-msg-panel{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:2px solid var(--green);border-radius:20px 20px 0 0;padding:1.25rem;z-index:6000;box-shadow:0 -8px 32px rgba(0,0,0,.2);}
+.hub-msg-panel.open{display:block;}
+.hub-msg-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.hub-msg-title{font-size:15px;font-weight:800;color:var(--text);font-family:'Syne',sans-serif;}
+.hub-msg-close{background:none;border:none;font-size:22px;color:var(--t3);cursor:pointer;line-height:1;}
+.hub-msg-feed{max-height:180px;overflow-y:auto;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}
+.hub-msg-bubble{padding:8px 12px;border-radius:12px;font-size:13px;max-width:80%;line-height:1.4;font-family:'Syne',sans-serif;}
+.hub-msg-bubble.sent{background:var(--green);color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+.hub-msg-bubble.received{background:var(--s2);color:var(--text);border:1px solid var(--b2);align-self:flex-start;border-bottom-left-radius:4px;}
+.hub-msg-meta{font-size:9px;opacity:.6;margin-top:3px;font-family:'DM Mono',monospace;}
+.hub-msg-inp-row{display:flex;gap:8px;}
+.hub-msg-inp{flex:1;height:46px;border:1.5px solid var(--b2);border-radius:10px;padding:0 14px;font-family:'Syne',sans-serif;font-size:14px;color:var(--text);background:var(--s2);outline:none;transition:border-color .15s;}
+.hub-msg-inp:focus{border-color:var(--green);}
+.hub-msg-send{height:46px;padding:0 20px;background:var(--green);color:#fff;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+/* Incoming message banner */
+.hub-msg-banner{position:fixed;top:-80px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;border-radius:14px;padding:12px 20px;font-size:14px;font-weight:700;font-family:'Syne',sans-serif;z-index:7000;transition:top .3s cubic-bezier(.34,1.3,.64,1);white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.25);max-width:90vw;overflow:hidden;text-overflow:ellipsis;}
+.hub-msg-banner.show{top:70px;}
 .hdr-weather{display:flex;align-items:center;gap:6px;}
 .hdr-w-icon{font-size:20px;}
 .hdr-temp{font-size:17px;font-weight:800;color:var(--text);line-height:1;}
@@ -740,6 +762,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="hdr-weather" id="hdr-weather"><div style="font-size:10px;color:var(--t3);font-family:'DM Mono',monospace;">...</div></div>
       <div class="hdr-user" id="hdr-user"></div>
       <button class="hdr-mic-btn" id="hdr-mic-btn" onclick="tapMic()" title="Voice assistant">🎤</button>
+      <button class="hub-msg-btn" id="hub-msg-btn" onclick="openHubMsgPanel()" title="Message phone">
+        💬
+        <div class="hub-msg-dot" id="hub-msg-dot"></div>
+      </button>
       <button class="hdr-sleep" onclick="goPhotoMode()">🌙</button>
       <button class="hdr-menu-btn" id="hdr-menu-btn" onclick="toggleHMenu()">≡</button>
     </div>
@@ -1326,6 +1352,7 @@ onAuthStateChanged(auth, async user => {
     try { const s=await getDoc(doc(db,'users',cu.uid,'pinned')); pinned=s.exists()?s.data():{}; } catch(e){}
     subList();
     loadTodos();
+    subscribeToHubMessages();
     loadCustomPhotos();
     initAI();
     if (activePg==='login-page'||activePg==='photo-mode') nav('home-page','fi');
@@ -2670,6 +2697,94 @@ function updateHeaderTimer(){
   }
 }
 
+// ── MESSAGING ──
+let hubMsgUnsubscribe = null;
+let hubMsgPanelOpen = false;
+
+function subscribeToHubMessages() {
+  if (!cu || hubMsgUnsubscribe) return;
+  const q = collection(db, 'users', cu.uid, 'messages');
+  hubMsgUnsubscribe = onSnapshot(q, snap => {
+    snap.docChanges().forEach(change => {
+      if (change.type === 'added') {
+        const msg = change.doc.data();
+        if (msg.from === 'app' && !msg.readByHub) {
+          setDoc(change.doc.ref, {readByHub: true}, {merge: true});
+          if (hubMsgPanelOpen) {
+            renderHubMsgFeed();
+          } else {
+            showHubMsgBanner('📱 Phone: ' + msg.text);
+            document.getElementById('hub-msg-dot').classList.add('show');
+          }
+        }
+      }
+    });
+    if (hubMsgPanelOpen) renderHubMsgFeed();
+  });
+}
+
+async function renderHubMsgFeed() {
+  if (!cu) return;
+  const el = document.getElementById('hub-msg-feed');
+  if (!el) return;
+  try {
+    const snap = await getDocs(collection(db, 'users', cu.uid, 'messages'));
+    const msgs = [];
+    snap.forEach(d => msgs.push({id: d.id, ...d.data()}));
+    msgs.sort((a,b) => (a.sentAt?.toMillis?.() || 0) - (b.sentAt?.toMillis?.() || 0));
+    el.innerHTML = '';
+    if (!msgs.length) {
+      el.innerHTML = '<div style="font-size:12px;color:var(--t3);text-align:center;padding:1rem;font-family:\'DM Mono\',monospace;">No messages yet</div>';
+      return;
+    }
+    msgs.forEach(msg => {
+      const d = document.createElement('div');
+      d.className = 'hub-msg-bubble ' + (msg.from === 'hub' ? 'sent' : 'received');
+      const time = msg.sentAt ? new Date(msg.sentAt.toMillis()).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
+      d.innerHTML = esc(msg.text) + '<div class="hub-msg-meta">' + (msg.from === 'app' ? '📱 Phone' : 'Station') + (time ? ' · ' + time : '') + '</div>';
+      el.appendChild(d);
+    });
+    el.scrollTop = el.scrollHeight;
+  } catch(e) {}
+}
+
+window.openHubMsgPanel = async () => {
+  hubMsgPanelOpen = true;
+  document.getElementById('hub-msg-panel').classList.add('open');
+  document.getElementById('hub-msg-dot').classList.remove('show');
+  await renderHubMsgFeed();
+  document.getElementById('hub-msg-inp').focus();
+};
+
+window.closeHubMsgPanel = () => {
+  hubMsgPanelOpen = false;
+  document.getElementById('hub-msg-panel').classList.remove('open');
+};
+
+window.sendHubMsg = async () => {
+  if (!cu) return;
+  const inp = document.getElementById('hub-msg-inp');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  try {
+    await setDoc(doc(collection(db, 'users', cu.uid, 'messages')), {
+      text, from: 'hub', sentAt: new Date(), readByApp: false, readByHub: true
+    });
+    await renderHubMsgFeed();
+  } catch(e) {}
+};
+
+function showHubMsgBanner(text) {
+  const el = document.getElementById('hub-msg-banner');
+  el.textContent = text;
+  el.classList.add('show');
+  clearTimeout(window._hubMsgTimer);
+  window._hubMsgTimer = setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+document.getElementById('hub-msg-inp')?.addEventListener('keydown', e => { if(e.key==='Enter') window.sendHubMsg(); e.stopPropagation(); });
+
 // ── WEATHER ──
 async function loadWeather(){
   try {
@@ -2839,7 +2954,7 @@ function setSts(m,t=''){const el=document.getElementById('scan-sts');if(el){el.t
 function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>el.classList.remove('show'),2500);}
 
 document.addEventListener('click',e=>{
-  if(activePg==='home-page'&&!e.target.closest('input,button,.wb-item,.nav-tile,.app-tile,.photo-thumb,.todo-panel,.clock-menu,.rt-detail-overlay'))
+  if(activePg==='home-page'&&!e.target.closest('input,button,.wb-item,.nav-tile,.app-tile,.photo-thumb,.todo-panel,.clock-menu,.rt-detail-overlay,.hub-msg-panel'))
     setTimeout(()=>document.getElementById('scan-inp')?.focus(),50);
 });
 </script>
@@ -2861,5 +2976,21 @@ document.addEventListener('click',e=>{
   setTimeout(startClock,1000);
 })();
 </script>
+<!-- Hub message banner -->
+<div class="hub-msg-banner" id="hub-msg-banner"></div>
+
+<!-- Hub message panel -->
+<div class="hub-msg-panel" id="hub-msg-panel">
+  <div class="hub-msg-hdr">
+    <div class="hub-msg-title">💬 Message Phone</div>
+    <button class="hub-msg-close" onclick="closeHubMsgPanel()">×</button>
+  </div>
+  <div class="hub-msg-feed" id="hub-msg-feed"></div>
+  <div class="hub-msg-inp-row">
+    <input class="hub-msg-inp" type="text" id="hub-msg-inp" placeholder="Send a message to the phone…" />
+    <button class="hub-msg-send" onclick="sendHubMsg()">Send</button>
+  </div>
+</div>
+
 </body>
 </html>
