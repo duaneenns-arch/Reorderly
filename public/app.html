@@ -60,7 +60,8 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 .home-logo-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: 3px; vertical-align: middle; position: relative; top: -2px; }
 .home-version { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-left: 6px; vertical-align: middle; }
 .home-stats { display: flex; gap: 8px; margin-bottom: 1.5rem; }
-.home-stat { flex: 1; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px 12px; text-align: center; }
+.home-stat { flex: 1; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 14px 12px; text-align: center; cursor: pointer; transition: border-color .15s; }
+.home-stat:hover { border-color: var(--green); }
 .home-stat-num { font-size: 24px; font-weight: 800; color: var(--green); line-height: 1; }
 .home-stat-label { font-size: 10px; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
 .home-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
@@ -477,15 +478,15 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
 
     <div class="home-stats">
-      <div class="home-stat">
+      <div class="home-stat" onclick="showMainView(); showAppScreen();">
         <div class="home-stat-num" id="home-stat-items">0</div>
         <div class="home-stat-label" data-i18n="statInList">In List</div>
       </div>
-      <div class="home-stat">
+      <div class="home-stat" onclick="showRecipeBook(); showAppScreen();">
         <div class="home-stat-num" id="home-stat-recipes">0</div>
         <div class="home-stat-label" data-i18n="statRecipes">Recipes</div>
       </div>
-      <div class="home-stat">
+      <div class="home-stat" onclick="showHistory(); showAppScreen();">
         <div class="home-stat-num" id="home-stat-orders">0</div>
         <div class="home-stat-label" data-i18n="statOrders">Orders</div>
       </div>
@@ -497,22 +498,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div class="home-card-info">
           <div class="home-card-title" data-i18n="cardListTitle">My Shopping List</div>
           <div class="home-card-sub" data-i18n="cardListSub">Scan items and order on Walmart</div>
-        </div>
-        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-      <div class="home-card" onclick="showRecipeBook(); showAppScreen();">
-        <div class="home-card-icon amber">📖</div>
-        <div class="home-card-info">
-          <div class="home-card-title" data-i18n="cardRecipeTitle">Recipe Book</div>
-          <div class="home-card-sub" data-i18n="cardRecipeSub">Add recipes and extract ingredients</div>
-        </div>
-        <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-      <div class="home-card" onclick="showHistory(); showAppScreen();">
-        <div class="home-card-icon blue">🕐</div>
-        <div class="home-card-info">
-          <div class="home-card-title" data-i18n="cardHistoryTitle">Order History</div>
-          <div class="home-card-sub" data-i18n="cardHistorySub">View and re-add past orders</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
@@ -573,7 +558,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
     <div class="about-section">
       <div class="about-section-title" data-i18n="aboutVersionTitle">Version</div>
-      <div class="about-section-body">ReOrderly v2.14 — Built with Firebase, Netlify, and Anthropic AI.</div>
+      <div class="about-section-body">ReOrderly v2.15 — Built with Firebase, Netlify, and Anthropic AI.</div>
     </div>
     <div class="about-section">
       <div class="about-section-title">Legal</div>
@@ -621,7 +606,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="drawer-header">
     <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
-    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v2.14</div>
+    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v2.15</div>
   </div>
   <div class="drawer-item" onclick="showHomeScreen(); closeDrawer();">
     <div class="drawer-item-left">
@@ -1392,6 +1377,8 @@ function subscribeToList(listId) {
   unsubscribeList = onSnapshot(ref, snap => {
     items = snap.exists() ? (snap.data().items||[]) : [];
     renderList();
+    const el = document.getElementById('home-stat-items');
+    if (el) el.textContent = items.length || 0;
   });
 }
 
