@@ -1465,6 +1465,10 @@ function renderTodos() {
 let hubDetailId = null, hubDetailPriority = 'medium';
 
 window.openHubTodoDetail = (id) => {
+  if (hubDetailId === id && document.getElementById('rt-detail-overlay').classList.contains('open')) {
+    closeHubTodoDetail();
+    return;
+  }
   const item = todos.find(t=>t.id===id);
   if (!item) return;
   hubDetailId = id;
