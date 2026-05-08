@@ -780,7 +780,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="sb-txt"> items on list</div>
     <div class="sb-sep" id="sb-sep2" style="display:none;">·</div>
     <div class="sb-txt" id="sb-last-scan"></div>
-    <div style="margin-left:auto;font-size:9px;font-family:'DM Mono',monospace;color:var(--t3);" id="sb-version">v2.13 · hub</div>
+    <div style="margin-left:auto;font-size:9px;font-family:'DM Mono',monospace;color:var(--t3);" id="sb-version">v3.0 · hub</div>
   </div>
 
   <div class="home-body">
@@ -1097,7 +1097,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
   <div class="hmenu-item" onclick="showAbout();closeHMenu()">
     <div class="hmenu-ico">ℹ️</div>
-    <div><div class="hmenu-label">About ReOrderly</div><div class="hmenu-sub">v2.12 · Walmart affiliate</div></div>
+    <div><div class="hmenu-label">About ReOrderly</div><div class="hmenu-sub">v3.0 · Walmart affiliate</div></div>
   </div>
   <div class="hmenu-divider"></div>
   <button class="hmenu-sleep" onclick="goPhotoMode();closeHMenu()">
@@ -1130,7 +1130,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <div class="about-modal" id="about-modal">
   <div class="about-box">
     <div class="about-logo">ReOrderly<span class="about-dot"></span></div>
-    <div class="about-version">Version 2.12 · Station Hub</div>
+    <div class="about-version">Version 3.0 · Station Hub</div>
     <div class="about-divider"></div>
     <div class="about-text">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
     <div class="about-text">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc.</div>
@@ -1229,6 +1229,30 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </div>
   </div>
 </div>
+
+<!-- Error Boundary Script — must run before all other scripts -->
+<script>
+(function(){
+  function showError(msg){
+    var el=document.getElementById('error-boundary');
+    if(!el)return;
+    el.style.display='flex';
+    var det=document.getElementById('hub-err-det');
+    if(det)det.textContent=msg||'Unknown error';
+  }
+  window.onerror=function(msg,src,line,col,err){
+    var detail=(err&&err.stack)||msg||'Unknown error';
+    console.error('[Station Error]',detail);
+    showError(detail);
+    return true;
+  };
+  window.onunhandledrejection=function(e){
+    var detail=(e.reason&&(e.reason.stack||e.reason.message))||String(e.reason)||'Unhandled promise rejection';
+    console.error('[Station Unhandled Rejection]',detail);
+    showError(detail);
+  };
+})();
+</script>
 
 <script>
 // Synchronous stubs — available immediately before the module loads
@@ -2989,6 +3013,18 @@ document.addEventListener('click',e=>{
   <div class="hub-msg-inp-row">
     <input class="hub-msg-inp" type="text" id="hub-msg-inp" placeholder="Send a message to the phone…" />
     <button class="hub-msg-send" onclick="sendHubMsg()">Send</button>
+  </div>
+</div>
+
+<!-- Error Boundary Overlay -->
+<div id="error-boundary" style="display:none;position:fixed;inset:0;z-index:99999;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;font-family:'Syne',sans-serif;">
+  <div style="font-size:32px;margin-bottom:12px;">⚠️</div>
+  <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px;">Station Error</div>
+  <div style="font-size:13px;color:var(--t2);margin-bottom:24px;line-height:1.6;">Something went wrong with the Station hub.<br>Tap below to reload.</div>
+  <button onclick="location.reload()" style="background:var(--green);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Reload Station</button>
+  <div style="margin-top:20px;">
+    <span onclick="document.getElementById('hub-err-det').style.display=document.getElementById('hub-err-det').style.display==='none'?'block':'none'" style="font-size:11px;color:var(--t3);cursor:pointer;text-decoration:underline;">show details</span>
+    <pre id="hub-err-det" style="display:none;margin-top:10px;font-size:10px;color:var(--t2);background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:10px;text-align:left;max-width:400px;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto;"></pre>
   </div>
 </div>
 
