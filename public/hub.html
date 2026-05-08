@@ -10,6 +10,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="/lang.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -774,13 +775,13 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   <!-- STATUS BAR -->
   <div class="status-bar">
     <div class="sb-dot"></div>
-    <div class="sb-txt">Scanner ready</div>
+    <div class="sb-txt" data-i18n="hubStatusReady">Scanner ready</div>
     <div class="sb-sep">·</div>
     <div class="sb-cnt" id="sb-item-cnt">0</div>
-    <div class="sb-txt"> items on list</div>
+    <div class="sb-txt" data-i18n="items"> items on list</div>
     <div class="sb-sep" id="sb-sep2" style="display:none;">·</div>
     <div class="sb-txt" id="sb-last-scan"></div>
-    <div style="margin-left:auto;font-size:9px;font-family:'DM Mono',monospace;color:var(--t3);" id="sb-version">v3.0 · hub</div>
+    <div style="margin-left:auto;font-size:9px;font-family:'DM Mono',monospace;color:var(--t3);" id="sb-version">v3.1 · hub</div>
   </div>
 
   <div class="home-body">
@@ -789,18 +790,18 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="wb-header">
         <div class="wb-scan-row">
           <span class="wb-title-sm">🛒</span>
-          <input class="wb-inp" type="text" id="scan-inp" placeholder="Barcode or item name…" autocomplete="off" />
-          <button class="wb-add-btn" id="scan-btn" onclick="doScan()">Add</button>
+          <input class="wb-inp" type="text" id="scan-inp" data-i18n-placeholder="hubScanPlaceholder" placeholder="Barcode or item name…" autocomplete="off" />
+          <button class="wb-add-btn" id="scan-btn" onclick="doScan()" data-i18n="btnAdd">Add</button>
           <button class="wb-open-btn" id="go-shop-btn" onclick="goShop()" disabled>🛍 Review &amp; Order</button>
         </div>
       </div>
       <div class="wb-sts" id="scan-sts"></div>
       <!-- TAB PANELS -->
       <div class="wb-tab-panel active" id="tbp-list">
-        <div class="wb-board-title">What do we need?</div>
+        <div class="wb-board-title" data-i18n="hubWhatDoWeNeed">What do we need?</div>
         <div class="wb-list" id="wb-list">
           <div class="wb-empty" id="wb-empty">
-            <div class="wb-empty-txt">Nothing on the list yet…<br>scan something to get started</div>
+            <div class="wb-empty-txt" data-i18n="hubEmptyList">Nothing on the list yet…</div>
           </div>
         </div>
       </div>
@@ -815,21 +816,21 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       </div>
       <div class="scn-bar">
         <div class="scn-dot"></div>
-        <div class="scn-lbl" style="font-size:9px;font-family:'DM Mono',monospace;color:var(--wb-green);font-weight:700;">Live</div>
-        <button class="wb-clear-sm" onclick="clearItems()">Clear list</button>
+        <div class="scn-lbl" style="font-size:9px;font-family:'DM Mono',monospace;color:var(--wb-green);font-weight:700;" data-i18n="liveIndicator">Live</div>
+        <button class="wb-clear-sm" onclick="clearItems()" data-i18n="btnClear">Clear list</button>
       </div>
       <div class="wb-tabs">
         <button class="wb-tab active" id="tab-list" onclick="switchTab('list')">
-          <div class="wb-tab-icon">🛒</div>List
+          <div class="wb-tab-icon">🛒</div><span data-i18n="hubNavList">List</span>
         </button>
         <button class="wb-tab" id="tab-rcp" onclick="switchTab('rcp')">
-          <div class="wb-tab-icon">📖</div>Recipes
+          <div class="wb-tab-icon">📖</div><span data-i18n="hubNavRecipes">Recipes</span>
         </button>
         <button class="wb-tab" id="tab-hist" onclick="switchTab('hist')">
-          <div class="wb-tab-icon">🕐</div>History
+          <div class="wb-tab-icon">🕐</div><span data-i18n="hubNavHistory">History</span>
         </button>
         <button class="wb-tab" id="tab-lib" onclick="switchTab('lib')">
-          <div class="wb-tab-icon">📦</div>Library
+          <div class="wb-tab-icon">📦</div><span data-i18n="hubNavLibrary">Library</span>
         </button>
       </div>
     </div>
@@ -843,11 +844,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           <div class="rt-title">📝 To-Do</div><span class="rt-cnt" id="todo-cnt" style="display:none;"></span>
         </div>
         <div class="rt-add-row">
-          <input class="rt-inp" type="text" id="todo-inp" placeholder="Add a task…" autocomplete="off" />
-          <button class="rt-add" onclick="addTodo()">+ Add</button>
+          <input class="rt-inp" type="text" id="todo-inp" data-i18n-placeholder="todoPlaceholder" placeholder="Add a task…" autocomplete="off" />
+          <button class="rt-add" onclick="addTodo()" data-i18n="todoAddBtn">+ Add</button>
         </div>
         <div class="rt-list" id="todo-list">
-          <div class="rt-empty">No tasks yet</div>
+          <div class="rt-empty" data-i18n="todoEmpty">No tasks yet</div>
         </div>
       </div>
       <!-- PHOTO FRAME -->
@@ -867,7 +868,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           </div>
           <div class="ai-response-text" id="ai-response-text"></div>
           <div class="ai-response-action" id="ai-response-action"></div>
-          <button class="ai-dismiss-btn" onclick="dismissAiFrame()">Dismiss</button>
+          <button class="ai-dismiss-btn" onclick="dismissAiFrame()" data-i18n="hubDismiss">Dismiss</button>
         </div>
       </div>
     </div>
@@ -875,34 +876,34 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <!-- TO-DO DETAIL OVERLAY — covers left column -->
     <div class="rt-detail-overlay" id="rt-detail-overlay">
       <div class="rt-detail-hdr">
-        <button class="rt-detail-back" onclick="closeHubTodoDetail()">‹ Back</button>
-        <div class="rt-detail-title">Task Detail</div>
+        <button class="rt-detail-back" onclick="closeHubTodoDetail()">‹ <span data-i18n="btnBack">Back</span></button>
+        <div class="rt-detail-title" data-i18n="todoDetailTitle">Task Detail</div>
         <div style="width:50px;"></div>
       </div>
       <div class="rt-detail-body">
         <div>
-          <div class="rt-detail-label">Task</div>
-          <input class="rt-detail-field" type="text" id="rt-detail-title-inp" placeholder="Task name..." />
+          <div class="rt-detail-label" data-i18n="todoDetailTaskLabel">Task</div>
+          <input class="rt-detail-field" type="text" id="rt-detail-title-inp" data-i18n-placeholder="todoDetailNotesPlaceholder" placeholder="Task name..." />
         </div>
         <div>
-          <div class="rt-detail-label">Notes</div>
-          <textarea class="rt-detail-field rt-detail-notes" id="rt-detail-notes-inp" placeholder="Add notes..."></textarea>
+          <div class="rt-detail-label" data-i18n="todoDetailNotesLabel">Notes</div>
+          <textarea class="rt-detail-field rt-detail-notes" id="rt-detail-notes-inp" data-i18n-placeholder="todoDetailNotesPlaceholder" placeholder="Add notes..."></textarea>
         </div>
         <div>
-          <div class="rt-detail-label">Due Date</div>
+          <div class="rt-detail-label" data-i18n="todoDetailDueLabel">Due Date</div>
           <input class="rt-detail-field rt-detail-date" type="date" id="rt-detail-date-inp" />
         </div>
         <div>
-          <div class="rt-detail-label">Priority</div>
+          <div class="rt-detail-label" data-i18n="todoDetailPriorityLabel">Priority</div>
           <div class="rt-prio-row">
-            <button class="rt-prio-btn" id="rt-prio-low" onclick="setHubPriority('low')">Low</button>
-            <button class="rt-prio-btn" id="rt-prio-medium" onclick="setHubPriority('medium')">Medium</button>
-            <button class="rt-prio-btn" id="rt-prio-high" onclick="setHubPriority('high')">High</button>
+            <button class="rt-prio-btn" id="rt-prio-low" onclick="setHubPriority('low')" data-i18n="priorityLow">Low</button>
+            <button class="rt-prio-btn" id="rt-prio-medium" onclick="setHubPriority('medium')" data-i18n="priorityMedium">Medium</button>
+            <button class="rt-prio-btn" id="rt-prio-high" onclick="setHubPriority('high')" data-i18n="priorityHigh">High</button>
           </div>
         </div>
         <div class="rt-detail-actions">
-          <button class="rt-detail-save" onclick="saveHubTodoDetail()">Save</button>
-          <button class="rt-detail-delete" onclick="deleteHubTodoDetail()">Delete</button>
+          <button class="rt-detail-save" onclick="saveHubTodoDetail()" data-i18n="todoDetailSave">Save</button>
+          <button class="rt-detail-delete" onclick="deleteHubTodoDetail()" data-i18n="todoDetailDelete">Delete</button>
         </div>
       </div>
     </div>
@@ -913,17 +914,17 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <!-- LIST PAGE -->
 <div class="page inner-page" id="list-page">
   <div class="pg-hdr">
-    <button class="back-btn" onclick="nav('home-page','zo')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Home</button>
-    <div class="pg-title">My Shopping List</div>
+    <button class="back-btn" onclick="nav('home-page','zo')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="hubNavHome">Home</span></button>
+    <div class="pg-title" data-i18n="cardListTitle">My Shopping List</div>
     <div style="width:70px;"></div>
   </div>
   <div class="pg-body">
     <div class="l-order-bar">
       <button class="l-order-btn" id="list-order-btn" disabled onclick="orderAll()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-        🛍 Order on Walmart
+        🛍 <span data-i18n="btnOrderAll">Review on Walmart</span>
       </button>
-      <button class="l-clear-btn" onclick="clearItems()">Clear list</button>
+      <button class="l-clear-btn" onclick="clearItems()" data-i18n="btnClear">Clear list</button>
     </div>
     <div id="list-items"></div>
   </div>
@@ -932,8 +933,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <!-- RECIPES PAGE -->
 <div class="page inner-page" id="rcp-page">
   <div class="pg-hdr">
-    <button class="back-btn" onclick="nav('home-page','zo')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Home</button>
-    <div class="pg-title">Recipe Book</div>
+    <button class="back-btn" onclick="nav('home-page','zo')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="hubNavHome">Home</span></button>
+    <div class="pg-title" data-i18n="cardRecipeTitle">Recipe Book</div>
     <div style="width:70px;"></div>
   </div>
   <div class="pg-body" id="rcp-page-body"><div class="pg-empty"><div class="spinner"></div></div></div>
@@ -942,8 +943,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <!-- HISTORY PAGE -->
 <div class="page inner-page" id="hist-page">
   <div class="pg-hdr">
-    <button class="back-btn" onclick="nav('home-page','zo')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Home</button>
-    <div class="pg-title">Order History</div>
+    <button class="back-btn" onclick="nav('home-page','zo')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="hubNavHome">Home</span></button>
+    <div class="pg-title" data-i18n="cardHistoryTitle">Order History</div>
     <div style="width:70px;"></div>
   </div>
   <div class="pg-body" id="hist-page-body"><div class="pg-empty"><div class="spinner"></div></div></div>
@@ -952,8 +953,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <!-- LIBRARY PAGE -->
 <div class="page inner-page" id="lib-page">
   <div class="pg-hdr">
-    <button class="back-btn" onclick="nav('home-page','zo')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Home</button>
-    <div class="pg-title">Product Library</div>
+    <button class="back-btn" onclick="nav('home-page','zo')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="hubNavHome">Home</span></button>
+    <div class="pg-title" data-i18n="cardLibraryTitle">Product Library</div>
     <div style="width:70px;"></div>
   </div>
   <div class="pg-body" id="lib-page-body"><div class="pg-empty"><div class="spinner"></div></div></div>
@@ -967,19 +968,19 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <div class="lgn-sub">Scan. List. Order.</div>
     </div>
     <div class="lgn-tabs">
-      <button class="lgn-tab active" id="ltab-in" onclick="lTab('in')">Sign in</button>
-      <button class="lgn-tab" id="ltab-up" onclick="lTab('up')">Create account</button>
+      <button class="lgn-tab active" id="ltab-in" onclick="lTab('in')" data-i18n="btnSignIn">Sign in</button>
+      <button class="lgn-tab" id="ltab-up" onclick="lTab('up')" data-i18n="btnCreateAccount">Create account</button>
     </div>
     <div class="lgn-form">
-      <input class="lgn-inp" type="email" id="lgn-email" placeholder="Email address" />
-      <input class="lgn-inp" type="password" id="lgn-pass" placeholder="Password" />
-      <input class="lgn-inp" type="password" id="lgn-pass2" placeholder="Confirm password" style="display:none;" />
+      <input class="lgn-inp" type="email" id="lgn-email" data-i18n-placeholder="placeholderEmail" placeholder="Email address" />
+      <input class="lgn-inp" type="password" id="lgn-pass" data-i18n-placeholder="placeholderPassword" placeholder="Password" />
+      <input class="lgn-inp" type="password" id="lgn-pass2" data-i18n-placeholder="placeholderConfirmPassword" placeholder="Confirm password" style="display:none;" />
       <div class="lgn-err" id="lgn-err"></div>
-      <button class="lgn-submit" id="lgn-submit" onclick="doLogin()">Sign in</button>
-      <div class="lgn-div"><div class="lgn-div-line"></div><div class="lgn-div-txt">or</div><div class="lgn-div-line"></div></div>
+      <button class="lgn-submit" id="lgn-submit" onclick="doLogin()" data-i18n="btnSignIn">Sign in</button>
+      <div class="lgn-div"><div class="lgn-div-line"></div><div class="lgn-div-txt" data-i18n="or">or</div><div class="lgn-div-line"></div></div>
       <button class="lgn-google" onclick="doGoogle()">
         <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
+        <span data-i18n="btnGoogleSignIn">Continue with Google</span>
       </button>
     </div>
   </div>
@@ -990,9 +991,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <div class="clock-menu" id="clock-menu">
   <div class="cm-box">
     <div class="cm-tabs">
-      <button class="cm-tab active" onclick="cmTab('timer')">Timer</button>
-      <button class="cm-tab" onclick="cmTab('alarm')">Alarm</button>
-      <button class="cm-tab" onclick="cmTab('calendar')">Calendar</button>
+      <button class="cm-tab active" onclick="cmTab('timer')" data-i18n="hubTimer">Timer</button>
+      <button class="cm-tab" onclick="cmTab('alarm')" data-i18n="hubAlarm">Alarm</button>
+      <button class="cm-tab" onclick="cmTab('calendar')" data-i18n="hubNavCalendar">Calendar</button>
     </div>
 
     <!-- Timer panel -->
@@ -1013,9 +1014,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
         <div style="font-size:11px;color:var(--t3);font-family:'DM Mono',monospace;margin-left:4px;">mm : ss</div>
       </div>
       <div class="cm-btn-row">
-        <button class="cm-btn start" id="timer-start-btn" onclick="timerAction()">Start</button>
-        <button class="cm-btn pause" id="timer-pause-btn" onclick="timerPause()" style="display:none;">Pause</button>
-        <button class="cm-btn reset" onclick="timerReset()">Reset</button>
+        <button class="cm-btn start" id="timer-start-btn" onclick="timerAction()" data-i18n="hubStart">Start</button>
+        <button class="cm-btn pause" id="timer-pause-btn" onclick="timerPause()" style="display:none;" data-i18n="hubPause">Pause</button>
+        <button class="cm-btn reset" onclick="timerReset()" data-i18n="hubReset">Reset</button>
       </div>
     </div>
 
@@ -1023,10 +1024,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="cm-panel" id="cm-alarm">
       <div class="alarm-time-row">
         <input class="alarm-time-inp" type="time" id="alarm-time-inp" />
-        <button class="cm-btn start" onclick="setAlarm()" style="flex:0 0 auto;padding:0 20px;">Set</button>
+        <button class="cm-btn start" onclick="setAlarm()" style="flex:0 0 auto;padding:0 20px;" data-i18n="hubSave">Set</button>
       </div>
       <div id="alarm-list" class="alarm-list"></div>
-      <div class="alarm-empty" id="alarm-empty">No alarms set</div>
+      <div class="alarm-empty" id="alarm-empty" data-i18n="hubNoAlarmsSet">No alarms set</div>
     </div>
 
     <!-- Calendar panel -->
@@ -1047,8 +1048,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <div class="scan-card" id="scan-card">
   <div class="sc-ph" id="sc-ph">📦</div>
   <div class="sc-info">
-    <div class="sc-added">✓ Added to list</div>
-    <div class="sc-name" id="sc-name">Product name</div>
+    <div class="sc-added" data-i18n="toastAddedToList">✓ Added to list</div>
+    <div class="sc-name" id="sc-name" data-i18n="hubProductName">Product name</div>
     <div class="sc-price" id="sc-price"></div>
   </div>
   <div class="sc-check">✅</div>
@@ -1057,56 +1058,61 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <!-- HAMBURGER MENU -->
 <div class="hmenu-overlay" id="hmenu-overlay" onclick="closeHMenu()"></div>
 <div class="hmenu" id="hmenu">
-  <div class="hmenu-section">Quick Launch</div>
+  <div class="hmenu-section" data-i18n="hubNavQuickLaunch">Quick Launch</div>
   <div class="hmenu-item" onclick="launchApp('youtube');closeHMenu()">
     <div class="hmenu-ico">▶️</div>
-    <div><div class="hmenu-label">YouTube</div><div class="hmenu-sub">Opens native app</div></div>
+    <div><div class="hmenu-label" data-i18n="hubNavYouTube">YouTube</div><div class="hmenu-sub" data-i18n="hubOpensNativeApp">Opens native app</div></div>
   </div>
   <div class="hmenu-item" onclick="launchApp('ring');closeHMenu()">
     <div class="hmenu-ico">🔔</div>
-    <div><div class="hmenu-label">Ring</div><div class="hmenu-sub">Cameras &amp; doorbell</div></div>
+    <div><div class="hmenu-label" data-i18n="hubNavRing">Ring</div><div class="hmenu-sub">Cameras &amp; doorbell</div></div>
   </div>
   <div class="hmenu-divider"></div>
   <div class="hmenu-item" onclick="openSettings();closeHMenu()">
     <div class="hmenu-ico">⚙️</div>
-    <div><div class="hmenu-label">Settings</div><div class="hmenu-sub">Voice, avatar, wake word</div></div>
+    <div><div class="hmenu-label" data-i18n="hubSettings">Settings</div><div class="hmenu-sub" data-i18n="hubVoiceAvatarWake">Voice, avatar, wake word</div></div>
   </div>
   <div class="hmenu-item" onclick="openPhotoManager();closeHMenu()">
     <div class="hmenu-ico">📸</div>
-    <div><div class="hmenu-label">Slideshow Photos</div><div class="hmenu-sub">Upload your own photos</div></div>
+    <div><div class="hmenu-label" data-i18n="hubSlideshowPhotos">Slideshow Photos</div><div class="hmenu-sub" data-i18n="hubUploadPhotos">Upload your own photos</div></div>
   </div>
   <div class="hmenu-divider"></div>
-  <div class="hmenu-section">Device</div>
+  <div class="hmenu-section" data-i18n="hubDevice">Device</div>
   <div class="hmenu-item" onclick="openWifi();closeHMenu()">
     <div class="hmenu-ico">📶</div>
-    <div><div class="hmenu-label">Wi-Fi</div><div class="hmenu-sub">Network settings</div></div>
+    <div><div class="hmenu-label" data-i18n="hubWifi">Wi-Fi</div><div class="hmenu-sub" data-i18n="hubNetworkSettings">Network settings</div></div>
   </div>
   <div class="hmenu-item" onclick="openBluetooth();closeHMenu()">
     <div class="hmenu-ico">🔷</div>
-    <div><div class="hmenu-label">Bluetooth</div><div class="hmenu-sub">Paired devices</div></div>
+    <div><div class="hmenu-label" data-i18n="hubBluetooth">Bluetooth</div><div class="hmenu-sub" data-i18n="hubPairedDevices">Paired devices</div></div>
   </div>
   <div class="hmenu-divider"></div>
-  <div class="hmenu-section">Legal &amp; Info</div>
+  <div class="hmenu-section" data-i18n="hubLegalInfo">Legal &amp; Info</div>
   <div class="hmenu-item" onclick="showLegal('privacy');closeHMenu()">
     <div class="hmenu-ico">📄</div>
-    <div><div class="hmenu-label">Privacy Policy</div></div>
+    <div><div class="hmenu-label" data-i18n="hubPrivacyPolicy">Privacy Policy</div></div>
   </div>
   <div class="hmenu-item" onclick="showLegal('terms');closeHMenu()">
     <div class="hmenu-ico">📄</div>
-    <div><div class="hmenu-label">Terms of Use</div></div>
+    <div><div class="hmenu-label" data-i18n="hubTermsOfUse">Terms of Use</div></div>
   </div>
   <div class="hmenu-item" onclick="showAbout();closeHMenu()">
     <div class="hmenu-ico">ℹ️</div>
-    <div><div class="hmenu-label">About ReOrderly</div><div class="hmenu-sub">v3.0 · Walmart affiliate</div></div>
+    <div><div class="hmenu-label" data-i18n="hubAbout">About ReOrderly</div><div class="hmenu-sub">v3.1 · Walmart affiliate</div></div>
+  </div>
+  <div class="hmenu-divider"></div>
+  <div class="hmenu-item" onclick="toggleHubLanguage();closeHMenu()">
+    <div class="hmenu-ico" id="hub-lang-flag">🇪🇸</div>
+    <div><div class="hmenu-label" id="hub-lang-label">Switch to Spanish</div></div>
   </div>
   <div class="hmenu-divider"></div>
   <button class="hmenu-sleep" onclick="goPhotoMode();closeHMenu()">
     <div class="hmenu-ico">🌙</div>
-    <div><div class="hmenu-label" style="font-size:13px;font-weight:700;color:var(--text);">Sleep / Photo Mode</div></div>
+    <div><div class="hmenu-label" style="font-size:13px;font-weight:700;color:var(--text);" data-i18n="hubSleepMode">Sleep / Photo Mode</div></div>
   </button>
   <button class="hmenu-sleep" onclick="doSignOut();closeHMenu()">
     <div class="hmenu-ico">🚪</div>
-    <div><div class="hmenu-label" style="font-size:13px;font-weight:700;color:#f87171;">Sign Out</div></div>
+    <div><div class="hmenu-label" style="font-size:13px;font-weight:700;color:#f87171;" data-i18n="hubSignOut">Sign Out</div></div>
   </button>
 </div>
 
@@ -1120,7 +1126,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       <iframe id="legal-iframe" src="" style="width:100%;height:60vh;border:none;background:#fff;border-radius:8px;"></iframe>
     </div>
     <div style="padding-top:10px;">
-      <button class="about-close" onclick="closeLegal()">Close</button>
+      <button class="about-close" onclick="closeLegal()" data-i18n="hubClose">Close</button>
     </div>
   </div>
 </div>
@@ -1130,20 +1136,20 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <div class="about-modal" id="about-modal">
   <div class="about-box">
     <div class="about-logo">ReOrderly<span class="about-dot"></span></div>
-    <div class="about-version">Version 3.0 · Station Hub</div>
+    <div class="about-version">Version 3.1 · Station Hub</div>
     <div class="about-divider"></div>
-    <div class="about-text">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
+    <div class="about-text" data-i18n="aboutAffiliateBody">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
     <div class="about-text">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc.</div>
-    <div class="about-text">Product prices and availability are confirmed on Walmart.com.</div>
+    <div class="about-text" data-i18n="walmartPriceNote">Product prices and availability are confirmed on Walmart.com.</div>
     <div class="about-divider"></div>
     <div class="about-links">
-      <span class="about-link" onclick="showLegal('privacy')">Privacy Policy</span>
+      <span class="about-link" onclick="showLegal('privacy')" data-i18n="hubPrivacyPolicy">Privacy Policy</span>
       <span class="about-sep">·</span>
-      <span class="about-link" onclick="showLegal('terms')">Terms of Use</span>
+      <span class="about-link" onclick="showLegal('terms')" data-i18n="hubTermsOfUse">Terms of Use</span>
       <span class="about-sep">·</span>
       <span class="about-link" onclick="window.open('mailto:support@reorderlysolutions.com')">Contact</span>
     </div>
-    <button class="about-close" onclick="closeAbout()">Close</button>
+    <button class="about-close" onclick="closeAbout()" data-i18n="hubClose">Close</button>
   </div>
 </div>
 
@@ -1156,7 +1162,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="orb-ring orb-ring-3"></div>
     <div class="orb-core"></div>
   </div>
-  <div class="voice-status" id="voice-status">Listening…</div>
+  <div class="voice-status" id="voice-status" data-i18n="hubListening">Listening…</div>
   <div class="voice-transcript" id="voice-transcript"></div>
   <button class="voice-cancel" onclick="cancelVoice()">✕ Cancel</button>
   <button class="voice-cancel" onclick="testAI()" style="margin-top:6px;border-color:var(--green);color:var(--green);">🧪 Test AI (no voice)</button>
@@ -1166,28 +1172,28 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <div class="settings-overlay" id="settings-overlay" onclick="closeSettings()"></div>
 <div class="settings-modal" id="settings-modal">
   <div class="settings-box">
-    <button class="settings-close" onclick="closeSettings()">✕ Close</button>
-    <div class="settings-title">⚙️ Settings</div>
+    <button class="settings-close" onclick="closeSettings()">✕ <span data-i18n="hubClose">Close</span></button>
+    <div class="settings-title">⚙️ <span data-i18n="hubSettings">Settings</span></div>
 
-    <div class="settings-section">Voice Assistant</div>
+    <div class="settings-section" data-i18n="hubVoiceAssistant">Voice Assistant</div>
     <div class="settings-row">
-      <div><div class="settings-label">Wake Word</div><div class="settings-sub">Say this to activate</div></div>
-      <input class="settings-inp" type="text" id="set-wakeword" value="Hey ReOrderly" placeholder="Hey ReOrderly" />
+      <div><div class="settings-label" data-i18n="hubWakeWord">Wake Word</div><div class="settings-sub" data-i18n="hubSayToActivate">Say this to activate</div></div>
+      <input class="settings-inp" type="text" id="set-wakeword" value="Hey ReOrderly" data-i18n-placeholder="hubHeyReOrderly" placeholder="Hey ReOrderly" />
     </div>
     <div class="settings-row">
-      <div><div class="settings-label">Voice</div><div class="settings-sub">Speaking voice</div></div>
+      <div><div class="settings-label" data-i18n="hubVoice">Voice</div><div class="settings-sub" data-i18n="hubSpeakingVoice">Speaking voice</div></div>
       <select class="settings-select" id="set-voice"></select>
     </div>
     <div class="settings-row">
-      <div><div class="settings-label">Speed</div><div class="settings-sub">Speech rate</div></div>
+      <div><div class="settings-label" data-i18n="hubSpeed">Speed</div><div class="settings-sub" data-i18n="hubSpeechRate">Speech rate</div></div>
       <select class="settings-select" id="set-rate">
-        <option value="0.8">Slow</option>
-        <option value="1.0" selected>Normal</option>
-        <option value="1.2">Fast</option>
+        <option value="0.8" data-i18n="hubSpeedSlow">Slow</option>
+        <option value="1.0" selected data-i18n="hubSpeedNormal">Normal</option>
+        <option value="1.2" data-i18n="hubSpeedFast">Fast</option>
       </select>
     </div>
 
-    <div class="settings-section">Assistant Avatar</div>
+    <div class="settings-section" data-i18n="hubAssistantAvatar">Assistant Avatar</div>
     <div class="avatar-grid">
       <div class="avatar-opt selected" data-avatar="orb" onclick="selectAvatar(this)">
         <div class="avatar-opt-ico">🔮</div>
@@ -1195,15 +1201,15 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       </div>
       <div class="avatar-opt" data-avatar="face" onclick="selectAvatar(this)">
         <div class="avatar-opt-ico">🙂</div>
-        <div class="avatar-opt-lbl">Face</div>
+        <div class="avatar-opt-lbl" data-i18n="hubAvatarFace">Face</div>
       </div>
       <div class="avatar-opt" data-avatar="wave" onclick="selectAvatar(this)">
         <div class="avatar-opt-ico">〰️</div>
-        <div class="avatar-opt-lbl">Wave</div>
+        <div class="avatar-opt-lbl" data-i18n="hubAvatarWave">Wave</div>
       </div>
     </div>
 
-    <button class="settings-save" onclick="saveSettings()">Save Settings</button>
+    <button class="settings-save" onclick="saveSettings()" data-i18n="hubSettingsSave">Save Settings</button>
   </div>
 </div>
 
@@ -1213,46 +1219,22 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <div class="photo-mgr-overlay" id="photo-mgr-overlay" onclick="closePhotoManager()"></div>
 <div class="photo-mgr-modal" id="photo-mgr-modal">
   <div class="photo-mgr-box">
-    <div class="pmgr-title">📸 Slideshow Photos</div>
-    <div class="pmgr-sub">Upload your own photos for the screensaver &amp; photo frame</div>
+    <div class="pmgr-title">📸 <span data-i18n="hubSlideshowPhotos">Slideshow Photos</span></div>
+    <div class="pmgr-sub" data-i18n="hubUploadPhotosHint">Upload your own photos for the screensaver &amp; photo frame</div>
     <div class="pmgr-upload-area">
       <input type="file" accept="image/*" multiple onchange="handlePhotoUpload(this)" />
       <div class="pmgr-upload-ico">⬆️</div>
-      <div class="pmgr-upload-lbl">Tap to upload photos</div>
-      <div class="pmgr-upload-hint">JPG, PNG, HEIC — multiple files OK</div>
+      <div class="pmgr-upload-lbl" data-i18n="hubTapToUpload">Tap to upload photos</div>
+      <div class="pmgr-upload-hint" data-i18n="hubPhotoFileTypes">JPG, PNG, HEIC — multiple files OK</div>
     </div>
     <div class="pmgr-upload-status" id="photo-upload-status"></div>
     <div class="pmgr-grid" id="photo-mgr-grid"></div>
     <div class="pmgr-footer">
-      <button class="pmgr-reset" onclick="resetPhotos()">↩ Reset to defaults</button>
-      <button class="pmgr-close" onclick="closePhotoManager()">Done</button>
+      <button class="pmgr-reset" onclick="resetPhotos()">↩ <span data-i18n="hubReset">Reset to defaults</span></button>
+      <button class="pmgr-close" onclick="closePhotoManager()" data-i18n="hubDone">Done</button>
     </div>
   </div>
 </div>
-
-<!-- Error Boundary Script — must run before all other scripts -->
-<script>
-(function(){
-  function showError(msg){
-    var el=document.getElementById('error-boundary');
-    if(!el)return;
-    el.style.display='flex';
-    var det=document.getElementById('hub-err-det');
-    if(det)det.textContent=msg||'Unknown error';
-  }
-  window.onerror=function(msg,src,line,col,err){
-    var detail=(err&&err.stack)||msg||'Unknown error';
-    console.error('[Station Error]',detail);
-    showError(detail);
-    return true;
-  };
-  window.onunhandledrejection=function(e){
-    var detail=(e.reason&&(e.reason.stack||e.reason.message))||String(e.reason)||'Unhandled promise rejection';
-    console.error('[Station Unhandled Rejection]',detail);
-    showError(detail);
-  };
-})();
-</script>
 
 <script>
 // Synchronous stubs — available immediately before the module loads
@@ -1347,6 +1329,35 @@ let expandedTodoId = null;
 let todos = [];
 let lastScanTime = null;
 
+// ── LANGUAGE SYSTEM ──
+let currentLang = localStorage.getItem('reorderly_lang') || 'en';
+window.__reorderlyLang = currentLang;
+
+function applyLang() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = window.t(key);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    el.placeholder = window.t(key);
+  });
+  document.documentElement.lang = currentLang;
+  const flag = document.getElementById('hub-lang-flag');
+  const label = document.getElementById('hub-lang-label');
+  if (flag) flag.textContent = currentLang === 'en' ? '🇪🇸' : '🇺🇸';
+  if (label) label.textContent = currentLang === 'en' ? 'Switch to Spanish' : 'Switch to English';
+}
+
+window.toggleHubLanguage = function() {
+  currentLang = currentLang === 'en' ? 'es' : 'en';
+  localStorage.setItem('reorderly_lang', currentLang);
+  window.__reorderlyLang = currentLang;
+  applyLang();
+  renderWhiteboard();
+  toast(window.t('hubSettingsSaved'));
+};
+
 // ── NAVIGATION ──
 window.nav = function(id, anim='fi') {
   const cur = document.getElementById(activePg);
@@ -1368,6 +1379,9 @@ window.wakeHub = ()=> cu ? nav('home-page','fi') : nav('login-page','fi');
 window.goPhotoMode = ()=> { closeClockMenu(); nav('photo-mode','fi'); };
 
 // ── AUTH ──
+// Apply language on first load
+applyLang();
+
 onAuthStateChanged(auth, async user => {
   if (user) {
     cu = user;
@@ -1392,7 +1406,7 @@ window.lTab = t => {
   document.getElementById('ltab-in').className='lgn-tab'+(t==='in'?' active':'');
   document.getElementById('ltab-up').className='lgn-tab'+(t==='up'?' active':'');
   document.getElementById('lgn-pass2').style.display=t==='up'?'block':'none';
-  document.getElementById('lgn-submit').textContent=t==='in'?'Sign in':'Create account';
+  document.getElementById('lgn-submit').textContent=t==='in'?window.t('btnSignIn'):window.t('btnCreateAccount');
   document.getElementById('lgn-err').textContent='';
 };
 
@@ -1402,22 +1416,29 @@ window.doLogin = async () => {
   const pass2=document.getElementById('lgn-pass2').value;
   const btn=document.getElementById('lgn-submit');
   const err=document.getElementById('lgn-err');
-  if(!email||!pass){err.textContent='Please fill in all fields';return;}
-  if(lMode==='up'&&pass!==pass2){err.textContent='Passwords do not match';return;}
+  if(!email||!pass){err.textContent=window.t('authFillFields');return;}
+  if(lMode==='up'&&pass!==pass2){err.textContent=window.t('authPasswordNoMatch');return;}
   btn.disabled=true; err.textContent='';
   try {
     if(lMode==='in') await signInWithEmailAndPassword(auth,email,pass);
     else await createUserWithEmailAndPassword(auth,email,pass);
   } catch(e) {
-    const m={'auth/user-not-found':'No account with that email','auth/wrong-password':'Incorrect password','auth/email-already-in-use':'Account already exists','auth/weak-password':'Password must be 6+ characters','auth/invalid-credential':'Incorrect email or password','auth/invalid-email':'Invalid email'};
-    err.textContent=m[e.code]||'Something went wrong';
+    const m={
+      'auth/user-not-found':window.t('authNoAccount'),
+      'auth/wrong-password':window.t('authWrongPassword'),
+      'auth/email-already-in-use':window.t('authEmailExists'),
+      'auth/weak-password':window.t('authWeakPassword'),
+      'auth/invalid-credential':window.t('authInvalidCred'),
+      'auth/invalid-email':window.t('authInvalidEmail')
+    };
+    err.textContent=m[e.code]||window.t('authSomethingWrong');
   }
   btn.disabled=false;
 };
 
 window.doGoogle = async () => {
   try { await signInWithPopup(auth,gProv); }
-  catch(e) { document.getElementById('lgn-err').textContent='Google sign-in failed'; }
+  catch(e) { document.getElementById('lgn-err').textContent=window.t('authGoogleFail'); }
 };
 
 // ── FIREBASE LIST ──
@@ -1572,8 +1593,8 @@ window.libAdd = async (upc, name, price, image, btn) => {
   if (ex) { ex.qty++; }
   else { items.push({upc, name, price, image, qty:1, category:getCat(name), walmartUrl:'https://www.walmart.com/search?q='+encodeURIComponent(name)}); }
   await saveList();
-  if (btn) { btn.textContent='✓ In list'; btn.classList.add('added'); }
-  toast('Added: '+name.substring(0,28));
+  if (btn) { btn.textContent=window.t('inList'); btn.classList.add('added'); }
+  toast(window.t('toastAdded')+name.substring(0,28));
 };
 
 window.toggleRtItem=(id)=>{
@@ -1666,25 +1687,25 @@ async function addNamedItem(name) {
   if(!cu)return;
   // Check if item with same name already exists (case-insensitive)
   const ex=items.find(i=>i.name.toLowerCase()===name.toLowerCase());
-  if(ex){ex.qty++;await saveList();showCard({name:ex.name,image:ex.image,price:ex.price});setSts('Quantity updated: '+ex.name.substring(0,32),'success');lastScanTime=new Date();updateStatusBar();return;}
+  if(ex){ex.qty++;await saveList();showCard({name:ex.name,image:ex.image,price:ex.price});setSts(window.t('statusQtyUpdated')+': '+ex.name.substring(0,32),'success');lastScanTime=new Date();updateStatusBar();return;}
   const fakeUpc='manual_'+Date.now();
   items.push({upc:fakeUpc,name,price:null,image:null,qty:1,category:getCat(name),walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name)}`});
   await saveList();
   lastScanTime = new Date();
   showCard({name,image:null,price:null});
-  setSts('✓ Added: '+name.substring(0,38),'success');
+  setSts(window.t('statusFound')+name.substring(0,38),'success');
   updateStatusBar();
 }
 
 async function globalScan(upc) {
   if(!cu)return;
   const ex=items.find(i=>i.upc===upc);
-  if(ex){ex.qty++;await saveList();showCard({name:ex.name,image:ex.image,price:ex.price});setSts('Quantity updated','success');lastScanTime=new Date();updateStatusBar();return;}
-  setSts('Searching…','loading');
+  if(ex){ex.qty++;await saveList();showCard({name:ex.name,image:ex.image,price:ex.price});setSts(window.t('statusQtyUpdated'),'success');lastScanTime=new Date();updateStatusBar();return;}
+  setSts(window.t('statusSearching'),'loading');
   const sb=document.getElementById('scan-btn');if(sb)sb.disabled=true;
   const r=await lookup(upc);
-  if(r){items.push({upc,...r,qty:1,category:getCat(r.name),checked:false});await saveList();showCard(r);setSts('✓ Found: '+r.name.substring(0,38),'success');lastScanTime=new Date();updateStatusBar();}
-  else{setSts('Product not found — try again','error');toast('Product not found');}
+  if(r){items.push({upc,...r,qty:1,category:getCat(r.name),checked:false});await saveList();showCard(r);setSts(window.t('statusFound')+r.name.substring(0,38),'success');lastScanTime=new Date();updateStatusBar();}
+  else{setSts(window.t('statusNotFound'),'error');toast(window.t('hubStatusNotFound'));}
   if(sb)sb.disabled=false;
   document.getElementById('scan-inp')?.focus();
 }
@@ -1781,7 +1802,7 @@ function renderListPage(){
       '</div></div>'+
       '<div class="lpi-wm"><button class="lpi-wbtn lpi-walmart">'+
         '<svg width="11" height="11" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>'+
-        'View on Walmart</button></div>';
+        window.t('viewOnWalmart')+'</button></div>';
     d.querySelector('.lpi-minus').addEventListener('click',()=>chQty(it.upc,-1));
     d.querySelector('.lpi-plus').addEventListener('click',()=>chQty(it.upc,1));
     d.querySelector('.lpi-del').addEventListener('click',()=>delItem(it.upc));
@@ -1803,7 +1824,7 @@ function updateStatusBar(){
   if(sep)sep.style.display=lastScanTime?'inline':'none';
   if(last&&lastScanTime){
     const mins=Math.round((new Date()-lastScanTime)/60000);
-    last.textContent=mins<1?'just scanned':`scanned ${mins}m ago`;
+    last.textContent=mins<1?window.t('statusFound').replace(': ',''):`${window.t('hubStatusReady')} ${mins}m`;
   }
 }
 
@@ -1816,9 +1837,10 @@ window.delItem=async(u)=>{
   items=items.filter(i=>i.upc!==u);
   await saveList();
 };
-window.clearItems=async()=>{items=[];expandedUpc=null;await saveList();setSts('Ready — scanner connected','');};
+window.clearItems=async()=>{items=[];expandedUpc=null;await saveList();setSts(window.t('hubStatusReady'),'');};
+
 window.goShop=()=>{
-  if(!items.length){toast('Nothing on the list yet');return;}
+  if(!items.length){toast(window.t('hubEmptyList'));return;}
   renderListPage();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const lp=document.getElementById('list-page');
@@ -1829,7 +1851,7 @@ window.orderAll=async()=>{
   if(!items.length)return;
   await saveHistory();
   items.forEach((it,i)=>setTimeout(()=>window.open(it.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(it.name)}`,'_blank'),i*350));
-  toast('Opening Walmart — '+items.length+' items');
+  toast(window.t('hubToastOpeningWalmart')+' '+items.length+' '+window.t('items'));
 };
 
 // ── RECIPES ──
@@ -1855,7 +1877,7 @@ async function loadRecipes(){
       b.appendChild(c);
     });
     b.dataset.loaded='1';
-  } catch(e){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">Could not load</div></div>';}
+  } catch(e){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">'+window.t('libCouldNotLoad')+'</div></div>';}
 }
 
 // ── HISTORY ──
@@ -1867,7 +1889,7 @@ async function loadHistory(){
     const snap=await getDocs(collection(db,'users',cu.uid,'history'));
     const orders=[];snap.forEach(d=>orders.push({id:d.id,...d.data()}));
     orders.sort((a,x)=>(x.orderedAt?.seconds||0)-(a.orderedAt?.seconds||0));
-    if(!orders.length){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">🕐</div><div class="wb-tab-empty-ttl">No order history yet</div></div>';return;}
+    if(!orders.length){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">🕐</div><div class="wb-tab-empty-ttl">'+window.t('noHistory')+'</div></div>';return;}
     b.innerHTML='';
     orders.forEach(o=>{
       const dt=o.orderedAt?.toDate?o.orderedAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'Unknown';
@@ -1876,21 +1898,29 @@ async function loadHistory(){
       c.innerHTML=`<div class="wb-hist-hdr"><div class="wb-hist-date">${dt}</div><div class="wb-hist-meta">${o.itemCount||0} items</div></div><div class="wb-hist-items">${iHtml}</div>`;
       b.appendChild(c);
     });
-  } catch(e){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">Could not load</div></div>';}
+  } catch(e){b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">'+window.t('libCouldNotLoad')+'</div></div>';}
 }
 
 window.reAdd=async(u,n,p)=>{
   const ex=items.find(i=>i.upc===u);
   if(ex)ex.qty++;else items.push({upc:u,name:n,price:p,qty:1,category:getCat(n),walmartUrl:'https://www.walmart.com/search?q='+encodeURIComponent(n)});
-  await saveList();toast('Added: '+n.substring(0,28));
+  await saveList();toast(window.t('toastAdded')+n.substring(0,28));
 };
 
 // ── LIBRARY ──
 async function loadLibrary(){
   const b=document.getElementById('lib-body');
   if(!b||!cu)return;
-  const tabs=[{id:'usual',label:'⭐ Usual'},{id:'all',label:'All'},{id:'grocery',label:'Grocery'},{id:'snacks',label:'Snacks'},{id:'household',label:'Household'},{id:'health',label:'Health'},{id:'other',label:'Other'}];
-  b.innerHTML=`<div class="lib-tabs-row" id="lib-tabs-row"></div><input class="lib-srch" type="text" id="lib-srch" placeholder="Search products..." oninput="filterLib(this.value)"/><div id="lib-list"><div class="pg-empty"><div class="spinner"></div></div></div>`;
+  const tabs=[
+    {id:'usual',label:window.t('libUsual')},
+    {id:'all',label:window.t('libAll')},
+    {id:'grocery',label:window.t('libGrocery')},
+    {id:'snacks',label:window.t('libSnacks')},
+    {id:'household',label:window.t('libHousehold')},
+    {id:'health',label:window.t('libHealth')},
+    {id:'other',label:window.t('libOther')}
+  ];
+  b.innerHTML=`<div class="lib-tabs-row" id="lib-tabs-row"></div><input class="lib-srch" type="text" id="lib-srch" placeholder="${window.t('hubSearchProducts')}" oninput="filterLib(this.value)"/><div id="lib-list"><div class="pg-empty"><div class="spinner"></div></div></div>`;
   const tr=document.getElementById('lib-tabs-row');
   tabs.forEach(t=>{const btn=document.createElement('button');btn.className='lib-tab'+(t.id===libTab?' active':'');btn.textContent=t.label;btn.onclick=()=>{libTab=t.id;document.querySelectorAll('.lib-tab').forEach(b=>b.className='lib-tab');btn.className='lib-tab active';filterLib(document.getElementById('lib-srch')?.value||'');};tr.appendChild(btn);});
   await filterLib('');
@@ -1915,14 +1945,14 @@ window.filterLib=async(f)=>{
       const r=document.createElement('div');r.className='wb-lib-row';
       const pImg=p.image?('<img class="wb-lib-img" src="'+p.image+'" alt="" onerror="this.hidden=true">'):'<div class="wb-lib-ph">📦</div>';
       r.innerHTML=pImg+'<div class="wb-lib-iname">'+esc(p.name)+'</div>'+
-        '<button class="wb-lib-add'+(inL?' added':'')+'">'+(inL?'✓ In list':'+ Add')+'</button>';
+        '<button class="wb-lib-add'+(inL?' added':'')+'">'+(inL?window.t('inList'):window.t('addItem'))+'</button>';
       r.querySelector('button').addEventListener('click',()=>{
         libAdd(p.upc,p.name,p.price||null,p.image||null,r.querySelector('button'));
         switchTab('list');
       });
       el.appendChild(r);
     });
-  }catch(e){el.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">Could not load</div></div>';}
+  }catch(e){el.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">😕</div><div class="wb-tab-empty-ttl">'+window.t('libCouldNotLoad')+'</div></div>';}
 };
 
 
@@ -1952,8 +1982,8 @@ window.closeHMenu=()=>{
 };
 
 // Android settings intents
-window.openWifi=()=>{ try{window.location.href='intent:#Intent;action=android.settings.WIFI_SETTINGS;end';}catch(e){toast('Open Settings → Wi-Fi');} };
-window.openBluetooth=()=>{ try{window.location.href='intent:#Intent;action=android.settings.BLUETOOTH_SETTINGS;end';}catch(e){toast('Open Settings → Bluetooth');} };
+window.openWifi=()=>{ try{window.location.href='intent:#Intent;action=android.settings.WIFI_SETTINGS;end';}catch(e){toast(window.t('hubOpenWifi'));} };
+window.openBluetooth=()=>{ try{window.location.href='intent:#Intent;action=android.settings.BLUETOOTH_SETTINGS;end';}catch(e){toast(window.t('hubOpenBluetooth'));} };
 
 
 // ── TAB SWITCHING ──
@@ -2001,8 +2031,8 @@ window.closeAbout=()=>{
 window.doSignOut=async()=>{
   try{
     await signOut(auth);
-    toast('Signed out');
-  }catch(e){toast('Sign out failed');}
+    toast(window.t('authSignedOut'));
+  }catch(e){toast(window.t('authSignOutFailed'));}
 };
 
 
@@ -2078,7 +2108,7 @@ window.saveSettings = async () => {
   if(rate) aiSettings.rate = parseFloat(rate);
   await saveAiSettingsToDb();
   closeSettings();
-  toast('Settings saved');
+  toast(window.t('hubSettingsSaved'));
 };
 
 window.selectAvatar = (el) => {
@@ -2180,26 +2210,26 @@ window.tapMic = () => {
 // ── ACTIVE LISTENING ──
 function startListening(){
   if(!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)){
-    toast('Voice not supported in this browser');
+    toast(window.t('hubVoiceNotSupported'));
     return;
   }
   voiceState = 'listening';
   aiActive = true;
-  setVoiceUI('listening', 'Listening… say your command', '');
+  setVoiceUI('listening', window.t('hubListeningSpeakNow'), '');
   resetIdle();
 
   // Auto-hint if nothing heard after 5 seconds
   clearTimeout(window._listenHint);
   window._listenHint = setTimeout(()=>{
     if(voiceState==='listening'){
-      setVoiceUI('listening','Still listening — speak clearly…','');
+      setVoiceUI('listening', window.t('hubListeningSpeakNow'), '');
     }
   }, 5000);
 
   // Auto-cancel after 15 seconds of silence
   clearTimeout(window._listenTimeout);
   window._listenTimeout = setTimeout(()=>{
-    if(voiceState==='listening'){ cancelVoice(); toast('No speech detected'); }
+    if(voiceState==='listening'){ cancelVoice(); toast(window.t('hubNoSpeechDetected')); }
   }, 15000);
 
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -2210,11 +2240,11 @@ function startListening(){
   recognition.continuous = false;
 
   recognition.onsoundstart = () => {
-    document.getElementById('voice-status').textContent = 'Sound detected…';
+    document.getElementById('voice-status').textContent = window.t('hubSoundDetected');
     document.getElementById('voice-orb').style.transform = 'scale(1.1)';
   };
   recognition.onspeechstart = () => {
-    document.getElementById('voice-status').textContent = 'Speech detected…';
+    document.getElementById('voice-status').textContent = window.t('hubSpeechDetected');
     document.getElementById('voice-orb').style.transform = 'scale(1.2)';
   };
   recognition.onsoundend = () => {
@@ -2234,13 +2264,13 @@ function startListening(){
   recognition.onstart = () => {
     window._netRetries = 0;
     console.log('Recognition started successfully');
-    document.getElementById('voice-status').textContent = 'Listening… speak now';
+    document.getElementById('voice-status').textContent = window.t('hubListeningSpeakNow');
   };
   recognition.onerror = (e) => {
     console.log('Recognition error:', e.error);
     if(e.error === 'aborted') return;
     if(e.error === 'no-speech'){ cancelVoice(); return; }
-    if(e.error === 'not-allowed'){ toast('Mic permission denied — check browser settings'); cancelVoice(); return; }
+    if(e.error === 'not-allowed'){ toast(window.t('hubMicDenied')); cancelVoice(); return; }
     if(e.error === 'network'){
       console.log('Network error on speech recognition');
       voiceState = 'idle';
@@ -2252,12 +2282,12 @@ function startListening(){
         setTimeout(startListening, 2000);
       } else {
         window._netRetries = 0;
-        toast('Voice unavailable — check your connection');
+        toast(window.t('hubVoiceUnavailable'));
         cancelVoice();
       }
       return;
     }
-    toast('Voice error: ' + e.error);
+    toast(window.t('hubVoiceError') + ' ' + e.error);
     cancelVoice();
   };
   recognition.onend = () => {
@@ -2686,7 +2716,7 @@ window.timerPause = () => {
   if(!timerRunning)return;
   clearInterval(timerInterval); timerRunning=false;
   document.getElementById('timer-start-btn').style.display='flex';
-  document.getElementById('timer-start-btn').textContent='Resume';
+  document.getElementById('timer-start-btn').textContent=window.t('hubResume');
   document.getElementById('timer-pause-btn').style.display='none';
   document.getElementById('timer-display').classList.remove('running');
 };
@@ -2694,7 +2724,7 @@ window.timerPause = () => {
 window.timerReset = () => {
   clearInterval(timerInterval); timerRunning=false; timerRemaining=0;
   document.getElementById('timer-start-btn').style.display='flex';
-  document.getElementById('timer-start-btn').textContent='Start';
+  document.getElementById('timer-start-btn').textContent=window.t('hubStart');
   document.getElementById('timer-pause-btn').style.display='none';
   const disp=document.getElementById('timer-display');
   disp.classList.remove('running','alarm');
@@ -2929,7 +2959,7 @@ window.removePhoto = async (i) => {
   await saveCustomPhotos(PHOTOS);
   startPhotoSlideshow();
   renderPhotoManager();
-  toast('Photo removed');
+  toast(window.t('hubPhotoRemoved'));
 };
 
 window.resetPhotos = async () => {
@@ -2937,14 +2967,14 @@ window.resetPhotos = async () => {
   await saveCustomPhotos(PHOTOS);
   startPhotoSlideshow();
   renderPhotoManager();
-  toast('Photos reset to defaults');
+  toast(window.t('hubPhotosReset'));
 };
 
 window.handlePhotoUpload = async (input) => {
   const files = Array.from(input.files);
   if(!files.length) return;
   const statusEl = document.getElementById('photo-upload-status');
-  if(statusEl) statusEl.textContent = 'Processing…';
+  if(statusEl) statusEl.textContent = window.t('hubProcessing');
   for(const file of files){
     if(!file.type.startsWith('image/')) continue;
     const dataUrl = await new Promise((res,rej)=>{
@@ -3013,18 +3043,6 @@ document.addEventListener('click',e=>{
   <div class="hub-msg-inp-row">
     <input class="hub-msg-inp" type="text" id="hub-msg-inp" placeholder="Send a message to the phone…" />
     <button class="hub-msg-send" onclick="sendHubMsg()">Send</button>
-  </div>
-</div>
-
-<!-- Error Boundary Overlay -->
-<div id="error-boundary" style="display:none;position:fixed;inset:0;z-index:99999;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;font-family:'Syne',sans-serif;">
-  <div style="font-size:32px;margin-bottom:12px;">⚠️</div>
-  <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px;">Station Error</div>
-  <div style="font-size:13px;color:var(--t2);margin-bottom:24px;line-height:1.6;">Something went wrong with the Station hub.<br>Tap below to reload.</div>
-  <button onclick="location.reload()" style="background:var(--green);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Reload Station</button>
-  <div style="margin-top:20px;">
-    <span onclick="document.getElementById('hub-err-det').style.display=document.getElementById('hub-err-det').style.display==='none'?'block':'none'" style="font-size:11px;color:var(--t3);cursor:pointer;text-decoration:underline;">show details</span>
-    <pre id="hub-err-det" style="display:none;margin-top:10px;font-size:10px;color:var(--t2);background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:10px;text-align:left;max-width:400px;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto;"></pre>
   </div>
 </div>
 
