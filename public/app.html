@@ -13,6 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="ReOrderly">
 <link rel="apple-touch-icon" href="/icon.png">
 <link rel="icon" type="image/png" href="/icon.png">
+<script src="/lang.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -609,7 +610,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
     <div class="about-section">
       <div class="about-section-title" data-i18n="aboutVersionTitle">Version</div>
-      <div class="about-section-body">ReOrderly v3.0 — Built with Firebase, Netlify, and Anthropic AI.</div>
+      <div class="about-section-body">ReOrderly v3.1 — Built with Firebase, Netlify, and Anthropic AI.</div>
     </div>
     <div class="about-section">
       <div class="about-section-title">Legal</div>
@@ -657,7 +658,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="drawer-header">
     <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
-    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v3.0</div>
+    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v3.1</div>
   </div>
   <div class="drawer-item" onclick="showHomeScreen(); closeDrawer();">
     <div class="drawer-item-left">
@@ -915,43 +916,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 
 <div class="toast" id="toast"></div>
 
-<!-- Error Boundary Overlay -->
-<div id="error-boundary" style="display:none;position:fixed;inset:0;z-index:99999;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;font-family:'Syne',sans-serif;">
-  <div style="font-size:32px;margin-bottom:12px;">⚠️</div>
-  <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px;">Something went wrong</div>
-  <div style="font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.6;">ReOrderly ran into a problem.<br>Your data is safe — please reload to continue.</div>
-  <button onclick="location.reload()" style="background:var(--green);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Reload App</button>
-  <div style="margin-top:20px;">
-    <span onclick="document.getElementById('error-boundary-details').style.display=document.getElementById('error-boundary-details').style.display==='none'?'block':'none'" style="font-size:11px;color:var(--text3);cursor:pointer;text-decoration:underline;">show details</span>
-    <pre id="error-boundary-details" style="display:none;margin-top:10px;font-size:10px;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:left;max-width:340px;white-space:pre-wrap;word-break:break-all;max-height:160px;overflow-y:auto;"></pre>
-  </div>
-</div>
-
-<!-- Error Boundary Script — must run before module script -->
-<script>
-(function(){
-  function showError(msg){
-    var el=document.getElementById('error-boundary');
-    if(!el)return;
-    el.style.display='flex';
-    var det=document.getElementById('error-boundary-details');
-    if(det)det.textContent=msg||'Unknown error';
-  }
-  window.onerror=function(msg,src,line,col,err){
-    var detail=(err&&err.stack)||msg||'Unknown error';
-    console.error('[ReOrderly Error]',detail);
-    showError(detail);
-    return true;
-  };
-  window.onunhandledrejection=function(e){
-    var detail=(e.reason&&(e.reason.stack||e.reason.message))||String(e.reason)||'Unhandled promise rejection';
-    console.error('[ReOrderly Unhandled Rejection]',detail);
-    showError(detail);
-  };
-  window.__showAppError=showError;
-})();
-</script>
-
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -974,286 +938,11 @@ const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
 // ── LANGUAGE SYSTEM ──
+// Strings are loaded from /lang.js — do not add a LANG object here.
 let currentLang = localStorage.getItem('reorderly_lang') || 'en';
+window.__reorderlyLang = currentLang;
 
-const LANG = {
-  en: {
-    // Stats
-    statInList: 'In List', statRecipes: 'Recipes', statOrders: 'Orders',
-    // Home
-    homeTagline: 'Your phone companion to the kitchen Station',
-    homeBenefit: 'Scan it when it runs out. Order it when you\'re ready.',
-    // Home cards
-    cardListTitle: 'My Shopping List', cardListSub: 'Scan items and order on Walmart',
-    cardStationTitle: 'Connect to Station', cardStationSub: 'Sync this phone with your kitchen hub',
-    cardRecipeTitle: 'Recipe Book', cardRecipeSub: 'Add recipes and extract ingredients',
-    cardHistoryTitle: 'Order History', cardHistorySub: 'View and re-add past orders',
-    cardLibraryTitle: 'My Usual Items', cardLibrarySub: 'Quickly re-add things you buy often',
-    cardTodoTitle: 'To-Do List', cardTodoSub: 'Tasks synced with your Station hub',
-    // Messaging
-    msgPanelTitle: 'Message Station', msgPlaceholder: 'Send a message to the hub…', msgSend: 'Send',
-    msgFromHub: '📺 Station',
-    // Station connect
-    stationConnectTitle: 'Connect to Station', stationConnectBody: 'Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.',
-    stationConnectHow: 'How it works',
-    stationStep1: 'Scan on the hub → appears on your phone list',
-    stationStep2: 'Add a to-do on your phone → shows on the hub',
-    stationStep3: 'Send messages between phone and hub',
-    stationStep4: 'Everything syncs in real time',
-    stationConnectStatus: 'Connection Status', stationConnectLearn: 'Don\'t have a Station yet? Visit reorderlysolutions.com to learn more.',
-    stationStatusConnected: '🟢 Connected — signed in and syncing',
-    stationStatusDisconnected: '🔴 Not connected — please sign in',
-    todoPlaceholder: 'Add a task...', todoAddBtn: 'Add', todoSyncNote: 'Syncs with Station hub',
-    todoEmpty: 'No tasks yet — add one above',
-    todoDetailTitle: 'Task Detail', todoDetailTaskLabel: 'Task', todoDetailNotesLabel: 'Notes',
-    todoDetailNotesPlaceholder: 'Add notes...', todoDetailDueLabel: 'Due Date',
-    todoDetailPriorityLabel: 'Priority', priorityLow: 'Low', priorityMedium: 'Medium', priorityHigh: 'High',
-    todoDetailSave: 'Save', todoDetailDelete: 'Delete Task',
-    // Home
-    recentActivity: 'Recent activity', noRecentActivity: 'No recent activity yet — scan your first item to get started',
-    inYourList: 'In your list',
-    affiliateDisclosure: 'ReOrderly may earn a commission on purchases made through links to Walmart.com. As a Walmart affiliate, we earn from qualifying purchases.',
-    btnAbout: 'About', btnGoToApp: 'Go to App',
-    // About modal
-    tagline: 'Scan. List. Order. — reorderlysolutions.com', taglineShort: 'Scan. List. Order.',
-    aboutWhatTitle: 'What is ReOrderly?',
-    aboutWhatBody: 'ReOrderly is a smart household reordering app. Scan any product barcode as you run out, build your reorder list automatically, and open matching Walmart product pages when you\'re ready to shop. No more manually typing grocery lists or forgetting what you need.',
-    aboutRecipeTitle: 'Recipe Intelligence',
-    aboutRecipeBody: 'Paste any recipe URL and our AI automatically extracts all ingredients with quantities. Add them to your shopping list and open matching Walmart product pages when you\'re ready to shop. Works with AllRecipes, Food Network, and thousands of recipe sites.',
-    aboutSharingTitle: 'Household Sharing',
-    aboutSharingBody: 'Invite family members to share your list. Anyone in the household can scan items and add them — everything syncs in real time across all devices.',
-    aboutAffiliateTitle: 'Affiliate Disclosure',
-    aboutAffiliateBody: 'ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.',
-    aboutVersionTitle: 'Version', btnClose: 'Close',
-    // Auth
-    btnSignIn: 'Sign in', btnCreateAccount: 'Create account',
-    placeholderEmail: 'Email address', placeholderPassword: 'Password', placeholderConfirmPassword: 'Confirm password',
-    or: 'or', btnGoogleSignIn: 'Continue with Google', btnSignOut: 'Sign out',
-    // Auth errors
-    authFillFields: 'Please fill in all fields', authPasswordNoMatch: 'Passwords do not match',
-    authNoAccount: 'No account with that email', authWrongPassword: 'Incorrect password',
-    authEmailExists: 'Account already exists', authWeakPassword: 'Password must be 6+ characters',
-    authInvalidCred: 'Incorrect email or password', authInvalidEmail: 'Invalid email',
-    authGoogleFail: 'Google sign-in failed', authSomethingWrong: 'Something went wrong',
-    // Drawer
-    myLists: 'My Lists', newList: 'New list', recipes: 'Recipes', home: 'Home',
-    myList: 'My List',
-    recipeBook: 'Recipe book', other: 'Other', productLibrary: 'Product library',
-    orderHistory: 'Order history', shared: 'Shared',
-    // Scan / main view
-    scanLabel: 'Scan or enter barcode', scanPlaceholder: 'e.g. 078742434032',
-    btnAdd: 'Add', btnOrderAll: 'Review on Walmart', btnClear: 'Clear',
-    reorderList: 'Reorder list', emptyList: 'Scan an item to add it to your list',
-    statusReady: 'Ready — scan with your Bluetooth scanner or type a UPC',
-    statusSearching: 'Searching Walmart catalog...', statusQtyUpdated: 'Quantity updated',
-    statusNotFound: 'Product not found — try a different item',
-    statusFound: '✓ Found: ', statusItemsReady: ' items ready to order', statusItemReady: ' item ready to order',
-    toastAddedToList: 'Added to list', toastOpeningWalmart: 'Opening Walmart — order saved to history!',
-    viewOnWalmart: 'View on Walmart',
-    // History
-    btnBack: 'Back', noHistory: 'No order history yet', loading: 'Loading...',
-    historyCouldNotLoad: 'Could not load history', items: 'items', item: 'item',
-    btnReAdd: '+ Add', toastAdded: 'Added: ',
-    // Library
-    searchProducts: 'Search your scanned products...',
-    libUsual: '⭐ Usual', libAll: 'All', libGrocery: 'Grocery', libSnacks: 'Snacks',
-    libHousehold: 'Household', libHealth: 'Health', libOther: 'Other',
-    libNoUsual: 'Scan items more than once or star items to add them here',
-    libNoResults: 'No results found', libNoCategory: 'No items in this category yet',
-    libCouldNotLoad: 'Could not load library', libLoading: 'Loading...',
-    inList: '✓ In list', addItem: '+ Add',
-    addToUsual: 'Add to Usual', removeFromUsual: 'Remove from Usual',
-    // Modals
-    newListTitle: 'New list', newListSub: 'Give your list a name like "Weekly Groceries" or "Costco Run"',
-    listNamePlaceholder: 'List name', btnCancel: 'Cancel', btnCreate: 'Create',
-    deleteListTitle: 'Delete list?', btnDelete: 'Delete',
-    deleteListMsg: 'This will permanently delete the list and all its items. This cannot be undone.',
-    shareListTitle: 'Share list',
-    shareListSub: "Invite someone by their email address. They'll need a ReOrderly account to access the list.",
-    btnDone: 'Done', btnInvite: 'Invite', noMembersYet: 'No members yet',
-    btnRemove: 'Remove', memberRemoved: 'Member removed',
-    invitePleaseEnterEmail: 'Please enter an email address', inviteCantInviteSelf: "You can't invite yourself",
-    inviteAlreadyMember: 'Already a member', inviteCouldNotAdd: 'Could not add member',
-    addToListTitle: 'Add to list', addToListSub: 'Choose which list to add the selected ingredients to',
-    // List operations
-    toastListCreated: 'List created: ', toastListDeleted: 'List deleted', toastCouldNotDelete: 'Could not delete list',
-    // Camera
-    cameraTitle: 'Scan barcode', cameraHint: 'Point at any product barcode',
-    cameraStarting: 'Starting camera...', cameraReady: 'Point camera at a barcode',
-    cameraFound: '✓ Added: ', cameraNotFound: 'Product not found — try again',
-    cameraAccessDenied: 'Camera access denied — please allow camera in Settings',
-    cameraCouldNotStart: 'Could not start camera — please try again',
-    // Recipe
-    addNewRecipe: '+ Add new recipe', noRecipesSaved: 'No recipes saved yet', addFirstRecipe: 'Add your first recipe above',
-    addRecipeTitle: 'Add recipe', extractBtn: 'Extract ingredients with AI',
-    tabUrl: '🔗 URL', tabText: '📝 Text', tabPhoto: '📷 Photo',
-    urlPlaceholder: 'https://www.allrecipes.com/recipe/...',
-    urlHint: 'Paste any recipe URL from AllRecipes, Food Network, or any cooking site',
-    textPlaceholder: 'Paste or type your recipe here — ingredients, amounts, instructions...',
-    photoLabel: 'Take a photo or choose from camera roll',
-    photoSub: 'Point at a recipe card, cookbook page, or printed recipe',
-    recipeProcessing: 'Reading recipe with AI...', recipeExtracting: 'Extracting ingredients and quantities',
-    recipeUrlToast: 'Please enter a recipe URL', recipeTextToast: 'Please paste or type recipe text',
-    recipePhotoToast: 'Please take or choose a photo first',
-    recipeUrlBlocked: 'That site blocked the fetch — paste the recipe text instead',
-    recipeUrlBlockedPlaceholder: 'This site blocked automatic fetching.\n\nGo to the recipe page, select all the text (Ctrl+A), copy it (Ctrl+C), then paste it here.',
-    recipeCantRead: "Couldn't read that recipe", recipeCheckConnection: 'Check your connection and try again',
-    recipeTryText: 'Try pasting the recipe text directly instead', btnTryAgain: 'Try again',
-    ingredients: 'ingredients', steps: 'steps', servings: 'servings',
-    notesPlaceholder: 'Add notes — substitutions, tips, what you changed...',
-    deselectAll: 'Deselect all', selectAll: 'Select all',
-    btnSaveRecipe: '💾 Save recipe', btnAddToList: '🛒 Add to list', btnShop: '🛒 Shop',
-    recipeSaved: 'Recipe saved to your book!', recipeCouldNotSave: 'Could not save recipe',
-    selectAtLeastOne: 'Please select at least one ingredient',
-    createNewListForRecipe: 'Create new list for this recipe',
-    ingredientsAddedTo: ' ingredients added to ',
-    couldNotAddIngredients: 'Could not add ingredients',
-    // Category labels
-    catGrocery: 'Grocery', catSnacks: 'Snacks', catHousehold: 'Household',
-    catHealth: 'Health & Beauty', catOther: 'Other',
-    // Greetings
-    greetMorning: 'Good morning', greetAfternoon: 'Good afternoon', greetEvening: 'Good evening',
-  },
-  es: {
-    // Stats
-    statInList: 'En Lista', statRecipes: 'Recetas', statOrders: 'Pedidos',
-    // Home
-    homeTagline: 'Tu compañero de teléfono para la Station',
-    homeBenefit: 'Escanéalo cuando se acabe. Pídelo cuando estés listo.',
-    // Home cards
-    cardListTitle: 'Mi Lista de Compras', cardListSub: 'Escanea artículos y pide en Walmart',
-    cardStationTitle: 'Conectar a Station', cardStationSub: 'Sincroniza tu teléfono con tu hub',
-    cardRecipeTitle: 'Libro de Recetas', cardRecipeSub: 'Agrega recetas y extrae ingredientes',
-    cardHistoryTitle: 'Historial de Pedidos', cardHistorySub: 'Ver y volver a agregar pedidos',
-    cardLibraryTitle: 'Mis Artículos Habituales', cardLibrarySub: 'Vuelve a agregar lo que compras seguido',
-    cardTodoTitle: 'Lista de Tareas', cardTodoSub: 'Tareas sincronizadas con tu Station',
-    // Messaging
-    msgPanelTitle: 'Mensaje a Station', msgPlaceholder: 'Enviar mensaje al hub…', msgSend: 'Enviar',
-    msgFromHub: '📺 Station',
-    // Station connect
-    stationConnectTitle: 'Conectar a Station', stationConnectBody: 'Tu teléfono y el hub se conectan automáticamente cuando ambos están en la misma cuenta de Google.',
-    stationConnectHow: 'Cómo funciona',
-    stationStep1: 'Escanear en el hub → aparece en tu lista del teléfono',
-    stationStep2: 'Agregar tarea en el teléfono → se muestra en el hub',
-    stationStep3: 'Enviar mensajes entre teléfono y hub',
-    stationStep4: 'Todo se sincroniza en tiempo real',
-    stationConnectStatus: 'Estado de Conexión', stationConnectLearn: '¿No tienes una Station? Visita reorderlysolutions.com para más información.',
-    stationStatusConnected: '🟢 Conectado — sincronizando',
-    stationStatusDisconnected: '🔴 No conectado — inicia sesión',
-    todoPlaceholder: 'Agregar tarea...', todoAddBtn: 'Agregar', todoSyncNote: 'Sincroniza con Station',
-    todoEmpty: 'Sin tareas — agrega una arriba',
-    todoDetailTitle: 'Detalle de Tarea', todoDetailTaskLabel: 'Tarea', todoDetailNotesLabel: 'Notas',
-    todoDetailNotesPlaceholder: 'Agregar notas...', todoDetailDueLabel: 'Fecha límite',
-    todoDetailPriorityLabel: 'Prioridad', priorityLow: 'Baja', priorityMedium: 'Media', priorityHigh: 'Alta',
-    todoDetailSave: 'Guardar', todoDetailDelete: 'Eliminar Tarea',
-    // Home
-    recentActivity: 'Actividad reciente', noRecentActivity: 'Sin actividad reciente — escanea tu primer artículo',
-    inYourList: 'En tu lista',
-    affiliateDisclosure: 'ReOrderly puede ganar una comisión por compras realizadas a través de enlaces a Walmart.com. Como afiliado de Walmart, ganamos por compras calificadas.',
-    btnAbout: 'Acerca de', btnGoToApp: 'Ir a la App',
-    // About modal
-    tagline: 'Escanea. Lista. Pide. — reorderlysolutions.com', taglineShort: 'Escanea. Lista. Pide.',
-    aboutWhatTitle: '¿Qué es ReOrderly?',
-    aboutWhatBody: 'ReOrderly es una app inteligente para reordenar productos del hogar. Escanea el código de barras cuando se te acabe algo, crea tu lista automáticamente y envía todo a tu carrito de Walmart con un toque.',
-    aboutRecipeTitle: 'Recetas con IA',
-    aboutRecipeBody: 'Pega cualquier URL de receta y nuestra IA extrae automáticamente todos los ingredientes con cantidades. Agrégalos a tu lista y envíalos a Walmart con un toque.',
-    aboutSharingTitle: 'Compartir en el Hogar',
-    aboutSharingBody: 'Invita a los miembros de tu familia a compartir la lista. Cualquier persona puede escanear artículos — todo se sincroniza en tiempo real.',
-    aboutAffiliateTitle: 'Divulgación de Afiliados',
-    aboutAffiliateBody: 'ReOrderly participa en el programa de afiliados de Walmart. Podemos ganar una comisión cuando realizas compras a través de enlaces en esta app. Esto no afecta el precio que pagas.',
-    aboutVersionTitle: 'Versión', btnClose: 'Cerrar',
-    // Auth
-    btnSignIn: 'Iniciar sesión', btnCreateAccount: 'Crear cuenta',
-    placeholderEmail: 'Correo electrónico', placeholderPassword: 'Contraseña', placeholderConfirmPassword: 'Confirmar contraseña',
-    or: 'o', btnGoogleSignIn: 'Continuar con Google', btnSignOut: 'Cerrar sesión',
-    // Auth errors
-    authFillFields: 'Por favor completa todos los campos', authPasswordNoMatch: 'Las contraseñas no coinciden',
-    authNoAccount: 'No hay cuenta con ese correo', authWrongPassword: 'Contraseña incorrecta',
-    authEmailExists: 'La cuenta ya existe', authWeakPassword: 'La contraseña debe tener 6+ caracteres',
-    authInvalidCred: 'Correo o contraseña incorrectos', authInvalidEmail: 'Correo electrónico inválido',
-    authGoogleFail: 'Error al iniciar sesión con Google', authSomethingWrong: 'Algo salió mal',
-    // Drawer
-    myLists: 'Mis Listas', newList: 'Nueva lista', recipes: 'Recetas', home: 'Inicio',
-    myList: 'Mi Lista',
-    recipeBook: 'Libro de recetas', other: 'Otros', productLibrary: 'Biblioteca de productos',
-    orderHistory: 'Historial de pedidos', shared: 'Compartida',
-    // Scan / main view
-    scanLabel: 'Escanea o ingresa código de barras', scanPlaceholder: 'ej. 078742434032',
-    btnAdd: 'Agregar', btnOrderAll: 'Revisar en Walmart', btnClear: 'Borrar',
-    reorderList: 'Lista de pedidos', emptyList: 'Escanea un artículo para agregarlo a tu lista',
-    statusReady: 'Listo — escanea con tu lector Bluetooth o escribe un UPC',
-    statusSearching: 'Buscando en catálogo de Walmart...', statusQtyUpdated: 'Cantidad actualizada',
-    statusNotFound: 'Producto no encontrado — intenta con otro artículo',
-    statusFound: '✓ Encontrado: ', statusItemsReady: ' artículos listos para pedir', statusItemReady: ' artículo listo para pedir',
-    toastAddedToList: 'Agregado a la lista', toastOpeningWalmart: '¡Abriendo Walmart — pedido guardado en historial!',
-    viewOnWalmart: 'Ver en Walmart',
-    // History
-    btnBack: 'Atrás', noHistory: 'Sin historial de pedidos', loading: 'Cargando...',
-    historyCouldNotLoad: 'No se pudo cargar el historial', items: 'artículos', item: 'artículo',
-    btnReAdd: '+ Agregar', toastAdded: 'Agregado: ',
-    // Library
-    searchProducts: 'Buscar productos escaneados...',
-    libUsual: '⭐ Habituales', libAll: 'Todos', libGrocery: 'Comestibles', libSnacks: 'Botanas',
-    libHousehold: 'Hogar', libHealth: 'Salud', libOther: 'Otros',
-    libNoUsual: 'Escanea artículos más de una vez o márcalos con estrella para agregarlos aquí',
-    libNoResults: 'Sin resultados', libNoCategory: 'Sin artículos en esta categoría',
-    libCouldNotLoad: 'No se pudo cargar la biblioteca', libLoading: 'Cargando...',
-    inList: '✓ En lista', addItem: '+ Agregar',
-    addToUsual: 'Agregar a Habituales', removeFromUsual: 'Quitar de Habituales',
-    // Modals
-    newListTitle: 'Nueva lista', newListSub: 'Ponle un nombre como "Súper semanal" o "Costco"',
-    listNamePlaceholder: 'Nombre de la lista', btnCancel: 'Cancelar', btnCreate: 'Crear',
-    deleteListTitle: '¿Eliminar lista?', btnDelete: 'Eliminar',
-    deleteListMsg: 'Esto eliminará permanentemente la lista y todos sus artículos. Esta acción no se puede deshacer.',
-    shareListTitle: 'Compartir lista',
-    shareListSub: 'Invita a alguien con su correo electrónico. Necesitan una cuenta de ReOrderly.',
-    btnDone: 'Listo', btnInvite: 'Invitar', noMembersYet: 'Sin miembros aún',
-    btnRemove: 'Quitar', memberRemoved: 'Miembro eliminado',
-    invitePleaseEnterEmail: 'Por favor ingresa un correo electrónico', inviteCantInviteSelf: 'No puedes invitarte a ti mismo',
-    inviteAlreadyMember: 'Ya es miembro', inviteCouldNotAdd: 'No se pudo agregar al miembro',
-    addToListTitle: 'Agregar a lista', addToListSub: 'Elige a qué lista agregar los ingredientes seleccionados',
-    // List operations
-    toastListCreated: 'Lista creada: ', toastListDeleted: 'Lista eliminada', toastCouldNotDelete: 'No se pudo eliminar la lista',
-    // Camera
-    cameraTitle: 'Escanear código', cameraHint: 'Apunta a cualquier código de barras',
-    cameraStarting: 'Iniciando cámara...', cameraReady: 'Apunta la cámara al código de barras',
-    cameraFound: '✓ Agregado: ', cameraNotFound: 'Producto no encontrado — intenta de nuevo',
-    cameraAccessDenied: 'Acceso a cámara denegado — permite el acceso en Configuración',
-    cameraCouldNotStart: 'No se pudo iniciar la cámara — intenta de nuevo',
-    // Recipe
-    addNewRecipe: '+ Agregar nueva receta', noRecipesSaved: 'Sin recetas guardadas', addFirstRecipe: 'Agrega tu primera receta arriba',
-    addRecipeTitle: 'Agregar receta', extractBtn: 'Extraer ingredientes con IA',
-    tabUrl: '🔗 URL', tabText: '📝 Texto', tabPhoto: '📷 Foto',
-    urlPlaceholder: 'https://www.allrecipes.com/recipe/...',
-    urlHint: 'Pega cualquier URL de receta de AllRecipes, Food Network u otros sitios',
-    textPlaceholder: 'Pega o escribe tu receta aquí — ingredientes, cantidades, instrucciones...',
-    photoLabel: 'Toma una foto o elige de tu galería',
-    photoSub: 'Apunta a una tarjeta de receta, libro de cocina o receta impresa',
-    recipeProcessing: 'Leyendo receta con IA...', recipeExtracting: 'Extrayendo ingredientes y cantidades',
-    recipeUrlToast: 'Por favor ingresa una URL de receta', recipeTextToast: 'Por favor pega o escribe el texto de la receta',
-    recipePhotoToast: 'Por favor toma o elige una foto primero',
-    recipeUrlBlocked: 'Ese sitio bloqueó la descarga — pega el texto de la receta',
-    recipeUrlBlockedPlaceholder: 'Ese sitio bloqueó la descarga automática.\n\nVe a la página de la receta, selecciona todo el texto (Ctrl+A), cópialo (Ctrl+C) y pégalo aquí.',
-    recipeCantRead: 'No se pudo leer esa receta', recipeCheckConnection: 'Verifica tu conexión e intenta de nuevo',
-    recipeTryText: 'Intenta pegando el texto de la receta directamente', btnTryAgain: 'Intentar de nuevo',
-    ingredients: 'ingredientes', steps: 'pasos', servings: 'porciones',
-    notesPlaceholder: 'Agrega notas — sustituciones, consejos, cambios...',
-    deselectAll: 'Deseleccionar todo', selectAll: 'Seleccionar todo',
-    btnSaveRecipe: '💾 Guardar receta', btnAddToList: '🛒 Agregar a lista', btnShop: '🛒 Comprar',
-    recipeSaved: '¡Receta guardada en tu libro!', recipeCouldNotSave: 'No se pudo guardar la receta',
-    selectAtLeastOne: 'Por favor selecciona al menos un ingrediente',
-    createNewListForRecipe: 'Crear nueva lista para esta receta',
-    ingredientsAddedTo: ' ingredientes agregados a ',
-    couldNotAddIngredients: 'No se pudieron agregar los ingredientes',
-    // Category labels
-    catGrocery: 'Comestibles', catSnacks: 'Botanas', catHousehold: 'Hogar',
-    catHealth: 'Salud y Belleza', catOther: 'Otros',
-    // Greetings
-    greetMorning: 'Buenos días', greetAfternoon: 'Buenas tardes', greetEvening: 'Buenas noches',
-  }
-};
-
-function t(key) { return (LANG[currentLang] && LANG[currentLang][key]) || LANG.en[key] || key; }
+function t(key) { return window.t ? window.t(key) : key; }
 
 function applyLang() {
   // Update all data-i18n text elements
@@ -1284,6 +973,7 @@ function applyLang() {
 window.toggleLanguage = function() {
   currentLang = currentLang === 'en' ? 'es' : 'en';
   localStorage.setItem('reorderly_lang', currentLang);
+  window.__reorderlyLang = currentLang;
   applyLang();
   // Refresh list badge with new language
   if (currentListName) updateListBadge(currentListName);
@@ -1379,7 +1069,6 @@ function hideSplash() {
 setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
 
 onAuthStateChanged(auth, async user => {
-  try {
   authReady = true;
   hideSplash();
   if (user) {
@@ -1407,10 +1096,6 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('app-screen').classList.remove('visible');
     if (unsubscribeList) unsubscribeList();
     items = [];
-  }
-  } catch(e) {
-    console.error('[ReOrderly Init Error]', e);
-    if(window.__showAppError) window.__showAppError(e.stack||e.message||String(e));
   }
 });
 

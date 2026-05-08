@@ -726,10 +726,13 @@ const LANG = {
 
 };
 
-// ── Helper function ──
-// Used by both app.html and hub.html
-// Returns translated string for key, falls back to EN, falls back to key name itself
-function t(key) {
+// ── Expose globally ──
+// Both app.html and hub.html access LANG and t() via window
+window.LANG = LANG;
+
+// Helper — returns translated string for key
+// Falls back to EN, then to the key name itself if not found
+window.t = function(key) {
   const lang = window.__reorderlyLang || 'en';
   return (LANG[lang] && LANG[lang][key]) || LANG.en[key] || key;
-}
+};
