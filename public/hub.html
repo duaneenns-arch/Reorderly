@@ -152,8 +152,17 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 }
 .pm-frame-badge.show{opacity:1;}
 
-/* hide default clock when polaroid active */
-#photo-mode.polaroid-active .pm-clock{display:none;}
+/* persistent frame cycle button */
+.pm-frame-btn{
+  position:absolute;bottom:22px;right:90px;z-index:10;
+  background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.5);font-size:13px;
+  width:32px;height:32px;border-radius:99px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;font-family:'Syne',sans-serif;
+  pointer-events:all;
+}
+.pm-frame-btn:hover{background:rgba(0,0,0,.6);color:#fff;border-color:rgba(255,255,255,.35);}
 
 /* ── HOME HEADER ── */
 #home-page{flex-direction:column;}
@@ -861,8 +870,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
   <div class="pm-logo">ReOrderly Station</div>
   <div class="pm-hint" data-i18n="hubTapToWake">Tap to wake</div>
-  <div class="pm-frame-hint" id="pm-frame-hint">Tap frame edge to change style</div>
+  <div class="pm-frame-hint" id="pm-frame-hint">Tap 🖼 to change frame style</div>
   <div class="pm-frame-badge" id="pm-frame-badge"></div>
+  <div class="pm-frame-btn" id="pm-frame-btn" onclick="cycleFrame();event.stopPropagation();" title="Change frame">🖼</div>
 </div>
 
 <!-- HOME PAGE -->
@@ -1375,6 +1385,7 @@ window.wakeHub = function(){
 window.goPhotoMode = function(){ document.getElementById('home-page')?.classList.remove('active'); document.getElementById('photo-mode')?.classList.add('active'); };
 window.handlePhotoTap = function(e){ e.stopPropagation(); window.wakeHub(); };
 window.handlePhotoModeTap = function(){ window.wakeHub(); };
+window.cycleFrame = function(){};
 window.toggleClockMenu = function(){};
 window.toggleHMenu = function(){};
 window.doScan = function(){};
