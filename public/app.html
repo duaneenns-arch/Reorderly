@@ -62,9 +62,36 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 .home-version { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-left: 6px; vertical-align: middle; }
 .home-tagline { font-size: 11px; color: var(--text3); margin-top: 2px; font-style: italic; }
 .home-benefit { font-size: 13px; color: var(--text2); font-weight: 600; margin-bottom: 1.25rem; line-height: 1.4; }
-/* Station card */
-.home-card.station { border-color: var(--green); background: var(--green-light); }
-.home-card.station .home-card-title { color: var(--green); }
+/* Station card — dark hub theme */
+.home-card.station {
+  background: #0d0f0e;
+  border-color: rgba(29,158,117,.35);
+  box-shadow: 0 4px 24px rgba(29,158,117,.08), 0 0 0 0 transparent;
+  position: relative;
+  overflow: hidden;
+}
+.home-card.station::before {
+  content: '';
+  position: absolute;
+  top: -40%; right: -20%;
+  width: 200px; height: 200px;
+  background: radial-gradient(ellipse at center, rgba(29,158,117,.14) 0%, transparent 65%);
+  pointer-events: none;
+}
+.home-card.station:hover { border-color: rgba(29,158,117,.65); box-shadow: 0 4px 28px rgba(29,158,117,.15); }
+.home-card.station .home-card-icon { background: rgba(29,158,117,.15); position: relative; }
+.home-card.station .home-card-title { color: #fff; }
+.home-card.station .home-card-sub { color: rgba(255,255,255,.45); }
+.home-card.station .home-card-arrow { color: rgba(255,255,255,.3); }
+/* pulsing live dot on station card */
+.station-live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: livePulse 2.5s ease-in-out infinite;
+  position: absolute; top: 6px; right: 6px;
+  flex-shrink: 0;
+}
 /* Message button in header */
 .msg-btn { background: none; border: 1px solid var(--border2); border-radius: 99px; padding: 5px 10px; font-size: 12px; cursor: pointer; color: var(--text2); display: flex; align-items: center; gap: 5px; font-family: 'Syne', sans-serif; font-weight: 700; transition: all .15s; position: relative; }
 .msg-btn:hover { border-color: var(--green); color: var(--green); }
@@ -227,6 +254,11 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 /* ── ITEMS ── */
 .item { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; overflow: hidden; animation: slideIn .2s ease; }
 @keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes livePulse {
+  0%   { transform: scale(1);   box-shadow: 0 0 0 0 rgba(29,158,117,.9), 0 0 6px var(--green); }
+  50%  { transform: scale(1.5); box-shadow: 0 0 0 6px rgba(29,158,117,0), 0 0 12px rgba(29,158,117,.8); }
+  100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(29,158,117,.9), 0 0 6px var(--green); }
+}
 .item-main { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
 .item-img { width: 50px; height: 50px; border-radius: 10px; object-fit: contain; flex-shrink: 0; border: 1px solid var(--border); background: var(--bg3); }
 .item-ph { width: 50px; height: 50px; border-radius: 10px; background: var(--bg3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); font-size: 22px; }
@@ -533,15 +565,15 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div class="home-card-icon green">🛒</div>
         <div class="home-card-info">
           <div class="home-card-title" data-i18n="cardListTitle">My Shopping List</div>
-          <div class="home-card-sub" data-i18n="cardListSub">Scan items and order on Walmart</div>
+          <div class="home-card-sub" data-i18n="cardListSub">Scan items and review on Walmart</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div class="home-card station" onclick="showStationConnect();">
-        <div class="home-card-icon green">📺</div>
+        <div class="home-card-icon green">📺<div class="station-live-dot"></div></div>
         <div class="home-card-info">
-          <div class="home-card-title" data-i18n="cardStationTitle">Connect to Station</div>
-          <div class="home-card-sub" data-i18n="cardStationSub">Sync this phone with your kitchen hub</div>
+          <div class="home-card-title" data-i18n="cardStationTitle">My Kitchen Station</div>
+          <div class="home-card-sub" data-i18n="cardStationSub">Synced with your kitchen hub</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
@@ -2645,29 +2677,34 @@ applyLang();
 
 <!-- Station Connect modal -->
 <div class="about-modal" id="station-modal">
-  <div class="about-box">
-    <div class="about-header">
-      <div class="about-logo">ReOrderly<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-left:3px;vertical-align:middle;position:relative;top:-2px;"></span></div>
-      <button class="about-close" onclick="closeStationConnect()">×</button>
+  <div class="about-box" style="background:#0d0f0e;border:1px solid rgba(29,158,117,.25);box-shadow:0 24px 64px rgba(0,0,0,.6),0 0 60px rgba(29,158,117,.06);overflow:hidden;position:relative;">
+    <!-- subtle green glow top right -->
+    <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(ellipse at center,rgba(29,158,117,.15) 0%,transparent 65%);pointer-events:none;z-index:0;"></div>
+    <div class="about-header" style="border-bottom-color:rgba(255,255,255,.07);position:relative;z-index:1;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:livePulse 2.5s ease-in-out infinite;flex-shrink:0;"></div>
+        <div class="about-logo" style="color:#fff;">ReOrderly<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-left:3px;vertical-align:middle;position:relative;top:-2px;"></span></div>
+      </div>
+      <button class="about-close" onclick="closeStationConnect()" style="color:rgba(255,255,255,.4);">×</button>
     </div>
-    <div style="padding:1.5rem;">
+    <div style="padding:1.5rem;position:relative;z-index:1;">
       <div style="font-size:32px;text-align:center;margin-bottom:12px;">📺</div>
-      <div style="font-size:18px;font-weight:800;color:var(--text);text-align:center;margin-bottom:8px;" data-i18n="stationConnectTitle">Connect to Station</div>
-      <div style="font-size:13px;color:var(--text2);text-align:center;margin-bottom:1.5rem;line-height:1.6;" data-i18n="stationConnectBody">Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.</div>
-      <div style="background:var(--green-light);border:1px solid var(--green);border-radius:14px;padding:14px 16px;margin-bottom:1rem;">
+      <div style="font-size:18px;font-weight:800;color:#fff;text-align:center;margin-bottom:8px;" data-i18n="stationConnectTitle">My Kitchen Station</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:1.5rem;line-height:1.6;" data-i18n="stationConnectBody">Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.</div>
+      <div style="background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.25);border-radius:14px;padding:14px 16px;margin-bottom:1rem;">
         <div style="font-size:12px;font-weight:800;color:var(--green);margin-bottom:4px;" data-i18n="stationConnectHow">How it works</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.7;">
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.7;">
           ✓ <span data-i18n="stationStep1">Scan on the hub → appears on your phone list</span><br>
           ✓ <span data-i18n="stationStep2">Add a to-do on your phone → shows on the hub</span><br>
           ✓ <span data-i18n="stationStep3">Send messages between phone and hub</span><br>
           ✓ <span data-i18n="stationStep4">Everything syncs in real time</span>
         </div>
       </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:1.5rem;">
-        <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:4px;" data-i18n="stationConnectStatus">Connection Status</div>
-        <div style="font-size:12px;color:var(--text2);" id="station-status-text">Checking…</div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 16px;margin-bottom:1.5rem;">
+        <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,.6);margin-bottom:4px;" data-i18n="stationConnectStatus">Connection Status</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.4);" id="station-status-text">Checking…</div>
       </div>
-      <div style="text-align:center;font-size:12px;color:var(--text3);" data-i18n="stationConnectLearn">Don't have a Station yet? Visit <strong>reorderlysolutions.com</strong> to learn more.</div>
+      <div style="text-align:center;font-size:12px;color:rgba(255,255,255,.28);" data-i18n="stationConnectLearn">Don't have a Station yet? Visit <strong style="color:rgba(255,255,255,.5);">reorderlysolutions.com</strong> to learn more.</div>
     </div>
   </div>
 </div>

@@ -29,8 +29,8 @@ const LANG = {
     // ── Home cards ──
     cardListTitle: 'My Shopping List',
     cardListSub: 'Scan items and review on Walmart',
-    cardStationTitle: 'Connect to Station',
-    cardStationSub: 'Sync this phone with your kitchen hub',
+    cardStationTitle: 'My Kitchen Station',
+    cardStationSub: 'Synced with your kitchen hub',
     cardRecipeTitle: 'Recipe Book',
     cardRecipeSub: 'Add recipes and extract ingredients',
     cardHistoryTitle: 'Shopping History',
@@ -49,7 +49,7 @@ const LANG = {
     msgToPhonePlaceholder: 'Send a message to the phone…',
 
     // ── Station connect ──
-    stationConnectTitle: 'Connect to Station',
+    stationConnectTitle: 'My Kitchen Station',
     stationConnectBody: 'Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.',
     stationConnectHow: 'How it works',
     stationStep1: 'Scan on the hub → appears on your phone list',
@@ -388,8 +388,8 @@ const LANG = {
     // ── Home cards ──
     cardListTitle: 'Mi Lista de Compras',
     cardListSub: 'Escanea artículos y revisa en Walmart',
-    cardStationTitle: 'Conectar a Station',
-    cardStationSub: 'Sincroniza tu teléfono con tu hub',
+    cardStationTitle: 'Mi Estación de Cocina',
+    cardStationSub: 'Sincronizada con tu hub de cocina',
     cardRecipeTitle: 'Libro de Recetas',
     cardRecipeSub: 'Agrega recetas y extrae ingredientes',
     cardHistoryTitle: 'Historial de Compras',
@@ -408,7 +408,7 @@ const LANG = {
     msgToPhonePlaceholder: 'Enviar mensaje al teléfono…',
 
     // ── Station connect ──
-    stationConnectTitle: 'Conectar a Station',
+    stationConnectTitle: 'Mi Estación de Cocina',
     stationConnectBody: 'Tu teléfono y el hub se conectan automáticamente cuando ambos están en la misma cuenta de Google.',
     stationConnectHow: 'Cómo funciona',
     stationStep1: 'Escanear en el hub → aparece en tu lista del teléfono',
