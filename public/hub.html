@@ -46,6 +46,129 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .pm-logo{position:absolute;bottom:24px;left:32px;font-size:13px;font-weight:800;color:rgba(255,255,255,0.12);letter-spacing:0.1em;z-index:2;}
 .pm-hint{position:absolute;bottom:24px;right:32px;font-size:10px;color:rgba(255,255,255,0.15);font-family:'DM Mono',monospace;letter-spacing:0.1em;z-index:2;}
 
+/* ── PHOTO FRAME SYSTEM ── */
+.pm-frame-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;pointer-events:none;}
+.pm-frame{position:relative;pointer-events:all;cursor:pointer;transition:all .4s ease;}
+
+/* frame: none — invisible wrapper, photo fills screen */
+.pm-frame.frame-none{width:100%;height:100%;border:none;background:transparent;box-shadow:none;}
+.pm-frame.frame-none .pm-frame-inner{width:100%;height:100%;}
+
+/* frame: wood (oak) */
+.pm-frame.frame-wood{
+  width:calc(100% - 60px);height:calc(100% - 60px);
+  border-radius:4px;
+  border:28px solid transparent;
+  background-clip:padding-box;
+  box-shadow:
+    0 0 0 28px #0000,
+    inset 0 0 0 2px rgba(255,255,255,.15),
+    0 8px 40px rgba(0,0,0,.7);
+  background-image:
+    repeating-linear-gradient(92deg,
+      rgba(180,120,60,.0) 0px, rgba(200,140,70,.18) 2px,
+      rgba(160,100,40,.08) 4px, rgba(190,130,55,.0) 8px),
+    repeating-linear-gradient(180deg,
+      rgba(0,0,0,.04) 0px, rgba(0,0,0,0) 3px),
+    linear-gradient(135deg, #c8832a 0%, #a0621e 25%, #c8832a 50%, #8b5016 75%, #c8832a 100%);
+  background-origin:border-box;
+}
+.pm-frame.frame-wood .pm-frame-inner{width:100%;height:100%;overflow:hidden;}
+
+/* frame: walnut (dark) */
+.pm-frame.frame-walnut{
+  width:calc(100% - 60px);height:calc(100% - 60px);
+  border-radius:4px;
+  border:28px solid transparent;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.08),
+    0 8px 40px rgba(0,0,0,.8);
+  background-image:
+    repeating-linear-gradient(88deg,
+      rgba(255,255,255,.0) 0px, rgba(255,255,255,.06) 1px,
+      rgba(0,0,0,.04) 3px, rgba(255,255,255,.0) 6px),
+    linear-gradient(135deg, #3d2010 0%, #2a1508 30%, #3d2010 60%, #1e0f06 80%, #3d2010 100%);
+  background-origin:border-box;
+}
+.pm-frame.frame-walnut .pm-frame-inner{width:100%;height:100%;overflow:hidden;}
+
+/* frame: metal (thin black) */
+.pm-frame.frame-metal{
+  width:calc(100% - 40px);height:calc(100% - 40px);
+  border-radius:3px;
+  border:14px solid transparent;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.2),
+    inset 0 1px 0 rgba(255,255,255,.35),
+    0 2px 0 rgba(255,255,255,.05),
+    0 8px 40px rgba(0,0,0,.75);
+  background-image:
+    linear-gradient(160deg, #2a2a2a 0%, #111 40%, #222 60%, #0a0a0a 100%);
+  background-origin:border-box;
+}
+.pm-frame.frame-metal .pm-frame-inner{width:100%;height:100%;overflow:hidden;}
+
+/* frame: polaroid */
+.pm-frame.frame-polaroid{
+  width:calc(100% - 80px);
+  max-height:calc(100% - 40px);
+  background:#f5f0e8;
+  border-radius:3px;
+  padding:18px 18px 0 18px;
+  box-shadow:0 12px 60px rgba(0,0,0,.75),0 2px 8px rgba(0,0,0,.4);
+  display:flex;flex-direction:column;
+}
+.pm-frame.frame-polaroid .pm-frame-inner{
+  flex:1;overflow:hidden;min-height:0;
+  border-radius:1px;
+}
+.pm-frame-polaroid-strip{
+  flex-shrink:0;
+  height:72px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;padding:0 12px;
+}
+.pm-frame-polaroid-caption{
+  font-family:'Caveat',cursive;
+  font-size:22px;font-weight:600;
+  color:#3a3028;text-align:center;
+  background:none;border:none;outline:none;
+  width:100%;cursor:text;
+  line-height:1.2;
+}
+.pm-frame-polaroid-caption::placeholder{color:rgba(58,48,40,.3);}
+.pm-frame-polaroid-clock{
+  font-family:'DM Mono',monospace;
+  font-size:11px;color:rgba(58,48,40,.45);
+  letter-spacing:.08em;text-align:center;
+  line-height:1;
+}
+
+/* frame hint — fades in then out */
+.pm-frame-hint{
+  position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.6);color:rgba(255,255,255,.8);
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;
+  padding:6px 16px;border-radius:99px;z-index:10;
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .5s ease;
+}
+.pm-frame-hint.show{opacity:1;}
+
+/* frame name badge — briefly shows current frame name when cycling */
+.pm-frame-badge{
+  position:absolute;top:16px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.55);color:#fff;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  padding:5px 14px;border-radius:99px;z-index:10;
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .4s ease;
+}
+.pm-frame-badge.show{opacity:1;}
+
+/* hide default clock when polaroid active — clock moves to strip */
+#photo-mode.polaroid-active .pm-clock{display:none;}
+
 /* ── HOME HEADER ── */
 #home-page{flex-direction:column;}
 .hub-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:9px 16px 8px;border-bottom:1px solid var(--b1);background:var(--s1);position:relative;z-index:2;}
@@ -729,15 +852,39 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <body>
 
 <!-- PHOTO MODE -->
-<div class="page active" id="photo-mode" onclick="window.wakeHub()">
+<div class="page active" id="photo-mode">
+  <!-- background slides (always full screen behind frame) -->
   <img class="pm-slide" id="pm-a" src="" alt="">
   <img class="pm-slide" id="pm-b" style="opacity:0;" src="" alt="">
-  <div class="pm-clock">
+
+  <!-- frame wrapper — tap frame border to cycle, tap center to wake -->
+  <div class="pm-frame-wrap">
+    <div class="pm-frame frame-none" id="pm-frame" onclick="handlePhotoTap(event)">
+      <div class="pm-frame-inner" id="pm-frame-inner">
+        <!-- polaroid strip (hidden unless polaroid active) -->
+      </div>
+      <!-- polaroid bottom strip -->
+      <div class="pm-frame-polaroid-strip" id="pm-polaroid-strip" style="display:none;">
+        <input class="pm-frame-polaroid-caption" id="pm-polaroid-caption" placeholder="Add a caption…" maxlength="48" onclick="event.stopPropagation()" />
+        <div class="pm-frame-polaroid-clock" id="pm-polaroid-clock"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- wake tap zone — center of screen, behind frame visuals -->
+  <div style="position:absolute;inset:0;z-index:2;" onclick="handlePhotoModeTap(event)"></div>
+
+  <div class="pm-clock" id="pm-clock-overlay">
     <div class="pm-time" id="pm-time">12:00 PM</div>
     <div class="pm-date" id="pm-date">Monday, January 1</div>
   </div>
   <div class="pm-logo">ReOrderly Station</div>
-  <div class="pm-hint">Tap to wake</div>
+  <div class="pm-hint" data-i18n="hubTapToWake">Tap to wake</div>
+
+  <!-- frame hint -->
+  <div class="pm-frame-hint" id="pm-frame-hint">Tap frame edge to change style</div>
+  <!-- frame name badge -->
+  <div class="pm-frame-badge" id="pm-frame-badge"></div>
 </div>
 
 <!-- HOME PAGE -->
@@ -1248,6 +1395,8 @@ window.wakeHub = function(){
   if(hp) { hp.classList.add('active'); }
 };
 window.goPhotoMode = function(){ document.getElementById('home-page')?.classList.remove('active'); document.getElementById('photo-mode')?.classList.add('active'); };
+window.handlePhotoTap = function(e){ e.stopPropagation(); window.wakeHub(); };
+window.handlePhotoModeTap = function(){ window.wakeHub(); };
 window.toggleClockMenu = function(){};
 window.toggleHMenu = function(){};
 window.doScan = function(){};
@@ -2927,7 +3076,132 @@ function startPhotoSlideshow(){
 }
 startPhotoSlideshow();
 
-// ── PHOTO MANAGER ──
+// ── PHOTO FRAME SYSTEM ──
+const FRAMES = ['none','wood','walnut','metal','polaroid'];
+const FRAME_LABELS = {
+  none:'No Frame', wood:'Oak Wood', walnut:'Dark Walnut',
+  metal:'Metal', polaroid:'Polaroid'
+};
+let currentFrame = localStorage.getItem('pm_frame') || 'none';
+let polaroidCaption = localStorage.getItem('pm_caption') || '';
+let frameHintShown = false;
+let frameBadgeTimer = null;
+
+function applyFrame(name){
+  currentFrame = name;
+  localStorage.setItem('pm_frame', name);
+  const frame = document.getElementById('pm-frame');
+  const strip = document.getElementById('pm-polaroid-strip');
+  const clockOverlay = document.getElementById('pm-clock-overlay');
+  const photoMode = document.getElementById('photo-mode');
+  if(!frame) return;
+
+  // Remove all frame classes
+  FRAMES.forEach(f => frame.classList.remove('frame-'+f));
+  frame.classList.add('frame-'+name);
+
+  if(name === 'polaroid'){
+    strip.style.display = 'flex';
+    photoMode.classList.add('polaroid-active');
+    // Restore saved caption
+    const cap = document.getElementById('pm-polaroid-caption');
+    if(cap) cap.value = polaroidCaption;
+    updatePolaroidClock();
+  } else {
+    strip.style.display = 'none';
+    photoMode.classList.remove('polaroid-active');
+  }
+
+  // Show frame name badge briefly
+  showFrameBadge(FRAME_LABELS[name]);
+}
+
+function showFrameBadge(label){
+  const badge = document.getElementById('pm-frame-badge');
+  if(!badge) return;
+  badge.textContent = label === 'No Frame' ? 'No Frame' : '🖼 ' + label;
+  badge.classList.add('show');
+  if(frameBadgeTimer) clearTimeout(frameBadgeTimer);
+  frameBadgeTimer = setTimeout(() => badge.classList.remove('show'), 2000);
+}
+
+function cycleFrame(){
+  const idx = FRAMES.indexOf(currentFrame);
+  const next = FRAMES[(idx + 1) % FRAMES.length];
+  applyFrame(next);
+}
+
+function updatePolaroidClock(){
+  const el = document.getElementById('pm-polaroid-clock');
+  if(!el) return;
+  const now = new Date();
+  const h = now.getHours(), m = String(now.getMinutes()).padStart(2,'0');
+  const ap = h >= 12 ? 'PM' : 'AM', h12 = h % 12 || 12;
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  el.textContent = `${h12}:${m} ${ap}  ·  ${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+}
+
+// Save polaroid caption on input
+document.getElementById('pm-polaroid-caption')?.addEventListener('input', function(){
+  polaroidCaption = this.value;
+  localStorage.setItem('pm_caption', polaroidCaption);
+});
+
+// Handle taps in photo mode
+window.handlePhotoModeTap = function(e){
+  // If tapping on the caption input, don't wake
+  if(e.target.id === 'pm-polaroid-caption') return;
+  window.wakeHub();
+};
+
+window.handlePhotoTap = function(e){
+  e.stopPropagation();
+  const frame = document.getElementById('pm-frame');
+  if(!frame) return;
+  const rect = frame.getBoundingClientRect();
+  const frameThickness = 32; // px — how deep the "frame border" tap zone is
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const onEdge = x < frameThickness || x > rect.width - frameThickness ||
+                 y < frameThickness || y > rect.height - frameThickness;
+
+  if(currentFrame === 'none'){
+    // No frame — any tap cycles frame (first showing hint, then cycling)
+    cycleFrame();
+  } else if(onEdge){
+    // Tapping the frame border cycles
+    cycleFrame();
+  } else {
+    // Tapping the center wakes hub
+    window.wakeHub();
+  }
+};
+
+// Show hint when entering photo mode
+const _origGoPhotoMode = window.goPhotoMode;
+window.goPhotoMode = function(){
+  _origGoPhotoMode();
+  applyFrame(currentFrame);
+  if(!frameHintShown){
+    frameHintShown = true;
+    const hint = document.getElementById('pm-frame-hint');
+    if(hint){
+      hint.classList.add('show');
+      setTimeout(() => hint.classList.remove('show'), 3500);
+    }
+  }
+};
+
+// Update polaroid clock every minute
+setInterval(() => {
+  if(currentFrame === 'polaroid') updatePolaroidClock();
+}, 60000);
+
+// Apply saved frame on load
+applyFrame(currentFrame);
+
+
 window.openPhotoManager = () => {
   renderPhotoManager();
   document.getElementById('photo-mgr-overlay').classList.add('open');
