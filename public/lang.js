@@ -2,7 +2,7 @@
 // Shared by app.html and hub.html
 // To add a new language: copy the 'es' block, change the key name, translate the values.
 // Do NOT edit keys — only translate the values.
-// Last updated: v3.0
+// Last updated: v3.1
 
 const LANG = {
 
@@ -28,13 +28,13 @@ const LANG = {
 
     // ── Home cards ──
     cardListTitle: 'My Shopping List',
-    cardListSub: 'Scan items and order on Walmart',
+    cardListSub: 'Scan items and review on Walmart',
     cardStationTitle: 'Connect to Station',
     cardStationSub: 'Sync this phone with your kitchen hub',
     cardRecipeTitle: 'Recipe Book',
     cardRecipeSub: 'Add recipes and extract ingredients',
-    cardHistoryTitle: 'Order History',
-    cardHistorySub: 'View and re-add past orders',
+    cardHistoryTitle: 'Shopping History',
+    cardHistorySub: 'View and re-add items from past sessions',
     cardLibraryTitle: 'My Usual Items',
     cardLibrarySub: 'Quickly re-add things you buy often',
     cardTodoTitle: 'To-Do List',
@@ -123,7 +123,7 @@ const LANG = {
     recipeBook: 'Recipe book',
     other: 'Other',
     productLibrary: 'Product library',
-    orderHistory: 'Order history',
+    orderHistory: 'Shopping history',
     shared: 'Shared',
 
     // ── Scan / main view ──
@@ -155,7 +155,7 @@ const LANG = {
 
     // ── History ──
     btnBack: 'Back',
-    noHistory: 'No order history yet',
+    noHistory: 'No shopping history yet',
     loading: 'Loading...',
     historyCouldNotLoad: 'Could not load history',
     items: 'items',
@@ -387,13 +387,13 @@ const LANG = {
 
     // ── Home cards ──
     cardListTitle: 'Mi Lista de Compras',
-    cardListSub: 'Escanea artículos y pide en Walmart',
+    cardListSub: 'Escanea artículos y revisa en Walmart',
     cardStationTitle: 'Conectar a Station',
     cardStationSub: 'Sincroniza tu teléfono con tu hub',
     cardRecipeTitle: 'Libro de Recetas',
     cardRecipeSub: 'Agrega recetas y extrae ingredientes',
-    cardHistoryTitle: 'Historial de Pedidos',
-    cardHistorySub: 'Ver y volver a agregar pedidos',
+    cardHistoryTitle: 'Historial de Compras',
+    cardHistorySub: 'Ver y volver a agregar artículos de sesiones anteriores',
     cardLibraryTitle: 'Mis Artículos Habituales',
     cardLibrarySub: 'Vuelve a agregar lo que compras seguido',
     cardTodoTitle: 'Lista de Tareas',
@@ -482,7 +482,7 @@ const LANG = {
     recipeBook: 'Libro de recetas',
     other: 'Otros',
     productLibrary: 'Biblioteca de productos',
-    orderHistory: 'Historial de pedidos',
+    orderHistory: 'Historial de compras',
     shared: 'Compartida',
 
     // ── Scan / main view ──
@@ -514,7 +514,7 @@ const LANG = {
 
     // ── History ──
     btnBack: 'Atrás',
-    noHistory: 'Sin historial de pedidos',
+    noHistory: 'Sin historial de compras',
     loading: 'Cargando...',
     historyCouldNotLoad: 'No se pudo cargar el historial',
     items: 'artículos',
