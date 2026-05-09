@@ -3111,11 +3111,11 @@ function showFrameBadge(label){
   frameBadgeTimer = setTimeout(() => badge.classList.remove('show'), 2000);
 }
 
-function cycleFrame(){
+window.cycleFrame = function cycleFrame(){
   const idx = FRAMES.indexOf(currentFrame);
   const next = FRAMES[(idx + 1) % FRAMES.length];
   applyFrame(next);
-}
+};
 
 function updatePolaroidClock(){
   const el = document.getElementById('pm-polaroid-clock');
