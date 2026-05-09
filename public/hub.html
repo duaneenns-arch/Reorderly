@@ -40,111 +40,97 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 /* ── PHOTO MODE ── */
 #photo-mode{background:#000;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;}
 .pm-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.8s ease;}
-.pm-clock{position:absolute;top:32px;right:40px;text-align:right;z-index:2;}
+.pm-clock{position:absolute;top:32px;right:40px;text-align:right;z-index:4;}
 .pm-time{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,5vw,64px);color:rgba(255,255,255,0.78);letter-spacing:3px;line-height:1;text-shadow:0 2px 20px rgba(0,0,0,0.5);}
 .pm-date{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;}
-.pm-logo{position:absolute;bottom:24px;left:32px;font-size:13px;font-weight:800;color:rgba(255,255,255,0.12);letter-spacing:0.1em;z-index:2;}
-.pm-hint{position:absolute;bottom:24px;right:32px;font-size:10px;color:rgba(255,255,255,0.15);font-family:'DM Mono',monospace;letter-spacing:0.1em;z-index:2;}
+.pm-logo{position:absolute;bottom:24px;left:32px;font-size:13px;font-weight:800;color:rgba(255,255,255,0.12);letter-spacing:0.1em;z-index:4;}
+.pm-hint{position:absolute;bottom:24px;right:32px;font-size:10px;color:rgba(255,255,255,0.15);font-family:'DM Mono',monospace;letter-spacing:0.1em;z-index:4;}
 
 /* ── PHOTO FRAME SYSTEM ── */
-.pm-frame-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;pointer-events:none;}
-.pm-frame{position:relative;pointer-events:all;cursor:pointer;transition:all .4s ease;}
-
-/* frame: none — invisible wrapper, photo fills screen */
-.pm-frame.frame-none{width:100%;height:100%;border:none;background:transparent;box-shadow:none;}
-.pm-frame.frame-none .pm-frame-inner{width:100%;height:100%;}
-
-/* frame: wood (oak) */
-.pm-frame.frame-wood{
-  width:calc(100% - 60px);height:calc(100% - 60px);
-  border-radius:4px;
-  border:28px solid transparent;
-  background-clip:padding-box;
-  box-shadow:
-    0 0 0 28px #0000,
-    inset 0 0 0 2px rgba(255,255,255,.15),
-    0 8px 40px rgba(0,0,0,.7);
-  background-image:
-    repeating-linear-gradient(92deg,
-      rgba(180,120,60,.0) 0px, rgba(200,140,70,.18) 2px,
-      rgba(160,100,40,.08) 4px, rgba(190,130,55,.0) 8px),
-    repeating-linear-gradient(180deg,
-      rgba(0,0,0,.04) 0px, rgba(0,0,0,0) 3px),
-    linear-gradient(135deg, #c8832a 0%, #a0621e 25%, #c8832a 50%, #8b5016 75%, #c8832a 100%);
-  background-origin:border-box;
+/* Frame is a pure overlay — photo slides stay full screen behind it */
+/* The frame sits on top using box-shadow inset technique so the photo shows through the center */
+.pm-frame-overlay{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  transition:box-shadow .4s ease, border .4s ease;
 }
-.pm-frame.frame-wood .pm-frame-inner{width:100%;height:100%;overflow:hidden;}
 
-/* frame: walnut (dark) */
-.pm-frame.frame-walnut{
-  width:calc(100% - 60px);height:calc(100% - 60px);
-  border-radius:4px;
-  border:28px solid transparent;
+/* frame: none */
+.pm-frame-overlay.frame-none{ box-shadow:none; }
+
+/* frame: wood (oak) — inset box-shadow creates the border, photo shows through center */
+.pm-frame-overlay.frame-wood{
+  box-shadow:
+    inset 0 0 0 32px #c8832a,
+    inset 0 0 0 34px rgba(255,255,255,.15),
+    inset 32px 0 20px -20px rgba(0,0,0,.3),
+    inset -32px 0 20px -20px rgba(0,0,0,.3),
+    inset 0 32px 20px -20px rgba(0,0,0,.25),
+    inset 0 -32px 20px -20px rgba(0,0,0,.25);
+  background:
+    linear-gradient(to right, #c8832a 32px, transparent 32px, transparent calc(100% - 32px), #c8832a calc(100% - 32px)),
+    linear-gradient(to bottom, #c8832a 32px, transparent 32px, transparent calc(100% - 32px), #c8832a calc(100% - 32px));
+  pointer-events:all;cursor:pointer;
+}
+
+/* frame: walnut */
+.pm-frame-overlay.frame-walnut{
+  background:
+    linear-gradient(to right, #2a1508 32px, transparent 32px, transparent calc(100% - 32px), #2a1508 calc(100% - 32px)),
+    linear-gradient(to bottom, #2a1508 32px, transparent 32px, transparent calc(100% - 32px), #2a1508 calc(100% - 32px));
   box-shadow:
     inset 0 0 0 2px rgba(255,255,255,.08),
-    0 8px 40px rgba(0,0,0,.8);
-  background-image:
-    repeating-linear-gradient(88deg,
-      rgba(255,255,255,.0) 0px, rgba(255,255,255,.06) 1px,
-      rgba(0,0,0,.04) 3px, rgba(255,255,255,.0) 6px),
-    linear-gradient(135deg, #3d2010 0%, #2a1508 30%, #3d2010 60%, #1e0f06 80%, #3d2010 100%);
-  background-origin:border-box;
+    inset 32px 0 20px -20px rgba(0,0,0,.4),
+    inset -32px 0 20px -20px rgba(0,0,0,.4),
+    inset 0 32px 20px -20px rgba(0,0,0,.35),
+    inset 0 -32px 20px -20px rgba(0,0,0,.35);
+  pointer-events:all;cursor:pointer;
 }
-.pm-frame.frame-walnut .pm-frame-inner{width:100%;height:100%;overflow:hidden;}
 
-/* frame: metal (thin black) */
-.pm-frame.frame-metal{
-  width:calc(100% - 40px);height:calc(100% - 40px);
-  border-radius:3px;
-  border:14px solid transparent;
+/* frame: metal (thin) */
+.pm-frame-overlay.frame-metal{
+  background:
+    linear-gradient(to right, #1a1a1a 14px, transparent 14px, transparent calc(100% - 14px), #1a1a1a calc(100% - 14px)),
+    linear-gradient(to bottom, #1a1a1a 14px, transparent 14px, transparent calc(100% - 14px), #1a1a1a calc(100% - 14px));
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.2),
-    inset 0 1px 0 rgba(255,255,255,.35),
-    0 2px 0 rgba(255,255,255,.05),
-    0 8px 40px rgba(0,0,0,.75);
-  background-image:
-    linear-gradient(160deg, #2a2a2a 0%, #111 40%, #222 60%, #0a0a0a 100%);
-  background-origin:border-box;
+    inset 0 0 0 1px rgba(255,255,255,.25),
+    inset 0 1px 0 rgba(255,255,255,.4);
+  pointer-events:all;cursor:pointer;
 }
-.pm-frame.frame-metal .pm-frame-inner{width:100%;height:100%;overflow:hidden;}
 
-/* frame: polaroid */
-.pm-frame.frame-polaroid{
-  width:calc(100% - 80px);
-  max-height:calc(100% - 40px);
-  background:#f5f0e8;
-  border-radius:3px;
-  padding:18px 18px 0 18px;
-  box-shadow:0 12px 60px rgba(0,0,0,.75),0 2px 8px rgba(0,0,0,.4);
-  display:flex;flex-direction:column;
+/* frame: polaroid — white border, taller bottom strip */
+.pm-frame-overlay.frame-polaroid{
+  background:
+    linear-gradient(to right, #f5f0e8 20px, transparent 20px, transparent calc(100% - 20px), #f5f0e8 calc(100% - 20px)),
+    linear-gradient(to bottom, #f5f0e8 20px, transparent 20px, transparent calc(100% - 88px), #f5f0e8 calc(100% - 88px));
+  box-shadow:
+    0 8px 40px rgba(0,0,0,.6),
+    inset 0 0 0 1px rgba(0,0,0,.06);
+  pointer-events:all;cursor:pointer;
 }
-.pm-frame.frame-polaroid .pm-frame-inner{
-  flex:1;overflow:hidden;min-height:0;
-  border-radius:1px;
+
+/* polaroid bottom strip — sits at bottom of photo mode */
+.pm-polaroid-strip{
+  position:absolute;bottom:0;left:0;right:0;height:88px;
+  background:#f5f0e8;z-index:4;
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  padding:0 20px;pointer-events:all;
 }
-.pm-frame-polaroid-strip{
-  flex-shrink:0;
-  height:72px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:4px;padding:0 12px;
-}
+.pm-polaroid-strip.active{ display:flex; }
 .pm-frame-polaroid-caption{
   font-family:'Caveat',cursive;
-  font-size:22px;font-weight:600;
+  font-size:24px;font-weight:600;
   color:#3a3028;text-align:center;
   background:none;border:none;outline:none;
-  width:100%;cursor:text;
-  line-height:1.2;
+  width:100%;cursor:text;line-height:1.2;
 }
-.pm-frame-polaroid-caption::placeholder{color:rgba(58,48,40,.3);}
+.pm-frame-polaroid-caption::placeholder{color:rgba(58,48,40,.28);}
 .pm-frame-polaroid-clock{
   font-family:'DM Mono',monospace;
   font-size:11px;color:rgba(58,48,40,.45);
-  letter-spacing:.08em;text-align:center;
-  line-height:1;
+  letter-spacing:.08em;text-align:center;line-height:1;
 }
 
-/* frame hint — fades in then out */
+/* frame hint */
 .pm-frame-hint{
   position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
   background:rgba(0,0,0,.6);color:rgba(255,255,255,.8);
@@ -155,7 +141,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 }
 .pm-frame-hint.show{opacity:1;}
 
-/* frame name badge — briefly shows current frame name when cycling */
+/* frame name badge */
 .pm-frame-badge{
   position:absolute;top:16px;left:50%;transform:translateX(-50%);
   background:rgba(0,0,0,.55);color:#fff;
@@ -166,7 +152,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 }
 .pm-frame-badge.show{opacity:1;}
 
-/* hide default clock when polaroid active — clock moves to strip */
+/* hide default clock when polaroid active */
 #photo-mode.polaroid-active .pm-clock{display:none;}
 
 /* ── HOME HEADER ── */
@@ -853,25 +839,20 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 
 <!-- PHOTO MODE -->
 <div class="page active" id="photo-mode">
-  <!-- background slides (always full screen behind frame) -->
+  <!-- background slides — always full screen -->
   <img class="pm-slide" id="pm-a" src="" alt="">
   <img class="pm-slide" id="pm-b" style="opacity:0;" src="" alt="">
 
-  <!-- frame wrapper — tap frame border to cycle, tap center to wake -->
-  <div class="pm-frame-wrap">
-    <div class="pm-frame frame-none" id="pm-frame" onclick="handlePhotoTap(event)">
-      <div class="pm-frame-inner" id="pm-frame-inner">
-        <!-- polaroid strip (hidden unless polaroid active) -->
-      </div>
-      <!-- polaroid bottom strip -->
-      <div class="pm-frame-polaroid-strip" id="pm-polaroid-strip" style="display:none;">
-        <input class="pm-frame-polaroid-caption" id="pm-polaroid-caption" placeholder="Add a caption…" maxlength="48" onclick="event.stopPropagation()" />
-        <div class="pm-frame-polaroid-clock" id="pm-polaroid-clock"></div>
-      </div>
-    </div>
+  <!-- frame overlay — sits on top of photo, transparent center, tappable border -->
+  <div class="pm-frame-overlay frame-none" id="pm-frame-overlay" onclick="handlePhotoTap(event)"></div>
+
+  <!-- polaroid bottom strip — shown only in polaroid mode -->
+  <div class="pm-polaroid-strip" id="pm-polaroid-strip">
+    <input class="pm-frame-polaroid-caption" id="pm-polaroid-caption" placeholder="Add a caption…" maxlength="48" onclick="event.stopPropagation()" />
+    <div class="pm-frame-polaroid-clock" id="pm-polaroid-clock"></div>
   </div>
 
-  <!-- wake tap zone — center of screen, behind frame visuals -->
+  <!-- tap center to wake (behind frame overlay) -->
   <div style="position:absolute;inset:0;z-index:2;" onclick="handlePhotoModeTap(event)"></div>
 
   <div class="pm-clock" id="pm-clock-overlay">
@@ -880,10 +861,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
   <div class="pm-logo">ReOrderly Station</div>
   <div class="pm-hint" data-i18n="hubTapToWake">Tap to wake</div>
-
-  <!-- frame hint -->
   <div class="pm-frame-hint" id="pm-frame-hint">Tap frame edge to change style</div>
-  <!-- frame name badge -->
   <div class="pm-frame-badge" id="pm-frame-badge"></div>
 </div>
 
@@ -3090,29 +3068,26 @@ let frameBadgeTimer = null;
 function applyFrame(name){
   currentFrame = name;
   localStorage.setItem('pm_frame', name);
-  const frame = document.getElementById('pm-frame');
+  const overlay = document.getElementById('pm-frame-overlay');
   const strip = document.getElementById('pm-polaroid-strip');
-  const clockOverlay = document.getElementById('pm-clock-overlay');
   const photoMode = document.getElementById('photo-mode');
-  if(!frame) return;
+  if(!overlay) return;
 
   // Remove all frame classes
-  FRAMES.forEach(f => frame.classList.remove('frame-'+f));
-  frame.classList.add('frame-'+name);
+  FRAMES.forEach(f => overlay.classList.remove('frame-'+f));
+  overlay.classList.add('frame-'+name);
 
   if(name === 'polaroid'){
-    strip.style.display = 'flex';
+    strip.classList.add('active');
     photoMode.classList.add('polaroid-active');
-    // Restore saved caption
     const cap = document.getElementById('pm-polaroid-caption');
     if(cap) cap.value = polaroidCaption;
     updatePolaroidClock();
   } else {
-    strip.style.display = 'none';
+    strip.classList.remove('active');
     photoMode.classList.remove('polaroid-active');
   }
 
-  // Show frame name badge briefly
   showFrameBadge(FRAME_LABELS[name]);
 }
 
@@ -3157,23 +3132,20 @@ window.handlePhotoModeTap = function(e){
 
 window.handlePhotoTap = function(e){
   e.stopPropagation();
-  const frame = document.getElementById('pm-frame');
-  if(!frame) return;
-  const rect = frame.getBoundingClientRect();
-  const frameThickness = 32; // px — how deep the "frame border" tap zone is
+  const overlay = document.getElementById('pm-frame-overlay');
+  if(!overlay) return;
+  const rect = overlay.getBoundingClientRect();
+  const frameThickness = currentFrame === 'metal' ? 18 : 36;
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
   const onEdge = x < frameThickness || x > rect.width - frameThickness ||
                  y < frameThickness || y > rect.height - frameThickness;
 
   if(currentFrame === 'none'){
-    // No frame — any tap cycles frame (first showing hint, then cycling)
     cycleFrame();
   } else if(onEdge){
-    // Tapping the frame border cycles
     cycleFrame();
   } else {
-    // Tapping the center wakes hub
     window.wakeHub();
   }
 };
