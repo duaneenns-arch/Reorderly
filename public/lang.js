@@ -88,7 +88,7 @@ const LANG = {
     aboutSharingTitle: 'Household Sharing',
     aboutSharingBody: 'Invite family members to share your list. Anyone in the household can scan items and add them — everything syncs in real time across all devices.',
     aboutAffiliateTitle: 'Affiliate Disclosure',
-    aboutAffiliateBody: 'ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.',
+    aboutAffiliateBody: 'ReOrderly has applied to participate in the Walmart affiliate program. If accepted, we may earn a commission when you make purchases through links in this app. This does not affect the price you pay.',
     aboutVersionTitle: 'Version',
     btnClose: 'Close',
 
@@ -460,7 +460,7 @@ const LANG = {
     aboutSharingTitle: 'Compartir en el Hogar',
     aboutSharingBody: 'Invita a los miembros de tu familia a compartir la lista. Cualquier persona puede escanear artículos — todo se sincroniza en tiempo real.',
     aboutAffiliateTitle: 'Divulgación de Afiliados',
-    aboutAffiliateBody: 'ReOrderly participa en el programa de afiliados de Walmart. Podemos ganar una comisión cuando realizas compras a través de enlaces en esta app. Esto no afecta el precio que pagas.',
+    aboutAffiliateBody: 'ReOrderly ha solicitado participar en el programa de afiliados de Walmart. Si es aceptado, podemos ganar una comisión cuando realizas compras a través de enlaces en esta app. Esto no afecta el precio que pagas.',
     aboutVersionTitle: 'Versión',
     btnClose: 'Cerrar',
 
