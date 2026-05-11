@@ -244,6 +244,26 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   pointer-events:all;cursor:pointer;
 }
 
+/* ── GUEST MODE ── */
+.hdr-guest-btn{height:26px;padding:0 10px;border-radius:8px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;}
+.hdr-guest-signin{background:none;border:1px solid var(--b2);color:var(--t2);}
+.hdr-guest-signin:hover{border-color:var(--green);color:var(--green);}
+.hdr-guest-create{background:var(--green);border:none;color:#fff;margin-left:4px;}
+.hdr-guest-create:hover{background:var(--green2);}
+.hub-guest-prompt-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:7000;display:none;align-items:center;justify-content:center;padding:1rem;}
+.hub-guest-prompt-overlay.open{display:flex;}
+.hub-guest-prompt-box{background:var(--s1);border:1px solid var(--b2);border-radius:20px;padding:1.75rem;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center;}
+.hub-guest-prompt-icon{font-size:36px;margin-bottom:12px;}
+.hub-guest-prompt-title{font-size:17px;font-weight:800;color:var(--text);margin-bottom:8px;}
+.hub-guest-prompt-body{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:1.5rem;}
+.hub-guest-prompt-create{width:100%;height:46px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;}
+.hub-guest-prompt-signin{width:100%;height:40px;background:none;border:1px solid var(--b2);border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--t2);cursor:pointer;margin-bottom:8px;}
+.hub-guest-prompt-later{background:none;border:none;font-family:'Syne',sans-serif;font-size:13px;color:var(--t3);cursor:pointer;padding:4px;text-decoration:underline;}
+.hub-msg-locked{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;gap:8px;}
+.hub-msg-locked-icon{font-size:28px;}
+.hub-msg-locked-text{font-size:13px;color:var(--t2);line-height:1.6;}
+.hub-msg-locked-btn{margin-top:8px;height:36px;padding:0 16px;background:var(--green);color:#fff;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+
 /* ── HOME HEADER ── */
 #home-page{flex-direction:column;}
 .hub-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:9px 16px 8px;border-bottom:1px solid var(--b1);background:var(--s1);position:relative;z-index:2;}
@@ -977,6 +997,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
       </div>
       <div class="hdr-weather" id="hdr-weather"><div style="font-size:10px;color:var(--t3);font-family:'DM Mono',monospace;">...</div></div>
       <div class="hdr-user" id="hdr-user"></div>
+      <div id="hdr-guest-btns" style="display:none;align-items:center;">
+        <button class="hdr-guest-btn hdr-guest-signin" onclick="hubShowLogin()" data-i18n="guestHubLabel">Guest — tap to sign in</button>
+      </div>
       <button class="hdr-mic-btn" id="hdr-mic-btn" onclick="tapMic()" title="Voice assistant">🎤</button>
       <button class="hub-msg-btn" id="hub-msg-btn" onclick="openHubMsgPanel()" title="Message phone">
         💬
@@ -1466,9 +1489,7 @@ if (typeof window.t !== 'function') {
 window.wakeHub = function(){
   var pm = document.getElementById('photo-mode');
   var hp = document.getElementById('home-page');
-  var lp = document.getElementById('login-page');
   if(pm) pm.classList.remove('active');
-  // Show home if it has content, otherwise login
   if(hp) { hp.classList.add('active'); }
 };
 window.goPhotoMode = function(){ document.getElementById('home-page')?.classList.remove('active'); document.getElementById('photo-mode')?.classList.add('active'); };
@@ -1602,8 +1623,53 @@ window.nav = function(id, anim='fi') {
   resetIdle();
 };
 
-window.wakeHub = ()=> cu ? nav('home-page','fi') : nav('login-page','fi');
+window.wakeHub = ()=> nav('home-page','fi');
 window.goPhotoMode = ()=> { closeClockMenu(); nav('photo-mode','fi'); };
+
+// ── GUEST MODE ──
+let isHubGuest = false;
+
+const HUB_SAMPLE_ITEMS = [
+  { upc: 'sample-1', name: 'Tide Pods Laundry Detergent, 42 Count', price: '$13.97', image: 'https://i5.walmartimages.com/seo/Tide-Pods-Laundry-Detergent-Pacs-Original-42-Count_1.jpg', qty: 1, category: 'Household', checked: false, sample: true },
+  { upc: 'sample-2', name: 'Cheerios Original Cereal, 8.9 oz', price: '$4.48', image: 'https://i5.walmartimages.com/seo/Cheerios-Original-Gluten-Free-Breakfast-Cereal-8-9-oz_1.jpg', qty: 1, category: 'Grocery', checked: false, sample: true },
+  { upc: 'sample-3', name: 'Dawn Platinum Dish Soap, 16.2 fl oz', price: '$3.97', image: 'https://i5.walmartimages.com/seo/Dawn-Platinum-Dishwashing-Liquid-Dish-Soap-Refreshing-Rain-Scent-16-2-fl-oz_1.jpg', qty: 1, category: 'Household', checked: false, sample: true },
+  { upc: 'sample-4', name: 'Bounty Select-A-Size Paper Towels, 8 rolls', price: '$12.97', image: 'https://i5.walmartimages.com/seo/Bounty-Select-A-Size-Paper-Towels-White-8-Double-Plus-Rolls_1.jpg', qty: 1, category: 'Household', checked: false, sample: true }
+];
+
+function enterHubGuestMode() {
+  isHubGuest = true;
+  cu = null;
+  items = [...HUB_SAMPLE_ITEMS];
+  document.getElementById('hdr-user').style.display = 'none';
+  document.getElementById('hdr-guest-btns').style.display = 'flex';
+  renderWhiteboard();
+  nav('home-page', 'fi');
+}
+
+function exitHubGuestMode() {
+  isHubGuest = false;
+  document.getElementById('hdr-user').style.display = '';
+  document.getElementById('hdr-guest-btns').style.display = 'none';
+}
+
+window.hubShowLogin = function(mode) {
+  if (mode === 'create') window.lTab && window.lTab('up');
+  else window.lTab && window.lTab('in');
+  nav('login-page', 'fi');
+};
+
+window.showHubGuestPrompt = function(callback) {
+  window._hubGuestCallback = callback;
+  document.getElementById('hub-guest-prompt').classList.add('open');
+};
+
+window.closeHubGuestPrompt = function(continueAsGuest) {
+  document.getElementById('hub-guest-prompt').classList.remove('open');
+  if (continueAsGuest && window._hubGuestCallback) {
+    window._hubGuestCallback();
+  }
+  window._hubGuestCallback = null;
+};
 
 // ── AUTH ──
 // Apply language on first load
@@ -1611,6 +1677,7 @@ applyLang();
 
 onAuthStateChanged(auth, async user => {
   if (user) {
+    exitHubGuestMode();
     cu = user;
     const name = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
     document.getElementById('hdr-user').textContent = name;
@@ -1622,9 +1689,8 @@ onAuthStateChanged(auth, async user => {
     initAI();
     if (activePg==='login-page'||activePg==='photo-mode') nav('home-page','fi');
   } else {
-    cu=null; items=[]; todos=[];
-    if (unsubList){unsubList();unsubList=null;}
-    nav('login-page','fi');
+    // No user — enter guest mode instead of showing login page
+    enterHubGuestMode();
   }
 });
 
@@ -1911,28 +1977,35 @@ window.doScan = async()=>{
 document.getElementById('scan-inp')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.stopPropagation();window.doScan();}});
 
 async function addNamedItem(name) {
-  if(!cu)return;
-  // Check if item with same name already exists (case-insensitive)
-  const ex=items.find(i=>i.name.toLowerCase()===name.toLowerCase());
-  if(ex){ex.qty++;await saveList();showCard({name:ex.name,image:ex.image,price:ex.price});setSts(window.t('statusQtyUpdated')+': '+ex.name.substring(0,32),'success');lastScanTime=new Date();updateStatusBar();return;}
-  const fakeUpc='manual_'+Date.now();
-  items.push({upc:fakeUpc,name,price:null,image:null,qty:1,category:getCat(name),walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name)}`});
-  await saveList();
-  lastScanTime = new Date();
-  showCard({name,image:null,price:null});
-  setSts(window.t('statusFound')+name.substring(0,38),'success');
-  updateStatusBar();
+  const doAdd = async () => {
+    const ex=items.find(i=>i.name.toLowerCase()===name.toLowerCase());
+    if(ex){ex.qty++;if(!isHubGuest)await saveList();showCard({name:ex.name,image:ex.image,price:ex.price});setSts(window.t('statusQtyUpdated')+': '+ex.name.substring(0,32),'success');lastScanTime=new Date();updateStatusBar();return;}
+    const fakeUpc='manual_'+Date.now();
+    items.push({upc:fakeUpc,name,price:null,image:null,qty:1,category:getCat(name),walmartUrl:`https://www.walmart.com/search?q=${encodeURIComponent(name)}`});
+    if(!isHubGuest) await saveList();
+    lastScanTime = new Date();
+    showCard({name,image:null,price:null});
+    setSts(window.t('statusFound')+name.substring(0,38),'success');
+    updateStatusBar();
+    renderWhiteboard();
+  };
+  if(isHubGuest) { window.showHubGuestPrompt(doAdd); } else { await doAdd(); }
 }
 
 async function globalScan(upc) {
-  if(!cu)return;
   const ex=items.find(i=>i.upc===upc);
-  if(ex){ex.qty++;await saveList();showCard({name:ex.name,image:ex.image,price:ex.price});setSts(window.t('statusQtyUpdated'),'success');lastScanTime=new Date();updateStatusBar();return;}
+  if(ex){ex.qty++;if(!isHubGuest)await saveList();showCard({name:ex.name,image:ex.image,price:ex.price});setSts(window.t('statusQtyUpdated'),'success');lastScanTime=new Date();updateStatusBar();return;}
   setSts(window.t('statusSearching'),'loading');
   const sb=document.getElementById('scan-btn');if(sb)sb.disabled=true;
   const r=await lookup(upc);
-  if(r){items.push({upc,...r,qty:1,category:getCat(r.name),checked:false});await saveList();showCard(r);setSts(window.t('statusFound')+r.name.substring(0,38),'success');lastScanTime=new Date();updateStatusBar();}
-  else{setSts(window.t('statusNotFound'),'error');toast(window.t('hubStatusNotFound'));}
+  if(r){
+    const doAdd = async () => {
+      items.push({upc,...r,qty:1,category:getCat(r.name),checked:false});
+      if(!isHubGuest) await saveList();
+      showCard(r);setSts(window.t('statusFound')+r.name.substring(0,38),'success');lastScanTime=new Date();updateStatusBar();renderWhiteboard();
+    };
+    if(isHubGuest) { window.showHubGuestPrompt(doAdd); } else { await doAdd(); }
+  } else{setSts(window.t('statusNotFound'),'error');toast(window.t('hubStatusNotFound'));}
   if(sb)sb.disabled=false;
   document.getElementById('scan-inp')?.focus();
 }
@@ -2076,7 +2149,7 @@ window.goShop=()=>{
 };
 window.orderAll=async()=>{
   if(!items.length)return;
-  await saveHistory();
+  if(!isHubGuest) await saveHistory();
   items.forEach((it,i)=>setTimeout(()=>window.open(it.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(it.name)}`,'_blank'),i*350));
   toast(window.t('hubToastOpeningWalmart')+' '+items.length+' '+window.t('items'));
 };
@@ -3030,6 +3103,18 @@ async function renderHubMsgFeed() {
 }
 
 window.openHubMsgPanel = async () => {
+  if(isHubGuest) {
+    // Show locked state for guests
+    const panel = document.getElementById('hub-msg-panel');
+    panel.innerHTML = `<div class="hub-msg-locked">
+      <div class="hub-msg-locked-icon">💬</div>
+      <div class="hub-msg-locked-text">${window.t('guestHubConnect')}</div>
+      <button class="hub-msg-locked-btn" onclick="closeHubMsg(); hubShowLogin();">${window.t('guestSignIn')}</button>
+      <button class="hub-guest-prompt-later" onclick="closeHubMsg()" style="margin-top:8px;">${window.t('guestPromptLater')}</button>
+    </div>`;
+    panel.classList.add('open');
+    return;
+  }
   hubMsgPanelOpen = true;
   document.getElementById('hub-msg-panel').classList.add('open');
   document.getElementById('hub-msg-dot').classList.remove('show');
@@ -3394,10 +3479,17 @@ document.addEventListener('click',e=>{
   </div>
 </div>
 
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
-}
-</script>
+<!-- Hub Guest Prompt Modal -->
+<div class="hub-guest-prompt-overlay" id="hub-guest-prompt">
+  <div class="hub-guest-prompt-box">
+    <div class="hub-guest-prompt-icon">🔒</div>
+    <div class="hub-guest-prompt-title" data-i18n="guestPromptTitle">Save your list across all your devices</div>
+    <div class="hub-guest-prompt-body" data-i18n="guestPromptBody">Create a free account to save your list, sync with your household, and access your order history from anywhere.</div>
+    <button class="hub-guest-prompt-create" onclick="closeHubGuestPrompt(); hubShowLogin('create');" data-i18n="guestPromptCreate">Create free account</button>
+    <button class="hub-guest-prompt-signin" onclick="closeHubGuestPrompt(); hubShowLogin();" data-i18n="guestPromptSignIn">Sign in</button>
+    <button class="hub-guest-prompt-later" onclick="closeHubGuestPrompt(true)" data-i18n="guestPromptLater">Continue as guest</button>
+  </div>
+</div>
+
 </body>
 </html>
