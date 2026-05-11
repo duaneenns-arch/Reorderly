@@ -1640,9 +1640,15 @@ function enterHubGuestMode() {
   isHubGuest = true;
   cu = null;
   items = [...HUB_SAMPLE_ITEMS];
+  todos = [
+    { id: 'sample-todo-1', title: 'Pick up dry cleaning', notes: '', priority: 'medium', done: false },
+    { id: 'sample-todo-2', title: 'Call plumber', notes: '', priority: 'high', done: false },
+    { id: 'sample-todo-3', title: 'Kids soccer at 4pm', notes: '', priority: 'low', done: true }
+  ];
   document.getElementById('hdr-user').style.display = 'none';
   document.getElementById('hdr-guest-btns').style.display = 'flex';
-  renderWhiteboard();
+  renderWbList();
+  renderTodos();
   nav('home-page', 'fi');
 }
 
@@ -1987,7 +1993,7 @@ async function addNamedItem(name) {
     showCard({name,image:null,price:null});
     setSts(window.t('statusFound')+name.substring(0,38),'success');
     updateStatusBar();
-    renderWhiteboard();
+    renderWbList();
   };
   if(isHubGuest) { window.showHubGuestPrompt(doAdd); } else { await doAdd(); }
 }
@@ -2002,7 +2008,7 @@ async function globalScan(upc) {
     const doAdd = async () => {
       items.push({upc,...r,qty:1,category:getCat(r.name),checked:false});
       if(!isHubGuest) await saveList();
-      showCard(r);setSts(window.t('statusFound')+r.name.substring(0,38),'success');lastScanTime=new Date();updateStatusBar();renderWhiteboard();
+      showCard(r);setSts(window.t('statusFound')+r.name.substring(0,38),'success');lastScanTime=new Date();updateStatusBar();renderWbList();
     };
     if(isHubGuest) { window.showHubGuestPrompt(doAdd); } else { await doAdd(); }
   } else{setSts(window.t('statusNotFound'),'error');toast(window.t('hubStatusNotFound'));}
