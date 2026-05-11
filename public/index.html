@@ -3,350 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReOrderly — Your kitchen finally has a brain.</title>
+<title>ReOrderly — Scan. List. Order.</title>
 <script>
   if (window.matchMedia('(display-mode: standalone)').matches) {
     window.location.replace('/app.html');
   }
 </script>
-<meta name="description" content="ReOrderly turns any tablet into an always-on kitchen hub — scan items as they run out, play music, keep an eye on the front door, and review matching Walmart product pages when you're ready to shop.">
+<meta name="description" content="Scan household items as you run out, build your reorder list automatically, and quickly open Walmart product pages when you're ready to order.">
 <link rel="icon" type="image/png" href="/icon.png">
 <link rel="apple-touch-icon" href="/icon.png">
-<link rel="manifest" href="/manifest__1_.json">
 <meta name="theme-color" content="#1D9E75">
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="/lang.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg: #F5F4EF; --bg2: #ffffff; --bg3: #eeede6; --border: #e0dfd8;
   --green: #1D9E75; --green-light: #e1f5ee; --green-dark: #0F6E56;
   --text: #1a1a18; --text2: #666662; --text3: #aaa8a0;
-  --dark: #0d0f0e; --dark2: #141614; --dark3: #1d221e;
-  --wb-bg: #f5f2eb; --wb-line: #e8e3d8; --wb-ink: #2a3228; --wb-green: #1a7a5a;
 }
 html { scroll-behavior: smooth; }
 body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
 /* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 1rem 1.5rem;
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(13,15,14,.92);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  transition: background .3s, border-color .3s;
-}
-nav.scrolled {
-  background: rgba(245,244,239,.96);
-  border-bottom-color: var(--border);
-}
-.nav-logo { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.5px; text-decoration: none; transition: color .3s; }
-nav.scrolled .nav-logo { color: var(--text); }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; background: rgba(245,244,239,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; text-decoration: none; }
 .nav-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
-.nav-links { display: flex; align-items: center; gap: 6px; }
-.nav-link { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.55); text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: color .15s; }
+.nav-links { display: flex; align-items: center; gap: 8px; }
+.nav-link { font-size: 13px; font-weight: 700; color: var(--text2); text-decoration: none; padding: 8px 14px; border-radius: 8px; transition: color .15s; }
 .nav-link:hover { color: var(--green); }
-nav.scrolled .nav-link { color: var(--text2); }
-nav.scrolled .nav-link:hover { color: var(--green); }
-.nav-lang { background: none; border: 1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.6); font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; padding: 7px 11px; border-radius: 8px; cursor: pointer; transition: all .15s; }
-.nav-lang:hover { border-color: var(--green); color: var(--green); }
-nav.scrolled .nav-lang { border-color: var(--border); color: var(--text2); }
-nav.scrolled .nav-lang:hover { border-color: var(--green); color: var(--green); }
 .nav-cta { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: background .15s; text-decoration: none; }
 .nav-cta:hover { background: var(--green-dark); }
 
-/* BUTTONS */
-.btn-p { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; padding: 15px 28px; border-radius: 13px; cursor: pointer; transition: background .15s, transform .1s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+/* HERO */
+.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6rem 1.5rem 4rem; text-align: center; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); margin-bottom: 1.5rem; letter-spacing: .05em; text-transform: uppercase; opacity: 0; animation: fadeUp .6s ease .2s forwards; }
+.hero-title { font-size: clamp(48px, 12vw, 88px); font-weight: 800; color: var(--text); letter-spacing: -3px; line-height: .95; margin-bottom: 1.25rem; opacity: 0; animation: fadeUp .6s ease .3s forwards; }
+.accent { color: var(--green); }
+.hero-sub { font-size: clamp(16px, 2.5vw, 20px); color: var(--text2); max-width: 500px; line-height: 1.6; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp .6s ease .4s forwards; }
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp .6s ease .5s forwards; }
+.btn-p { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 14px; cursor: pointer; transition: background .15s, transform .1s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
 .btn-p:hover { background: var(--green-dark); }
 .btn-p:active { transform: scale(.97); }
-.btn-s { background: var(--bg2); color: var(--text); border: 1px solid var(--border); font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; padding: 15px 28px; border-radius: 13px; cursor: pointer; transition: border-color .15s, color .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn-s { background: var(--bg2); color: var(--text); border: 1px solid var(--border); font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; padding: 16px 32px; border-radius: 14px; cursor: pointer; transition: border-color .15s, color .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
 .btn-s:hover { border-color: var(--green); color: var(--green); }
+.hero-proof { margin-top: 2.5rem; font-size: 13px; color: var(--text3); opacity: 0; animation: fadeUp .6s ease .7s forwards; }
 
-/* HERO */
-.hero-wrap {
-  min-height: 100vh;
-  display: flex; align-items: center; justify-content: center;
-  padding: 7rem 2rem 6rem; gap: 3.5rem; flex-wrap: wrap;
-  background: var(--dark);
-  position: relative;
-  overflow: hidden;
-}
-/* green radial glow behind the station mockup */
-.hero-wrap::before {
-  content: '';
-  position: absolute;
-  top: 10%; right: -5%;
-  width: 600px; height: 600px;
-  background: radial-gradient(ellipse at center, rgba(29,158,117,.18) 0%, transparent 65%);
-  pointer-events: none;
-  z-index: 0;
-}
-/* subtle green glow bottom-left for depth */
-.hero-wrap::after {
-  content: '';
-  position: absolute;
-  bottom: -10%; left: -5%;
-  width: 400px; height: 400px;
-  background: radial-gradient(ellipse at center, rgba(29,158,117,.08) 0%, transparent 65%);
-  pointer-events: none;
-  z-index: 0;
-}
-.hero-left { flex: 1; min-width: 280px; max-width: 460px; position: relative; z-index: 1; }
-.hero-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; opacity: 0; animation: fadeUp .7s ease .45s forwards; position: relative; z-index: 1; }
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(29,158,117,.15);
-  color: var(--green);
-  font-size: 12px; font-weight: 700; padding: 6px 14px;
-  border-radius: 99px;
-  border: 1px solid rgba(29,158,117,.3);
-  margin-bottom: 1.5rem; letter-spacing: .05em; text-transform: uppercase;
-  opacity: 0; animation: fadeUp .6s ease .2s forwards;
-}
-.hero-title {
-  font-size: clamp(32px, 5.5vw, 56px); font-weight: 800;
-  color: #fff;
-  letter-spacing: -2.5px; line-height: .95; margin-bottom: 1.25rem;
-  opacity: 0; animation: fadeUp .6s ease .3s forwards;
-}
-.accent { color: var(--green); }
-.hero-sub {
-  font-size: clamp(14px, 1.7vw, 17px);
-  color: rgba(255,255,255,.62);
-  line-height: 1.7; margin-bottom: 2.25rem;
-  opacity: 0; animation: fadeUp .6s ease .4s forwards;
-}
-.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; opacity: 0; animation: fadeUp .6s ease .5s forwards; }
-.hero-proof {
-  margin-top: 1.75rem; font-size: 12px;
-  color: rgba(255,255,255,.28);
-  opacity: 0; animation: fadeUp .6s ease .7s forwards; line-height: 1.8;
-}
+/* HERO SPLIT (text + phone) */
+.hero-split { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 7rem 2rem 4rem; gap: 4rem; flex-wrap: wrap; }
+.hero-split-left { flex: 1; min-width: 280px; max-width: 480px; }
+.hero-split-left .hero-eyebrow { opacity: 0; animation: fadeUp .6s ease .2s forwards; }
+.hero-split-left .hero-title { opacity: 0; animation: fadeUp .6s ease .3s forwards; }
+.hero-split-left .hero-sub { opacity: 0; animation: fadeUp .6s ease .4s forwards; }
+.hero-split-left .hero-btns { opacity: 0; animation: fadeUp .6s ease .5s forwards; }
+.hero-split-left .hero-proof { opacity: 0; animation: fadeUp .6s ease .7s forwards; margin-top: 1.5rem; }
+.hero-split-right { flex-shrink: 0; opacity: 0; animation: fadeUp .7s ease .5s forwards; }
 
-/* dark-themed secondary button for hero */
-.hero-btns .btn-s {
-  background: rgba(255,255,255,.07);
-  color: rgba(255,255,255,.85);
-  border: 1px solid rgba(255,255,255,.15);
-}
-.hero-btns .btn-s:hover {
-  background: rgba(255,255,255,.12);
-  border-color: rgba(29,158,117,.5);
-  color: #fff;
-}
+/* PHONE MOCKUP */
+.phone-frame { width: 260px; background: var(--bg); border: 1px solid var(--border); border-radius: 32px; overflow: hidden; box-shadow: 0 24px 56px rgba(0,0,0,.14), 0 6px 16px rgba(0,0,0,.08); }
+.phone-notch { width: 64px; height: 11px; background: var(--text); border-radius: 0 0 9px 9px; margin: 0 auto; }
+.phone-topbar { background: var(--bg2); padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.phone-logo { font-size: 14px; font-weight: 800; color: var(--text); letter-spacing: -.5px; }
+.phone-logo-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -1px; }
+.phone-badge { background: var(--green-light); color: var(--green); font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); }
+.phone-scan-area { padding: 10px 12px 4px; }
+.phone-scan-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 11px; padding: 9px 11px; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.phone-scan-input { flex: 1; font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; }
+.phone-scan-btn { background: var(--green); color: #fff; border: none; border-radius: 7px; font-size: 11px; font-weight: 700; padding: 5px 10px; font-family: 'Syne', sans-serif; }
+.phone-list-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); margin-bottom: 6px; }
+.phone-scan-status { font-size: 10px; color: var(--text3); padding: 0 12px 5px; height: 18px; overflow: hidden; transition: color .2s; }
+.phone-scan-status.found { color: var(--green); font-weight: 700; }
+.phone-scan-status.loading { color: var(--green); }
+.phone-item-list { padding: 0 12px 6px; }
+.phone-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 6px; opacity: 0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease; }
+.phone-item.show { opacity: 1; transform: translateY(0); }
+.phone-item-row { display: flex; align-items: center; gap: 8px; padding: 9px 10px; }
+.phone-item-ph { width: 34px; height: 34px; border-radius: 8px; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.phone-item-info { flex: 1; min-width: 0; }
+.phone-item-name { font-size: 11px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.phone-item-price { font-size: 10px; font-weight: 700; color: var(--green); margin-top: 1px; }
+.phone-item-qty { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.phone-qty-btn { width: 20px; height: 20px; border: 1px solid var(--border); border-radius: 5px; background: var(--bg3); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); }
+.phone-qty-num { font-size: 11px; font-weight: 800; min-width: 12px; text-align: center; color: var(--text); }
+.phone-order-bar { padding: 4px 12px 14px; }
+.phone-order-btn { width: 100%; height: 42px; background: var(--green); color: #fff; border: none; border-radius: 11px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; opacity: 0; transition: opacity .5s ease; }
+.phone-order-btn.show { opacity: 1; }
+.phone-order-sub { text-align: center; font-size: 9px; color: var(--text3); margin-top: 5px; }
 
-/* gradient fade from dark hero into light problem section */
-.hero-fade {
-  height: 80px;
-  background: linear-gradient(to bottom, var(--dark), var(--bg2));
-  margin-top: -1px;
-}
-
-/* WHITEBOARD MOCKUP (shared) */
-.wb-mock { background: var(--wb-bg); border: 2px solid #1a1a1a; border-radius: 4px; overflow: hidden; position: relative; }
-.wb-mock::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(transparent, transparent 31px, var(--wb-line) 31px, var(--wb-line) 32px); pointer-events: none; z-index: 0; }
-.wb-mock::after { content: ''; position: absolute; top: 0; left: 50px; bottom: 0; width: 1px; background: rgba(220,100,100,.13); pointer-events: none; z-index: 0; }
-
-/* dark header shared by all station mocks */
-.swb-hdr { position: relative; z-index: 2; background: var(--dark); border-bottom: 2px solid #1a1a1a; display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; }
-.swb-logo { display: flex; align-items: center; gap: 7px; }
-.swb-logo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 7px var(--green); animation: livePulse 2.5s ease-in-out infinite; flex-shrink: 0; }
-.swb-logo-text { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -.3px; }
-.swb-logo-sub { font-size: 8px; font-family: 'DM Mono',monospace; color: rgba(255,255,255,.3); margin-top: 1px; }
-.swb-meta { display: flex; align-items: center; gap: 12px; }
-.swb-weather { font-size: 11px; color: rgba(255,255,255,.5); font-family: 'DM Mono',monospace; }
-.swb-time { font-size: 13px; font-weight: 800; color: rgba(255,255,255,.8); font-family: 'DM Mono',monospace; letter-spacing: 1px; }
-.swb-date { font-size: 7px; color: rgba(255,255,255,.28); font-family: 'DM Mono',monospace; text-transform: uppercase; letter-spacing: .1em; }
-
-/* scanner status bar */
-.swb-sts { position: relative; z-index: 2; background: rgba(245,242,235,.92); border-bottom: 1px solid var(--wb-line); padding: 5px 12px; display: flex; align-items: center; gap: 8px; }
-.swb-sdot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: livePulse 2.5s ease-in-out infinite; flex-shrink: 0; }
-.swb-stxt { font-size: 10px; color: var(--wb-green); font-family: 'DM Mono',monospace; font-weight: 700; flex: 1; }
-.swb-badge { font-size: 9px; font-weight: 700; background: var(--wb-green); color: #fff; padding: 2px 7px; border-radius: 99px; }
-
-/* two-column body */
-.swb-body { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1px 1fr; }
-.swb-divider { background: var(--wb-line); }
-
-/* list column */
-.swb-list-col { display: flex; flex-direction: column; }
-.swb-col-hdr { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 7px 11px 6px; border-bottom: 1px solid var(--wb-line); background: rgba(245,242,235,.95); }
-.swb-col-title { font-family: 'Caveat',cursive; font-size: 16px; font-weight: 700; color: var(--wb-ink); }
-.swb-col-count { font-size: 9px; font-family: 'DM Mono',monospace; color: rgba(42,50,40,.4); }
-.swb-items { padding: 5px 11px; flex: 1; position: relative; z-index: 1; }
-.swb-item { display: flex; align-items: center; gap: 7px; min-height: 28px; }
-.swb-bullet { width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid rgba(42,50,40,.3); flex-shrink: 0; }
-.swb-name { font-family: 'Caveat',cursive; font-size: 15px; color: var(--wb-ink); flex: 1; line-height: 1.2; }
-.swb-qty { font-size: 9px; font-family: 'DM Mono',monospace; color: var(--wb-green); font-weight: 700; }
-.swb-scan-row { position: relative; z-index: 1; display: flex; gap: 5px; align-items: center; padding: 5px 11px 7px; border-top: 1px solid var(--wb-line); background: rgba(245,242,235,.95); }
-.swb-inp { flex: 1; height: 30px; background: rgba(255,255,255,.7); border: 1.5px solid var(--wb-line); border-radius: 6px; padding: 0 8px; font-family: 'DM Mono',monospace; font-size: 10px; color: var(--wb-ink); outline: none; min-width: 0; }
-.swb-add { height: 30px; padding: 0 10px; background: var(--wb-green); color: #fff; border: none; border-radius: 6px; font-family: 'Syne',sans-serif; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-.swb-walmart { height: 30px; padding: 0 8px; background: #0071CE; color: #fff; border: none; border-radius: 6px; font-family: 'Syne',sans-serif; font-size: 9px; font-weight: 800; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
-
-/* right column */
-.swb-right-col { display: flex; flex-direction: column; }
-.swb-todo { position: relative; z-index: 1; flex: 1; padding: 7px 11px 5px; border-bottom: 1px solid var(--wb-line); }
-.swb-todo-title { font-family: 'Caveat',cursive; font-size: 14px; font-weight: 700; color: var(--wb-ink); margin-bottom: 5px; }
-.swb-todo-row { display: flex; align-items: center; gap: 6px; min-height: 24px; }
-.swb-check { width: 11px; height: 11px; border: 1.5px solid rgba(42,50,40,.3); border-radius: 3px; flex-shrink: 0; }
-.swb-check.done { background: var(--wb-green); border-color: var(--wb-green); }
-.swb-todo-txt { font-family: 'Caveat',cursive; font-size: 13px; color: var(--wb-ink); }
-.swb-todo-txt.done { color: rgba(42,50,40,.3); text-decoration: line-through; }
-.swb-photo { position: relative; z-index: 1; flex-shrink: 0; overflow: hidden; border-top: 1px solid var(--wb-line); }
-.swb-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .72; }
-.swb-photo-lbl { position: absolute; bottom: 5px; left: 8px; font-size: 8px; font-family: 'DM Mono',monospace; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .1em; background: rgba(0,0,0,.22); padding: 1px 5px; border-radius: 3px; z-index: 1; }
-
-/* hero sizing */
-.hero-wb { width: min(520px, calc(100vw - 3rem)); box-shadow: 0 28px 70px rgba(0,0,0,.5), 0 6px 18px rgba(0,0,0,.3), 0 0 60px rgba(29,158,117,.12), 0 0 120px rgba(29,158,117,.07); border-color: rgba(255,255,255,.1); }
-.hero-wb .swb-body { min-height: 200px; }
-.hero-wb .swb-photo { height: 88px; }
-
-/* device label on dark bg */
-.hero-wrap .device-label { color: rgba(255,255,255,.28); }
-.hero-wrap .hcn-label { color: var(--green); }
-.hero-wrap .hcn-text { color: rgba(255,255,255,.5); }
-.hero-wrap .hero-cnote { background: rgba(29,158,117,.12); border-color: rgba(29,158,117,.25); }
-
-/* phone row below station */
-.hero-phone-row { display: flex; align-items: flex-start; gap: 12px; }
-.hero-phone-wrap { display: flex; flex-direction: column; align-items: center; }
-.device-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); margin-top: 8px; }
-
-/* SMALL PHONE MOCKUP */
-.phone-sm { width: 130px; background: var(--bg); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,.11); }
-.psm-notch { width: 40px; height: 7px; background: var(--text); border-radius: 0 0 5px 5px; margin: 0 auto; }
-.psm-top { background: var(--bg2); padding: 6px 9px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.psm-logo { font-size: 10px; font-weight: 800; color: var(--text); }
-.psm-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--green); margin-left: 1px; vertical-align: middle; }
-.psm-badge { font-size: 7px; background: var(--green-light); color: var(--green); border: 1px solid rgba(29,158,117,.2); padding: 2px 5px; border-radius: 99px; font-weight: 700; }
-.psm-sync { display: flex; align-items: center; gap: 4px; padding: 4px 9px; background: rgba(29,158,117,.07); border-bottom: 1px solid rgba(29,158,117,.1); }
-.psm-sync-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: livePulse 2s ease-in-out infinite; }
-.psm-sync-txt { font-size: 8px; color: var(--green); font-family: 'DM Mono',monospace; font-weight: 700; }
-.psm-items { padding: 5px 8px 4px; }
-.psm-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 7px; margin-bottom: 4px; padding: 5px 7px; display: flex; align-items: center; gap: 5px; }
-.psm-emoji { font-size: 11px; }
-.psm-name { font-size: 8px; font-weight: 700; color: var(--text); flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.psm-price { font-size: 8px; font-weight: 700; color: var(--green); }
-.psm-order { padding: 3px 8px 9px; }
-.psm-order-btn { width: 100%; height: 26px; background: var(--green); color: #fff; border: none; border-radius: 7px; font-family: 'Syne',sans-serif; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 4px; }
-
-/* companion note */
-.hero-cnote { background: var(--green-light); border: 1px solid rgba(29,158,117,.2); border-radius: 10px; padding: 10px 13px; max-width: 130px; }
-.hcn-label { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
-.hcn-text { font-size: 11px; color: var(--text2); line-height: 1.5; }
-
-/* SHARED SECTION STYLES */
-.section { padding: 5rem 1.5rem; max-width: 900px; margin: 0 auto; }
+/* SECTIONS */
+.section { padding: 5rem 1.5rem; max-width: 860px; margin: 0 auto; }
 .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
-.sec-title { font-size: clamp(26px, 5vw, 42px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; line-height: 1.05; margin-bottom: .75rem; }
-.sec-sub { font-size: 15px; color: var(--text2); line-height: 1.65; max-width: 520px; margin-bottom: 2.5rem; }
+.sec-title { font-size: clamp(26px, 5vw, 40px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; line-height: 1.1; margin-bottom: .75rem; }
+.sec-sub { font-size: 15px; color: var(--text2); line-height: 1.6; max-width: 500px; margin-bottom: 2.5rem; }
 
-/* PROBLEM */
-.problem-wrap { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 5rem 1.5rem; text-align: center; margin-top: -1px; }
-.problem-title { font-size: clamp(22px, 4.5vw, 36px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 1rem; }
-.problem-body { font-size: 16px; color: var(--text2); line-height: 1.75; max-width: 580px; margin: 0 auto; }
-
-/* STATION SECTION */
-.station-wrap { background: var(--dark); padding: 5rem 2rem; }
-.station-inner { max-width: 1040px; margin: 0 auto; display: flex; gap: 4rem; align-items: center; flex-wrap: wrap; }
-.station-left { flex: 1; min-width: 280px; }
-.station-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
-.station-title { font-size: clamp(26px, 4.5vw, 40px); font-weight: 800; color: #fff; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: .75rem; }
-.station-sub { font-size: 15px; color: rgba(255,255,255,.44); line-height: 1.65; max-width: 420px; margin-bottom: 2rem; }
-.station-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
-.station-tile { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07); border-radius: 14px; padding: 14px 15px; transition: border-color .2s; }
-.station-tile:hover { border-color: rgba(29,158,117,.35); }
-.station-tile-icon { font-size: 20px; margin-bottom: 7px; }
-.station-tile-title { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 3px; }
-.station-tile-desc { font-size: 11px; color: rgba(255,255,255,.38); line-height: 1.55; }
-.tile-badge { display: inline-block; font-size: 9px; font-weight: 700; background: rgba(255,255,255,.07); color: rgba(255,255,255,.35); border: 1px solid rgba(255,255,255,.1); border-radius: 4px; padding: 1px 6px; margin-top: 5px; letter-spacing: .04em; }
-.station-callout { background: rgba(29,158,117,.1); border: 1px solid rgba(29,158,117,.25); border-radius: 14px; padding: 18px 20px; }
-.station-callout-text { font-size: 14px; color: rgba(255,255,255,.68); line-height: 1.65; margin-bottom: 12px; }
-.station-callout-link { font-size: 13px; font-weight: 700; color: var(--green); text-decoration: none; }
-.station-callout-link:hover { text-decoration: underline; }
-.station-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
-.station-mock-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.22); margin-top: 12px; }
-
-/* station section mockup sizing */
-.station-wb { width: min(400px, calc(100vw - 4rem)); box-shadow: 0 28px 80px rgba(0,0,0,.55), 0 8px 24px rgba(0,0,0,.35); }
-.station-wb .swb-body { min-height: 180px; }
-.station-wb .swb-photo { height: 78px; }
-
-/* COMPANION */
-.companion-wrap { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 2rem; }
-.companion-inner { max-width: 1040px; margin: 0 auto; display: flex; gap: 4rem; align-items: center; flex-wrap: wrap-reverse; }
-.companion-left { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
-.companion-right { flex: 1; min-width: 280px; }
-.companion-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
-.companion-title { font-size: clamp(24px, 4.5vw, 38px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; line-height: 1.05; margin-bottom: .75rem; }
-.companion-sub { font-size: 15px; color: var(--text2); line-height: 1.65; max-width: 420px; margin-bottom: 2rem; }
-.companion-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
-.companion-tile { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 14px 15px; transition: border-color .2s; }
-.companion-tile:hover { border-color: var(--green); }
-.companion-tile-icon { font-size: 20px; margin-bottom: 7px; }
-.companion-tile-title { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
-.companion-tile-desc { font-size: 11px; color: var(--text2); line-height: 1.55; }
-.companion-tagline { font-size: 14px; font-weight: 700; color: var(--text2); font-style: italic; border-left: 3px solid var(--green); padding-left: 14px; line-height: 1.55; }
-
-/* LARGE PHONE */
-.phone-lg { width: 230px; background: var(--bg); border: 1px solid var(--border); border-radius: 30px; overflow: hidden; box-shadow: 0 20px 56px rgba(0,0,0,.12); }
-.plg-notch { width: 65px; height: 10px; background: var(--text); border-radius: 0 0 8px 8px; margin: 0 auto; }
-.plg-top { background: var(--bg2); padding: 10px 13px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.plg-logo { font-size: 14px; font-weight: 800; color: var(--text); letter-spacing: -.4px; }
-.plg-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; }
-.plg-badge { font-size: 10px; background: var(--green-light); color: var(--green); border: 1px solid rgba(29,158,117,.2); padding: 3px 9px; border-radius: 99px; font-weight: 700; }
-.plg-sync { display: flex; align-items: center; gap: 6px; padding: 7px 13px; background: rgba(29,158,117,.07); border-bottom: 1px solid rgba(29,158,117,.1); }
-.plg-sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: livePulse 2s ease-in-out infinite; }
-.plg-sync-txt { font-size: 10px; color: var(--green); font-family: 'DM Mono',monospace; font-weight: 700; }
-.plg-lbl { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); padding: 7px 12px 3px; }
-.plg-item { margin: 0 11px 5px; background: var(--bg2); border: 1px solid var(--border); border-radius: 9px; padding: 8px 9px; display: flex; align-items: center; gap: 7px; }
-.plg-emoji { width: 28px; height: 28px; border-radius: 6px; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
-.plg-info { flex: 1; min-width: 0; }
-.plg-name { font-size: 10px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.plg-price { font-size: 9px; font-weight: 700; color: var(--green); margin-top: 1px; }
-.plg-qty { display: flex; align-items: center; gap: 3px; }
-.plg-qbtn { width: 18px; height: 18px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg3); font-size: 12px; display: flex; align-items: center; justify-content: center; color: var(--text2); }
-.plg-qnum { font-size: 10px; font-weight: 800; min-width: 12px; text-align: center; }
-.plg-order { padding: 4px 11px 13px; }
-.plg-order-btn { width: 100%; height: 38px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.phone-lg-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); margin-top: 10px; }
-
-/* HOW IT WORKS */
+/* STEPS */
 .steps { display: flex; flex-direction: column; gap: 12px; }
 .step { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; transition: border-color .2s; }
 .step:hover { border-color: var(--green); }
 .step-num { width: 38px; height: 38px; border-radius: 10px; background: var(--green); color: #fff; font-size: 17px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .step-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.step-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
-
-/* FEATURES */
-.feat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
-.feat { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 1.4rem; transition: border-color .2s; }
-.feat:hover { border-color: var(--green); }
-.feat-icon { font-size: 26px; margin-bottom: 10px; }
-.feat-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.feat-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
-.feat-dev { display: inline-block; font-size: 9px; font-weight: 700; background: var(--bg3); color: var(--text3); border-radius: 4px; padding: 1px 6px; margin-top: 6px; letter-spacing: .04em; }
-.feat-group { margin-bottom: 2rem; }
-.feat-group-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; padding-left: 2px; border-left: 3px solid var(--green); padding-left: 10px; }
-
-/* VS */
-.vs-wrap { background: var(--dark); padding: 5rem 1.5rem; }
-.vs-inner { max-width: 800px; margin: 0 auto; }
-.vs-title { font-size: clamp(22px, 4.5vw, 36px); font-weight: 800; color: #fff; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: .75rem; }
-.vs-sub { font-size: 15px; color: rgba(255,255,255,.38); line-height: 1.65; max-width: 580px; margin-bottom: 2.5rem; }
-.vs-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 2rem; }
-.vs-table th { padding: 11px 14px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.28); border-bottom: 1px solid rgba(255,255,255,.07); }
-.vs-table th:nth-child(2), .vs-table th:nth-child(3) { text-align: center; }
-.vs-table th:nth-child(3) { color: var(--green); }
-.vs-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,.04); color: rgba(255,255,255,.58); font-size: 13px; }
-.vs-table td:nth-child(1) { font-weight: 600; }
-.vs-table td:nth-child(2), .vs-table td:nth-child(3) { text-align: center; font-size: 12px; }
-.vs-yes { color: var(--green); font-weight: 700; }
-.vs-no { color: rgba(255,255,255,.2); }
-.vs-disclaimer { font-size: 11px; color: rgba(255,255,255,.2); line-height: 1.65; }
+.step-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
 
 /* DEMO */
 .demo-wrap { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 1.5rem; }
@@ -373,371 +128,148 @@ nav.scrolled .nav-lang:hover { border-color: var(--green); color: var(--green); 
 .demo-order-btn { width: 100%; height: 46px; background: var(--green); color: #fff; border: none; border-radius: 11px; font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .15s; }
 .demo-order-btn:hover { background: var(--green-dark); }
 
+/* FEATURES */
+.feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.feat { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; padding: 1.4rem; }
+.feat-icon { font-size: 26px; margin-bottom: 10px; }
+.feat-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+.feat-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+/* VS */
+.vs-wrap { background: var(--text); padding: 5rem 1.5rem; }
+.vs-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+.vs-title { font-size: clamp(24px, 5vw, 38px); font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1.2; margin-bottom: .75rem; }
+.vs-sub { font-size: 15px; color: rgba(255,255,255,.55); line-height: 1.6; margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+.vs-cards { display: flex; gap: 14px; justify-content: center; margin-bottom: 2.5rem; flex-wrap: wrap; }
+.vs-card { flex: 1; min-width: 200px; max-width: 280px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 1.5rem; text-align: center; }
+.vs-card.win { background: var(--green-light); border-color: var(--green); }
+.vs-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.35); margin-bottom: 8px; }
+.vs-card.win .vs-lbl { color: var(--green); }
+.vs-price { font-size: 36px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.vs-card.win .vs-price { color: var(--green); }
+.vs-name { font-size: 12px; color: rgba(255,255,255,.4); }
+.vs-card.win .vs-name { color: var(--text2); }
+
 /* CTA */
 .cta-wrap { padding: 5rem 1.5rem; text-align: center; }
-.cta-title { font-size: clamp(28px, 6vw, 48px); font-weight: 800; color: var(--text); letter-spacing: -2px; margin-bottom: .75rem; line-height: 1.0; }
-.cta-sub { font-size: 15px; color: var(--text2); margin-bottom: 2rem; line-height: 1.65; max-width: 500px; margin-left: auto; margin-right: auto; }
-.cta-small { margin-top: 1.25rem; font-size: 12px; color: var(--text3); }
+.cta-title { font-size: clamp(26px, 5vw, 40px); font-weight: 800; color: var(--text); letter-spacing: -1.5px; margin-bottom: .75rem; }
+.cta-sub { font-size: 15px; color: var(--text2); margin-bottom: 2rem; line-height: 1.6; }
 
 /* FOOTER */
 footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; }
-.ft-logo { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.ft-logo { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
 .ft-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -1px; }
-.ft-entity { font-size: 12px; color: var(--text3); margin-bottom: 12px; }
-.ft-disc { font-size: 11px; color: var(--text3); max-width: 480px; margin: 0 auto 8px; line-height: 1.65; }
-.ft-links { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-top: 12px; }
+.ft-disc { font-size: 11px; color: var(--text3); max-width: 460px; margin: 0 auto 12px; line-height: 1.6; }
+.ft-links { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
 .ft-link { font-size: 12px; color: var(--text3); text-decoration: none; transition: color .15s; }
 .ft-link:hover { color: var(--green); }
 
-/* bottom tabs on mockup */
-.swb-tabs { position: relative; z-index: 2; display: flex; background: var(--dark); border-top: 1px solid rgba(255,255,255,.07); }
-.swb-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 5px 4px; }
-.swb-tab.active .swb-tab-lbl { color: var(--green); }
-.swb-tab-icon { font-size: 11px; line-height: 1; }
-.swb-tab-lbl { font-size: 7px; font-family: 'DM Mono',monospace; color: rgba(255,255,255,.28); letter-spacing: .04em; text-transform: uppercase; }
-.swb-tab.active .swb-tab-icon { filter: none; }
-
-/* ANIMATIONS */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes livePulse {
-  0%   { transform: scale(1);   box-shadow: 0 0 0 0 rgba(29,158,117,.9), 0 0 6px var(--green); }
-  50%  { transform: scale(1.5); box-shadow: 0 0 0 8px rgba(29,158,117,0), 0 0 14px rgba(29,158,117,.8); }
-  100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(29,158,117,.9), 0 0 6px var(--green); }
-}
-
-/* RESPONSIVE */
-@media (max-width: 700px) {
+@media (max-width: 560px) {
   .nav-link { display: none; }
-  .hero-wrap { flex-direction: column; align-items: center; padding: 6rem 1.5rem 3rem; gap: 2rem; text-align: center; }
+  .hero-split { padding: 6rem 1.5rem 3rem; gap: 2.5rem; text-align: center; }
+  .hero-split-left .hero-btns { justify-content: center; }
   .hero-btns { flex-direction: column; align-items: stretch; }
   .btn-p, .btn-s { justify-content: center; }
-  .swb-body { grid-template-columns: 1fr; }
-  .swb-divider { display: none; }
-  .swb-right-col { border-top: 1px solid var(--wb-line); }
-  .station-inner { flex-direction: column-reverse; }
-  .station-tiles { grid-template-columns: 1fr; }
-  .companion-inner { flex-direction: column; align-items: center; }
-  .companion-tiles { grid-template-columns: 1fr; }
-  .feat-grid { grid-template-columns: 1fr 1fr; }
+  .vs-cards { flex-direction: column; align-items: center; }
+  .phone-frame { width: 220px; }
 }
-@media (max-width: 420px) { .feat-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a href="/" class="nav-logo">ReOrderly<span class="nav-dot"></span></a>
   <div class="nav-links">
-    <a href="#how-it-works" class="nav-link" data-i18n="navHowItWorks">How it works</a>
-    <a href="#station" class="nav-link" data-i18n="navStation">Station</a>
-    <a href="#features" class="nav-link" data-i18n="navFeatures">Features</a>
-    <a href="#demo" class="nav-link" data-i18n="navDemo">Demo</a>
-    <button class="nav-lang" id="nav-lang-btn" onclick="toggleSplashLang()">ES</button>
-    <a href="/app.html" class="nav-cta" data-i18n="btnSignIn">Sign in</a>
+    <a href="#how-it-works" class="nav-link">How it works</a>
+    <a href="#features" class="nav-link">Features</a>
+    <a href="/app.html" class="nav-cta">Sign in</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero-wrap">
-  <div class="hero-left">
+<section class="hero-split">
+  <div class="hero-split-left">
     <div class="hero-eyebrow">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-      <span data-i18n="heroEyebrow">No smart fridge required</span>
+      No smart fridge required
     </div>
-    <h1 class="hero-title"><span data-i18n="heroTitle1">Your kitchen finally</span><br><span class="accent" data-i18n="heroTitle2">remembers.</span></h1>
-    <p class="hero-sub" data-i18n="heroSub">ReOrderly turns a tablet into an always-on kitchen Station. Scan items as they run out, keep one shared household list, and review matching Walmart product pages when you're ready to shop.</p>
-    <p class="hero-sub" style="margin-top:-1rem;font-size:13px;color:var(--text3);" data-i18n="heroSubBonus">Bonus: recipes, notes, to-dos, music, photo frame, and front-door shortcuts — all from the same kitchen screen.</p>
+    <h1 class="hero-title">Scan.<span class="accent"> List.</span><br>Order.</h1>
+    <p class="hero-sub">Scan household items as you run out, build your reorder list automatically, and open Walmart product pages when you're ready to order.</p>
     <div class="hero-btns">
       <a href="/app.html" class="btn-p">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span data-i18n="btnGetStarted">Get started free</span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Get started free
       </a>
       <a href="#demo" class="btn-s">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-        <span data-i18n="btnSeeDemo">See the demo</span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        See the demo
       </a>
     </div>
-    <p class="hero-proof" data-i18n="heroProof">Free app · Scan → Sync → Review → Shop · Works with any fridge · Family notes · Photos · Music</p>
+    <p class="hero-proof">Free to use &nbsp;·&nbsp; Works with any fridge &nbsp;·&nbsp; Phone camera, Bluetooth scanner, or manual entry</p>
   </div>
 
-  <div class="hero-right">
-    <!-- Wide whiteboard Station mockup — main hero visual -->
-    <div class="wb-mock hero-wb">
-      <div class="swb-hdr">
-        <div class="swb-logo">
-          <div class="swb-logo-dot"></div>
-          <div>
-            <div class="swb-logo-text">ReOrderly<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-left:2px;vertical-align:middle;position:relative;top:-1px"></span></div>
-            <div class="swb-logo-sub" data-i18n="stationLabel">Kitchen Station</div>
-          </div>
-        </div>
-        <div class="swb-meta">
-          <div style="text-align:right">
-            <div class="swb-time" id="hero-time">10:42 AM</div>
-            <div class="swb-date" id="hero-date">Saturday</div>
-          </div>
-          <div class="swb-weather">72° ☁️</div>
-        </div>
+  <div class="hero-split-right">
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-topbar">
+        <div class="phone-logo">ReOrderly<span class="phone-logo-dot"></span></div>
+        <div class="phone-badge" id="hero-badge">0 items</div>
       </div>
-      <div class="swb-sts">
-        <div class="swb-sdot"></div>
-        <div class="swb-stxt" data-i18n="scannerReady">Scanner ready — scan a barcode to add</div>
-        <div class="swb-badge">3 items</div>
-      </div>
-      <div class="swb-body">
-        <div class="swb-list-col">
-          <div class="swb-col-hdr">
-            <div class="swb-col-title" data-i18n="wbListTitle">What do we need?</div>
-            <div class="swb-col-count">3 items</div>
-          </div>
-          <div class="swb-items">
-            <div class="swb-item"><div class="swb-bullet"></div><div class="swb-name">Tide Pods Laundry</div><div class="swb-qty">×1</div></div>
-            <div class="swb-item"><div class="swb-bullet"></div><div class="swb-name">Folgers Coffee</div><div class="swb-qty">×1</div></div>
-            <div class="swb-item"><div class="swb-bullet"></div><div class="swb-name">Great Value 2% Milk</div><div class="swb-qty">×2</div></div>
-          </div>
-          <div class="swb-scan-row">
-            <input class="swb-inp" type="text" placeholder="Scan or enter barcode…" readonly>
-            <button class="swb-add" data-i18n="btnAdd">Add</button>
-            <button class="swb-walmart">
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-              <span data-i18n="btnReviewWalmart">Review on Walmart</span>
-            </button>
-          </div>
+      <div class="phone-scan-area">
+        <div class="phone-scan-box">
+          <div class="phone-scan-input" id="hero-scan-input">Scan or enter barcode...</div>
+          <button class="phone-scan-btn">Add</button>
         </div>
-        <div class="swb-divider"></div>
-        <div class="swb-right-col">
-          <div class="swb-todo">
-            <div class="swb-todo-title" data-i18n="wbTodoTitle">To-Do</div>
-            <div class="swb-todo-row"><div class="swb-check done"></div><div class="swb-todo-txt done">Pick up dry cleaning</div></div>
-            <div class="swb-todo-row"><div class="swb-check"></div><div class="swb-todo-txt">Call plumber</div></div>
-            <div class="swb-todo-row"><div class="swb-check"></div><div class="swb-todo-txt">Kids' soccer at 4pm</div></div>
-          </div>
-          <div class="swb-photo" style="height:88px">
-            <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=600&q=75" alt="">
-            <div class="swb-photo-lbl" data-i18n="photoLabel">Family photos</div>
-          </div>
-        </div>
+        <div class="phone-list-label">Reorder list</div>
       </div>
-      <!-- bottom tabs -->
-      <div class="swb-tabs">
-        <div class="swb-tab active"><div class="swb-tab-icon">🛒</div><div class="swb-tab-lbl">List</div></div>
-        <div class="swb-tab"><div class="swb-tab-icon">📖</div><div class="swb-tab-lbl">Recipes</div></div>
-        <div class="swb-tab"><div class="swb-tab-icon">🕐</div><div class="swb-tab-lbl">History</div></div>
-        <div class="swb-tab"><div class="swb-tab-icon">📦</div><div class="swb-tab-lbl">Library</div></div>
-      </div>
-    </div>
-
-    <!-- Small phone companion (secondary) -->
-    <div class="hero-phone-row">
-      <div class="hero-phone-wrap">
-        <div class="phone-sm">
-          <div class="psm-notch"></div>
-          <div class="psm-top">
-            <div class="psm-logo">ReOrderly<span class="psm-dot"></span></div>
-            <div class="psm-badge">3 items</div>
-          </div>
-          <div class="psm-sync"><div class="psm-sync-dot"></div><div class="psm-sync-txt" data-i18n="syncedStation">Synced with Station</div></div>
-          <div class="psm-items">
-            <div class="psm-item"><span class="psm-emoji">🧺</span><span class="psm-name">Tide Pods</span><span class="psm-price">$13.97</span></div>
-            <div class="psm-item"><span class="psm-emoji">☕</span><span class="psm-name">Folgers Coffee</span><span class="psm-price">$9.97</span></div>
-            <div class="psm-item"><span class="psm-emoji">🥛</span><span class="psm-name">2% Milk</span><span class="psm-price">$3.48</span></div>
-          </div>
-          <div class="psm-order">
-            <button class="psm-order-btn">
-              <svg width="7" height="7" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-              <span data-i18n="btnReviewWalmart">Review on Walmart</span>
-            </button>
-          </div>
-        </div>
-        <div class="device-label" data-i18n="phoneCompanionLabel">Phone Companion</div>
-      </div>
-      <div class="hero-cnote">
-        <div class="hcn-label" data-i18n="syncedLabel">In sync</div>
-        <div class="hcn-text" data-i18n="syncedNote">List updates instantly across Station and every phone in the household.</div>
+      <div class="phone-scan-status" id="hero-scan-status"></div>
+      <div class="phone-item-list" id="hero-item-list"></div>
+      <div class="phone-order-bar">
+        <button class="phone-order-btn" id="hero-order-btn">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="4" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/><circle cx="6.34" cy="6.34" r="2.2"/><circle cx="17.66" cy="17.66" r="2.2"/><circle cx="6.34" cy="17.66" r="2.2"/><circle cx="17.66" cy="6.34" r="2.2"/></svg>
+          Review on Walmart
+        </button>
+        <div class="phone-order-sub" id="hero-order-sub"></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- gradient fade dark → light -->
-<div class="hero-fade"></div>
-
-<!-- THE PROBLEM -->
-<div class="problem-wrap">
-  <div style="max-width:600px;margin:0 auto">
-    <div class="eyebrow" style="text-align:center" data-i18n="problemEyebrow">Sound familiar?</div>
-    <h2 class="problem-title" data-i18n="problemTitle">You knew it was running low. You just forgot to add it.</h2>
-    <p class="problem-body" data-i18n="problemBody">Every household runs the same mental loop: notice something is low, try to remember it, forget it by the time you're at the store, run out, make an emergency trip. It's not a willpower problem — it's a system problem. ReOrderly fixes the system.</p>
-  </div>
-</div>
-
-<!-- MEET THE STATION -->
-<div class="station-wrap" id="station">
-  <div class="station-inner">
-    <div class="station-left">
-      <div class="station-eyebrow" data-i18n="stationEyebrow">The ReOrderly Station</div>
-      <h2 class="station-title" data-i18n="stationTitle">An always-on kitchen command center.</h2>
-      <p class="station-sub" data-i18n="stationSub">Mount a tablet in your kitchen. Keep it on. Let the whole household scan, message, cook, and reorder from one shared screen — always visible, always ready.</p>
-      <div class="station-tiles">
-        <div class="station-tile"><div class="station-tile-icon">🔍</div><div class="station-tile-title" data-i18n="tileScanner">Always-on scanner</div><div class="station-tile-desc" data-i18n="tileScannerDesc">Scan a finished item in one second. No unlocking, no typing.</div></div>
-        <div class="station-tile"><div class="station-tile-icon">🛒</div><div class="station-tile-title" data-i18n="tileList">Live shopping list</div><div class="station-tile-desc" data-i18n="tileListDesc">Syncs instantly with every phone in the household.</div></div>
-        <div class="station-tile"><div class="station-tile-icon">💬</div><div class="station-tile-title" data-i18n="tileNotes">Kitchen Notes</div><div class="station-tile-desc" data-i18n="tileNotesDesc">Leave messages for anyone in the household from the kitchen screen.</div></div>
-        <div class="station-tile"><div class="station-tile-icon">✅</div><div class="station-tile-title" data-i18n="tileTodo">Household to-do</div><div class="station-tile-desc" data-i18n="tileTodoDesc">Shared tasks and reminders visible to the whole family.</div></div>
-        <div class="station-tile"><div class="station-tile-icon">📖</div><div class="station-tile-title" data-i18n="tileRecipe">Recipe book</div><div class="station-tile-desc" data-i18n="tileRecipeDesc">Browse saved recipes on the kitchen screen while you cook.</div></div>
-        <div class="station-tile"><div class="station-tile-icon">🌤️</div><div class="station-tile-title" data-i18n="tileWeather">Weather &amp; clock</div><div class="station-tile-desc" data-i18n="tileWeatherDesc">Always visible at a glance in the header.</div></div>
-      </div>
-
-      <!-- Station Extras -->
-      <div style="margin-top:1.5rem;margin-bottom:.5rem;">
-        <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem;" data-i18n="stationExtrasLabel">Station extras</div>
-        <div class="station-tiles">
-          <div class="station-tile"><div class="station-tile-icon">🖼️</div><div class="station-tile-title" data-i18n="tilePhoto">Digital picture frame</div><div class="station-tile-desc" data-i18n="tilePhotoDesc">Your family photos on display in the kitchen, always on, always beautiful. No separate device needed.</div></div>
-          <div class="station-tile"><div class="station-tile-icon">🎵</div><div class="station-tile-title" data-i18n="tileMusic">Kitchen music</div><div class="station-tile-desc" data-i18n="tileMusicDesc">Designed for quick access to music and video apps like Spotify and YouTube. Your kitchen soundtrack, always a tap away.</div></div>
-          <div class="station-tile"><div class="station-tile-icon">📷</div><div class="station-tile-title" data-i18n="tileSecurity">Security camera view</div><div class="station-tile-desc" data-i18n="tileSecurityDesc">Designed for front-door camera access from the kitchen screen, including Ring and other camera apps where supported.</div></div>
-          <div class="station-tile">
-            <div class="station-tile-icon">🎤</div>
-            <div class="station-tile-title" data-i18n="tileVoice">Voice assistant</div>
-            <div class="station-tile-desc" data-i18n="tileVoiceDesc">Hands-free interaction for the Station — add items, set timers, and ask kitchen-related questions.</div>
-            <div class="tile-badge" data-i18n="badgeVoice">Experimental Beta</div>
-          </div>
-        </div>
-      </div>
-      <div class="station-callout">
-        <p class="station-callout-text" data-i18n="stationKitCallout">Join the waitlist for the planned ReOrderly Station Kit — a pre-configured tablet and barcode scanner designed to be ready for your kitchen.</p>
-        <p style="font-size:11px;color:var(--text3);margin-top:6px;margin-bottom:10px;" data-i18n="stationKitDisclaimer">Final hardware, pricing, and availability are still being tested.</p>
-        <a href="#cta" class="station-callout-link" data-i18n="btnJoinWaitlist">Join the waitlist →</a>
-      </div>
-    </div>
-
-    <!-- Station section whiteboard mockup -->
-    <div class="station-right">
-      <div class="wb-mock station-wb">
-        <div class="swb-hdr">
-          <div class="swb-logo">
-            <div class="swb-logo-dot"></div>
-            <div>
-              <div class="swb-logo-text">ReOrderly<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-left:2px;vertical-align:middle;position:relative;top:-1px"></span></div>
-              <div class="swb-logo-sub" data-i18n="stationLabel">Kitchen Station</div>
-            </div>
-          </div>
-          <div class="swb-meta">
-            <div style="text-align:right">
-              <div class="swb-time" id="sec-time">10:42 AM</div>
-              <div class="swb-date" id="sec-date">Saturday</div>
-            </div>
-            <div class="swb-weather">72° ☁️</div>
-          </div>
-        </div>
-        <div class="swb-sts">
-          <div class="swb-sdot"></div>
-          <div class="swb-stxt" data-i18n="scannerReady">Scanner ready — scan a barcode to add</div>
-          <div class="swb-badge">4 items</div>
-        </div>
-        <div class="swb-body">
-          <div class="swb-list-col">
-            <div class="swb-col-hdr">
-              <div class="swb-col-title" data-i18n="wbListTitle">What do we need?</div>
-              <div class="swb-col-count">4 items</div>
-            </div>
-            <div class="swb-items">
-              <div class="swb-item"><div class="swb-bullet"></div><div class="swb-name">Tide Pods Laundry</div><div class="swb-qty">×1</div></div>
-              <div class="swb-item"><div class="swb-bullet"></div><div class="swb-name">Bounty Paper Towels</div><div class="swb-qty">×2</div></div>
-              <div class="swb-item"><div class="swb-bullet"></div><div class="swb-name">Folgers Classic Roast</div><div class="swb-qty">×1</div></div>
-              <div class="swb-item"><div class="swb-bullet"></div><div class="swb-name">Great Value 2% Milk</div><div class="swb-qty">×2</div></div>
-            </div>
-            <div class="swb-scan-row">
-              <input class="swb-inp" type="text" placeholder="Scan or enter barcode…" readonly>
-              <button class="swb-add" data-i18n="btnAdd">Add</button>
-              <button class="swb-walmart">
-                <svg width="9" height="9" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-                <span data-i18n="btnReviewWalmart">Review on Walmart</span>
-              </button>
-            </div>
-          </div>
-          <div class="swb-divider"></div>
-          <div class="swb-right-col">
-            <div class="swb-todo">
-              <div class="swb-todo-title" data-i18n="wbTodoTitle">To-Do</div>
-              <div class="swb-todo-row" style="margin-bottom:2px"><div class="swb-check done"></div><div class="swb-todo-txt done">School forms signed</div></div>
-              <div class="swb-todo-row" style="margin-bottom:2px"><div class="swb-check"></div><div class="swb-todo-txt">Call plumber re: sink</div></div>
-              <div class="swb-todo-row"><div class="swb-check"></div><div class="swb-todo-txt">Soccer pickup 4pm</div></div>
-            </div>
-            <div class="swb-photo" style="height:78px">
-              <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=500&q=75" alt="">
-              <div class="swb-photo-lbl" data-i18n="photoLabel">Family photos</div>
-            </div>
-          </div>
-        </div>
-        <!-- bottom tabs -->
-        <div class="swb-tabs">
-          <div class="swb-tab active"><div class="swb-tab-icon">🛒</div><div class="swb-tab-lbl">List</div></div>
-          <div class="swb-tab"><div class="swb-tab-icon">📖</div><div class="swb-tab-lbl">Recipes</div></div>
-          <div class="swb-tab"><div class="swb-tab-icon">🕐</div><div class="swb-tab-lbl">History</div></div>
-          <div class="swb-tab"><div class="swb-tab-icon">📦</div><div class="swb-tab-lbl">Library</div></div>
-        </div>
-      </div>
-      <div class="station-mock-label" data-i18n="stationLabel">Kitchen Station</div>
-    </div>
-  </div>
-</div>
-
-<!-- PHONE COMPANION -->
-<div class="companion-wrap">
-  <div class="companion-inner">
-    <div class="companion-left">
-      <div class="phone-lg">
-        <div class="plg-notch"></div>
-        <div class="plg-top">
-          <div class="plg-logo">ReOrderly<span class="plg-dot"></span></div>
-          <div class="plg-badge">4 items</div>
-        </div>
-        <div class="plg-sync"><div class="plg-sync-dot"></div><div class="plg-sync-txt" data-i18n="syncedStation">Synced with Station</div></div>
-        <div class="plg-lbl" data-i18n="reorderList">Reorder list</div>
-        <div class="plg-item"><div class="plg-emoji">🧺</div><div class="plg-info"><div class="plg-name">Tide Pods Laundry</div><div class="plg-price">$13.97</div></div><div class="plg-qty"><div class="plg-qbtn">−</div><div class="plg-qnum">1</div><div class="plg-qbtn">+</div></div></div>
-        <div class="plg-item"><div class="plg-emoji">🧻</div><div class="plg-info"><div class="plg-name">Bounty Paper Towels</div><div class="plg-price">$18.94</div></div><div class="plg-qty"><div class="plg-qbtn">−</div><div class="plg-qnum">2</div><div class="plg-qbtn">+</div></div></div>
-        <div class="plg-item"><div class="plg-emoji">☕</div><div class="plg-info"><div class="plg-name">Folgers Classic Roast</div><div class="plg-price">$9.97</div></div><div class="plg-qty"><div class="plg-qbtn">−</div><div class="plg-qnum">1</div><div class="plg-qbtn">+</div></div></div>
-        <div class="plg-item"><div class="plg-emoji">🥛</div><div class="plg-info"><div class="plg-name">Great Value 2% Milk</div><div class="plg-price">$3.48</div></div><div class="plg-qty"><div class="plg-qbtn">−</div><div class="plg-qnum">2</div><div class="plg-qbtn">+</div></div></div>
-        <div class="plg-order"><button class="plg-order-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg><span data-i18n="btnReviewWalmart">Review on Walmart</span></button></div>
-      </div>
-      <div class="phone-lg-label" data-i18n="phoneCompanionLabel">Phone Companion</div>
-    </div>
-    <div class="companion-right">
-      <div class="companion-eyebrow" data-i18n="companionEyebrow">The ReOrderly App</div>
-      <h2 class="companion-title" data-i18n="companionTitle">Your kitchen in your pocket.</h2>
-      <p class="companion-sub" data-i18n="companionSub">The free ReOrderly app stays in sync with your Station in real time. See the list from anywhere, scan with your phone camera, add recipes, and open matching Walmart product pages when you're ready to shop.</p>
-      <div class="companion-tiles">
-        <div class="companion-tile"><div class="companion-tile-icon">📷</div><div class="companion-tile-title" data-i18n="appTileCamera">Camera scanning</div><div class="companion-tile-desc" data-i18n="appTileCameraDesc">Scan barcodes with your phone camera from anywhere.</div></div>
-        <div class="companion-tile"><div class="companion-tile-icon">🔄</div><div class="companion-tile-title" data-i18n="appTileSync">Real-time sync</div><div class="companion-tile-desc" data-i18n="appTileSyncDesc">List updates the moment anything is scanned on the Station.</div></div>
-        <div class="companion-tile"><div class="companion-tile-icon">👨‍👩‍👧</div><div class="companion-tile-title" data-i18n="appTileSharing">Household sharing</div><div class="companion-tile-desc" data-i18n="appTileSharingDesc">Invite family members. Everyone shares one list.</div></div>
-        <div class="companion-tile"><div class="companion-tile-icon">🧠</div><div class="companion-tile-title" data-i18n="appTileRecipe">Recipe intelligence</div><div class="companion-tile-desc" data-i18n="appTileRecipeDesc">Paste any recipe URL and AI extracts every ingredient automatically.</div></div>
-        <div class="companion-tile"><div class="companion-tile-icon">🕐</div><div class="companion-tile-title" data-i18n="appTileHistory">Shopping history</div><div class="companion-tile-desc" data-i18n="appTileHistoryDesc">Re-add past items with one tap. No scanning needed.</div></div>
-        <div class="companion-tile"><div class="companion-tile-icon">💬</div><div class="companion-tile-title" data-i18n="tileNotes">Kitchen Notes</div><div class="companion-tile-desc" data-i18n="appTileNotesDesc">Send messages to the Station from anywhere in the house.</div></div>
-      </div>
-      <p class="companion-tagline" data-i18n="companionTagline">Station keeps the kitchen organized. App keeps the household connected.</p>
-    </div>
-  </div>
-</div>
-
-<!-- HOW IT WORKS -->
 <section class="section" id="how-it-works">
-  <div class="eyebrow" data-i18n="howItWorksLabel">How it works</div>
-  <h2 class="sec-title" data-i18n="howItWorksTitle">Three steps. That's it.</h2>
-  <p class="sec-sub" data-i18n="howItWorksSub">ReOrderly removes every bit of friction between running out of something and having it back in your home.</p>
+  <div class="eyebrow">How it works</div>
+  <h2 class="sec-title">Three steps.<br>That's it.</h2>
+  <p class="sec-sub">ReOrderly removes every bit of friction between running out of something and having it back in your home.</p>
   <div class="steps">
-    <div class="step"><div class="step-num">1</div><div><div class="step-title" data-i18n="step1Title">Scan as you run out</div><div class="step-desc" data-i18n="step1Desc">Use the Station's always-on barcode scanner, your phone camera, or a Bluetooth scanner. Scan the item as you finish it — ReOrderly helps match it to a Walmart product listing, with final product details, pricing, and availability confirmed on Walmart.com.</div></div></div>
-    <div class="step"><div class="step-num">2</div><div><div class="step-title" data-i18n="step2Title">Your list builds itself</div><div class="step-desc" data-i18n="step2Desc">Items build up throughout the week on the Station and the app — in sync, in real time. Anyone in the household can add, adjust, or check items off from any device.</div></div></div>
-    <div class="step"><div class="step-num">3</div><div><div class="step-title" data-i18n="step3Title">Review and order on Walmart</div><div class="step-desc" data-i18n="step3Desc">When you're ready, tap "Review on Walmart." ReOrderly opens matching Walmart product pages for every item — review, add to cart, and check out through Walmart.com.</div></div></div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Scan as you run out</div>
+        <div class="step-desc">Use a Bluetooth barcode scanner, your phone camera, or type a UPC manually. Scan the item as you finish it — ReOrderly helps match it to a Walmart product listing, with product details confirmed on Walmart.com.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Your list builds itself</div>
+        <div class="step-desc">Items add up throughout the week. Adjust quantities, check things off, share with your whole household. Your list syncs across all devices in real time.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Review and order on Walmart</div>
+        <div class="step-desc">When you're ready, tap "Review on Walmart." ReOrderly opens matching Walmart product pages for every item — quickly review, add items to your cart, and check out through Walmart.</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- DEMO -->
-<div class="demo-wrap" id="demo">
+<section class="demo-wrap" id="demo">
   <div class="demo-inner">
     <div class="demo-hdr">
-      <div class="eyebrow" style="text-align:center" data-i18n="demoEyebrow">Live demo</div>
-      <h2 class="sec-title" style="text-align:center" data-i18n="demoTitle">See it in action</h2>
-      <p class="sec-sub" style="text-align:center;margin:0 auto 2rem" data-i18n="demoSub">This is the real app with sample items. Use the Walmart buttons to open live product pages.</p>
+      <div class="eyebrow" style="text-align:center">Live demo</div>
+      <h2 class="sec-title" style="text-align:center">See it in action</h2>
+      <p class="sec-sub" style="text-align:center;margin:0 auto 2rem">This is the real app with sample items. Use the Walmart buttons to open live product pages.</p>
     </div>
     <div class="demo-phone">
       <div class="demo-topbar">
@@ -745,467 +277,145 @@ footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: 
         <div class="demo-badge" id="demo-count">5 items</div>
       </div>
       <div class="demo-banner">
-        <span data-i18n="demoBanner">👋 Demo — sign up to save your list</span>
-        <a href="/app.html" class="demo-signup-link" data-i18n="demoSignupLink">Sign up free →</a>
+        <span>👋 Demo — sign up to save your list</span>
+        <a href="/app.html" class="demo-signup-link">Sign up free →</a>
       </div>
       <div class="demo-list" id="demo-list"></div>
       <div class="demo-order">
         <button class="demo-order-btn" onclick="demoOrderAll()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="6.34" cy="6.34" r="2"/><circle cx="17.66" cy="17.66" r="2"/><circle cx="6.34" cy="17.66" r="2"/><circle cx="17.66" cy="6.34" r="2"/></svg>
-          <span data-i18n="btnReviewWalmart">Review on Walmart</span>
+          Review on Walmart
         </button>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- FEATURES -->
 <section class="section" id="features">
-  <div class="eyebrow" data-i18n="featuresLabel">Features</div>
-  <h2 class="sec-title" data-i18n="featuresTitle">One system. Everything your household needs.</h2>
-  <p class="sec-sub" style="margin-bottom:2.5rem" data-i18n="featuresSub">Built for real kitchens, real families, and the Walmart run you do every week.</p>
-
-  <!-- Group 1: Reorder System -->
-  <div class="feat-group">
-    <div class="feat-group-label" data-i18n="featGroupReorder">Reorder System</div>
-    <div class="feat-grid">
-      <div class="feat"><div class="feat-icon">🔍</div><div class="feat-title" data-i18n="tileScanner">Always-on scanner</div><div class="feat-desc" data-i18n="tileScannerDesc">Scan a finished item in one second. No unlocking, no typing.</div></div>
-      <div class="feat"><div class="feat-icon">🔄</div><div class="feat-title" data-i18n="featSync">Real-time sync</div><div class="feat-desc" data-i18n="featSyncDesc">Your list syncs instantly across all devices. Everyone in the household always sees the same list.</div></div>
-      <div class="feat"><div class="feat-icon">👨‍👩‍👧</div><div class="feat-title" data-i18n="featSharing">Household sharing</div><div class="feat-desc" data-i18n="featSharingDesc">Invite family members to share your list. Anyone can scan and add items from anywhere.</div></div>
-      <div class="feat"><div class="feat-icon">🛍️</div><div class="feat-title" data-i18n="featWalmart">Walmart review</div><div class="feat-desc" data-i18n="featWalmartDesc">Tap "Review on Walmart" to open matching product pages for every item on your list.</div></div>
-    </div>
-  </div>
-
-  <!-- Group 2: Kitchen Station -->
-  <div class="feat-group">
-    <div class="feat-group-label" data-i18n="featGroupStation">Kitchen Station</div>
-    <div class="feat-grid">
-      <div class="feat"><div class="feat-icon">🖼️</div><div class="feat-title" data-i18n="tilePhoto">Digital picture frame</div><div class="feat-desc" data-i18n="featPhotoDesc">Station becomes a living family photo display when idle. A $150 digital frame — built right in.</div></div>
-      <div class="feat"><div class="feat-icon">🧠</div><div class="feat-title" data-i18n="featRecipe">Recipe intelligence</div><div class="feat-desc" data-i18n="featRecipeDesc">Paste any recipe URL and AI extracts all ingredients automatically. Open matching Walmart product pages when ready.</div></div>
-      <div class="feat"><div class="feat-icon">💬</div><div class="feat-title" data-i18n="tileNotes">Kitchen Notes</div><div class="feat-desc" data-i18n="featNotesDesc">Send messages between the Station and any phone. Leave notes for the family without a group chat.</div></div>
-      <div class="feat"><div class="feat-icon">✅</div><div class="feat-title" data-i18n="tileTodo">Household to-do</div><div class="feat-desc" data-i18n="featTodoDesc">Shared task list synced between Station and phone. Chores, reminders, errands — all in one place.</div></div>
-    </div>
-  </div>
-
-  <!-- Group 3: Smart Extras -->
-  <div class="feat-group">
-    <div class="feat-group-label" data-i18n="featGroupExtras">Smart Extras</div>
-    <div class="feat-grid">
-      <div class="feat"><div class="feat-icon">🎵</div><div class="feat-title" data-i18n="tileMusic">Kitchen music</div><div class="feat-desc" data-i18n="featMusicDesc">Supports quick access to music and video apps like Spotify and YouTube from the Station screen.</div></div>
-      <div class="feat"><div class="feat-icon">📷</div><div class="feat-title" data-i18n="tileSecurity">Security monitoring</div><div class="feat-desc" data-i18n="featSecurityDesc">Designed for front-door camera access while you cook, including Ring and other camera apps where supported.</div></div>
-      <div class="feat">
-        <div class="feat-icon">🎤</div>
-        <div class="feat-title" data-i18n="tileVoice">Voice assistant</div>
-        <div class="feat-desc" data-i18n="featVoiceDesc">Hands-free interaction for the Station — add items, set timers, and ask kitchen-related questions.</div>
-        <div class="feat-dev" data-i18n="badgeVoice">Experimental Beta</div>
-      </div>
-      <div class="feat"><div class="feat-icon">🌐</div><div class="feat-title" data-i18n="featBilingual">English &amp; Spanish</div><div class="feat-desc" data-i18n="featBilingualDesc">Full bilingual support across the app and Station. Switch languages any time.</div></div>
-    </div>
+  <div class="eyebrow">Features</div>
+  <h2 class="sec-title">Everything your<br>household needs</h2>
+  <p class="sec-sub" style="margin-bottom:2rem">Built for busy families who shop at Walmart every week.</p>
+  <div class="feat-grid">
+    <div class="feat"><div class="feat-icon">📱</div><div class="feat-title">Camera scanning</div><div class="feat-desc">Use your phone camera or any Bluetooth barcode scanner to scan items in seconds.</div></div>
+    <div class="feat"><div class="feat-icon">🔄</div><div class="feat-title">Real-time sync</div><div class="feat-desc">Your list syncs instantly across all your devices. Everyone in the household always sees the same list.</div></div>
+    <div class="feat"><div class="feat-icon">👨‍👩‍👧</div><div class="feat-title">Household sharing</div><div class="feat-desc">Invite family members to share your list. Anyone can scan and add items from anywhere.</div></div>
+    <div class="feat"><div class="feat-icon">📖</div><div class="feat-title">Recipe intelligence</div><div class="feat-desc">Paste any recipe URL and AI extracts all ingredients automatically. Add them to your list and open matching Walmart product pages when you're ready to shop.</div></div>
+    <div class="feat"><div class="feat-icon">📋</div><div class="feat-title">Multiple lists</div><div class="feat-desc">Weekly Groceries, Costco Run, Pet Supplies — create as many named lists as you need.</div></div>
+    <div class="feat"><div class="feat-icon">🕐</div><div class="feat-title">Shopping history</div><div class="feat-desc">Shopping sessions are saved. Re-add items from past sessions with one tap — no scanning needed.</div></div>
   </div>
 </section>
 
-<!-- VS COMPARISON -->
-<div class="vs-wrap">
+<section class="vs-wrap">
   <div class="vs-inner">
-    <div class="eyebrow" style="color:rgba(255,255,255,.3)" data-i18n="heroEyebrow">No smart fridge required</div>
-    <h2 class="vs-title" data-i18n="vsTitle">The smart fridge experience — without replacing your fridge.</h2>
-    <p class="vs-sub" data-i18n="vsSub">Smart refrigerators with barcode scanning cost around $4,899 — and they're limited to the fridge. ReOrderly gives you more capability, works with any fridge, and the whole household is connected.</p>
-    <table class="vs-table">
-      <thead><tr>
-        <th data-i18n="vsColFeature">Feature</th>
-        <th data-i18n="vsColFridge">Smart Fridge (~$4,899)</th>
-        <th data-i18n="vsColReorderly">ReOrderly</th>
-      </tr></thead>
-      <tbody>
-        <tr><td data-i18n="vsRowScanning">Barcode scanning</td><td>✓</td><td><span class="vs-yes">✓</span></td></tr>
-        <tr><td data-i18n="vsRowAnyFridge">Works with any fridge</td><td><span class="vs-no" data-i18n="vsNoFridgeOnly">No — built into fridge only</span></td><td><span class="vs-yes">Yes</span></td></tr>
-        <tr><td data-i18n="vsRowApp">Phone companion app</td><td><span class="vs-no" data-i18n="vsLimited">Limited</span></td><td><span class="vs-yes" data-i18n="vsYesFullSync">Yes — full sync</span></td></tr>
-        <tr><td data-i18n="vsRowSharing">Family sharing</td><td><span class="vs-no" data-i18n="vsLimited">Limited</span></td><td><span class="vs-yes" data-i18n="vsYesHousehold">Yes — household sharing</span></td></tr>
-        <tr><td data-i18n="vsRowRecipe">Recipe intelligence</td><td><span class="vs-no">No</span></td><td><span class="vs-yes" data-i18n="vsYesAI">Yes — AI-powered</span></td></tr>
-        <tr><td data-i18n="vsRowNotes">Kitchen messages &amp; to-do</td><td><span class="vs-no">No</span></td><td><span class="vs-yes">Yes</span></td></tr>
-        <tr><td data-i18n="vsRowPhoto">Digital picture frame</td><td><span class="vs-no">No</span></td><td><span class="vs-yes" data-i18n="vsYesBuiltIn">Yes — built in</span></td></tr>
-        <tr><td data-i18n="vsRowSecurity">Security camera view</td><td><span class="vs-no">No</span></td><td><span class="vs-yes" data-i18n="vsYesRing">Yes — Ring &amp; more</span></td></tr>
-        <tr><td data-i18n="vsRowVoice">Voice assistant</td><td><span class="vs-no">No</span></td><td><span class="vs-yes" data-i18n="vsYesVoiceBeta">Yes — Experimental Beta</span></td></tr>
-        <tr><td data-i18n="vsRowMove">Move it to a new kitchen</td><td><span class="vs-no">No</span></td><td><span class="vs-yes">Yes</span></td></tr>
-        <tr><td data-i18n="vsRowCost">Cost</td><td>~$4,899</td><td><span class="vs-yes" data-i18n="vsReorderlyCost">Free app · Station kit waitlist</span></td></tr>
-      </tbody>
-    </table>
-    <p class="vs-disclaimer" data-i18n="walmartDisclaimer">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc. Product prices and availability are confirmed on Walmart.com.</p>
-  </div>
-</div>
-
-<!-- CTA -->
-<section class="cta-wrap" id="cta">
-  <div style="max-width:560px;margin:0 auto">
-    <h2 class="cta-title" data-i18n="ctaTitle">Your kitchen is ready for this.</h2>
-    <p class="cta-sub" data-i18n="ctaSub">Start with the free app today. Or join the waitlist for the ReOrderly Station Kit — a pre-configured kitchen hub ready to mount and use out of the box.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <a href="/app.html" class="btn-p">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span data-i18n="btnGetStarted">Get started free</span>
-      </a>
-    </div>
-    <!-- Station waitlist email capture -->
-    <div id="waitlist-form" style="margin-top:1.5rem;max-width:400px;margin-left:auto;margin-right:auto;">
-      <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:10px;" data-i18n="waitlistLabel">Join the Station kit waitlist</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <input id="waitlist-email" type="email" data-i18n-placeholder="waitlistPlaceholder" placeholder="Your email address"
-          style="flex:1;min-width:0;height:46px;border:1.5px solid var(--border);border-radius:11px;padding:0 14px;font-family:'Syne',sans-serif;font-size:14px;color:var(--text);background:var(--bg2);outline:none;transition:border-color .15s;"
-          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'">
-        <button onclick="submitWaitlist()" id="waitlist-btn"
-          style="height:46px;padding:0 20px;background:var(--green);color:#fff;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;"
-          onmouseover="this.style.background='var(--green-dark)'" onmouseout="this.style.background='var(--green)'"
-          data-i18n="waitlistBtn">Join waitlist</button>
+    <h2 class="vs-title">The smart fridge experience.<br><span class="accent">Without the $4,899 price tag.</span></h2>
+    <p class="vs-sub">GE has introduced a smart refrigerator with a built-in barcode scanner priced around $4,899. ReOrderly gives you the same barcode scanning and automatic reorder list — for free — on any phone, with any fridge, at any store.</p>
+    <div class="vs-cards">
+      <div class="vs-card">
+        <div class="vs-lbl">GE Profile Smart Fridge</div>
+        <div class="vs-price">$4,899</div>
+        <div class="vs-name">Barcode scanning only</div>
       </div>
-      <div id="waitlist-msg" style="display:none;margin-top:10px;font-size:13px;font-weight:700;color:var(--green);text-align:center;" data-i18n="waitlistSuccess">You're on the list! We'll be in touch.</div>
+      <div class="vs-card win">
+        <div class="vs-lbl">ReOrderly</div>
+        <div class="vs-price">Free</div>
+        <div class="vs-name">Scanning + recipes + sharing + history</div>
+      </div>
     </div>
-    <p class="cta-small" data-i18n="ctaSmall">ReOrderly is currently in active development and early household testing.</p>
+    <a href="/app.html" class="btn-p" style="display:inline-flex">Get started free</a>
   </div>
 </section>
 
-<!-- FOOTER -->
+<section class="cta-wrap">
+  <div style="max-width:520px;margin:0 auto">
+    <h2 class="cta-title">Never run out of anything again</h2>
+    <p class="cta-sub">Join ReOrderly and make your weekly Walmart shopping faster and easier.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="/app.html" class="btn-p">Get started free</a>
+      <a href="#demo" class="btn-s">Try the demo</a>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="ft-logo">ReOrderly<span class="ft-dot"></span></div>
-  <p class="ft-entity">ReOrderly Solutions LLC · Warren, Ohio</p>
-  <p class="ft-disc" data-i18n="affiliateDisclosure">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</p>
-  <p class="ft-disc" style="margin-top:6px" data-i18n="walmartDisclaimer">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc. Product prices and availability are confirmed on Walmart.com.</p>
-  <p class="ft-disc" style="margin-top:6px;font-size:11px" data-i18n="betaNotice">ReOrderly is currently in beta testing. Product matches, prices, and availability may vary by Walmart location and product listing.</p>
+  <p class="ft-disc" style="margin-top:4px;font-size:12px;color:#888;">ReOrderly Solutions LLC · Warren, Ohio · reorderlysolutions.com</p>
+  <p class="ft-disc">ReOrderly may earn a commission from qualifying purchases through retailer links if accepted into affiliate programs. This does not affect the price you pay.</p>
+  <p class="ft-disc" style="margin-top:8px;">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc. Product prices and availability are confirmed on Walmart.com.</p>
+  <p class="ft-disc" style="margin-top:8px;font-size:11px;">ReOrderly is currently in beta testing. Product matches, prices, and availability may vary by Walmart location and product listing.</p>
   <div class="ft-links">
-    <a href="#how-it-works" class="ft-link" data-i18n="navHowItWorks">How it works</a>
-    <a href="#station" class="ft-link" data-i18n="navStation">Station</a>
-    <a href="#features" class="ft-link" data-i18n="navFeatures">Features</a>
-    <a href="#demo" class="ft-link" data-i18n="navDemo">Demo</a>
-    <a href="/app.html" class="ft-link" data-i18n="btnSignIn">Sign in</a>
-    <a href="/app.html" class="ft-link" data-i18n="btnGetStarted">Get started</a>
-    <a href="/privacy.html" class="ft-link" data-i18n="privacyPolicy">Privacy Policy</a>
-    <a href="/terms.html" class="ft-link" data-i18n="termsOfUse">Terms of Use</a>
-    <a href="mailto:support@reorderlysolutions.com" class="ft-link" data-i18n="contactLabel">Contact</a>
+    <a href="#how-it-works" class="ft-link">How it works</a>
+    <a href="#features" class="ft-link">Features</a>
+    <a href="#demo" class="ft-link">Demo</a>
+    <a href="/app.html" class="ft-link">Sign in</a>
+    <a href="/app.html" class="ft-link">Get started</a>
+    <a href="/privacy.html" class="ft-link">Privacy Policy</a>
+    <a href="/terms.html" class="ft-link">Terms of Use</a>
+    <a href="/disclosure.html" class="ft-link">Affiliate Disclosure</a>
+    <a href="mailto:support@reorderlysolutions.com" class="ft-link">Contact</a>
   </div>
 </footer>
 
 <script>
-// ── NAV SCROLL THEME ──
-(function() {
-  const nav = document.querySelector('nav');
-  function updateNav() {
-    if (window.scrollY > window.innerHeight * 0.7) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
+const HERO_ITEMS = [
+  { emoji: '🧺', name: 'Tide Pods Laundry', price: '$13.97' },
+  { emoji: '🧻', name: 'Bounty Paper Towels', price: '$18.94' },
+  { emoji: '🥛', name: 'Great Value 2% Milk', price: '$3.48' },
+  { emoji: '☕', name: 'Folgers Classic Roast', price: '$9.97' },
+];
+const HERO_CODES = ['078742434032','037000863892','036000291452','025500015966'];
+let heroShown = 0;
+
+function heroAddItem(i) {
+  const item = HERO_ITEMS[i];
+  const el = document.createElement('div');
+  el.className = 'phone-item';
+  el.innerHTML = `
+    <div class="phone-item-row">
+      <div class="phone-item-ph">${item.emoji}</div>
+      <div class="phone-item-info">
+        <div class="phone-item-name">${item.name}</div>
+        <div class="phone-item-price">${item.price}</div>
+      </div>
+      <div class="phone-item-qty">
+        <div class="phone-qty-btn">−</div>
+        <div class="phone-qty-num">1</div>
+        <div class="phone-qty-btn">+</div>
+      </div>
+    </div>`;
+  document.getElementById('hero-item-list').appendChild(el);
+  setTimeout(() => el.classList.add('show'), 30);
+  heroShown++;
+  document.getElementById('hero-badge').textContent = heroShown + (heroShown === 1 ? ' item' : ' items');
+  if (heroShown >= 3) {
+    document.getElementById('hero-order-btn').classList.add('show');
+    document.getElementById('hero-order-sub').textContent = heroShown + ' items ready to order';
   }
-  window.addEventListener('scroll', updateNav, { passive: true });
-  updateNav();
-})();
-
-// ── CLOCK ──
-(function clock(){
-  try {
-    const now = new Date();
-    const h = now.getHours(), m = String(now.getMinutes()).padStart(2,'0');
-    const ap = h >= 12 ? 'PM' : 'AM', h12 = h % 12 || 12;
-    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const ts = h12 + ':' + m + ' ' + ap, ds = days[now.getDay()];
-    ['hero-time','sec-time'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=ts; });
-    ['hero-date','sec-date'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=ds; });
-  } catch(e) {}
-  setTimeout(clock, 30000);
-})();
-
-// ── TRANSLATION SYSTEM ──
-// Identical pattern to app.html and hub.html:
-//   - /lang.js loaded in <head> (provides window.t)
-//   - localStorage key: 'reorderly_lang'
-//   - data-i18n attributes on all text nodes
-//   - applyLangSplash() mirrors applyLang() in app.html
-//
-// Keys that already exist in lang.js are used directly via window.t().
-// Keys specific to this page (splash-only) fall back to the local SPLASH_STRINGS table below.
-// When lang.js is extended in future, those local fallbacks are automatically bypassed.
-
-let splashLang = localStorage.getItem('reorderly_lang') || 'en';
-window.__reorderlyLang = splashLang;
-
-const SPLASH_STRINGS = {
-  en: {
-    navHowItWorks:'How it works',navStation:'Station',navFeatures:'Features',navDemo:'Demo',
-    heroEyebrow:'No smart fridge required',
-    heroTitle1:'Your kitchen finally',heroTitle2:'remembers.',
-    heroSub:"ReOrderly turns a tablet into an always-on kitchen Station. Scan items as they run out, keep one shared household list, and review matching Walmart product pages when you're ready to shop.",
-    heroSubBonus:'Bonus: recipes, notes, to-dos, music, photo frame, and front-door shortcuts — all from the same kitchen screen.',
-    btnGetStarted:'Get started free',btnSeeDemo:'See the demo',
-    heroProof:'Free app · Scan → Sync → Review → Shop · Works with any fridge · Family notes · Photos · Music',
-    stationLabel:'Kitchen Station',scannerReady:'Scanner ready — scan a barcode to add',
-    wbListTitle:'What do we need?',wbTodoTitle:'To-Do',photoLabel:'Family photos',
-    syncedStation:'Synced with Station',phoneCompanionLabel:'Phone Companion',
-    syncedLabel:'In sync',syncedNote:'List updates instantly across Station and every phone in the household.',
-    problemEyebrow:'Sound familiar?',
-    problemTitle:'You knew it was running low. You just forgot to add it.',
-    problemBody:"Every household runs the same mental loop: notice something is low, try to remember it, forget it by the time you're at the store, run out, make an emergency trip. It's not a willpower problem — it's a system problem. ReOrderly fixes the system.",
-    stationEyebrow:'The ReOrderly Station',
-    stationTitle:'An always-on kitchen command center.',
-    stationSub:"Mount a tablet in your kitchen. Keep it on. Let the whole household scan, message, cook, and reorder from one shared screen — always visible, always ready.",
-    tileScanner:'Always-on scanner',tileScannerDesc:'Scan a finished item in one second. No unlocking, no typing.',
-    tileList:'Live shopping list',tileListDesc:'Syncs instantly with every phone in the household.',
-    tileNotes:'Kitchen Notes',tileNotesDesc:'Leave messages for anyone in the household from the kitchen screen.',
-    tileTodo:'Household to-do',tileTodoDesc:'Shared tasks and reminders visible to the whole family.',
-    tileRecipe:'Recipe book',tileRecipeDesc:'Browse saved recipes on the kitchen screen while you cook.',
-    tileWeather:'Weather & clock',tileWeatherDesc:'Always visible at a glance in the header.',
-    tilePhoto:'Digital picture frame',tilePhotoDesc:'Your family photos on display in the kitchen, always on, always beautiful. No separate device needed.',
-    tileMusic:'Kitchen music',tileMusicDesc:'Designed for quick access to music and video apps like Spotify and YouTube. Your kitchen soundtrack, always a tap away.',
-    tileSecurity:'Security camera view',tileSecurityDesc:'Designed for front-door camera access from the kitchen screen, including Ring and other camera apps where supported.',
-    featMusicDesc:'Supports quick access to music and video apps like Spotify and YouTube from the Station screen. Play your kitchen playlist without touching your phone.',
-    featSecurityDesc:'Designed for front-door camera access while you cook, including Ring and other camera apps where supported.',
-    featPhotoDesc:'Station becomes a living family photo display when idle. A $150 digital frame — built right in.',
-    tileVoice:'Voice assistant',tileVoiceDesc:'Hands-free interaction for the Station — add items, set timers, and ask kitchen-related questions.',
-    badgeInDev:'In development',
-    badgeVoice:'Experimental Beta',
-    stationKitCallout:'Join the waitlist for the planned ReOrderly Station Kit — a pre-configured tablet and barcode scanner designed to be ready for your kitchen.',
-    stationKitDisclaimer:'Final hardware, pricing, and availability are still being tested.',
-    stationExtrasLabel:'Station extras',
-    btnJoinWaitlist:'Join the waitlist →',
-    companionEyebrow:'The ReOrderly App',companionTitle:'Your kitchen in your pocket.',
-    companionSub:"The free ReOrderly app stays in sync with your Station in real time. See the list from anywhere, scan with your phone camera, add recipes, and open matching Walmart product pages when you're ready to shop.",
-    appTileCamera:'Camera scanning',appTileCameraDesc:'Scan barcodes with your phone camera from anywhere.',
-    appTileSync:'Real-time sync',appTileSyncDesc:'List updates the moment anything is scanned on the Station.',
-    appTileSharing:'Household sharing',appTileSharingDesc:'Invite family members. Everyone shares one list.',
-    appTileRecipe:'Recipe intelligence',appTileRecipeDesc:'Paste any recipe URL and AI extracts every ingredient automatically.',
-    appTileHistory:'Shopping history',appTileHistoryDesc:'Re-add past items with one tap. No scanning needed.',
-    appTileNotesDesc:'Send messages to the Station from anywhere in the house.',
-    companionTagline:'Station keeps the kitchen organized. App keeps the household connected.',
-    howItWorksLabel:'How it works',howItWorksTitle:"Three steps. That's it.",
-    howItWorksSub:'ReOrderly removes every bit of friction between running out of something and having it back in your home.',
-    step1Title:'Scan as you run out',
-    step1Desc:"Use the Station's always-on barcode scanner, your phone camera, or a Bluetooth scanner. Scan the item as you finish it — ReOrderly helps match it to a Walmart product listing, with final product details, pricing, and availability confirmed on Walmart.com.",
-    step2Title:'Your list builds itself',
-    step2Desc:'Items build up throughout the week on the Station and the app — in sync, in real time. Anyone in the household can add, adjust, or check items off from any device.',
-    step3Title:'Review and order on Walmart',
-    step3Desc:'When you\'re ready, tap "Review on Walmart." ReOrderly opens matching Walmart product pages for every item — review, add to cart, and check out through Walmart.com.',
-    demoEyebrow:'Live demo',demoTitle:'See it in action',
-    demoSub:'This is the real app with sample items. Use the Walmart buttons to open live product pages.',
-    demoBanner:'👋 Demo — sign up to save your list',demoSignupLink:'Sign up free →',
-    featuresLabel:'Features',featuresTitle:'One system. Everything your household needs.',
-    featuresSub:'Built for real kitchens, real families, and the Walmart run you do every week.',
-    featGroupReorder:'Reorder System',
-    featGroupStation:'Kitchen Station',
-    featGroupExtras:'Smart Extras',
-    featWalmart:'Walmart review',featWalmartDesc:'Tap "Review on Walmart" to open matching product pages for every item on your list.',
-    featStation:'Kitchen Station',featStationDesc:'Always-on tablet hub for the whole household. Scanner ready, list visible, family in sync.',
-    featCamera:'Camera scanning',featCameraDesc:'Use your phone camera or any Bluetooth barcode scanner to scan items in seconds.',
-    featSync:'Real-time sync',featSyncDesc:'Your list syncs instantly across all devices. Everyone in the household always sees the same list.',
-    featSharing:'Household sharing',featSharingDesc:'Invite family members to share your list. Anyone can scan and add items from anywhere.',
-    featRecipe:'Recipe intelligence',featRecipeDesc:'Paste any recipe URL and AI extracts all ingredients automatically. Open matching Walmart product pages when ready.',
-    featLists:'Multiple lists',featListsDesc:'Weekly Groceries, Costco Run, Pet Supplies — create as many named lists as you need.',
-    featHistory:'Shopping history',featHistoryDesc:'Shopping sessions are saved. Re-add items from past sessions with one tap — no scanning needed.',
-    featNotesDesc:'Send messages between the Station and any phone. Leave notes for the family without a group chat.',
-    featTodoDesc:'Shared task list synced between Station and phone. Chores, reminders, errands — all in one place.',
-    featPhotoDesc:'Station becomes a living family photo display when idle. A $150 digital frame — built right in.',
-    featVoiceDesc:'Hands-free interaction for the Station — add items, set timers, and ask kitchen-related questions.',
-    featBilingual:'English & Spanish',featBilingualDesc:'Full bilingual support across the app and Station. Switch languages any time.',
-    vsTitle:'The smart fridge experience — without replacing your fridge.',
-    vsSub:"Smart refrigerators with barcode scanning cost around $4,899 — and they're limited to the fridge. ReOrderly gives you more capability, works with any fridge, and the whole household is connected.",
-    vsColFeature:'Feature',vsColFridge:'Smart Fridge (~$4,899)',vsColReorderly:'ReOrderly',
-    vsRowScanning:'Barcode scanning',vsRowAnyFridge:'Works with any fridge',vsRowApp:'Phone companion app',
-    vsRowSharing:'Family sharing',vsRowRecipe:'Recipe intelligence',vsRowNotes:'Kitchen messages & to-do',
-    vsRowVoice:'Voice assistant',vsRowMove:'Move it to a new kitchen',vsRowCost:'Cost',
-    vsNoFridgeOnly:'No — built into fridge only',vsLimited:'Limited',vsYesFullSync:'Yes — full sync',
-    vsYesHousehold:'Yes — household sharing',vsYesAI:'Yes — AI-powered',vsYesPlanned:'Yes — planned',vsYesVoiceBeta:'Yes — Experimental Beta',
-    vsRowPhoto:'Digital picture frame',vsRowSecurity:'Security camera view',vsYesBuiltIn:'Yes — built in',vsYesRing:'Yes — Ring & more',
-    vsReorderlyCost:'Free app · Station kit waitlist',
-    walmartDisclaimer:'ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc. Product prices and availability are confirmed on Walmart.com.',
-    ctaTitle:'Your kitchen is ready for this.',
-    ctaSub:'Start with the free app today. Or join the waitlist for the ReOrderly Station Kit — a pre-configured kitchen hub ready to mount and use out of the box.',
-    btnJoinWaitlist2:'Join Station waitlist',waitlistLabel:'Join the Station kit waitlist',
-    waitlistSuccess:"You're on the list! We'll be in touch.",waitlistPlaceholder:'Your email address',waitlistBtn:'Join waitlist',
-    ctaSmall:'ReOrderly is currently in active development and early household testing.',
-    affiliateDisclosure:'ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.',
-    betaNotice:'ReOrderly is currently in beta testing. Product matches, prices, and availability may vary by Walmart location and product listing.',
-    privacyPolicy:'Privacy Policy',termsOfUse:'Terms of Use',contactLabel:'Contact',
-    reorderList:'Reorder list',btnAdd:'Add',btnReviewWalmart:'Review on Walmart',btnSignIn:'Sign in',
-  },
-  es: {
-    navHowItWorks:'Cómo funciona',navStation:'Estación',navFeatures:'Funciones',navDemo:'Demo',
-    heroEyebrow:'Sin refrigerador inteligente necesario',
-    heroTitle1:'Tu cocina finalmente',heroTitle2:'recuerda.',
-    heroSub:'ReOrderly convierte una tableta en un hub de cocina siempre activo. Escanea artículos cuando se agoten, mantén una lista compartida del hogar y revisa las páginas de productos de Walmart cuando estés listo para comprar.',
-    heroSubBonus:'Bonus: recetas, notas, tareas, música, marco de fotos y accesos a la puerta principal — todo desde la misma pantalla de cocina.',
-    btnGetStarted:'Empezar gratis',btnSeeDemo:'Ver la demo',
-    heroProof:'App gratis · Escanear → Sincronizar → Revisar → Comprar · Funciona con cualquier refrigerador',
-    stationLabel:'Estación de Cocina',scannerReady:'Escáner listo — escanea un código de barras para agregar',
-    wbListTitle:'¿Qué necesitamos?',wbTodoTitle:'Tareas',photoLabel:'Fotos familiares',
-    syncedStation:'Sincronizado con la Estación',phoneCompanionLabel:'App del Teléfono',
-    syncedLabel:'Sincronizado',syncedNote:'La lista se actualiza al instante en la Estación y en todos los teléfonos del hogar.',
-    problemEyebrow:'¿Te suena familiar?',
-    problemTitle:'Sabías que se estaba acabando. Solo olvidaste anotarlo.',
-    problemBody:"Cada hogar repite el mismo ciclo mental: notar que algo está por acabarse, intentar recordarlo, olvidarlo en la tienda, quedarse sin ello y hacer un viaje de emergencia. No es un problema de fuerza de voluntad — es un problema de sistema. ReOrderly soluciona el sistema.",
-    stationEyebrow:'La Estación ReOrderly',
-    stationTitle:'Un centro de mando de cocina siempre activo.',
-    stationSub:'Monta una tableta en tu cocina. Mantenla encendida. Deja que todo el hogar escanee, envíe mensajes, cocine y re-ordene desde una pantalla compartida — siempre visible, siempre lista.',
-    tileScanner:'Escáner siempre activo',tileScannerDesc:'Escanea un artículo terminado en un segundo. Sin desbloquear, sin escribir.',
-    tileList:'Lista de compras en vivo',tileListDesc:'Se sincroniza al instante con todos los teléfonos del hogar.',
-    tileNotes:'Notas de Cocina',tileNotesDesc:'Deja mensajes para cualquier persona del hogar desde la pantalla de la cocina.',
-    tileTodo:'Tareas del hogar',tileTodoDesc:'Tareas y recordatorios compartidos visibles para toda la familia.',
-    tileRecipe:'Libro de recetas',tileRecipeDesc:'Navega por las recetas guardadas en la pantalla de la cocina mientras cocinas.',
-    tileWeather:'Clima y reloj',tileWeatherDesc:'Siempre visible de un vistazo en el encabezado.',
-    tilePhoto:'Marco de fotos digital',tilePhotoDesc:'Las fotos de tu familia en la cocina, siempre encendidas, siempre hermosas. No necesitas un dispositivo separado.',
-    tileMusic:'Música de cocina',tileMusicDesc:'Diseñado para acceso rápido a apps de música y video como Spotify y YouTube. La banda sonora de tu cocina, siempre a un toque.',
-    tileSecurity:'Vista de cámara de seguridad',tileSecurityDesc:'Diseñado para acceso a la cámara de la puerta principal desde la pantalla de la cocina, incluyendo Ring y otras apps de cámara donde sea compatible.',
-    tileVoice:'Asistente de voz',tileVoiceDesc:'Interacción sin manos para la Estación — agregar artículos, configurar temporizadores y hacer preguntas de cocina.',
-    badgeInDev:'En desarrollo',
-    badgeVoice:'Beta Experimental',
-    stationKitCallout:'Únete a la lista de espera del planeado Kit de Estación ReOrderly — una tableta y escáner de códigos de barras preconfigurados, diseñados para estar listos para tu cocina.',
-    stationKitDisclaimer:'Hardware, precios y disponibilidad finales aún están siendo evaluados.',
-    stationExtrasLabel:'Extras de la Estación',
-    btnJoinWaitlist:'Unirse a la lista de espera →',
-    companionEyebrow:'La App ReOrderly',companionTitle:'Tu cocina en tu bolsillo.',
-    companionSub:"La app gratuita de ReOrderly se mantiene sincronizada con tu Estación en tiempo real. Ve la lista desde cualquier lugar, escanea con la cámara de tu teléfono, agrega recetas y abre las páginas de productos de Walmart cuando estés listo para comprar.",
-    appTileCamera:'Escaneo con cámara',appTileCameraDesc:'Escanea códigos de barras con la cámara de tu teléfono desde cualquier lugar.',
-    appTileSync:'Sincronización en tiempo real',appTileSyncDesc:'La lista se actualiza en el momento en que se escanea algo en la Estación.',
-    appTileSharing:'Compartir en el hogar',appTileSharingDesc:'Invita a miembros de la familia. Todos comparten una lista.',
-    appTileRecipe:'Inteligencia de recetas',appTileRecipeDesc:'Pega cualquier URL de receta y la IA extrae cada ingrediente automáticamente.',
-    appTileHistory:'Historial de compras',appTileHistoryDesc:'Re-agrega artículos anteriores con un toque. Sin escanear.',
-    appTileNotesDesc:'Envía mensajes a la Estación desde cualquier lugar de la casa.',
-    companionTagline:'La Estación mantiene la cocina organizada. La app mantiene conectado al hogar.',
-    howItWorksLabel:'Cómo funciona',howItWorksTitle:'Tres pasos. Eso es todo.',
-    howItWorksSub:'ReOrderly elimina toda la fricción entre quedarse sin algo y tenerlo de vuelta en casa.',
-    step1Title:'Escanea cuando se acabe',
-    step1Desc:'Usa el escáner siempre activo de la Estación, la cámara de tu teléfono o un escáner Bluetooth. Escanea el artículo cuando lo termines — ReOrderly ayuda a encontrar el producto en Walmart, con detalles, precios y disponibilidad confirmados en Walmart.com.',
-    step2Title:'Tu lista se construye sola',
-    step2Desc:'Los artículos se acumulan durante la semana en la Estación y la app — sincronizados, en tiempo real. Cualquier miembro del hogar puede agregar, ajustar o marcar artículos desde cualquier dispositivo.',
-    step3Title:'Revisa y ordena en Walmart',
-    step3Desc:'Cuando estés listo, toca "Revisar en Walmart." ReOrderly abre páginas de productos de Walmart para cada artículo — revisa, agrega al carrito y realiza el pago en Walmart.com.',
-    demoEyebrow:'Demo en vivo',demoTitle:'Míralo en acción',
-    demoSub:'Esta es la app real con artículos de muestra. Usa los botones de Walmart para abrir páginas de productos reales.',
-    demoBanner:'👋 Demo — regístrate para guardar tu lista',demoSignupLink:'Regístrate gratis →',
-    featuresLabel:'Funciones',featuresTitle:'Un sistema. Todo lo que necesita tu hogar.',
-    featuresSub:'Construido para cocinas reales, familias reales y la compra en Walmart que haces cada semana.',
-    featGroupReorder:'Sistema de Reorden',
-    featGroupStation:'Estación de Cocina',
-    featGroupExtras:'Extras Inteligentes',
-    featWalmart:'Revisión en Walmart',featWalmartDesc:'Toca "Revisar en Walmart" para abrir páginas de productos que coincidan con cada artículo de tu lista.',
-    featStation:'Estación de Cocina',featStationDesc:'Centro siempre activo para todo el hogar. Escáner listo, lista visible, familia sincronizada.',
-    featCamera:'Escaneo con cámara',featCameraDesc:'Usa la cámara de tu teléfono o cualquier escáner Bluetooth para escanear artículos en segundos.',
-    featSync:'Sincronización en tiempo real',featSyncDesc:'Tu lista se sincroniza al instante en todos los dispositivos.',
-    featSharing:'Compartir en el hogar',featSharingDesc:'Invita a miembros de la familia. Cualquiera puede escanear y agregar artículos desde cualquier lugar.',
-    featRecipe:'Inteligencia de recetas',featRecipeDesc:'Pega cualquier URL de receta y la IA extrae todos los ingredientes automáticamente.',
-    featLists:'Múltiples listas',featListsDesc:'Comestibles semanales, Costco, Mascotas — crea tantas listas como necesites.',
-    featHistory:'Historial de compras',featHistoryDesc:'Las sesiones de compras se guardan. Re-agrega artículos anteriores con un toque.',
-    featNotesDesc:'Envía mensajes entre la Estación y cualquier teléfono. Deja notas para la familia sin un chat grupal.',
-    featTodoDesc:'Lista de tareas sincronizada entre la Estación y el teléfono.',
-    featPhotoDesc:'La Estación se convierte en un marco de fotos familiar cuando está inactiva. Un marco digital de $150 — ya incluido.',
-    featMusicDesc:'Compatible con acceso rápido a apps de música y video como Spotify y YouTube desde la Estación. Pon tu lista de reproducción sin tocar el teléfono.',
-    featSecurityDesc:'Diseñado para acceso a la cámara de la puerta principal mientras cocinas, incluyendo Ring y otras apps de cámara donde sea compatible.',
-    featVoiceDesc:'Interacción sin manos para la Estación — agregar artículos, configurar temporizadores y hacer preguntas de cocina.',
-    featBilingual:'Inglés y Español',featBilingualDesc:'Soporte bilingüe completo en la app y la Estación. Cambia de idioma en cualquier momento.',
-    vsTitle:'La experiencia del refrigerador inteligente — sin reemplazar el tuyo.',
-    vsSub:"Los refrigeradores inteligentes con escáner cuestan alrededor de $4,899 — y están limitados al refrigerador. ReOrderly te ofrece más capacidad, funciona con cualquier refrigerador y todo el hogar está conectado.",
-    vsColFeature:'Función',vsColFridge:'Refrigerador Inteligente (~$4,899)',vsColReorderly:'ReOrderly',
-    vsRowScanning:'Escáner de código de barras',vsRowAnyFridge:'Funciona con cualquier refrigerador',
-    vsRowApp:'App para teléfono',vsRowSharing:'Compartir en familia',vsRowRecipe:'Inteligencia de recetas',
-    vsRowNotes:'Mensajes y tareas de cocina',vsRowVoice:'Asistente de voz',
-    vsRowPhoto:'Marco de fotos digital',vsRowSecurity:'Vista de cámara de seguridad',vsYesBuiltIn:'Sí — integrado',vsYesRing:'Sí — Ring y más',
-    vsRowMove:'Moverlo a otra cocina',vsRowCost:'Costo',
-    vsNoFridgeOnly:'No — integrado solo al refrigerador',vsLimited:'Limitado',
-    vsYesFullSync:'Sí — sincronización completa',vsYesHousehold:'Sí — compartir en el hogar',
-    vsYesAI:'Sí — con IA',vsYesPlanned:'Sí — planeado',vsYesVoiceBeta:'Sí — Beta Experimental',
-    vsReorderlyCost:'App gratis · Lista de espera del kit',
-    walmartDisclaimer:'ReOrderly es una aplicación independiente y no es propiedad de, operada por, ni está oficialmente respaldada por Walmart. Walmart es una marca comercial de Walmart Inc. Los precios y disponibilidad de productos se confirman en Walmart.com.',
-    ctaTitle:'Tu cocina está lista para esto.',
-    ctaSub:'Empieza con la app gratuita hoy. O únete a la lista de espera del Kit de Estación ReOrderly — un hub de cocina preconfigurado listo para montar y usar.',
-    btnJoinWaitlist2:'Unirse a la lista de espera',waitlistLabel:'Únete a la lista de espera del kit',
-    waitlistSuccess:'¡Estás en la lista! Estaremos en contacto.',waitlistPlaceholder:'Tu correo electrónico',waitlistBtn:'Unirse a la lista',
-    ctaSmall:'ReOrderly está actualmente en desarrollo activo y pruebas en hogares.',
-    affiliateDisclosure:'ReOrderly participa en el programa de afiliados de Walmart. Podemos ganar una comisión cuando realizas compras a través de los enlaces de esta aplicación. Esto no afecta el precio que pagas.',
-    betaNotice:'ReOrderly está actualmente en pruebas beta. Los productos, precios y disponibilidad pueden variar según la ubicación de Walmart.',
-    privacyPolicy:'Política de Privacidad',termsOfUse:'Términos de Uso',contactLabel:'Contacto',
-    reorderList:'Lista de reorden',btnAdd:'Agregar',btnReviewWalmart:'Revisar en Walmart',btnSignIn:'Iniciar sesión',
-  }
-};
-
-function tSplash(key) {
-  // Prefer lang.js (window.t) if it already has the key — same as app.html pattern
-  if (window.t && typeof window.t === 'function') {
-    const v = window.t(key);
-    if (v && v !== key) return v;
-  }
-  const strings = SPLASH_STRINGS[splashLang] || SPLASH_STRINGS.en;
-  return strings[key] || SPLASH_STRINGS.en[key] || key;
 }
 
-function applyLangSplash() {
-  document.documentElement.lang = splashLang;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    const val = tSplash(key);
-    if (val && val !== key) el.textContent = val;
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    const val = tSplash(key);
-    if (val && val !== key) el.placeholder = val;
-  });
-  const btn = document.getElementById('nav-lang-btn');
-  if (btn) btn.textContent = splashLang === 'en' ? 'ES' : 'EN';
+function heroAnimateScan(i) {
+  if (i >= HERO_ITEMS.length) return;
+  const status = document.getElementById('hero-scan-status');
+  const input = document.getElementById('hero-scan-input');
+  input.textContent = HERO_CODES[i];
+  input.style.color = 'var(--text)';
+  setTimeout(() => { status.textContent = 'Searching...'; status.className = 'phone-scan-status loading'; }, 400);
+  setTimeout(() => {
+    status.textContent = '✓ Found: ' + HERO_ITEMS[i].name;
+    status.className = 'phone-scan-status found';
+    input.textContent = 'Scan or enter barcode...';
+    input.style.color = 'var(--text3)';
+    heroAddItem(i);
+  }, 1100);
+  setTimeout(() => {
+    status.textContent = '';
+    status.className = 'phone-scan-status';
+    heroAnimateScan(i + 1);
+  }, 2200);
 }
 
-window.toggleSplashLang = function() {
-  splashLang = splashLang === 'en' ? 'es' : 'en';
-  localStorage.setItem('reorderly_lang', splashLang);
-  window.__reorderlyLang = splashLang;
-  applyLangSplash();
-};
-
-applyLangSplash();
+setTimeout(() => heroAnimateScan(0), 1000);
 </script>
-
-<script type="module">
-// ── FIREBASE WAITLIST ──
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const _fbConfig = {
-  apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
-  authDomain: "reorderly-b152f.firebaseapp.com",
-  projectId: "reorderly-b152f",
-  storageBucket: "reorderly-b152f.firebasestorage.app",
-  messagingSenderId: "690816543799",
-  appId: "1:690816543799:web:5c0d7573ab04cc009d23b2"
-};
-const _fbApp = initializeApp(_fbConfig, 'splash');
-const _db = getFirestore(_fbApp);
-
-window.submitWaitlist = async function() {
-  const input = document.getElementById('waitlist-email');
-  const btn = document.getElementById('waitlist-btn');
-  const msg = document.getElementById('waitlist-msg');
-  const email = input.value.trim();
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    input.style.borderColor = '#dc2626';
-    input.focus();
-    setTimeout(() => input.style.borderColor = 'var(--border)', 2000);
-    return;
-  }
-  btn.disabled = true;
-  btn.textContent = '…';
-  try {
-    await addDoc(collection(_db, 'waitlist'), {
-      email,
-      source: 'splash',
-      lang: splashLang,
-      submittedAt: new Date()
-    });
-    input.style.display = 'none';
-    btn.style.display = 'none';
-    msg.style.display = 'block';
-    msg.textContent = tSplash('waitlistSuccess');
-  } catch(e) {
-    btn.disabled = false;
-    btn.textContent = tSplash('waitlistBtn');
-    input.style.borderColor = '#dc2626';
-    setTimeout(() => input.style.borderColor = 'var(--border)', 2000);
-  }
-};
-
+<script>
 const ITEMS = [
   { name: 'Tide Pods Laundry Detergent', price: '$13.97', emoji: '🧺', qty: 1, q: 'Tide Pods laundry detergent' },
   { name: 'Bounty Paper Towels 8-Pack', price: '$18.94', emoji: '🧻', qty: 1, q: 'Bounty paper towels 8 pack' },
@@ -1214,12 +424,16 @@ const ITEMS = [
   { name: 'Colgate Total Toothpaste', price: '$4.27', emoji: '🦷', qty: 1, q: 'Colgate Total toothpaste' },
 ];
 let items = ITEMS.map(i => ({...i}));
+
 function render() {
   document.getElementById('demo-list').innerHTML = items.map((it, i) => `
     <div class="demo-item">
       <div class="demo-item-row">
         <div class="demo-emoji">${it.emoji}</div>
-        <div style="flex:1;min-width:0"><div class="demo-name">${it.name}</div><div class="demo-price">${it.price}</div></div>
+        <div style="flex:1;min-width:0">
+          <div class="demo-name">${it.name}</div>
+          <div class="demo-price">${it.price}</div>
+        </div>
         <div class="demo-ctls">
           <button class="demo-qbtn" onclick="chg(${i},-1)">−</button>
           <span class="demo-qnum">${it.qty}</span>
@@ -1232,6 +446,7 @@ function render() {
     </div>`).join('');
   document.getElementById('demo-count').textContent = items.length + ' items';
 }
+
 function chg(i, d) { items[i].qty = Math.max(1, items[i].qty + d); render(); }
 function demoOrderAll() { items.forEach((it, i) => setTimeout(() => window.open('https://www.walmart.com/search?q=' + encodeURIComponent(it.q), '_blank'), i * 400)); }
 render();

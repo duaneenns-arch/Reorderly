@@ -22,7 +22,7 @@ const LANG = {
     recentActivity: 'Recent activity',
     noRecentActivity: 'No recent activity yet — scan your first item to get started',
     inYourList: 'In your list',
-    affiliateDisclosure: 'ReOrderly may earn a commission on purchases made through links to Walmart.com. As a Walmart affiliate, we earn from qualifying purchases.',
+    affiliateDisclosure: 'ReOrderly may earn a commission from qualifying purchases through retailer links if accepted into affiliate programs. This does not affect the price you pay.',
     btnAbout: 'About',
     btnGoToApp: 'Go to App',
 
@@ -381,7 +381,7 @@ const LANG = {
     recentActivity: 'Actividad reciente',
     noRecentActivity: 'Sin actividad reciente — escanea tu primer artículo',
     inYourList: 'En tu lista',
-    affiliateDisclosure: 'ReOrderly puede ganar una comisión por compras realizadas a través de enlaces a Walmart.com. Como afiliado de Walmart, ganamos por compras calificadas.',
+    affiliateDisclosure: 'ReOrderly puede ganar una comisión por compras calificadas a través de enlaces de minoristas si es aceptado en programas de afiliados. Esto no afecta el precio que pagas.',
     btnAbout: 'Acerca de',
     btnGoToApp: 'Ir a la App',
 
