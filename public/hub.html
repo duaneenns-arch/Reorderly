@@ -1336,7 +1336,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
   </div>
   <div class="hmenu-item" onclick="showAbout();closeHMenu()">
     <div class="hmenu-ico">ℹ️</div>
-    <div><div class="hmenu-label" data-i18n="hubAbout">About ReOrderly</div><div class="hmenu-sub">v3.1 · Walmart affiliate</div></div>
+    <div><div class="hmenu-label" data-i18n="hubAbout">About ReOrderly</div><div class="hmenu-sub">v3.1 · reorderlysolutions.com</div></div>
   </div>
   <div class="hmenu-divider"></div>
   <div class="hmenu-item" onclick="toggleHubLanguage();closeHMenu()">
@@ -1381,9 +1381,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="about-text" data-i18n="walmartPriceNote">Product prices and availability are confirmed on Walmart.com.</div>
     <div class="about-divider"></div>
     <div class="about-links">
-      <span class="about-link" onclick="showLegal('privacy')" data-i18n="hubPrivacyPolicy">Privacy Policy</span>
+      <span class="about-link" onclick="closeAbout();showLegal('privacy')" data-i18n="hubPrivacyPolicy">Privacy Policy</span>
       <span class="about-sep">·</span>
-      <span class="about-link" onclick="showLegal('terms')" data-i18n="hubTermsOfUse">Terms of Use</span>
+      <span class="about-link" onclick="closeAbout();showLegal('terms')" data-i18n="hubTermsOfUse">Terms of Use</span>
       <span class="about-sep">·</span>
       <span class="about-link" onclick="window.open('mailto:support@reorderlysolutions.com')">Contact</span>
     </div>
