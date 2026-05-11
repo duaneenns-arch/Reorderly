@@ -267,6 +267,19 @@ const LANG = {
     catHealth: 'Health & Beauty',
     catOther: 'Other',
 
+    // ── Guest mode ──
+    guestMode: 'Guest mode',
+    guestSignIn: 'Sign in',
+    guestCreateAccount: 'Create free account',
+    guestSampleList: 'Sample list — sign in to save your own',
+    guestPromptTitle: 'Save your list across all your devices',
+    guestPromptBody: 'Create a free account to save your list, sync with your household, and access your order history from anywhere.',
+    guestPromptCreate: 'Create free account',
+    guestPromptSignIn: 'Sign in',
+    guestPromptLater: 'Continue as guest',
+    guestHubConnect: 'Sign in to connect with your household',
+    guestHubLabel: 'Guest — tap to sign in',
+
     // ── Greetings ──
     greetMorning: 'Good morning',
     greetAfternoon: 'Good afternoon',
@@ -625,6 +638,19 @@ const LANG = {
     catHousehold: 'Hogar',
     catHealth: 'Salud y Belleza',
     catOther: 'Otros',
+
+    // ── Guest mode ──
+    guestMode: 'Modo invitado',
+    guestSignIn: 'Iniciar sesión',
+    guestCreateAccount: 'Crear cuenta gratis',
+    guestSampleList: 'Lista de muestra — inicia sesión para guardar la tuya',
+    guestPromptTitle: 'Guarda tu lista en todos tus dispositivos',
+    guestPromptBody: 'Crea una cuenta gratis para guardar tu lista, sincronizar con tu hogar y acceder a tu historial desde cualquier lugar.',
+    guestPromptCreate: 'Crear cuenta gratis',
+    guestPromptSignIn: 'Iniciar sesión',
+    guestPromptLater: 'Continuar como invitado',
+    guestHubConnect: 'Inicia sesión para conectarte con tu hogar',
+    guestHubLabel: 'Invitado — toca para iniciar sesión',
 
     // ── Greetings ──
     greetMorning: 'Buenos días',

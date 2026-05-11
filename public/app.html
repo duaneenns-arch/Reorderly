@@ -511,7 +511,30 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 .list-picker-item:hover { background: var(--bg3); color: var(--green); }
 .list-picker-item:last-child { border-bottom: none; }
 
-/* ── TOAST ── */
+/* ── GUEST MODE ── */
+.guest-bar { display:none; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 8px 16px; align-items: center; justify-content: space-between; gap: 8px; }
+.guest-bar.visible { display: flex; }
+.guest-label { font-size: 12px; color: var(--text3); font-weight: 600; display:flex; align-items:center; gap:5px; }
+.guest-label::before { content:'👤'; font-size:13px; }
+.guest-btns { display:flex; gap:6px; }
+.guest-btn-signin { height:30px; padding:0 12px; background:none; border:1px solid var(--border); border-radius:8px; font-family:Syne,sans-serif; font-size:12px; font-weight:700; color:var(--text2); cursor:pointer; transition:all .15s; }
+.guest-btn-signin:hover { border-color:var(--green); color:var(--green); }
+.guest-btn-create { height:30px; padding:0 12px; background:var(--green); border:none; border-radius:8px; font-family:Syne,sans-serif; font-size:12px; font-weight:700; color:#fff; cursor:pointer; transition:background .15s; }
+.guest-btn-create:hover { background:var(--green-dark); }
+.guest-sample-label { font-size:11px; color:var(--text3); font-style:italic; text-align:center; padding:6px 0 2px; }
+
+/* Guest prompt modal */
+.guest-prompt-overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:900; display:none; align-items:center; justify-content:center; padding:1rem; }
+.guest-prompt-overlay.open { display:flex; }
+.guest-prompt-box { background:var(--bg); border-radius:20px; padding:1.75rem; max-width:340px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.2); text-align:center; }
+.guest-prompt-icon { font-size:36px; margin-bottom:12px; }
+.guest-prompt-title { font-size:17px; font-weight:800; color:var(--text); margin-bottom:8px; }
+.guest-prompt-body { font-size:13px; color:var(--text2); line-height:1.6; margin-bottom:1.5rem; }
+.guest-prompt-create { width:100%; height:46px; background:var(--green); color:#fff; border:none; border-radius:12px; font-family:Syne,sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-bottom:8px; transition:background .15s; }
+.guest-prompt-create:hover { background:var(--green-dark); }
+.guest-prompt-signin { width:100%; height:40px; background:none; border:1px solid var(--border); border-radius:12px; font-family:Syne,sans-serif; font-size:14px; font-weight:700; color:var(--text2); cursor:pointer; margin-bottom:8px; transition:all .15s; }
+.guest-prompt-signin:hover { border-color:var(--green); color:var(--green); }
+.guest-prompt-later { background:none; border:none; font-family:Syne,sans-serif; font-size:13px; color:var(--text3); cursor:pointer; padding:4px; text-decoration:underline; }
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: #fff; font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
@@ -528,6 +551,14 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- Home Screen -->
 <div class="home-screen" id="home-screen">
   <div class="home-inner">
+    <!-- Guest bar — visible only in guest mode -->
+    <div class="guest-bar" id="home-guest-bar">
+      <div class="guest-label" data-i18n="guestMode">Guest mode</div>
+      <div class="guest-btns">
+        <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
+        <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
+      </div>
+    </div>
     <div class="home-header">
       <div>
         <div class="home-greeting" id="home-greeting" data-i18n="greetMorning">Good morning</div>
@@ -745,6 +776,14 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- App -->
 <div class="app-screen" id="app-screen">
   <div class="app-inner">
+    <!-- Guest bar — visible only in guest mode -->
+    <div class="guest-bar" id="app-guest-bar">
+      <div class="guest-label" data-i18n="guestMode">Guest mode</div>
+      <div class="guest-btns">
+        <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
+        <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
+      </div>
+    </div>
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
@@ -780,6 +819,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div class="list-title" data-i18n="reorderList">Reorder list</div>
         <div class="item-count" id="item-count" style="display:none"></div>
       </div>
+      <div class="guest-sample-label" id="sample-label" style="display:none;" data-i18n="guestSampleList">Sample list — sign in to save your own</div>
       <div id="item-list">
         <div class="empty" id="empty-state">
           <div style="font-size:32px;margin-bottom:10px;opacity:.4">🛒</div>
@@ -1100,14 +1140,74 @@ function hideSplash() {
 
 setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
 
+// ── GUEST MODE ──
+let isGuestMode = false;
+
+const SAMPLE_ITEMS = [
+  { upc: 'sample-1', name: 'Tide Pods Laundry Detergent, 42 Count', price: '$13.97', image: 'https://i5.walmartimages.com/seo/Tide-Pods-Laundry-Detergent-Pacs-Original-42-Count_1.jpg', qty: 1, category: 'Household', checked: false, sample: true },
+  { upc: 'sample-2', name: 'Cheerios Original Cereal, 8.9 oz', price: '$4.48', image: 'https://i5.walmartimages.com/seo/Cheerios-Original-Gluten-Free-Breakfast-Cereal-8-9-oz_1.jpg', qty: 1, category: 'Grocery', checked: false, sample: true },
+  { upc: 'sample-3', name: 'Dawn Platinum Dish Soap, 16.2 fl oz', price: '$3.97', image: 'https://i5.walmartimages.com/seo/Dawn-Platinum-Dishwashing-Liquid-Dish-Soap-Refreshing-Rain-Scent-16-2-fl-oz_1.jpg', qty: 1, category: 'Household', checked: false, sample: true },
+  { upc: 'sample-4', name: 'Bounty Select-A-Size Paper Towels, 8 rolls', price: '$12.97', image: 'https://i5.walmartimages.com/seo/Bounty-Select-A-Size-Paper-Towels-White-8-Double-Plus-Rolls_1.jpg', qty: 1, category: 'Household', checked: false, sample: true }
+];
+
+function enterGuestMode() {
+  isGuestMode = true;
+  currentUser = null;
+  items = [...SAMPLE_ITEMS];
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('home-guest-bar').classList.add('visible');
+  document.getElementById('app-guest-bar').classList.add('visible');
+  const greetEl = document.getElementById('home-greeting');
+  const hour = new Date().getHours();
+  const timeGreet = hour < 12 ? t('greetMorning') : hour < 17 ? t('greetAfternoon') : t('greetEvening');
+  if (greetEl) greetEl.textContent = timeGreet;
+  showHomeScreen();
+  renderList();
+  updateHomeStats();
+  const sl = document.getElementById('sample-label');
+  if (sl) sl.style.display = 'block';
+}
+
+function exitGuestMode() {
+  isGuestMode = false;
+  items = [];
+  document.getElementById('home-guest-bar').classList.remove('visible');
+  document.getElementById('app-guest-bar').classList.remove('visible');
+  const sl = document.getElementById('sample-label');
+  if (sl) sl.style.display = 'none';
+}
+
+window.showAuthScreen = function(mode) {
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('home-screen').classList.remove('active');
+  document.getElementById('app-screen').classList.remove('visible');
+  if (mode === 'create') {
+    window.lTab && window.lTab('up');
+  }
+};
+
+window.showGuestPrompt = function(callback) {
+  window._guestPromptCallback = callback;
+  document.getElementById('guest-prompt-overlay').classList.add('open');
+};
+
+window.closeGuestPrompt = function(continueAsGuest) {
+  document.getElementById('guest-prompt-overlay').classList.remove('open');
+  if (continueAsGuest && window._guestPromptCallback) {
+    window._guestPromptCallback();
+  }
+  window._guestPromptCallback = null;
+};
+
 onAuthStateChanged(auth, async user => {
+  try {
   authReady = true;
   hideSplash();
   if (user) {
+    exitGuestMode();
     currentUser = user;
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('drawer-user').textContent = user.email;
-    // Set greeting
     const name = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
     const greetEl = document.getElementById('home-greeting');
     const hour = new Date().getHours();
@@ -1116,18 +1216,18 @@ onAuthStateChanged(auth, async user => {
     await loadLists();
     subscribeToList(currentListId);
     subscribeToMessages();
-    // Show home screen on fresh page load
     if (!sessionStarted) {
       showHomeScreen();
     } else {
       document.getElementById('app-screen').classList.add('visible');
     }
   } else {
-    currentUser = null;
-    document.getElementById('auth-screen').style.display = 'flex';
-    document.getElementById('app-screen').classList.remove('visible');
-    if (unsubscribeList) unsubscribeList();
-    items = [];
+    // No user — enter guest mode instead of showing sign-in wall
+    enterGuestMode();
+  }
+  } catch(e) {
+    console.error('[ReOrderly Init Error]', e);
+    if(window.__showAppError) window.__showAppError(e.stack||e.message||String(e));
   }
 });
 
@@ -1416,15 +1516,16 @@ window.closeAbout = function() {
 };
 
 async function updateHomeStats() {
-  if (!currentUser) return;
-  // Items in current list
   document.getElementById('home-stat-items').textContent = items.length || 0;
-  // Recipes count
+  if (!currentUser) {
+    document.getElementById('home-stat-recipes').textContent = '0';
+    document.getElementById('home-stat-orders').textContent = '0';
+    return;
+  }
   try {
     const snap = await getDocs(collection(db, 'users', currentUser.uid, 'recipes'));
     document.getElementById('home-stat-recipes').textContent = snap.size || 0;
   } catch(e) { document.getElementById('home-stat-recipes').textContent = '0'; }
-  // Orders count
   try {
     const snap = await getDocs(collection(db, 'users', currentUser.uid, 'history'));
     document.getElementById('home-stat-orders').textContent = snap.size || 0;
@@ -1698,19 +1799,34 @@ window.handleScan = async function() {
   const upcInput=document.getElementById('upc-input');
   const upc=upcInput.value.trim().replace(/\D/g,'');
   if (!upc) return;
-  // Clear input value (works even when readonly by temporarily removing the attribute)
   const wasReadonly = upcInput.hasAttribute('readonly');
   if (wasReadonly) upcInput.removeAttribute('readonly');
   upcInput.value='';
   if (wasReadonly) upcInput.setAttribute('readonly','readonly');
   const existing=items.find(i=>i.upc===upc);
-  if (existing) { existing.qty++; await saveList(); setStatus(t('statusQtyUpdated'),'success'); upcInput.focus(); return; }
+  if (existing) {
+    existing.qty++;
+    if (!isGuestMode) await saveList();
+    setStatus(t('statusQtyUpdated'),'success');
+    upcInput.focus();
+    return;
+  }
   setStatus(t('statusSearching'),'loading');
   document.getElementById('add-btn').disabled=true;
   const result=await lookupProduct(upc);
   if (result) {
-    items.push({upc,...result,qty:1,category:getCategory(result.name)});
-    await saveList(); setStatus(t('statusFound')+result.name.substring(0,45),'success'); showToast(t('toastAddedToList'));
+    const addItem = async () => {
+      items.push({upc,...result,qty:1,category:getCategory(result.name)});
+      if (!isGuestMode) await saveList();
+      renderList(); updateHomeStats();
+      setStatus(t('statusFound')+result.name.substring(0,45),'success');
+      showToast(t('toastAddedToList'));
+    };
+    if (isGuestMode) {
+      window.showGuestPrompt(addItem);
+    } else {
+      await addItem();
+    }
   } else setStatus(t('statusNotFound'),'error');
   document.getElementById('add-btn').disabled=false; upcInput.focus();
 };
@@ -1808,7 +1924,7 @@ window.clearList = async function() { items=[]; await saveList(); setStatus(t('s
 
 window.orderAllOnWalmart = async function() {
   if (!items.length) return;
-  await saveToHistory();
+  if (!isGuestMode) await saveToHistory();
   items.forEach((item,i)=>setTimeout(()=>window.open(item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`,'_blank'),i*400));
   showToast(t('toastOpeningWalmart'));
 };
@@ -2706,6 +2822,18 @@ applyLang();
       </div>
       <div style="text-align:center;font-size:12px;color:rgba(255,255,255,.28);" data-i18n="stationConnectLearn">Don't have a Station yet? Visit <strong style="color:rgba(255,255,255,.5);">reorderlysolutions.com</strong> to learn more.</div>
     </div>
+  </div>
+</div>
+
+<!-- Guest Prompt Modal -->
+<div class="guest-prompt-overlay" id="guest-prompt-overlay">
+  <div class="guest-prompt-box">
+    <div class="guest-prompt-icon">🔒</div>
+    <div class="guest-prompt-title" data-i18n="guestPromptTitle">Save your list across all your devices</div>
+    <div class="guest-prompt-body" data-i18n="guestPromptBody">Create a free account to save your list, sync with your household, and access your order history from anywhere.</div>
+    <button class="guest-prompt-create" onclick="closeGuestPrompt(); showAuthScreen('create');" data-i18n="guestPromptCreate">Create free account</button>
+    <button class="guest-prompt-signin" onclick="closeGuestPrompt(); showAuthScreen();" data-i18n="guestPromptSignIn">Sign in</button>
+    <button class="guest-prompt-later" onclick="closeGuestPrompt(true)" data-i18n="guestPromptLater">Continue as guest</button>
   </div>
 </div>
 
