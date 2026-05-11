@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" id="html-root">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,9 +19,6 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text
 nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; background: rgba(245,244,239,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
 .nav-logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; text-decoration: none; }
 .nav-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
-.nav-right { display: flex; align-items: center; gap: 10px; }
-.nav-lang { background: none; border: 1px solid var(--border); font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 10px; cursor: pointer; color: var(--text2); transition: all .15s; }
-.nav-lang:hover { border-color: var(--green); color: var(--green); }
 .nav-cta { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: background .15s; text-decoration: none; }
 .nav-cta:hover { background: var(--green-dark); }
 
@@ -55,260 +52,102 @@ footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: 
 
 <nav>
   <a href="/" class="nav-logo">ReOrderly<span class="nav-dot"></span></a>
-  <div class="nav-right">
-    <button class="nav-lang" id="lang-btn" onclick="toggleLang()">🇪🇸 Español</button>
-    <a href="/app.html" class="nav-cta" id="nav-cta-btn">Get started free</a>
-  </div>
+  <a href="/app.html" class="nav-cta">Get started free</a>
 </nav>
 
 <div class="page-wrap">
-  <div class="page-eyebrow" id="eyebrow">Legal</div>
-  <h1 class="page-title" id="page-title">Terms of Use</h1>
-  <div class="page-date" id="page-date">Last updated: May 3, 2026</div>
+  <div class="page-eyebrow">Legal</div>
+  <h1 class="page-title">Terms of Use</h1>
+  <div class="page-date">Last updated: May 3, 2026</div>
 
   <div class="highlight-box">
-    <p id="highlight-text">By using ReOrderly, you agree to these terms. ReOrderly is currently in beta testing. Please read these terms carefully before using the service.</p>
+    <p>By using ReOrderly, you agree to these terms. ReOrderly is currently in beta testing. Please read these terms carefully before using the service.</p>
   </div>
 
   <div class="section">
-    <h2 id="s1-title">1. About ReOrderly</h2>
-    <p id="s1-p1">ReOrderly is an independent household shopping and reordering application available at reorderlysolutions.com. ReOrderly helps users scan product barcodes, build reorder lists, and open matching Walmart product pages when ready to shop.</p>
-    <p id="s1-p2">ReOrderly is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc. All purchases are completed directly on Walmart.com. ReOrderly is not a Walmart service.</p>
+    <h2>1. About ReOrderly</h2>
+    <p>ReOrderly is an independent household shopping and reordering application available at reorderlysolutions.com. ReOrderly helps users scan product barcodes, build reorder lists, and open matching Walmart product pages when ready to shop.</p>
+    <p>ReOrderly is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc. All purchases are completed directly on Walmart.com. ReOrderly is not a Walmart service.</p>
   </div>
 
   <div class="section">
-    <h2 id="s2-title">2. Beta Testing</h2>
-    <p id="s2-p1">ReOrderly is currently in beta testing. This means:</p>
+    <h2>2. Beta Testing</h2>
+    <p>ReOrderly is currently in beta testing. This means:</p>
     <ul>
-      <li id="s2-l1">The service may be updated, changed, or interrupted at any time.</li>
-      <li id="s2-l2">Product matches may not always be accurate or complete.</li>
-      <li id="s2-l3">Prices and availability shown are for reference only and are confirmed on Walmart.com.</li>
-      <li id="s2-l4">Features may be added, modified, or removed without notice.</li>
-      <li id="s2-l5">We appreciate your feedback to help improve the service.</li>
+      <li>The service may be updated, changed, or interrupted at any time.</li>
+      <li>Product matches may not always be accurate or complete.</li>
+      <li>Prices and availability shown are for reference only and are confirmed on Walmart.com.</li>
+      <li>Features may be added, modified, or removed without notice.</li>
+      <li>We appreciate your feedback to help improve the service.</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2 id="s3-title">3. Your Account</h2>
-    <p id="s3-p1">To use ReOrderly, you must create an account using a valid email address or Google account. You are responsible for keeping your account credentials secure. You may not share your account with others or use another person's account without permission.</p>
-    <p id="s3-p2">You can delete your account at any time by contacting <a href="mailto:support@reorderlysolutions.com">support@reorderlysolutions.com</a>.</p>
+    <h2>3. Your Account</h2>
+    <p>To use ReOrderly, you must create an account using a valid email address or Google account. You are responsible for keeping your account credentials secure. You may not share your account with others or use another person's account without permission.</p>
+    <p>You can delete your account at any time by contacting <a href="mailto:support@reorderlysolutions.com">support@reorderlysolutions.com</a>.</p>
   </div>
 
   <div class="section">
-    <h2 id="s4-title">4. Acceptable Use</h2>
-    <p id="s4-p1">When using ReOrderly, you agree not to:</p>
+    <h2>4. Acceptable Use</h2>
+    <p>When using ReOrderly, you agree not to:</p>
     <ul>
-      <li id="s4-l1">Use the service for any unlawful purpose.</li>
-      <li id="s4-l2">Attempt to access other users' accounts or data.</li>
-      <li id="s4-l3">Reverse engineer, copy, or redistribute the ReOrderly software.</li>
-      <li id="s4-l4">Use automated tools to scrape or extract data from the service.</li>
-      <li id="s4-l5">Interfere with or disrupt the service or servers.</li>
+      <li>Use the service for any unlawful purpose.</li>
+      <li>Attempt to access other users' accounts or data.</li>
+      <li>Reverse engineer, copy, or redistribute the ReOrderly software.</li>
+      <li>Use automated tools to scrape or extract data from the service.</li>
+      <li>Interfere with or disrupt the service or servers.</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2 id="s5-title">5. Walmart Affiliate Disclosure</h2>
-    <p id="s5-p1">ReOrderly participates in the Walmart affiliate program through Impact Radius. When you click on Walmart product links in ReOrderly, Walmart may place cookies on your browser. ReOrderly may earn a commission on qualifying purchases at no additional cost to you.</p>
-    <p id="s5-p2">ReOrderly does not guarantee the accuracy of product matches, prices, or availability shown. Product information may be provided by third-party lookup services and Walmart product pages. Always verify final product details, pricing, and availability on Walmart.com before purchasing.</p>
+    <h2>5. Walmart Affiliate Disclosure</h2>
+    <p>ReOrderly has applied to participate in the Walmart affiliate program. If accepted, when you click on Walmart product links in ReOrderly, Walmart may place cookies on your browser. ReOrderly may earn a commission on qualifying purchases at no additional cost to you.</p>
+    <p>ReOrderly does not guarantee the accuracy of product matches, prices, or availability shown. Product information may be provided by third-party lookup services and Walmart product pages. Always verify final product details, pricing, and availability on Walmart.com before purchasing.</p>
   </div>
 
   <div class="section">
-    <h2 id="s6-title">6. Product Matching Disclaimer</h2>
-    <p id="s6-p1">ReOrderly uses barcode scanning and product lookup services to match items to Walmart product listings. We do not guarantee that every product scan will result in a correct match. Product matches, prices, images, and availability may vary by Walmart location and product listing. Always verify product details on Walmart.com before purchasing.</p>
+    <h2>6. Product Matching Disclaimer</h2>
+    <p>ReOrderly uses barcode scanning and product lookup services to match items to Walmart product listings. We do not guarantee that every product scan will result in a correct match. Product matches, prices, images, and availability may vary by Walmart location and product listing. Always verify product details on Walmart.com before purchasing.</p>
   </div>
 
   <div class="section">
-    <h2 id="s7-title">7. Intellectual Property</h2>
-    <p id="s7-p1">The ReOrderly name, logo, and app design are the property of ReOrderly. You may not use ReOrderly branding without written permission. Walmart product names, images, and trademarks are the property of Walmart Inc. and are used in accordance with Walmart's affiliate program terms.</p>
+    <h2>7. Intellectual Property</h2>
+    <p>The ReOrderly name, logo, and app design are the property of ReOrderly. You may not use ReOrderly branding without written permission. Walmart product names, images, and trademarks are the property of Walmart Inc. and are used for product identification purposes only.</p>
   </div>
 
   <div class="section">
-    <h2 id="s8-title">8. Disclaimer of Warranties</h2>
-    <p id="s8-p1">ReOrderly is provided "as is" without warranty of any kind. We do not warrant that the service will be uninterrupted, error-free, or that product information will always be accurate. Your use of the service is at your own risk.</p>
+    <h2>8. Disclaimer of Warranties</h2>
+    <p>ReOrderly is provided "as is" without warranty of any kind. We do not warrant that the service will be uninterrupted, error-free, or that product information will always be accurate. Your use of the service is at your own risk.</p>
   </div>
 
   <div class="section">
-    <h2 id="s9-title">9. Limitation of Liability</h2>
-    <p id="s9-p1">To the maximum extent permitted by law, ReOrderly shall not be liable for any indirect, incidental, or consequential damages arising from your use of the service, including but not limited to incorrect product matches, pricing errors, or any purchases made on Walmart.com.</p>
+    <h2>9. Limitation of Liability</h2>
+    <p>To the maximum extent permitted by law, ReOrderly shall not be liable for any indirect, incidental, or consequential damages arising from your use of the service, including but not limited to incorrect product matches, pricing errors, or any purchases made on Walmart.com.</p>
   </div>
 
   <div class="section">
-    <h2 id="s10-title">10. Changes to These Terms</h2>
-    <p id="s10-p1">We may update these Terms of Use from time to time. We will post the updated terms on this page with a new "Last updated" date. Continued use of ReOrderly after changes constitutes acceptance of the updated terms.</p>
+    <h2>10. Changes to These Terms</h2>
+    <p>We may update these Terms of Use from time to time. We will post the updated terms on this page with a new "Last updated" date. Continued use of ReOrderly after changes constitutes acceptance of the updated terms.</p>
   </div>
 
   <div class="section">
-    <h2 id="s11-title">11. Contact</h2>
-    <p id="s11-p1">If you have questions about these Terms of Use, please contact us at <a href="mailto:support@reorderlysolutions.com">support@reorderlysolutions.com</a>.</p>
+    <h2>11. Contact</h2>
+    <p>If you have questions about these Terms of Use, please contact us at <a href="mailto:support@reorderlysolutions.com">support@reorderlysolutions.com</a>.</p>
   </div>
 </div>
 
 <footer>
   <div class="ft-logo">ReOrderly<span class="ft-dot"></span></div>
-  <p class="ft-disc" id="ft-disc">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc.</p>
+  <p class="ft-disc">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc.</p>
   <div class="ft-links">
-    <a href="/" class="ft-link" id="ft-home">Home</a>
-    <a href="/app.html" class="ft-link" id="ft-start">Get started</a>
-    <a href="/privacy.html" class="ft-link" id="ft-privacy">Privacy Policy</a>
-    <a href="/terms.html" class="ft-link" id="ft-terms">Terms of Use</a>
-    <a href="mailto:support@reorderlysolutions.com" class="ft-link" id="ft-contact">Contact</a>
+    <a href="/" class="ft-link">Home</a>
+    <a href="/app.html" class="ft-link">Get started</a>
+    <a href="/privacy.html" class="ft-link">Privacy Policy</a>
+    <a href="/terms.html" class="ft-link">Terms of Use</a>
+    <a href="mailto:support@reorderlysolutions.com" class="ft-link">Contact</a>
   </div>
 </footer>
 
-<script>
-const CONTENT = {
-  en: {
-    pageTitle: 'Terms of Use — ReOrderly',
-    langBtn: '🇪🇸 Español',
-    navCta: 'Get started free',
-    eyebrow: 'Legal',
-    title: 'Terms of Use',
-    date: 'Last updated: May 3, 2026',
-    highlight: 'By using ReOrderly, you agree to these terms. ReOrderly is currently in beta testing. Please read these terms carefully before using the service.',
-    s1Title: '1. About ReOrderly',
-    s1p1: 'ReOrderly is an independent household shopping and reordering application available at reorderlysolutions.com. ReOrderly helps users scan product barcodes, build reorder lists, and open matching Walmart product pages when ready to shop.',
-    s1p2: 'ReOrderly is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc. All purchases are completed directly on Walmart.com. ReOrderly is not a Walmart service.',
-    s2Title: '2. Beta Testing',
-    s2p1: 'ReOrderly is currently in beta testing. This means:',
-    s2l1: 'The service may be updated, changed, or interrupted at any time.',
-    s2l2: 'Product matches may not always be accurate or complete.',
-    s2l3: 'Prices and availability shown are for reference only and are confirmed on Walmart.com.',
-    s2l4: 'Features may be added, modified, or removed without notice.',
-    s2l5: 'We appreciate your feedback to help improve the service.',
-    s3Title: '3. Your Account',
-    s3p1: 'To use ReOrderly, you must create an account using a valid email address or Google account. You are responsible for keeping your account credentials secure. You may not share your account with others or use another person\'s account without permission.',
-    s3p2: 'You can delete your account at any time by contacting ',
-    s4Title: '4. Acceptable Use',
-    s4p1: 'When using ReOrderly, you agree not to:',
-    s4l1: 'Use the service for any unlawful purpose.',
-    s4l2: 'Attempt to access other users\' accounts or data.',
-    s4l3: 'Reverse engineer, copy, or redistribute the ReOrderly software.',
-    s4l4: 'Use automated tools to scrape or extract data from the service.',
-    s4l5: 'Interfere with or disrupt the service or servers.',
-    s5Title: '5. Walmart Affiliate Disclosure',
-    s5p1: 'ReOrderly participates in the Walmart affiliate program through Impact Radius. When you click on Walmart product links in ReOrderly, Walmart may place cookies on your browser. ReOrderly may earn a commission on qualifying purchases at no additional cost to you.',
-    s5p2: 'ReOrderly does not guarantee the accuracy of product matches, prices, or availability shown. Product information may be provided by third-party lookup services and Walmart product pages. Always verify final product details, pricing, and availability on Walmart.com before purchasing.',
-    s6Title: '6. Product Matching Disclaimer',
-    s6p1: 'ReOrderly uses barcode scanning and product lookup services to match items to Walmart product listings. We do not guarantee that every product scan will result in a correct match. Product matches, prices, images, and availability may vary by Walmart location and product listing. Always verify product details on Walmart.com before purchasing.',
-    s7Title: '7. Intellectual Property',
-    s7p1: 'The ReOrderly name, logo, and app design are the property of ReOrderly. You may not use ReOrderly branding without written permission. Walmart product names, images, and trademarks are the property of Walmart Inc. and are used in accordance with Walmart\'s affiliate program terms.',
-    s8Title: '8. Disclaimer of Warranties',
-    s8p1: 'ReOrderly is provided "as is" without warranty of any kind. We do not warrant that the service will be uninterrupted, error-free, or that product information will always be accurate. Your use of the service is at your own risk.',
-    s9Title: '9. Limitation of Liability',
-    s9p1: 'To the maximum extent permitted by law, ReOrderly shall not be liable for any indirect, incidental, or consequential damages arising from your use of the service, including but not limited to incorrect product matches, pricing errors, or any purchases made on Walmart.com.',
-    s10Title: '10. Changes to These Terms',
-    s10p1: 'We may update these Terms of Use from time to time. We will post the updated terms on this page with a new "Last updated" date. Continued use of ReOrderly after changes constitutes acceptance of the updated terms.',
-    s11Title: '11. Contact',
-    s11p1: 'If you have questions about these Terms of Use, please contact us at ',
-    ftDisc: 'ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc.',
-    ftHome: 'Home', ftStart: 'Get started', ftPrivacy: 'Privacy Policy', ftTerms: 'Terms of Use', ftContact: 'Contact',
-  },
-  es: {
-    pageTitle: 'Términos de Uso — ReOrderly',
-    langBtn: '🇺🇸 English',
-    navCta: 'Comenzar gratis',
-    eyebrow: 'Legal',
-    title: 'Términos de Uso',
-    date: 'Última actualización: 3 de mayo de 2026',
-    highlight: 'Al usar ReOrderly, aceptas estos términos. ReOrderly se encuentra actualmente en fase beta. Por favor lee estos términos cuidadosamente antes de usar el servicio.',
-    s1Title: '1. Acerca de ReOrderly',
-    s1p1: 'ReOrderly es una aplicación independiente de compras y reabastecimiento para el hogar disponible en reorderlysolutions.com. ReOrderly ayuda a los usuarios a escanear códigos de barras de productos, crear listas de pedidos y abrir las páginas de productos de Walmart correspondientes cuando estén listos para comprar.',
-    s1p2: 'ReOrderly no es propiedad de, no es operada por, ni está oficialmente respaldada por Walmart. Walmart es una marca registrada de Walmart Inc. Todas las compras se realizan directamente en Walmart.com. ReOrderly no es un servicio de Walmart.',
-    s2Title: '2. Prueba Beta',
-    s2p1: 'ReOrderly se encuentra actualmente en prueba beta. Esto significa:',
-    s2l1: 'El servicio puede ser actualizado, cambiado o interrumpido en cualquier momento.',
-    s2l2: 'Las coincidencias de productos pueden no ser siempre precisas o completas.',
-    s2l3: 'Los precios y la disponibilidad mostrados son solo de referencia y se confirman en Walmart.com.',
-    s2l4: 'Las funciones pueden añadirse, modificarse o eliminarse sin previo aviso.',
-    s2l5: 'Agradecemos tus comentarios para ayudar a mejorar el servicio.',
-    s3Title: '3. Tu Cuenta',
-    s3p1: 'Para usar ReOrderly, debes crear una cuenta con una dirección de correo electrónico válida o una cuenta de Google. Eres responsable de mantener seguras tus credenciales de cuenta. No puedes compartir tu cuenta con otros ni usar la cuenta de otra persona sin permiso.',
-    s3p2: 'Puedes eliminar tu cuenta en cualquier momento contactando a ',
-    s4Title: '4. Uso Aceptable',
-    s4p1: 'Al usar ReOrderly, aceptas no:',
-    s4l1: 'Usar el servicio para ningún propósito ilegal.',
-    s4l2: 'Intentar acceder a las cuentas o datos de otros usuarios.',
-    s4l3: 'Realizar ingeniería inversa, copiar o redistribuir el software de ReOrderly.',
-    s4l4: 'Usar herramientas automatizadas para extraer datos del servicio.',
-    s4l5: 'Interferir con o interrumpir el servicio o los servidores.',
-    s5Title: '5. Divulgación de Afiliados de Walmart',
-    s5p1: 'ReOrderly participa en el programa de afiliados de Walmart a través de Impact Radius. Cuando haces clic en los enlaces de productos de Walmart en ReOrderly, Walmart puede colocar cookies en tu navegador. ReOrderly puede ganar una comisión por compras calificadas sin costo adicional para ti.',
-    s5p2: 'ReOrderly no garantiza la precisión de las coincidencias de productos, precios o disponibilidad mostrados. La información del producto puede ser proporcionada por servicios de búsqueda de terceros y páginas de productos de Walmart. Siempre verifica los detalles finales del producto, precios y disponibilidad en Walmart.com antes de comprar.',
-    s6Title: '6. Aviso sobre Coincidencia de Productos',
-    s6p1: 'ReOrderly utiliza escaneo de códigos de barras y servicios de búsqueda de productos para hacer coincidir artículos con los listados de productos de Walmart. No garantizamos que cada escaneo de producto resulte en una coincidencia correcta. Las coincidencias, precios, imágenes y disponibilidad pueden variar según la ubicación de Walmart y el listado del producto. Siempre verifica los detalles del producto en Walmart.com antes de comprar.',
-    s7Title: '7. Propiedad Intelectual',
-    s7p1: 'El nombre, logo y diseño de la app de ReOrderly son propiedad de ReOrderly. No puedes usar la marca de ReOrderly sin permiso escrito. Los nombres de productos, imágenes y marcas registradas de Walmart son propiedad de Walmart Inc. y se usan de acuerdo con los términos del programa de afiliados de Walmart.',
-    s8Title: '8. Renuncia de Garantías',
-    s8p1: 'ReOrderly se proporciona "tal cual" sin garantía de ningún tipo. No garantizamos que el servicio sea ininterrumpido, libre de errores, o que la información del producto sea siempre precisa. El uso del servicio es bajo tu propio riesgo.',
-    s9Title: '9. Limitación de Responsabilidad',
-    s9p1: 'En la máxima medida permitida por la ley, ReOrderly no será responsable de ningún daño indirecto, incidental o consecuente que surja del uso del servicio, incluyendo pero no limitado a coincidencias de productos incorrectas, errores de precios o cualquier compra realizada en Walmart.com.',
-    s10Title: '10. Cambios a Estos Términos',
-    s10p1: 'Podemos actualizar estos Términos de Uso de vez en cuando. Publicaremos los términos actualizados en esta página con una nueva fecha de "Última actualización". El uso continuado de ReOrderly después de los cambios constituye la aceptación de los términos actualizados.',
-    s11Title: '11. Contacto',
-    s11p1: 'Si tienes preguntas sobre estos Términos de Uso, contáctanos en ',
-    ftDisc: 'ReOrderly es una app independiente y no es propiedad de, no es operada por, ni está oficialmente respaldada por Walmart. Walmart es una marca registrada de Walmart Inc.',
-    ftHome: 'Inicio', ftStart: 'Comenzar', ftPrivacy: 'Política de Privacidad', ftTerms: 'Términos de Uso', ftContact: 'Contacto',
-  }
-};
-
-let lang = localStorage.getItem('reorderly_lang') || 'en';
-
-function applyLang() {
-  const c = CONTENT[lang];
-  document.getElementById('html-root').lang = lang;
-  document.title = c.pageTitle;
-  document.getElementById('lang-btn').textContent = c.langBtn;
-  document.getElementById('nav-cta-btn').textContent = c.navCta;
-  document.getElementById('eyebrow').textContent = c.eyebrow;
-  document.getElementById('page-title').textContent = c.title;
-  document.getElementById('page-date').textContent = c.date;
-  document.getElementById('highlight-text').textContent = c.highlight;
-  document.getElementById('s1-title').textContent = c.s1Title;
-  document.getElementById('s1-p1').textContent = c.s1p1;
-  document.getElementById('s1-p2').textContent = c.s1p2;
-  document.getElementById('s2-title').textContent = c.s2Title;
-  document.getElementById('s2-p1').textContent = c.s2p1;
-  document.getElementById('s2-l1').textContent = c.s2l1; document.getElementById('s2-l2').textContent = c.s2l2;
-  document.getElementById('s2-l3').textContent = c.s2l3; document.getElementById('s2-l4').textContent = c.s2l4;
-  document.getElementById('s2-l5').textContent = c.s2l5;
-  document.getElementById('s3-title').textContent = c.s3Title;
-  document.getElementById('s3-p1').textContent = c.s3p1;
-  document.getElementById('s3-p2').innerHTML = c.s3p2 + '<a href="mailto:support@reorderlysolutions.com">support@reorderlysolutions.com</a>.';
-  document.getElementById('s4-title').textContent = c.s4Title;
-  document.getElementById('s4-p1').textContent = c.s4p1;
-  document.getElementById('s4-l1').textContent = c.s4l1; document.getElementById('s4-l2').textContent = c.s4l2;
-  document.getElementById('s4-l3').textContent = c.s4l3; document.getElementById('s4-l4').textContent = c.s4l4;
-  document.getElementById('s4-l5').textContent = c.s4l5;
-  document.getElementById('s5-title').textContent = c.s5Title;
-  document.getElementById('s5-p1').textContent = c.s5p1;
-  document.getElementById('s5-p2').textContent = c.s5p2;
-  document.getElementById('s6-title').textContent = c.s6Title;
-  document.getElementById('s6-p1').textContent = c.s6p1;
-  document.getElementById('s7-title').textContent = c.s7Title;
-  document.getElementById('s7-p1').textContent = c.s7p1;
-  document.getElementById('s8-title').textContent = c.s8Title;
-  document.getElementById('s8-p1').textContent = c.s8p1;
-  document.getElementById('s9-title').textContent = c.s9Title;
-  document.getElementById('s9-p1').textContent = c.s9p1;
-  document.getElementById('s10-title').textContent = c.s10Title;
-  document.getElementById('s10-p1').textContent = c.s10p1;
-  document.getElementById('s11-title').textContent = c.s11Title;
-  document.getElementById('s11-p1').innerHTML = c.s11p1 + '<a href="mailto:support@reorderlysolutions.com">support@reorderlysolutions.com</a>.';
-  document.getElementById('ft-disc').textContent = c.ftDisc;
-  document.getElementById('ft-home').textContent = c.ftHome;
-  document.getElementById('ft-start').textContent = c.ftStart;
-  document.getElementById('ft-privacy').textContent = c.ftPrivacy;
-  document.getElementById('ft-terms').textContent = c.ftTerms;
-  document.getElementById('ft-contact').textContent = c.ftContact;
-}
-
-function toggleLang() {
-  lang = lang === 'en' ? 'es' : 'en';
-  localStorage.setItem('reorderly_lang', lang);
-  applyLang();
-}
-
-applyLang();
-</script>
 </body>
 </html>

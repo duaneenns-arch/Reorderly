@@ -13,7 +13,6 @@
 <meta name="apple-mobile-web-app-title" content="ReOrderly">
 <link rel="apple-touch-icon" href="/icon.png">
 <link rel="icon" type="image/png" href="/icon.png">
-<script src="/lang.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -62,36 +61,9 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 .home-version { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-left: 6px; vertical-align: middle; }
 .home-tagline { font-size: 11px; color: var(--text3); margin-top: 2px; font-style: italic; }
 .home-benefit { font-size: 13px; color: var(--text2); font-weight: 600; margin-bottom: 1.25rem; line-height: 1.4; }
-/* Station card — dark hub theme */
-.home-card.station {
-  background: #0d0f0e;
-  border-color: rgba(29,158,117,.35);
-  box-shadow: 0 4px 24px rgba(29,158,117,.08), 0 0 0 0 transparent;
-  position: relative;
-  overflow: hidden;
-}
-.home-card.station::before {
-  content: '';
-  position: absolute;
-  top: -40%; right: -20%;
-  width: 200px; height: 200px;
-  background: radial-gradient(ellipse at center, rgba(29,158,117,.14) 0%, transparent 65%);
-  pointer-events: none;
-}
-.home-card.station:hover { border-color: rgba(29,158,117,.65); box-shadow: 0 4px 28px rgba(29,158,117,.15); }
-.home-card.station .home-card-icon { background: rgba(29,158,117,.15); position: relative; }
-.home-card.station .home-card-title { color: #fff; }
-.home-card.station .home-card-sub { color: rgba(255,255,255,.45); }
-.home-card.station .home-card-arrow { color: rgba(255,255,255,.3); }
-/* pulsing live dot on station card */
-.station-live-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 6px var(--green);
-  animation: livePulse 2.5s ease-in-out infinite;
-  position: absolute; top: 6px; right: 6px;
-  flex-shrink: 0;
-}
+/* Station card */
+.home-card.station { border-color: var(--green); background: var(--green-light); }
+.home-card.station .home-card-title { color: var(--green); }
 /* Message button in header */
 .msg-btn { background: none; border: 1px solid var(--border2); border-radius: 99px; padding: 5px 10px; font-size: 12px; cursor: pointer; color: var(--text2); display: flex; align-items: center; gap: 5px; font-family: 'Syne', sans-serif; font-weight: 700; transition: all .15s; position: relative; }
 .msg-btn:hover { border-color: var(--green); color: var(--green); }
@@ -254,11 +226,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 /* ── ITEMS ── */
 .item { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; overflow: hidden; animation: slideIn .2s ease; }
 @keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes livePulse {
-  0%   { transform: scale(1);   box-shadow: 0 0 0 0 rgba(29,158,117,.9), 0 0 6px var(--green); }
-  50%  { transform: scale(1.5); box-shadow: 0 0 0 6px rgba(29,158,117,0), 0 0 12px rgba(29,158,117,.8); }
-  100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(29,158,117,.9), 0 0 6px var(--green); }
-}
 .item-main { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
 .item-img { width: 50px; height: 50px; border-radius: 10px; object-fit: contain; flex-shrink: 0; border: 1px solid var(--border); background: var(--bg3); }
 .item-ph { width: 50px; height: 50px; border-radius: 10px; background: var(--bg3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); font-size: 22px; }
@@ -511,30 +478,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 .list-picker-item:hover { background: var(--bg3); color: var(--green); }
 .list-picker-item:last-child { border-bottom: none; }
 
-/* ── GUEST MODE ── */
-.guest-bar { display:none; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 8px 16px; align-items: center; justify-content: space-between; gap: 8px; }
-.guest-bar.visible { display: flex; }
-.guest-label { font-size: 12px; color: var(--text3); font-weight: 600; display:flex; align-items:center; gap:5px; }
-.guest-label::before { content:'👤'; font-size:13px; }
-.guest-btns { display:flex; gap:6px; }
-.guest-btn-signin { height:30px; padding:0 12px; background:none; border:1px solid var(--border); border-radius:8px; font-family:Syne,sans-serif; font-size:12px; font-weight:700; color:var(--text2); cursor:pointer; transition:all .15s; }
-.guest-btn-signin:hover { border-color:var(--green); color:var(--green); }
-.guest-btn-create { height:30px; padding:0 12px; background:var(--green); border:none; border-radius:8px; font-family:Syne,sans-serif; font-size:12px; font-weight:700; color:#fff; cursor:pointer; transition:background .15s; }
-.guest-btn-create:hover { background:var(--green-dark); }
-.guest-sample-label { font-size:11px; color:var(--text3); font-style:italic; text-align:center; padding:6px 0 2px; }
-
-/* Guest prompt modal */
-.guest-prompt-overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:900; display:none; align-items:center; justify-content:center; padding:1rem; }
-.guest-prompt-overlay.open { display:flex; }
-.guest-prompt-box { background:var(--bg); border-radius:20px; padding:1.75rem; max-width:340px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.2); text-align:center; }
-.guest-prompt-icon { font-size:36px; margin-bottom:12px; }
-.guest-prompt-title { font-size:17px; font-weight:800; color:var(--text); margin-bottom:8px; }
-.guest-prompt-body { font-size:13px; color:var(--text2); line-height:1.6; margin-bottom:1.5rem; }
-.guest-prompt-create { width:100%; height:46px; background:var(--green); color:#fff; border:none; border-radius:12px; font-family:Syne,sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-bottom:8px; transition:background .15s; }
-.guest-prompt-create:hover { background:var(--green-dark); }
-.guest-prompt-signin { width:100%; height:40px; background:none; border:1px solid var(--border); border-radius:12px; font-family:Syne,sans-serif; font-size:14px; font-weight:700; color:var(--text2); cursor:pointer; margin-bottom:8px; transition:all .15s; }
-.guest-prompt-signin:hover { border-color:var(--green); color:var(--green); }
-.guest-prompt-later { background:none; border:none; font-family:Syne,sans-serif; font-size:13px; color:var(--text3); cursor:pointer; padding:4px; text-decoration:underline; }
+/* ── TOAST ── */
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: #fff; font-size: 13px; font-family: 'Syne', sans-serif; padding: 11px 20px; border-radius: 99px; transition: transform .25s ease; white-space: nowrap; pointer-events: none; z-index: 999; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
@@ -551,14 +495,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- Home Screen -->
 <div class="home-screen" id="home-screen">
   <div class="home-inner">
-    <!-- Guest bar — visible only in guest mode -->
-    <div class="guest-bar" id="home-guest-bar">
-      <div class="guest-label" data-i18n="guestMode">Guest mode</div>
-      <div class="guest-btns">
-        <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
-        <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
-      </div>
-    </div>
     <div class="home-header">
       <div>
         <div class="home-greeting" id="home-greeting" data-i18n="greetMorning">Good morning</div>
@@ -596,15 +532,15 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div class="home-card-icon green">🛒</div>
         <div class="home-card-info">
           <div class="home-card-title" data-i18n="cardListTitle">My Shopping List</div>
-          <div class="home-card-sub" data-i18n="cardListSub">Scan items and review on Walmart</div>
+          <div class="home-card-sub" data-i18n="cardListSub">Scan items and order on Walmart</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div class="home-card station" onclick="showStationConnect();">
-        <div class="home-card-icon green">📺<div class="station-live-dot"></div></div>
+        <div class="home-card-icon green">📺</div>
         <div class="home-card-info">
-          <div class="home-card-title" data-i18n="cardStationTitle">My Kitchen Station</div>
-          <div class="home-card-sub" data-i18n="cardStationSub">Synced with your kitchen hub</div>
+          <div class="home-card-title" data-i18n="cardStationTitle">Connect to Station</div>
+          <div class="home-card-sub" data-i18n="cardStationSub">Sync this phone with your kitchen hub</div>
         </div>
         <svg class="home-card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
@@ -642,7 +578,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
 
     <div class="home-footer">
-      <div class="home-footer-disclosure" data-i18n="affiliateDisclosure">ReOrderly may earn a commission on purchases made through links to Walmart.com. As a Walmart affiliate, we earn from qualifying purchases.</div>
+      <div class="home-footer-disclosure" data-i18n="affiliateDisclosure">ReOrderly may earn a commission from qualifying purchases through retailer links if accepted into affiliate programs. This does not affect the price you pay.</div>
       <div class="home-footer-links">
         <button class="home-footer-link" onclick="openAbout()" data-i18n="btnAbout">About</button>
       </div>
@@ -669,11 +605,11 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
     <div class="about-section">
       <div class="about-section-title" data-i18n="aboutAffiliateTitle">Affiliate Disclosure</div>
-      <div class="about-section-body" data-i18n="aboutAffiliateBody">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
+      <div class="about-section-body" data-i18n="aboutAffiliateBody">ReOrderly has applied to participate in the Walmart affiliate program. If accepted, we may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
     </div>
     <div class="about-section">
       <div class="about-section-title" data-i18n="aboutVersionTitle">Version</div>
-      <div class="about-section-body">ReOrderly v3.1 — Built with Firebase, Netlify, and Anthropic AI.</div>
+      <div class="about-section-body">ReOrderly v2.16 — Built with Firebase, Netlify, and Anthropic AI.</div>
     </div>
     <div class="about-section">
       <div class="about-section-title">Legal</div>
@@ -721,7 +657,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="drawer-header">
     <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
-    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v3.1</div>
+    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v2.16</div>
   </div>
   <div class="drawer-item" onclick="showHomeScreen(); closeDrawer();">
     <div class="drawer-item-left">
@@ -776,14 +712,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- App -->
 <div class="app-screen" id="app-screen">
   <div class="app-inner">
-    <!-- Guest bar — visible only in guest mode -->
-    <div class="guest-bar" id="app-guest-bar">
-      <div class="guest-label" data-i18n="guestMode">Guest mode</div>
-      <div class="guest-btns">
-        <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
-        <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
-      </div>
-    </div>
     <div class="header">
       <div class="header-left">
         <button class="menu-btn" onclick="openDrawer()"><span></span><span></span><span></span></button>
@@ -819,7 +747,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         <div class="list-title" data-i18n="reorderList">Reorder list</div>
         <div class="item-count" id="item-count" style="display:none"></div>
       </div>
-      <div class="guest-sample-label" id="sample-label" style="display:none;" data-i18n="guestSampleList">Sample list — sign in to save your own</div>
       <div id="item-list">
         <div class="empty" id="empty-state">
           <div style="font-size:32px;margin-bottom:10px;opacity:.4">🛒</div>
@@ -1010,11 +937,286 @@ const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
 // ── LANGUAGE SYSTEM ──
-// Strings are loaded from /lang.js — do not add a LANG object here.
 let currentLang = localStorage.getItem('reorderly_lang') || 'en';
-window.__reorderlyLang = currentLang;
 
-function t(key) { return window.t ? window.t(key) : key; }
+const LANG = {
+  en: {
+    // Stats
+    statInList: 'In List', statRecipes: 'Recipes', statOrders: 'Orders',
+    // Home
+    homeTagline: 'Your phone companion to the kitchen Station',
+    homeBenefit: 'Scan it when it runs out. Order it when you\'re ready.',
+    // Home cards
+    cardListTitle: 'My Shopping List', cardListSub: 'Scan items and order on Walmart',
+    cardStationTitle: 'Connect to Station', cardStationSub: 'Sync this phone with your kitchen hub',
+    cardRecipeTitle: 'Recipe Book', cardRecipeSub: 'Add recipes and extract ingredients',
+    cardHistoryTitle: 'Order History', cardHistorySub: 'View and re-add past orders',
+    cardLibraryTitle: 'My Usual Items', cardLibrarySub: 'Quickly re-add things you buy often',
+    cardTodoTitle: 'To-Do List', cardTodoSub: 'Tasks synced with your Station hub',
+    // Messaging
+    msgPanelTitle: 'Message Station', msgPlaceholder: 'Send a message to the hub…', msgSend: 'Send',
+    msgFromHub: '📺 Station',
+    // Station connect
+    stationConnectTitle: 'Connect to Station', stationConnectBody: 'Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.',
+    stationConnectHow: 'How it works',
+    stationStep1: 'Scan on the hub → appears on your phone list',
+    stationStep2: 'Add a to-do on your phone → shows on the hub',
+    stationStep3: 'Send messages between phone and hub',
+    stationStep4: 'Everything syncs in real time',
+    stationConnectStatus: 'Connection Status', stationConnectLearn: 'Don\'t have a Station yet? Visit reorderlysolutions.com to learn more.',
+    stationStatusConnected: '🟢 Connected — signed in and syncing',
+    stationStatusDisconnected: '🔴 Not connected — please sign in',
+    todoPlaceholder: 'Add a task...', todoAddBtn: 'Add', todoSyncNote: 'Syncs with Station hub',
+    todoEmpty: 'No tasks yet — add one above',
+    todoDetailTitle: 'Task Detail', todoDetailTaskLabel: 'Task', todoDetailNotesLabel: 'Notes',
+    todoDetailNotesPlaceholder: 'Add notes...', todoDetailDueLabel: 'Due Date',
+    todoDetailPriorityLabel: 'Priority', priorityLow: 'Low', priorityMedium: 'Medium', priorityHigh: 'High',
+    todoDetailSave: 'Save', todoDetailDelete: 'Delete Task',
+    // Home
+    recentActivity: 'Recent activity', noRecentActivity: 'No recent activity yet — scan your first item to get started',
+    inYourList: 'In your list',
+    affiliateDisclosure: 'ReOrderly may earn a commission from qualifying purchases through retailer links if accepted into affiliate programs. This does not affect the price you pay.',
+    btnAbout: 'About', btnGoToApp: 'Go to App',
+    // About modal
+    tagline: 'Scan. List. Order. — reorderlysolutions.com', taglineShort: 'Scan. List. Order.',
+    aboutWhatTitle: 'What is ReOrderly?',
+    aboutWhatBody: 'ReOrderly is a smart household reordering app. Scan any product barcode as you run out, build your reorder list automatically, and open matching Walmart product pages when you\'re ready to shop. No more manually typing grocery lists or forgetting what you need.',
+    aboutRecipeTitle: 'Recipe Intelligence',
+    aboutRecipeBody: 'Paste any recipe URL and our AI automatically extracts all ingredients with quantities. Add them to your shopping list and open matching Walmart product pages when you\'re ready to shop. Works with AllRecipes, Food Network, and thousands of recipe sites.',
+    aboutSharingTitle: 'Household Sharing',
+    aboutSharingBody: 'Invite family members to share your list. Anyone in the household can scan items and add them — everything syncs in real time across all devices.',
+    aboutAffiliateTitle: 'Affiliate Disclosure',
+    aboutAffiliateBody: 'ReOrderly has applied to participate in the Walmart affiliate program. If accepted, we may earn a commission when you make purchases through links in this app. This does not affect the price you pay.',
+    aboutVersionTitle: 'Version', btnClose: 'Close',
+    // Auth
+    btnSignIn: 'Sign in', btnCreateAccount: 'Create account',
+    placeholderEmail: 'Email address', placeholderPassword: 'Password', placeholderConfirmPassword: 'Confirm password',
+    or: 'or', btnGoogleSignIn: 'Continue with Google', btnSignOut: 'Sign out',
+    // Auth errors
+    authFillFields: 'Please fill in all fields', authPasswordNoMatch: 'Passwords do not match',
+    authNoAccount: 'No account with that email', authWrongPassword: 'Incorrect password',
+    authEmailExists: 'Account already exists', authWeakPassword: 'Password must be 6+ characters',
+    authInvalidCred: 'Incorrect email or password', authInvalidEmail: 'Invalid email',
+    authGoogleFail: 'Google sign-in failed', authSomethingWrong: 'Something went wrong',
+    // Drawer
+    myLists: 'My Lists', newList: 'New list', recipes: 'Recipes', home: 'Home',
+    myList: 'My List',
+    recipeBook: 'Recipe book', other: 'Other', productLibrary: 'Product library',
+    orderHistory: 'Order history', shared: 'Shared',
+    // Scan / main view
+    scanLabel: 'Scan or enter barcode', scanPlaceholder: 'e.g. 078742434032',
+    btnAdd: 'Add', btnOrderAll: 'Review on Walmart', btnClear: 'Clear',
+    reorderList: 'Reorder list', emptyList: 'Scan an item to add it to your list',
+    statusReady: 'Ready — scan with your Bluetooth scanner or type a UPC',
+    statusSearching: 'Searching Walmart catalog...', statusQtyUpdated: 'Quantity updated',
+    statusNotFound: 'Product not found — try a different item',
+    statusFound: '✓ Found: ', statusItemsReady: ' items ready to order', statusItemReady: ' item ready to order',
+    toastAddedToList: 'Added to list', toastOpeningWalmart: 'Opening Walmart — order saved to history!',
+    viewOnWalmart: 'View on Walmart',
+    // History
+    btnBack: 'Back', noHistory: 'No order history yet', loading: 'Loading...',
+    historyCouldNotLoad: 'Could not load history', items: 'items', item: 'item',
+    btnReAdd: '+ Add', toastAdded: 'Added: ',
+    // Library
+    searchProducts: 'Search your scanned products...',
+    libUsual: '⭐ Usual', libAll: 'All', libGrocery: 'Grocery', libSnacks: 'Snacks',
+    libHousehold: 'Household', libHealth: 'Health', libOther: 'Other',
+    libNoUsual: 'Scan items more than once or star items to add them here',
+    libNoResults: 'No results found', libNoCategory: 'No items in this category yet',
+    libCouldNotLoad: 'Could not load library', libLoading: 'Loading...',
+    inList: '✓ In list', addItem: '+ Add',
+    addToUsual: 'Add to Usual', removeFromUsual: 'Remove from Usual',
+    // Modals
+    newListTitle: 'New list', newListSub: 'Give your list a name like "Weekly Groceries" or "Costco Run"',
+    listNamePlaceholder: 'List name', btnCancel: 'Cancel', btnCreate: 'Create',
+    deleteListTitle: 'Delete list?', btnDelete: 'Delete',
+    deleteListMsg: 'This will permanently delete the list and all its items. This cannot be undone.',
+    shareListTitle: 'Share list',
+    shareListSub: "Invite someone by their email address. They'll need a ReOrderly account to access the list.",
+    btnDone: 'Done', btnInvite: 'Invite', noMembersYet: 'No members yet',
+    btnRemove: 'Remove', memberRemoved: 'Member removed',
+    invitePleaseEnterEmail: 'Please enter an email address', inviteCantInviteSelf: "You can't invite yourself",
+    inviteAlreadyMember: 'Already a member', inviteCouldNotAdd: 'Could not add member',
+    addToListTitle: 'Add to list', addToListSub: 'Choose which list to add the selected ingredients to',
+    // List operations
+    toastListCreated: 'List created: ', toastListDeleted: 'List deleted', toastCouldNotDelete: 'Could not delete list',
+    // Camera
+    cameraTitle: 'Scan barcode', cameraHint: 'Point at any product barcode',
+    cameraStarting: 'Starting camera...', cameraReady: 'Point camera at a barcode',
+    cameraFound: '✓ Added: ', cameraNotFound: 'Product not found — try again',
+    cameraAccessDenied: 'Camera access denied — please allow camera in Settings',
+    cameraCouldNotStart: 'Could not start camera — please try again',
+    // Recipe
+    addNewRecipe: '+ Add new recipe', noRecipesSaved: 'No recipes saved yet', addFirstRecipe: 'Add your first recipe above',
+    addRecipeTitle: 'Add recipe', extractBtn: 'Extract ingredients with AI',
+    tabUrl: '🔗 URL', tabText: '📝 Text', tabPhoto: '📷 Photo',
+    urlPlaceholder: 'https://www.allrecipes.com/recipe/...',
+    urlHint: 'Paste any recipe URL from AllRecipes, Food Network, or any cooking site',
+    textPlaceholder: 'Paste or type your recipe here — ingredients, amounts, instructions...',
+    photoLabel: 'Take a photo or choose from camera roll',
+    photoSub: 'Point at a recipe card, cookbook page, or printed recipe',
+    recipeProcessing: 'Reading recipe with AI...', recipeExtracting: 'Extracting ingredients and quantities',
+    recipeUrlToast: 'Please enter a recipe URL', recipeTextToast: 'Please paste or type recipe text',
+    recipePhotoToast: 'Please take or choose a photo first',
+    recipeUrlBlocked: 'That site blocked the fetch — paste the recipe text instead',
+    recipeUrlBlockedPlaceholder: 'This site blocked automatic fetching.\n\nGo to the recipe page, select all the text (Ctrl+A), copy it (Ctrl+C), then paste it here.',
+    recipeCantRead: "Couldn't read that recipe", recipeCheckConnection: 'Check your connection and try again',
+    recipeTryText: 'Try pasting the recipe text directly instead', btnTryAgain: 'Try again',
+    ingredients: 'ingredients', steps: 'steps', servings: 'servings',
+    notesPlaceholder: 'Add notes — substitutions, tips, what you changed...',
+    deselectAll: 'Deselect all', selectAll: 'Select all',
+    btnSaveRecipe: '💾 Save recipe', btnAddToList: '🛒 Add to list', btnShop: '🛒 Shop',
+    recipeSaved: 'Recipe saved to your book!', recipeCouldNotSave: 'Could not save recipe',
+    selectAtLeastOne: 'Please select at least one ingredient',
+    createNewListForRecipe: 'Create new list for this recipe',
+    ingredientsAddedTo: ' ingredients added to ',
+    couldNotAddIngredients: 'Could not add ingredients',
+    // Category labels
+    catGrocery: 'Grocery', catSnacks: 'Snacks', catHousehold: 'Household',
+    catHealth: 'Health & Beauty', catOther: 'Other',
+    // Greetings
+    greetMorning: 'Good morning', greetAfternoon: 'Good afternoon', greetEvening: 'Good evening',
+  },
+  es: {
+    // Stats
+    statInList: 'En Lista', statRecipes: 'Recetas', statOrders: 'Pedidos',
+    // Home
+    homeTagline: 'Tu compañero de teléfono para la Station',
+    homeBenefit: 'Escanéalo cuando se acabe. Pídelo cuando estés listo.',
+    // Home cards
+    cardListTitle: 'Mi Lista de Compras', cardListSub: 'Escanea artículos y pide en Walmart',
+    cardStationTitle: 'Conectar a Station', cardStationSub: 'Sincroniza tu teléfono con tu hub',
+    cardRecipeTitle: 'Libro de Recetas', cardRecipeSub: 'Agrega recetas y extrae ingredientes',
+    cardHistoryTitle: 'Historial de Pedidos', cardHistorySub: 'Ver y volver a agregar pedidos',
+    cardLibraryTitle: 'Mis Artículos Habituales', cardLibrarySub: 'Vuelve a agregar lo que compras seguido',
+    cardTodoTitle: 'Lista de Tareas', cardTodoSub: 'Tareas sincronizadas con tu Station',
+    // Messaging
+    msgPanelTitle: 'Mensaje a Station', msgPlaceholder: 'Enviar mensaje al hub…', msgSend: 'Enviar',
+    msgFromHub: '📺 Station',
+    // Station connect
+    stationConnectTitle: 'Conectar a Station', stationConnectBody: 'Tu teléfono y el hub se conectan automáticamente cuando ambos están en la misma cuenta de Google.',
+    stationConnectHow: 'Cómo funciona',
+    stationStep1: 'Escanear en el hub → aparece en tu lista del teléfono',
+    stationStep2: 'Agregar tarea en el teléfono → se muestra en el hub',
+    stationStep3: 'Enviar mensajes entre teléfono y hub',
+    stationStep4: 'Todo se sincroniza en tiempo real',
+    stationConnectStatus: 'Estado de Conexión', stationConnectLearn: '¿No tienes una Station? Visita reorderlysolutions.com para más información.',
+    stationStatusConnected: '🟢 Conectado — sincronizando',
+    stationStatusDisconnected: '🔴 No conectado — inicia sesión',
+    todoPlaceholder: 'Agregar tarea...', todoAddBtn: 'Agregar', todoSyncNote: 'Sincroniza con Station',
+    todoEmpty: 'Sin tareas — agrega una arriba',
+    todoDetailTitle: 'Detalle de Tarea', todoDetailTaskLabel: 'Tarea', todoDetailNotesLabel: 'Notas',
+    todoDetailNotesPlaceholder: 'Agregar notas...', todoDetailDueLabel: 'Fecha límite',
+    todoDetailPriorityLabel: 'Prioridad', priorityLow: 'Baja', priorityMedium: 'Media', priorityHigh: 'Alta',
+    todoDetailSave: 'Guardar', todoDetailDelete: 'Eliminar Tarea',
+    // Home
+    recentActivity: 'Actividad reciente', noRecentActivity: 'Sin actividad reciente — escanea tu primer artículo',
+    inYourList: 'En tu lista',
+    affiliateDisclosure: 'ReOrderly puede ganar una comisión por compras calificadas a través de enlaces de minoristas si es aceptado en programas de afiliados. Esto no afecta el precio que pagas.',
+    btnAbout: 'Acerca de', btnGoToApp: 'Ir a la App',
+    // About modal
+    tagline: 'Escanea. Lista. Pide. — reorderlysolutions.com', taglineShort: 'Escanea. Lista. Pide.',
+    aboutWhatTitle: '¿Qué es ReOrderly?',
+    aboutWhatBody: 'ReOrderly es una app inteligente para reordenar productos del hogar. Escanea el código de barras cuando se te acabe algo, crea tu lista automáticamente y envía todo a tu carrito de Walmart con un toque.',
+    aboutRecipeTitle: 'Recetas con IA',
+    aboutRecipeBody: 'Pega cualquier URL de receta y nuestra IA extrae automáticamente todos los ingredientes con cantidades. Agrégalos a tu lista y envíalos a Walmart con un toque.',
+    aboutSharingTitle: 'Compartir en el Hogar',
+    aboutSharingBody: 'Invita a los miembros de tu familia a compartir la lista. Cualquier persona puede escanear artículos — todo se sincroniza en tiempo real.',
+    aboutAffiliateTitle: 'Divulgación de Afiliados',
+    aboutAffiliateBody: 'ReOrderly participa en el programa de afiliados de Walmart. Podemos ganar una comisión cuando realizas compras a través de enlaces en esta app. Esto no afecta el precio que pagas.',
+    aboutVersionTitle: 'Versión', btnClose: 'Cerrar',
+    // Auth
+    btnSignIn: 'Iniciar sesión', btnCreateAccount: 'Crear cuenta',
+    placeholderEmail: 'Correo electrónico', placeholderPassword: 'Contraseña', placeholderConfirmPassword: 'Confirmar contraseña',
+    or: 'o', btnGoogleSignIn: 'Continuar con Google', btnSignOut: 'Cerrar sesión',
+    // Auth errors
+    authFillFields: 'Por favor completa todos los campos', authPasswordNoMatch: 'Las contraseñas no coinciden',
+    authNoAccount: 'No hay cuenta con ese correo', authWrongPassword: 'Contraseña incorrecta',
+    authEmailExists: 'La cuenta ya existe', authWeakPassword: 'La contraseña debe tener 6+ caracteres',
+    authInvalidCred: 'Correo o contraseña incorrectos', authInvalidEmail: 'Correo electrónico inválido',
+    authGoogleFail: 'Error al iniciar sesión con Google', authSomethingWrong: 'Algo salió mal',
+    // Drawer
+    myLists: 'Mis Listas', newList: 'Nueva lista', recipes: 'Recetas', home: 'Inicio',
+    myList: 'Mi Lista',
+    recipeBook: 'Libro de recetas', other: 'Otros', productLibrary: 'Biblioteca de productos',
+    orderHistory: 'Historial de pedidos', shared: 'Compartida',
+    // Scan / main view
+    scanLabel: 'Escanea o ingresa código de barras', scanPlaceholder: 'ej. 078742434032',
+    btnAdd: 'Agregar', btnOrderAll: 'Revisar en Walmart', btnClear: 'Borrar',
+    reorderList: 'Lista de pedidos', emptyList: 'Escanea un artículo para agregarlo a tu lista',
+    statusReady: 'Listo — escanea con tu lector Bluetooth o escribe un UPC',
+    statusSearching: 'Buscando en catálogo de Walmart...', statusQtyUpdated: 'Cantidad actualizada',
+    statusNotFound: 'Producto no encontrado — intenta con otro artículo',
+    statusFound: '✓ Encontrado: ', statusItemsReady: ' artículos listos para pedir', statusItemReady: ' artículo listo para pedir',
+    toastAddedToList: 'Agregado a la lista', toastOpeningWalmart: '¡Abriendo Walmart — pedido guardado en historial!',
+    viewOnWalmart: 'Ver en Walmart',
+    // History
+    btnBack: 'Atrás', noHistory: 'Sin historial de pedidos', loading: 'Cargando...',
+    historyCouldNotLoad: 'No se pudo cargar el historial', items: 'artículos', item: 'artículo',
+    btnReAdd: '+ Agregar', toastAdded: 'Agregado: ',
+    // Library
+    searchProducts: 'Buscar productos escaneados...',
+    libUsual: '⭐ Habituales', libAll: 'Todos', libGrocery: 'Comestibles', libSnacks: 'Botanas',
+    libHousehold: 'Hogar', libHealth: 'Salud', libOther: 'Otros',
+    libNoUsual: 'Escanea artículos más de una vez o márcalos con estrella para agregarlos aquí',
+    libNoResults: 'Sin resultados', libNoCategory: 'Sin artículos en esta categoría',
+    libCouldNotLoad: 'No se pudo cargar la biblioteca', libLoading: 'Cargando...',
+    inList: '✓ En lista', addItem: '+ Agregar',
+    addToUsual: 'Agregar a Habituales', removeFromUsual: 'Quitar de Habituales',
+    // Modals
+    newListTitle: 'Nueva lista', newListSub: 'Ponle un nombre como "Súper semanal" o "Costco"',
+    listNamePlaceholder: 'Nombre de la lista', btnCancel: 'Cancelar', btnCreate: 'Crear',
+    deleteListTitle: '¿Eliminar lista?', btnDelete: 'Eliminar',
+    deleteListMsg: 'Esto eliminará permanentemente la lista y todos sus artículos. Esta acción no se puede deshacer.',
+    shareListTitle: 'Compartir lista',
+    shareListSub: 'Invita a alguien con su correo electrónico. Necesitan una cuenta de ReOrderly.',
+    btnDone: 'Listo', btnInvite: 'Invitar', noMembersYet: 'Sin miembros aún',
+    btnRemove: 'Quitar', memberRemoved: 'Miembro eliminado',
+    invitePleaseEnterEmail: 'Por favor ingresa un correo electrónico', inviteCantInviteSelf: 'No puedes invitarte a ti mismo',
+    inviteAlreadyMember: 'Ya es miembro', inviteCouldNotAdd: 'No se pudo agregar al miembro',
+    addToListTitle: 'Agregar a lista', addToListSub: 'Elige a qué lista agregar los ingredientes seleccionados',
+    // List operations
+    toastListCreated: 'Lista creada: ', toastListDeleted: 'Lista eliminada', toastCouldNotDelete: 'No se pudo eliminar la lista',
+    // Camera
+    cameraTitle: 'Escanear código', cameraHint: 'Apunta a cualquier código de barras',
+    cameraStarting: 'Iniciando cámara...', cameraReady: 'Apunta la cámara al código de barras',
+    cameraFound: '✓ Agregado: ', cameraNotFound: 'Producto no encontrado — intenta de nuevo',
+    cameraAccessDenied: 'Acceso a cámara denegado — permite el acceso en Configuración',
+    cameraCouldNotStart: 'No se pudo iniciar la cámara — intenta de nuevo',
+    // Recipe
+    addNewRecipe: '+ Agregar nueva receta', noRecipesSaved: 'Sin recetas guardadas', addFirstRecipe: 'Agrega tu primera receta arriba',
+    addRecipeTitle: 'Agregar receta', extractBtn: 'Extraer ingredientes con IA',
+    tabUrl: '🔗 URL', tabText: '📝 Texto', tabPhoto: '📷 Foto',
+    urlPlaceholder: 'https://www.allrecipes.com/recipe/...',
+    urlHint: 'Pega cualquier URL de receta de AllRecipes, Food Network u otros sitios',
+    textPlaceholder: 'Pega o escribe tu receta aquí — ingredientes, cantidades, instrucciones...',
+    photoLabel: 'Toma una foto o elige de tu galería',
+    photoSub: 'Apunta a una tarjeta de receta, libro de cocina o receta impresa',
+    recipeProcessing: 'Leyendo receta con IA...', recipeExtracting: 'Extrayendo ingredientes y cantidades',
+    recipeUrlToast: 'Por favor ingresa una URL de receta', recipeTextToast: 'Por favor pega o escribe el texto de la receta',
+    recipePhotoToast: 'Por favor toma o elige una foto primero',
+    recipeUrlBlocked: 'Ese sitio bloqueó la descarga — pega el texto de la receta',
+    recipeUrlBlockedPlaceholder: 'Ese sitio bloqueó la descarga automática.\n\nVe a la página de la receta, selecciona todo el texto (Ctrl+A), cópialo (Ctrl+C) y pégalo aquí.',
+    recipeCantRead: 'No se pudo leer esa receta', recipeCheckConnection: 'Verifica tu conexión e intenta de nuevo',
+    recipeTryText: 'Intenta pegando el texto de la receta directamente', btnTryAgain: 'Intentar de nuevo',
+    ingredients: 'ingredientes', steps: 'pasos', servings: 'porciones',
+    notesPlaceholder: 'Agrega notas — sustituciones, consejos, cambios...',
+    deselectAll: 'Deseleccionar todo', selectAll: 'Seleccionar todo',
+    btnSaveRecipe: '💾 Guardar receta', btnAddToList: '🛒 Agregar a lista', btnShop: '🛒 Comprar',
+    recipeSaved: '¡Receta guardada en tu libro!', recipeCouldNotSave: 'No se pudo guardar la receta',
+    selectAtLeastOne: 'Por favor selecciona al menos un ingrediente',
+    createNewListForRecipe: 'Crear nueva lista para esta receta',
+    ingredientsAddedTo: ' ingredientes agregados a ',
+    couldNotAddIngredients: 'No se pudieron agregar los ingredientes',
+    // Category labels
+    catGrocery: 'Comestibles', catSnacks: 'Botanas', catHousehold: 'Hogar',
+    catHealth: 'Salud y Belleza', catOther: 'Otros',
+    // Greetings
+    greetMorning: 'Buenos días', greetAfternoon: 'Buenas tardes', greetEvening: 'Buenas noches',
+  }
+};
+
+function t(key) { return (LANG[currentLang] && LANG[currentLang][key]) || LANG.en[key] || key; }
 
 function applyLang() {
   // Update all data-i18n text elements
@@ -1045,7 +1247,6 @@ function applyLang() {
 window.toggleLanguage = function() {
   currentLang = currentLang === 'en' ? 'es' : 'en';
   localStorage.setItem('reorderly_lang', currentLang);
-  window.__reorderlyLang = currentLang;
   applyLang();
   // Refresh list badge with new language
   if (currentListName) updateListBadge(currentListName);
@@ -1140,74 +1341,14 @@ function hideSplash() {
 
 setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
 
-// ── GUEST MODE ──
-let isGuestMode = false;
-
-const SAMPLE_ITEMS = [
-  { upc: 'sample-1', name: 'Tide Pods Laundry Detergent, 42 Count', price: '$13.97', image: 'https://i5.walmartimages.com/seo/Tide-Pods-Laundry-Detergent-Pacs-Original-42-Count_1.jpg', qty: 1, category: 'Household', checked: false, sample: true },
-  { upc: 'sample-2', name: 'Cheerios Original Cereal, 8.9 oz', price: '$4.48', image: 'https://i5.walmartimages.com/seo/Cheerios-Original-Gluten-Free-Breakfast-Cereal-8-9-oz_1.jpg', qty: 1, category: 'Grocery', checked: false, sample: true },
-  { upc: 'sample-3', name: 'Dawn Platinum Dish Soap, 16.2 fl oz', price: '$3.97', image: 'https://i5.walmartimages.com/seo/Dawn-Platinum-Dishwashing-Liquid-Dish-Soap-Refreshing-Rain-Scent-16-2-fl-oz_1.jpg', qty: 1, category: 'Household', checked: false, sample: true },
-  { upc: 'sample-4', name: 'Bounty Select-A-Size Paper Towels, 8 rolls', price: '$12.97', image: 'https://i5.walmartimages.com/seo/Bounty-Select-A-Size-Paper-Towels-White-8-Double-Plus-Rolls_1.jpg', qty: 1, category: 'Household', checked: false, sample: true }
-];
-
-function enterGuestMode() {
-  isGuestMode = true;
-  currentUser = null;
-  items = [...SAMPLE_ITEMS];
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('home-guest-bar').classList.add('visible');
-  document.getElementById('app-guest-bar').classList.add('visible');
-  const greetEl = document.getElementById('home-greeting');
-  const hour = new Date().getHours();
-  const timeGreet = hour < 12 ? t('greetMorning') : hour < 17 ? t('greetAfternoon') : t('greetEvening');
-  if (greetEl) greetEl.textContent = timeGreet;
-  showHomeScreen();
-  renderList();
-  updateHomeStats();
-  const sl = document.getElementById('sample-label');
-  if (sl) sl.style.display = 'block';
-}
-
-function exitGuestMode() {
-  isGuestMode = false;
-  items = [];
-  document.getElementById('home-guest-bar').classList.remove('visible');
-  document.getElementById('app-guest-bar').classList.remove('visible');
-  const sl = document.getElementById('sample-label');
-  if (sl) sl.style.display = 'none';
-}
-
-window.showAuthScreen = function(mode) {
-  document.getElementById('auth-screen').style.display = 'flex';
-  document.getElementById('home-screen').classList.remove('active');
-  document.getElementById('app-screen').classList.remove('visible');
-  if (mode === 'create') {
-    window.lTab && window.lTab('up');
-  }
-};
-
-window.showGuestPrompt = function(callback) {
-  window._guestPromptCallback = callback;
-  document.getElementById('guest-prompt-overlay').classList.add('open');
-};
-
-window.closeGuestPrompt = function(continueAsGuest) {
-  document.getElementById('guest-prompt-overlay').classList.remove('open');
-  if (continueAsGuest && window._guestPromptCallback) {
-    window._guestPromptCallback();
-  }
-  window._guestPromptCallback = null;
-};
-
 onAuthStateChanged(auth, async user => {
-  try {
   authReady = true;
   hideSplash();
   if (user) {
-    exitGuestMode();
     currentUser = user;
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('drawer-user').textContent = user.email;
+    // Set greeting
     const name = user.displayName ? user.displayName.split(' ')[0] : user.email.split('@')[0];
     const greetEl = document.getElementById('home-greeting');
     const hour = new Date().getHours();
@@ -1216,18 +1357,18 @@ onAuthStateChanged(auth, async user => {
     await loadLists();
     subscribeToList(currentListId);
     subscribeToMessages();
+    // Show home screen on fresh page load
     if (!sessionStarted) {
       showHomeScreen();
     } else {
       document.getElementById('app-screen').classList.add('visible');
     }
   } else {
-    // No user — enter guest mode instead of showing sign-in wall
-    enterGuestMode();
-  }
-  } catch(e) {
-    console.error('[ReOrderly Init Error]', e);
-    if(window.__showAppError) window.__showAppError(e.stack||e.message||String(e));
+    currentUser = null;
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('app-screen').classList.remove('visible');
+    if (unsubscribeList) unsubscribeList();
+    items = [];
   }
 });
 
@@ -1516,16 +1657,15 @@ window.closeAbout = function() {
 };
 
 async function updateHomeStats() {
+  if (!currentUser) return;
+  // Items in current list
   document.getElementById('home-stat-items').textContent = items.length || 0;
-  if (!currentUser) {
-    document.getElementById('home-stat-recipes').textContent = '0';
-    document.getElementById('home-stat-orders').textContent = '0';
-    return;
-  }
+  // Recipes count
   try {
     const snap = await getDocs(collection(db, 'users', currentUser.uid, 'recipes'));
     document.getElementById('home-stat-recipes').textContent = snap.size || 0;
   } catch(e) { document.getElementById('home-stat-recipes').textContent = '0'; }
+  // Orders count
   try {
     const snap = await getDocs(collection(db, 'users', currentUser.uid, 'history'));
     document.getElementById('home-stat-orders').textContent = snap.size || 0;
@@ -1799,34 +1939,19 @@ window.handleScan = async function() {
   const upcInput=document.getElementById('upc-input');
   const upc=upcInput.value.trim().replace(/\D/g,'');
   if (!upc) return;
+  // Clear input value (works even when readonly by temporarily removing the attribute)
   const wasReadonly = upcInput.hasAttribute('readonly');
   if (wasReadonly) upcInput.removeAttribute('readonly');
   upcInput.value='';
   if (wasReadonly) upcInput.setAttribute('readonly','readonly');
   const existing=items.find(i=>i.upc===upc);
-  if (existing) {
-    existing.qty++;
-    if (!isGuestMode) await saveList();
-    setStatus(t('statusQtyUpdated'),'success');
-    upcInput.focus();
-    return;
-  }
+  if (existing) { existing.qty++; await saveList(); setStatus(t('statusQtyUpdated'),'success'); upcInput.focus(); return; }
   setStatus(t('statusSearching'),'loading');
   document.getElementById('add-btn').disabled=true;
   const result=await lookupProduct(upc);
   if (result) {
-    const addItem = async () => {
-      items.push({upc,...result,qty:1,category:getCategory(result.name)});
-      if (!isGuestMode) await saveList();
-      renderList(); updateHomeStats();
-      setStatus(t('statusFound')+result.name.substring(0,45),'success');
-      showToast(t('toastAddedToList'));
-    };
-    if (isGuestMode) {
-      window.showGuestPrompt(addItem);
-    } else {
-      await addItem();
-    }
+    items.push({upc,...result,qty:1,category:getCategory(result.name)});
+    await saveList(); setStatus(t('statusFound')+result.name.substring(0,45),'success'); showToast(t('toastAddedToList'));
   } else setStatus(t('statusNotFound'),'error');
   document.getElementById('add-btn').disabled=false; upcInput.focus();
 };
@@ -1924,7 +2049,7 @@ window.clearList = async function() { items=[]; await saveList(); setStatus(t('s
 
 window.orderAllOnWalmart = async function() {
   if (!items.length) return;
-  if (!isGuestMode) await saveToHistory();
+  await saveToHistory();
   items.forEach((item,i)=>setTimeout(()=>window.open(item.walmartUrl||`https://www.walmart.com/search?q=${encodeURIComponent(item.name)}`,'_blank'),i*400));
   showToast(t('toastOpeningWalmart'));
 };
@@ -2793,47 +2918,30 @@ applyLang();
 
 <!-- Station Connect modal -->
 <div class="about-modal" id="station-modal">
-  <div class="about-box" style="background:#0d0f0e;border:1px solid rgba(29,158,117,.25);box-shadow:0 24px 64px rgba(0,0,0,.6),0 0 60px rgba(29,158,117,.06);overflow:hidden;position:relative;">
-    <!-- subtle green glow top right -->
-    <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(ellipse at center,rgba(29,158,117,.15) 0%,transparent 65%);pointer-events:none;z-index:0;"></div>
-    <div class="about-header" style="border-bottom-color:rgba(255,255,255,.07);position:relative;z-index:1;">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:livePulse 2.5s ease-in-out infinite;flex-shrink:0;"></div>
-        <div class="about-logo" style="color:#fff;">ReOrderly<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-left:3px;vertical-align:middle;position:relative;top:-2px;"></span></div>
-      </div>
-      <button class="about-close" onclick="closeStationConnect()" style="color:rgba(255,255,255,.4);">×</button>
+  <div class="about-box">
+    <div class="about-header">
+      <div class="about-logo">ReOrderly<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-left:3px;vertical-align:middle;position:relative;top:-2px;"></span></div>
+      <button class="about-close" onclick="closeStationConnect()">×</button>
     </div>
-    <div style="padding:1.5rem;position:relative;z-index:1;">
+    <div style="padding:1.5rem;">
       <div style="font-size:32px;text-align:center;margin-bottom:12px;">📺</div>
-      <div style="font-size:18px;font-weight:800;color:#fff;text-align:center;margin-bottom:8px;" data-i18n="stationConnectTitle">My Kitchen Station</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:1.5rem;line-height:1.6;" data-i18n="stationConnectBody">Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.</div>
-      <div style="background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.25);border-radius:14px;padding:14px 16px;margin-bottom:1rem;">
+      <div style="font-size:18px;font-weight:800;color:var(--text);text-align:center;margin-bottom:8px;" data-i18n="stationConnectTitle">Connect to Station</div>
+      <div style="font-size:13px;color:var(--text2);text-align:center;margin-bottom:1.5rem;line-height:1.6;" data-i18n="stationConnectBody">Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.</div>
+      <div style="background:var(--green-light);border:1px solid var(--green);border-radius:14px;padding:14px 16px;margin-bottom:1rem;">
         <div style="font-size:12px;font-weight:800;color:var(--green);margin-bottom:4px;" data-i18n="stationConnectHow">How it works</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.7;">
+        <div style="font-size:12px;color:var(--text2);line-height:1.7;">
           ✓ <span data-i18n="stationStep1">Scan on the hub → appears on your phone list</span><br>
           ✓ <span data-i18n="stationStep2">Add a to-do on your phone → shows on the hub</span><br>
           ✓ <span data-i18n="stationStep3">Send messages between phone and hub</span><br>
           ✓ <span data-i18n="stationStep4">Everything syncs in real time</span>
         </div>
       </div>
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 16px;margin-bottom:1.5rem;">
-        <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,.6);margin-bottom:4px;" data-i18n="stationConnectStatus">Connection Status</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.4);" id="station-status-text">Checking…</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:1.5rem;">
+        <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:4px;" data-i18n="stationConnectStatus">Connection Status</div>
+        <div style="font-size:12px;color:var(--text2);" id="station-status-text">Checking…</div>
       </div>
-      <div style="text-align:center;font-size:12px;color:rgba(255,255,255,.28);" data-i18n="stationConnectLearn">Don't have a Station yet? Visit <strong style="color:rgba(255,255,255,.5);">reorderlysolutions.com</strong> to learn more.</div>
+      <div style="text-align:center;font-size:12px;color:var(--text3);" data-i18n="stationConnectLearn">Don't have a Station yet? Visit <strong>reorderlysolutions.com</strong> to learn more.</div>
     </div>
-  </div>
-</div>
-
-<!-- Guest Prompt Modal -->
-<div class="guest-prompt-overlay" id="guest-prompt-overlay">
-  <div class="guest-prompt-box">
-    <div class="guest-prompt-icon">🔒</div>
-    <div class="guest-prompt-title" data-i18n="guestPromptTitle">Save your list across all your devices</div>
-    <div class="guest-prompt-body" data-i18n="guestPromptBody">Create a free account to save your list, sync with your household, and access your order history from anywhere.</div>
-    <button class="guest-prompt-create" onclick="closeGuestPrompt(); showAuthScreen('create');" data-i18n="guestPromptCreate">Create free account</button>
-    <button class="guest-prompt-signin" onclick="closeGuestPrompt(); showAuthScreen();" data-i18n="guestPromptSignIn">Sign in</button>
-    <button class="guest-prompt-later" onclick="closeGuestPrompt(true)" data-i18n="guestPromptLater">Continue as guest</button>
   </div>
 </div>
 
