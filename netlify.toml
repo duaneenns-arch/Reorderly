@@ -16,3 +16,13 @@
   from = "/app/*"
   to = "/app.html"
   status = 200
+
+[[redirects]]
+  from = "/hub"
+  to = "/hub.html"
+  status = 200
+
+[[redirects]]
+  from = "/hub/*"
+  to = "/hub.html"
+  status = 200
