@@ -3118,8 +3118,8 @@ window.openHubMsgPanel = async () => {
     panel.innerHTML = `<div class="hub-msg-locked">
       <div class="hub-msg-locked-icon">💬</div>
       <div class="hub-msg-locked-text">${window.t('guestHubConnect')}</div>
-      <button class="hub-msg-locked-btn" onclick="closeHubMsg(); hubShowLogin();">${window.t('guestSignIn')}</button>
-      <button class="hub-guest-prompt-later" onclick="closeHubMsg()" style="margin-top:8px;">${window.t('guestPromptLater')}</button>
+      <button class="hub-msg-locked-btn" onclick="closeHubMsgPanel(); hubShowLogin();">${window.t('guestSignIn')}</button>
+      <button class="hub-guest-prompt-later" onclick="closeHubMsgPanel()" style="margin-top:8px;">${window.t('guestPromptLater')}</button>
     </div>`;
     panel.classList.add('open');
     return;
