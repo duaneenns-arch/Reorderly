@@ -21,6 +21,7 @@ document.addEventListener('touchstart', function() {
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <script src="/lang.js"></script>
+<script>if(typeof window.t!=='function')window.t=function(k){return(window.LANG&&window.LANG.en&&window.LANG.en[k])||k;};</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -1449,6 +1450,15 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     </div>
   </div>
 </div>
+
+<script>
+// Fallback if lang.js fails to load (e.g. file:// protocol or network error)
+if (typeof window.t !== 'function') {
+  window.t = function(key) {
+    return (window.LANG && window.LANG.en && window.LANG.en[key]) || key;
+  };
+}
+</script>
 
 <script>
 // Synchronous stubs — available immediately before the module loads
