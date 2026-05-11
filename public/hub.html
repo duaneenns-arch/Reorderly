@@ -2163,7 +2163,8 @@ window.orderAll=async()=>{
 // ── RECIPES ──
 async function loadRecipes(){
   const b=document.getElementById('rcp-body');
-  if(!b||!cu)return;
+  if(!b) return;
+  if(!cu){ b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">📖</div><div class="wb-tab-empty-ttl">Recipe Book</div><div class="wb-tab-empty-sub">Sign in to save and view your recipes</div><button class="hub-msg-locked-btn" onclick="hubShowLogin()" style="margin-top:12px;">'+window.t('guestSignIn')+'</button></div>'; return; }
   if(b.dataset.loaded==='1')return;
   b.innerHTML='<div class="wb-inner-loading"><div class="spinner-wb"></div></div>';
   try {
@@ -2189,7 +2190,8 @@ async function loadRecipes(){
 // ── HISTORY ──
 async function loadHistory(){
   const b=document.getElementById('hist-body');
-  if(!b||!cu)return;
+  if(!b) return;
+  if(!cu){ b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">🕐</div><div class="wb-tab-empty-ttl">Shopping History</div><div class="wb-tab-empty-sub">Sign in to view your past shopping sessions</div><button class="hub-msg-locked-btn" onclick="hubShowLogin()" style="margin-top:12px;">'+window.t('guestSignIn')+'</button></div>'; return; }
   b.innerHTML='<div class="wb-inner-loading"><div class="spinner-wb"></div></div>';
   try {
     const snap=await getDocs(collection(db,'users',cu.uid,'history'));
@@ -2216,7 +2218,8 @@ window.reAdd=async(u,n,p)=>{
 // ── LIBRARY ──
 async function loadLibrary(){
   const b=document.getElementById('lib-body');
-  if(!b||!cu)return;
+  if(!b) return;
+  if(!cu){ b.innerHTML='<div class="wb-tab-empty"><div class="wb-tab-empty-ico">📦</div><div class="wb-tab-empty-ttl">Product Library</div><div class="wb-tab-empty-sub">Sign in to access your scanned product library</div><button class="hub-msg-locked-btn" onclick="hubShowLogin()" style="margin-top:12px;">'+window.t('guestSignIn')+'</button></div>'; return; }
   const tabs=[
     {id:'usual',label:window.t('libUsual')},
     {id:'all',label:window.t('libAll')},
