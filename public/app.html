@@ -799,7 +799,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
           💬
           <div class="msg-btn-dot" id="msg-btn-dot"></div>
         </button>
-        <div class="list-badge" id="list-name-badge" onclick="showMainView(); showAppScreen();" style="cursor:pointer;" title="Go to shopping list">My List</div>
+        <div class="list-badge" id="list-name-badge" onclick="showHomeScreen();" style="cursor:pointer;" title="Go home">Home</div>
       </div>
     </div>
 
@@ -1102,7 +1102,7 @@ const CATEGORIES = {
 };
 
 function updateListBadge(name) {
-  const display = (name === 'My List' || name === 'Mi Lista') ? t('myList') : name;
+  const display = isGuestMode ? t('btnHome') || 'Home' : (name === 'My List' || name === 'Mi Lista') ? t('myList') : name;
   document.getElementById('list-name-badge').textContent = display;
 }
 function getCategory(name) {
@@ -1145,10 +1145,10 @@ setTimeout(() => { splashReady = true; hideSplash(); }, 3500);
 let isGuestMode = false;
 
 const SAMPLE_ITEMS = [
-  { upc: 'sample-1', name: 'Tide Pods Laundry Detergent, 42 Count', price: '$13.97', image: 'https://i5.walmartimages.com/seo/Tide-Pods-Laundry-Detergent-Pacs-Original-42-Count_1.jpg', qty: 1, category: 'Household', checked: false, sample: true },
-  { upc: 'sample-2', name: 'Cheerios Original Cereal, 8.9 oz', price: '$4.48', image: 'https://i5.walmartimages.com/seo/Cheerios-Original-Gluten-Free-Breakfast-Cereal-8-9-oz_1.jpg', qty: 1, category: 'Grocery', checked: false, sample: true },
-  { upc: 'sample-3', name: 'Dawn Platinum Dish Soap, 16.2 fl oz', price: '$3.97', image: 'https://i5.walmartimages.com/seo/Dawn-Platinum-Dishwashing-Liquid-Dish-Soap-Refreshing-Rain-Scent-16-2-fl-oz_1.jpg', qty: 1, category: 'Household', checked: false, sample: true },
-  { upc: 'sample-4', name: 'Bounty Select-A-Size Paper Towels, 8 rolls', price: '$12.97', image: 'https://i5.walmartimages.com/seo/Bounty-Select-A-Size-Paper-Towels-White-8-Double-Plus-Rolls_1.jpg', qty: 1, category: 'Household', checked: false, sample: true }
+  { upc: 'sample-1', name: 'Tide Pods Laundry Detergent, 42 Count', price: null, image: null, qty: 1, category: 'Household', checked: false, sample: true },
+  { upc: 'sample-2', name: 'Cheerios Original Cereal, 8.9 oz', price: null, image: null, qty: 1, category: 'Grocery', checked: false, sample: true },
+  { upc: 'sample-3', name: 'Dawn Platinum Dish Soap, 16.2 fl oz', price: null, image: null, qty: 1, category: 'Household', checked: false, sample: true },
+  { upc: 'sample-4', name: 'Bounty Select-A-Size Paper Towels, 8 rolls', price: null, image: null, qty: 1, category: 'Household', checked: false, sample: true }
 ];
 
 function enterGuestMode() {
@@ -1953,7 +1953,7 @@ function renderList() {
         <div class="item-meta">
           ${item.price?`<span class="item-price">$${item.price}</span>`:''}
           <span class="cat-pill cat-${cat}">${getCatLabel(cat)}</span>
-          <span class="item-upc">${item.upc}</span>
+          <span class="item-upc">${item.sample ? '' : item.upc}</span>
         </div>
       </div>
       <div class="item-controls">
