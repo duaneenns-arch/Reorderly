@@ -512,8 +512,9 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 .list-picker-item:last-child { border-bottom: none; }
 
 /* ── GUEST MODE ── */
-.guest-bar { display:none; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 8px 16px; align-items: center; justify-content: space-between; gap: 8px; }
+.guest-bar { display:none; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 8px 16px; align-items: center; justify-content: center; gap: 8px; }
 .guest-bar.visible { display: flex; }
+.guest-bar-inner { display:flex; align-items:center; justify-content:space-between; width:100%; max-width:460px; gap:8px; }
 .guest-label { font-size: 12px; color: var(--text3); font-weight: 600; display:flex; align-items:center; gap:5px; }
 .guest-label::before { content:'👤'; font-size:13px; }
 .guest-btns { display:flex; gap:6px; }
@@ -553,10 +554,12 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="home-inner">
     <!-- Guest bar — visible only in guest mode -->
     <div class="guest-bar" id="home-guest-bar">
-      <div class="guest-label" data-i18n="guestMode">Guest mode</div>
-      <div class="guest-btns">
-        <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
-        <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
+      <div class="guest-bar-inner">
+        <div class="guest-label" data-i18n="guestMode">Guest mode</div>
+        <div class="guest-btns">
+          <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
+          <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
+        </div>
       </div>
     </div>
     <div class="home-header">
@@ -807,10 +810,12 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="app-inner">
     <!-- Guest bar — visible only in guest mode -->
     <div class="guest-bar" id="app-guest-bar">
-      <div class="guest-label" data-i18n="guestMode">Guest mode</div>
-      <div class="guest-btns">
-        <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
-        <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
+      <div class="guest-bar-inner">
+        <div class="guest-label" data-i18n="guestMode">Guest mode</div>
+        <div class="guest-btns">
+          <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
+          <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
+        </div>
       </div>
     </div>
     <div class="header">
