@@ -677,7 +677,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
     <div class="about-section">
       <div class="about-section-title" data-i18n="aboutVersionTitle">Version</div>
-      <div class="about-section-body">ReOrderly v3.1 — Built with Firebase, Netlify, and Anthropic AI.</div>
+      <div class="about-section-body">ReOrderly v3.2 — Built with Firebase, Netlify, and Anthropic AI.</div>
     </div>
     <div class="about-section">
       <div class="about-section-title">Legal</div>
@@ -695,6 +695,11 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 <!-- Auth -->
 <div class="auth-screen" id="auth-screen">
   <div class="auth-box">
+    <div style="text-align:left;margin-bottom:0.5rem;">
+      <button onclick="document.getElementById('auth-screen').style.display='none'; showHomeScreen();" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:4px;padding:0;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Back
+      </button>
+    </div>
     <div class="auth-logo">
       <div class="auth-logo-text">ReOrderly<span class="auth-logo-dot"></span></div>
       <div class="auth-logo-sub" data-i18n="taglineShort">Scan. List. Order.</div>
@@ -726,7 +731,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
   <div class="drawer-header">
     <div class="drawer-logo">ReOrderly<span class="drawer-logo-dot"></span></div>
     <div class="drawer-user" id="drawer-user"></div>
-    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v3.1</div>
+    <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;">v3.2</div>
   </div>
   <div class="drawer-item" onclick="showHomeScreen(); closeDrawer();">
     <div class="drawer-item-left">
@@ -1136,8 +1141,7 @@ const CATEGORIES = {
 };
 
 function updateListBadge(name) {
-  const display = isGuestMode ? t('btnHome') || 'Home' : (name === 'My List' || name === 'Mi Lista') ? t('myList') : name;
-  document.getElementById('list-name-badge').textContent = display;
+  document.getElementById('list-name-badge').textContent = t('btnHome') || 'Home';
 }
 function getCategory(name) {
   if (!name) return 'other';
@@ -1221,9 +1225,22 @@ window.showAuthScreen = function(mode) {
   }
 };
 
-window.showGuestPrompt = function(callback) {
+window.showGuestPrompt = function(callback, context) {
   window._guestPromptCallback = callback;
-  document.getElementById('guest-prompt-overlay').classList.add('open');
+  const configs = {
+    chat:   { icon: '💬', title: 'Message your Station', body: 'Create a free account to send and receive messages between your phone and Kitchen Station hub.' },
+    recipe: { icon: '📖', title: 'Save recipes to your book', body: 'Create a free account to save recipes, extract ingredients, and add them to your shopping list.' },
+  };
+  const cfg = configs[context] || { icon: '🔒', title: null, body: null };
+  const el = document.getElementById('guest-prompt-overlay');
+  el.querySelector('.guest-prompt-icon').textContent = cfg.icon;
+  const titleEl = el.querySelector('.guest-prompt-title');
+  const bodyEl  = el.querySelector('.guest-prompt-body');
+  if (cfg.title) { titleEl.textContent = cfg.title; titleEl.removeAttribute('data-i18n'); }
+  else           { titleEl.setAttribute('data-i18n','guestPromptTitle'); titleEl.textContent = t('guestPromptTitle') || 'Save your list across all your devices'; }
+  if (cfg.body)  { bodyEl.textContent = cfg.body; bodyEl.removeAttribute('data-i18n'); }
+  else           { bodyEl.setAttribute('data-i18n','guestPromptBody'); bodyEl.textContent = t('guestPromptBody') || 'Create a free account to save your list, sync with your household, and access your order history from anywhere.'; }
+  el.classList.add('open');
 };
 
 window.closeGuestPrompt = function(continueAsGuest) {
@@ -2048,7 +2065,10 @@ async function renderRecipeBook() {
   const newBtn = document.createElement('button');
   newBtn.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 32px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:Syne,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin:0 auto 1.25rem;';
   newBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'+t('addNewRecipe');
-  newBtn.addEventListener('click', () => showRecipeInput());
+  newBtn.addEventListener('click', () => {
+    if (isGuestMode) { showGuestPrompt(null, 'recipe'); return; }
+    showRecipeInput();
+  });
   el.appendChild(newBtn);
 
   // Load saved recipes
@@ -2770,7 +2790,7 @@ async function renderMsgFeed() {
 
 window.openMsgPanel = async function() {
   if (isGuestMode) {
-    showGuestPrompt();
+    showGuestPrompt(null, 'chat');
     return;
   }
   msgPanelOpen = true;
