@@ -1166,7 +1166,7 @@ applyLangSplash();
 <script type="module">
 // ── FIREBASE WAITLIST ──
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const _fbConfig = {
   apiKey: "AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
@@ -1194,15 +1194,24 @@ window.handleWaitlistSubmit = async function(e) {
   btn.disabled = true;
   btn.textContent = '…';
   try {
+    // Save to Firestore
+    await addDoc(collection(_db, 'waitlist'), {
+      email,
+      joinedAt: serverTimestamp(),
+      source: 'station-kit-landing'
+    });
+    // Also submit to Netlify Forms
     const formData = new FormData();
     formData.append('form-name', 'station-waitlist');
     formData.append('email', email);
     await fetch('/', { method: 'POST', body: formData });
+    // Show success
     input.style.display = 'none';
     btn.style.display = 'none';
     msg.style.display = 'block';
     msg.textContent = tSplash('waitlistSuccess');
-  } catch(e) {
+  } catch(err) {
+    console.error('Waitlist error:', err);
     btn.disabled = false;
     btn.textContent = tSplash('waitlistBtn');
     input.style.borderColor = '#dc2626';
