@@ -235,11 +235,11 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); min-height: 100vh
 /* ── SCAN BOX ── */
 .scan-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; margin-bottom: 1rem; margin-top: 1.25rem; }
 .scan-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
-.scan-row { display: flex; gap: 8px; }
-input[type=text] { flex: 1; font-family: 'DM Mono', monospace; font-size: 15px; padding: 0 14px; height: 46px; border: 1px solid var(--border2); border-radius: 10px; background: var(--bg2); color: var(--text); outline: none; transition: border-color .15s; }
+.scan-row { display: flex; gap: 6px; }
+input[type=text] { flex: 1; min-width: 0; font-family: 'DM Mono', monospace; font-size: 15px; padding: 0 10px; height: 46px; border: 1px solid var(--border2); border-radius: 10px; background: var(--bg2); color: var(--text); outline: none; transition: border-color .15s; }
 input[type=text]::placeholder { color: var(--text3); }
 input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,.12); }
-.btn-add { height: 46px; padding: 0 20px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; white-space: nowrap; }
+.btn-add { height: 46px; padding: 0 14px; background: var(--green); color: #fff; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; white-space: nowrap; flex-shrink: 0; }
 .btn-add:hover { background: var(--green-dark); }
 .btn-add:active { transform: scale(.97); }
 .btn-add:disabled { opacity: .4; cursor: not-allowed; }
@@ -1141,7 +1141,7 @@ const CATEGORIES = {
 };
 
 function updateListBadge(name) {
-  document.getElementById('list-name-badge').textContent = t('btnHome') || 'Home';
+  document.getElementById('list-name-badge').textContent = t('home') || 'Home';
 }
 function getCategory(name) {
   if (!name) return 'other';
@@ -1906,7 +1906,7 @@ if (isMobile) {
     const kbBtn = document.createElement('button');
     kbBtn.id = 'kb-toggle-btn';
     kbBtn.title = 'Toggle keyboard';
-    kbBtn.style.cssText = 'height:46px;width:46px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;transition:background .15s;';
+    kbBtn.style.cssText = 'height:46px;width:42px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;transition:background .15s;';
     kbBtn.innerHTML = '⌨️';
     kbBtn.addEventListener('click', e => {
       e.stopPropagation();
