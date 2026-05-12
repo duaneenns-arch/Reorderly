@@ -1536,6 +1536,7 @@ let sessionStarted = false; // tracks if user has navigated away from home this 
 window.showHomeScreen = function() {
   document.getElementById('home-screen').classList.add('visible');
   document.getElementById('app-screen').classList.remove('visible');
+  hideAllViews();
   updateHomeStats();
   updateHomeRecent();
 };
@@ -1594,47 +1595,38 @@ async function updateHomeRecent() {
 }
 
 // ── VIEWS ──
-window.showHistory = async function() {
-  document.getElementById('station-view').style.display='none';
-  document.getElementById('main-view').style.display='none';
-  document.getElementById('history-view').classList.add('visible');
-  document.getElementById('todo-view').classList.remove('visible');
-  const rv = document.getElementById('recipe-view');
-  if (rv) rv.classList.remove('visible');
-  await loadHistory();
-};
-window.showMainView = function() {
-  document.getElementById('station-view').style.display='none';
-  document.getElementById('main-view').style.display='';
+window.hideAllViews = function hideAllViews() {
+  document.getElementById('main-view').style.display = 'none';
   document.getElementById('history-view').classList.remove('visible');
   document.getElementById('library-view').classList.remove('visible');
   document.getElementById('todo-view').classList.remove('visible');
+  document.getElementById('station-view').style.display = 'none';
   const rv = document.getElementById('recipe-view');
-  if (rv) rv.classList.remove('visible');
+  if (rv) rv.style.display = 'none';
+}
+
+window.showHistory = async function() {
+  hideAllViews();
+  document.getElementById('history-view').classList.add('visible');
+  await loadHistory();
+};
+window.showMainView = function() {
+  hideAllViews();
+  document.getElementById('main-view').style.display = '';
   setTimeout(()=>{ const i=document.getElementById('upc-input'); if(i) i.focus(); },100);
 };
 
 window.showLibrary = async function() {
-  document.getElementById('station-view').style.display='none';
-  document.getElementById('main-view').style.display='none';
-  document.getElementById('history-view').classList.remove('visible');
+  hideAllViews();
   document.getElementById('library-view').classList.add('visible');
-  document.getElementById('todo-view').classList.remove('visible');
-  const rv = document.getElementById('recipe-view');
-  if (rv) rv.classList.remove('visible');
   await loadPinnedItems();
   renderLibTabs();
   await renderLibrary();
 };
 
 window.showTodos = async function() {
-  document.getElementById('station-view').style.display='none';
-  document.getElementById('main-view').style.display='none';
-  document.getElementById('history-view').classList.remove('visible');
-  document.getElementById('library-view').classList.remove('visible');
+  hideAllViews();
   document.getElementById('todo-view').classList.add('visible');
-  const rv = document.getElementById('recipe-view');
-  if (rv) rv.classList.remove('visible');
   await loadTodos();
   setTimeout(()=>{ const i=document.getElementById('todo-input'); if(i) i.focus(); },100);
 };
@@ -2031,11 +2023,9 @@ let recipeNavSource = 'book'; // 'book' | 'main'
 
 function showRecipeView(title, source) {
   if (source) recipeNavSource = source;
-  document.getElementById('station-view').style.display = 'none';
-  document.getElementById('main-view').style.display = 'none';
-  document.getElementById('history-view').classList.remove('visible');
-  document.getElementById('library-view').classList.remove('visible');
-  document.getElementById('recipe-view').classList.add('visible');
+  hideAllViews();
+  const rv = document.getElementById('recipe-view');
+  rv.style.display = 'block';
   document.getElementById('recipe-view-title').textContent = title || 'Recipe book';
   // Update back button label based on where we came from
   const backBtn = document.querySelector('.recipe-back-btn');
@@ -2712,12 +2702,7 @@ document.getElementById('todo-input')?.addEventListener('keydown', e => { if(e.k
 // ── STATION CONNECT ──
 window.showStationConnect = function() {
   showAppScreen();
-  document.getElementById('main-view').style.display = 'none';
-  document.getElementById('history-view').classList.remove('visible');
-  document.getElementById('library-view').classList.remove('visible');
-  document.getElementById('todo-view').classList.remove('visible');
-  const rv = document.getElementById('recipe-view');
-  if (rv) rv.classList.remove('visible');
+  hideAllViews();
   document.getElementById('station-view').style.display = 'block';
   const statusEl = document.getElementById('station-status-text-screen');
   if (statusEl) {
