@@ -1598,8 +1598,7 @@ window.hideAllViews = function hideAllViews() {
   document.getElementById('library-view').classList.remove('visible');
   document.getElementById('todo-view').classList.remove('visible');
   document.getElementById('station-view').style.display = 'none';
-  const rv = document.getElementById('recipe-view');
-  if (rv) rv.style.display = 'none';
+  document.getElementById('recipe-view').classList.remove('visible');
 }
 
 window.showHistory = async function() {
@@ -2021,8 +2020,7 @@ let recipeNavSource = 'book'; // 'book' | 'main'
 function showRecipeView(title, source) {
   if (source) recipeNavSource = source;
   hideAllViews();
-  const rv = document.getElementById('recipe-view');
-  rv.style.display = 'block';
+  document.getElementById('recipe-view').classList.add('visible');
   document.getElementById('recipe-view-title').textContent = title || 'Recipe book';
   // Update back button label based on where we came from
   const backBtn = document.querySelector('.recipe-back-btn');
