@@ -950,7 +950,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
         </button>
         <div id="recipe-view-title" style="font-size:16px;font-weight:800;color:var(--text);" data-i18n="recipeBook">Recipe book</div>
       </div>
-      <div id="recipe-content"></div>
+      <div id="recipe-content" style="width:100%;"></div>
     </div>
 
   </div><!-- end app-inner -->
@@ -2065,7 +2065,7 @@ async function renderRecipeBook() {
 
   // New recipe button
   const newBtn = document.createElement('button');
-  newBtn.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 32px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:Syne,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin:0 auto 1.25rem;';
+  newBtn.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 32px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:Syne,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin:0 auto 1.25rem;width:fit-content;';
   newBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'+t('addNewRecipe');
   newBtn.addEventListener('click', () => {
     if (isGuestMode) { showGuestPrompt(null, 'recipe'); return; }
