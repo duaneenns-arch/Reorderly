@@ -1598,6 +1598,7 @@ async function updateHomeRecent() {
 
 // ── VIEWS ──
 window.showHistory = async function() {
+  document.getElementById('station-view').style.display='none';
   document.getElementById('main-view').style.display='none';
   document.getElementById('history-view').classList.add('visible');
   document.getElementById('todo-view').classList.remove('visible');
@@ -1606,6 +1607,7 @@ window.showHistory = async function() {
   await loadHistory();
 };
 window.showMainView = function() {
+  document.getElementById('station-view').style.display='none';
   document.getElementById('main-view').style.display='';
   document.getElementById('history-view').classList.remove('visible');
   document.getElementById('library-view').classList.remove('visible');
@@ -1616,6 +1618,7 @@ window.showMainView = function() {
 };
 
 window.showLibrary = async function() {
+  document.getElementById('station-view').style.display='none';
   document.getElementById('main-view').style.display='none';
   document.getElementById('history-view').classList.remove('visible');
   document.getElementById('library-view').classList.add('visible');
@@ -1628,6 +1631,7 @@ window.showLibrary = async function() {
 };
 
 window.showTodos = async function() {
+  document.getElementById('station-view').style.display='none';
   document.getElementById('main-view').style.display='none';
   document.getElementById('history-view').classList.remove('visible');
   document.getElementById('library-view').classList.remove('visible');
@@ -2030,6 +2034,7 @@ let recipeNavSource = 'book'; // 'book' | 'main'
 
 function showRecipeView(title, source) {
   if (source) recipeNavSource = source;
+  document.getElementById('station-view').style.display = 'none';
   document.getElementById('main-view').style.display = 'none';
   document.getElementById('history-view').classList.remove('visible');
   document.getElementById('library-view').classList.remove('visible');
