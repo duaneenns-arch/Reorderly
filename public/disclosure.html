@@ -4,59 +4,126 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Affiliate Disclosure — ReOrderly</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/icon.png">
+<meta name="theme-color" content="#1D9E75">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Syne', sans-serif; background: #f5f4ef; color: #1a1a18; line-height: 1.7; padding: 2rem 1.5rem; }
-.wrap { max-width: 680px; margin: 0 auto; }
-.logo { font-size: 22px; font-weight: 800; color: #1a1a18; margin-bottom: 2rem; }
-.logo span { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #1D9E75; margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
-h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
-.date { font-size: 13px; color: #888; margin-bottom: 2rem; }
-h2 { font-size: 16px; font-weight: 700; margin: 2rem 0 8px; color: #1a1a18; }
-p { font-size: 14px; color: #444; margin-bottom: 12px; }
-.highlight { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
-.highlight p { margin: 0; font-size: 14px; color: #333; }
-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e5e5e5; font-size: 12px; color: #aaa; text-align: center; }
-a { color: #1D9E75; text-decoration: none; }
-a:hover { text-decoration: underline; }
+:root {
+  --bg: #F5F4EF; --bg2: #ffffff; --bg3: #eeede6; --border: #e0dfd8;
+  --green: #1D9E75; --green-light: #e1f5ee; --green-dark: #0F6E56;
+  --text: #1a1a18; --text2: #666662; --text3: #aaa8a0;
+}
+body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; background: rgba(245,244,239,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; text-decoration: none; }
+.nav-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -2px; }
+.nav-cta { background: var(--green); color: #fff; border: none; font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: background .15s; text-decoration: none; }
+.nav-cta:hover { background: var(--green-dark); }
+
+.page-wrap { max-width: 720px; margin: 0 auto; padding: 7rem 1.5rem 4rem; }
+.page-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--green-light); color: var(--green); font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 99px; border: 1px solid rgba(29,158,117,.2); margin-bottom: 1.5rem; letter-spacing: .05em; text-transform: uppercase; }
+.page-title { font-size: clamp(32px, 7vw, 52px); font-weight: 800; color: var(--text); letter-spacing: -2px; line-height: 1.1; margin-bottom: 0.75rem; }
+.page-date { font-size: 13px; color: var(--text3); font-family: 'DM Mono', monospace; margin-bottom: 3rem; }
+
+.section { margin-bottom: 2.5rem; }
+.section h2 { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+.section p { font-size: 15px; color: var(--text2); line-height: 1.7; margin-bottom: 0.75rem; }
+.section ul { list-style: none; padding: 0; margin-bottom: 0.75rem; }
+.section ul li { font-size: 15px; color: var(--text2); line-height: 1.7; padding: 4px 0 4px 20px; position: relative; }
+.section ul li::before { content: '·'; position: absolute; left: 6px; color: var(--green); font-weight: 800; }
+.section a { color: var(--green); text-decoration: none; }
+.section a:hover { text-decoration: underline; }
+
+.highlight-box { background: var(--green-light); border: 1px solid rgba(29,158,117,.2); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; }
+.highlight-box p { font-size: 14px; color: var(--green-dark); line-height: 1.6; margin: 0; }
+
+footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; }
+.ft-logo { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; }
+.ft-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-left: 2px; vertical-align: middle; position: relative; top: -1px; }
+.ft-disc { font-size: 12px; color: var(--text3); line-height: 1.6; max-width: 560px; margin: 0 auto 0.5rem; }
+.ft-links { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 1rem; }
+.ft-link { font-size: 12px; font-weight: 700; color: var(--text3); text-decoration: none; transition: color .15s; }
+.ft-link:hover { color: var(--green); }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="logo">ReOrderly<span></span></div>
+<nav>
+  <a href="/" class="nav-logo">ReOrderly<span class="nav-dot"></span></a>
+  <a href="/app.html" class="nav-cta">Get started free</a>
+</nav>
 
-  <h1>Affiliate Disclosure</h1>
-  <div class="date">ReOrderly Solutions LLC · Warren, Ohio</div>
+<div class="page-wrap">
+  <div class="page-eyebrow">Legal</div>
+  <h1 class="page-title">Affiliate Disclosure</h1>
+  <div class="page-date">Last updated: May 2026</div>
 
-  <div class="highlight">
-    <p>ReOrderly may earn a commission from qualifying purchases through retailer links if accepted into affiliate programs. This does not affect the price you pay.</p>
+  <div class="highlight-box">
+    <p>ReOrderly may earn a commission from qualifying purchases made through links to retailer websites, if accepted into affiliate programs. This is at no additional cost to you and does not influence which products appear in ReOrderly.</p>
   </div>
 
-  <h2>What is an affiliate relationship?</h2>
-  <p>An affiliate relationship means that when a user follows a link from ReOrderly to a retailer's website and makes a purchase, ReOrderly may receive a small commission from the retailer. This commission comes from the retailer — not from you. The price you pay is never affected by whether you arrived through an affiliate link or directly.</p>
+  <div class="section">
+    <h2>1. What Is an Affiliate Program?</h2>
+    <p>An affiliate program is a partnership between a website or app and a retailer. When a user clicks a link from ReOrderly to a retailer's website and makes a qualifying purchase, ReOrderly may earn a small commission from that sale. The price you pay is never affected — you pay exactly the same as if you had visited the retailer directly.</p>
+  </div>
 
-  <h2>How ReOrderly works with Walmart</h2>
-  <p>ReOrderly is a household barcode scanning app. When users scan products that are running low, ReOrderly helps match those products to listings on Walmart.com. Users can then review matching product pages and complete their purchases directly on Walmart's website.</p>
-  <p>ReOrderly has applied to participate in Walmart's affiliate program. If accepted, links to Walmart product pages generated by the app may include an affiliate tracking identifier. This allows Walmart to attribute purchases made through those links to ReOrderly and pay a commission accordingly.</p>
+  <div class="section">
+    <h2>2. ReOrderly and Walmart</h2>
+    <p>ReOrderly has applied to participate in the Walmart affiliate program through Impact.com. If accepted, when you tap "Review on Walmart" or click any Walmart product link in ReOrderly, you will be directed to Walmart.com. Walmart may place or recognize cookies on your browser through these links. ReOrderly may earn a commission on qualifying purchases completed on Walmart.com at no additional cost to you.</p>
+    <p>ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc. All purchases are completed directly on Walmart.com. ReOrderly does not process payments, handle orders, or have access to your Walmart account or payment information.</p>
+  </div>
 
-  <h2>What this means for you</h2>
-  <p>Your shopping experience is not affected. You shop on Walmart.com directly — ReOrderly simply helps you find the right products faster. The prices you see on Walmart.com are the same whether you arrive through ReOrderly or any other means.</p>
-  <p>ReOrderly does not have access to your Walmart account, payment information, or order details. All purchases are completed on Walmart.com.</p>
+  <div class="section">
+    <h2>3. How We Use Affiliate Links</h2>
+    <p>When you tap "Review on Walmart" in the ReOrderly app or Station hub, the app opens matching Walmart product search pages for items on your household list. These links may contain an affiliate tracking parameter that identifies ReOrderly as the referring source.</p>
+    <p>ReOrderly does not:</p>
+    <ul>
+      <li>Charge you any fee for using affiliate links</li>
+      <li>Inflate prices on linked products</li>
+      <li>Receive any portion of your purchase price</li>
+      <li>Have access to your payment information or checkout data</li>
+      <li>Guarantee product prices, availability, or accuracy</li>
+    </ul>
+    <p>Always verify final product details, pricing, and availability directly on Walmart.com before purchasing.</p>
+  </div>
 
-  <h2>Independence from Walmart</h2>
-  <p>ReOrderly is an independent application and is not owned by, operated by, or officially endorsed by Walmart Inc. Walmart is a registered trademark of Walmart Inc. Product prices, availability, and details are confirmed on Walmart.com at the time of purchase.</p>
+  <div class="section">
+    <h2>4. Disclosure Placement</h2>
+    <p>In compliance with FTC guidelines, ReOrderly displays affiliate disclosure language in the following locations:</p>
+    <ul>
+      <li>App footer — visible on the main screen of the ReOrderly app</li>
+      <li>About section — accessible from the app menu</li>
+      <li>Landing page footer — visible at reorderlysolutions.com</li>
+      <li>This page — reorderlysolutions.com/disclosure.html</li>
+    </ul>
+    <p>The disclosure reads: "ReOrderly may earn a commission from qualifying purchases through retailer links if accepted into affiliate programs. This does not affect the price you pay."</p>
+  </div>
 
-  <h2>Questions</h2>
-  <p>If you have questions about this disclosure or how ReOrderly uses affiliate links, please contact us at <a href="mailto:support@reorderlysolutions.com">support@reorderlysolutions.com</a>.</p>
+  <div class="section">
+    <h2>5. Third-Party Retailers</h2>
+    <p>ReOrderly is currently built around Walmart as the primary shopping destination. In the future, ReOrderly may participate in affiliate programs with additional retailers. This disclosure page will be updated to reflect any new affiliate relationships.</p>
+  </div>
 
-  <footer>
-    ReOrderly Solutions LLC · Warren, Ohio · <a href="/">reorderlysolutions.com</a> ·
-    <a href="/privacy.html">Privacy Policy</a> ·
-    <a href="/terms.html">Terms of Use</a>
-  </footer>
-
+  <div class="section">
+    <h2>6. Questions</h2>
+    <p>If you have questions about this Affiliate Disclosure or how affiliate links work in ReOrderly, please contact us at <a href="mailto:support@reorderlysolutions.com">support@reorderlysolutions.com</a>.</p>
+  </div>
 </div>
+
+<footer>
+  <div class="ft-logo">ReOrderly<span class="ft-dot"></span></div>
+  <p class="ft-disc">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc.</p>
+  <div class="ft-links">
+    <a href="/" class="ft-link">Home</a>
+    <a href="/app.html" class="ft-link">Get started</a>
+    <a href="/privacy.html" class="ft-link">Privacy Policy</a>
+    <a href="/terms.html" class="ft-link">Terms of Use</a>
+    <a href="/disclosure.html" class="ft-link">Affiliate Disclosure</a>
+    <a href="mailto:support@reorderlysolutions.com" class="ft-link">Contact</a>
+  </div>
+</footer>
+
 </body>
 </html>
