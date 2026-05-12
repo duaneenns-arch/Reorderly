@@ -782,32 +782,6 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 
 <!-- App -->
 <!-- Station Full Screen -->
-<div id="station-screen" style="display:none;position:fixed;inset:0;background:#0d0f0e;z-index:500;overflow-y:auto;flex-direction:column;">
-  <div style="display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;background:#0d0f0e;z-index:10;">
-    <button onclick="closeStationScreen()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:Syne,sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">‹ Back</button>
-    <div style="font-size:16px;font-weight:800;color:#fff;" data-i18n="stationConnectTitle">My Kitchen Station</div>
-  </div>
-  <div style="position:fixed;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(ellipse at center,rgba(29,158,117,.12) 0%,transparent 65%);pointer-events:none;z-index:0;"></div>
-  <div style="padding:1.5rem;position:relative;z-index:1;max-width:480px;margin:0 auto;width:100%;">
-    <div style="font-size:48px;text-align:center;margin-bottom:16px;">📺</div>
-    <div style="font-size:22px;font-weight:800;color:#fff;text-align:center;margin-bottom:8px;" data-i18n="stationConnectTitle">My Kitchen Station</div>
-    <div style="font-size:14px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:2rem;line-height:1.6;" data-i18n="stationConnectBody">Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.</div>
-    <div style="background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.25);border-radius:16px;padding:16px 18px;margin-bottom:1rem;">
-      <div style="font-size:12px;font-weight:800;color:var(--green);margin-bottom:8px;" data-i18n="stationConnectHow">How it works</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.8;">
-        ✓ <span data-i18n="stationStep1">Scan on the hub → appears on your phone list</span><br>
-        ✓ <span data-i18n="stationStep2">Add a to-do on your phone → shows on the hub</span><br>
-        ✓ <span data-i18n="stationStep3">Send messages between phone and hub</span><br>
-        ✓ <span data-i18n="stationStep4">Everything syncs in real time</span>
-      </div>
-    </div>
-    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px 18px;margin-bottom:2rem;">
-      <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,.6);margin-bottom:6px;" data-i18n="stationConnectStatus">Connection Status</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.4);" id="station-status-text-screen">Checking…</div>
-    </div>
-    <div style="text-align:center;font-size:12px;color:rgba(255,255,255,.28);" data-i18n="stationConnectLearn">Don't have a Station yet? Visit <strong style="color:rgba(255,255,255,.5);">reorderlysolutions.com</strong> to learn more.</div>
-  </div>
-</div>
 
 <div class="app-screen" id="app-screen">
   <div class="app-inner">
@@ -894,6 +868,36 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <input class="lib-search" type="text" id="lib-search" data-i18n-placeholder="searchProducts" placeholder="Search your scanned products..." />
       <div class="lib-tabs" id="lib-tabs"></div>
       <div id="library-list"></div>
+    </div>
+
+    <!-- Station view -->
+    <div id="station-view" class="todo-view" style="background:#0d0f0e;border-radius:16px;padding:1.5rem;margin-top:0.5rem;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(ellipse at center,rgba(29,158,117,.12) 0%,transparent 65%);pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;position:relative;">
+        <button onclick="showHomeScreen()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="btnBack">Back</span>
+        </button>
+        <div style="font-size:16px;font-weight:800;color:#fff;" data-i18n="stationConnectTitle">My Kitchen Station</div>
+      </div>
+      <div style="position:relative;z-index:1;">
+        <div style="font-size:42px;text-align:center;margin-bottom:12px;">📺</div>
+        <div style="font-size:18px;font-weight:800;color:#fff;text-align:center;margin-bottom:8px;" data-i18n="stationConnectTitle">My Kitchen Station</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:1.5rem;line-height:1.6;" data-i18n="stationConnectBody">Your phone and Station hub connect automatically when both are signed into the same Google account. No setup required.</div>
+        <div style="background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.25);border-radius:14px;padding:14px 16px;margin-bottom:1rem;">
+          <div style="font-size:12px;font-weight:800;color:var(--green);margin-bottom:6px;" data-i18n="stationConnectHow">How it works</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.8;">
+            ✓ <span data-i18n="stationStep1">Scan on the hub → appears on your phone list</span><br>
+            ✓ <span data-i18n="stationStep2">Add a to-do on your phone → shows on the hub</span><br>
+            ✓ <span data-i18n="stationStep3">Send messages between phone and hub</span><br>
+            ✓ <span data-i18n="stationStep4">Everything syncs in real time</span>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 16px;margin-bottom:1.5rem;">
+          <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,.6);margin-bottom:4px;" data-i18n="stationConnectStatus">Connection Status</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4);" id="station-status-text-screen">Checking…</div>
+        </div>
+        <div style="text-align:center;font-size:11px;color:rgba(255,255,255,.28);" data-i18n="stationConnectLearn">Don't have a Station yet? Visit <strong style="color:rgba(255,255,255,.5);">reorderlysolutions.com</strong> to learn more.</div>
+      </div>
     </div>
 
     <!-- To-Do view -->
@@ -2705,21 +2709,23 @@ document.getElementById('todo-input')?.addEventListener('keydown', e => { if(e.k
 
 // ── STATION CONNECT ──
 window.showStationConnect = function() {
-  document.getElementById('home-screen').classList.remove('active');
-  document.getElementById('app-screen').classList.remove('visible');
-  const screen = document.getElementById('station-screen');
-  screen.style.display = 'flex';
+  showAppScreen();
+  document.getElementById('main-view').style.display = 'none';
+  document.getElementById('history-view').classList.remove('visible');
+  document.getElementById('library-view').classList.remove('visible');
+  document.getElementById('todo-view').classList.remove('visible');
+  const rv = document.getElementById('recipe-view');
+  if (rv) rv.classList.remove('visible');
+  document.getElementById('station-view').classList.add('visible');
   const statusEl = document.getElementById('station-status-text-screen');
   if (statusEl) {
-    if (currentUser) {
-      statusEl.innerHTML = '🟢 Signed in as ' + (currentUser.displayName || currentUser.email);
-    } else {
-      statusEl.innerHTML = '🔴 Not connected — please sign in';
-    }
+    statusEl.innerHTML = currentUser
+      ? '🟢 Signed in as ' + (currentUser.displayName || currentUser.email)
+      : '🔴 Not connected — please sign in';
   }
 };
 window.closeStationScreen = function() {
-  document.getElementById('station-screen').style.display = 'none';
+  document.getElementById('station-view').classList.remove('visible');
   showHomeScreen();
 };
 window.closeStationConnect = function() {

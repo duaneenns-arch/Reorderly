@@ -122,7 +122,7 @@ const LANG = {
     myList: 'My List',
     recipeBook: 'Recipe book',
     other: 'Other',
-    productLibrary: 'Product library',
+    productLibrary: 'Usual items',
     orderHistory: 'Shopping history',
     shared: 'Shared',
 
@@ -494,7 +494,7 @@ const LANG = {
     myList: 'Mi Lista',
     recipeBook: 'Libro de recetas',
     other: 'Otros',
-    productLibrary: 'Biblioteca de productos',
+    productLibrary: 'Artículos habituales',
     orderHistory: 'Historial de compras',
     shared: 'Compartida',
 
