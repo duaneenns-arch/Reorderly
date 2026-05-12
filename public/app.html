@@ -438,7 +438,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 /* ── RECIPE MODULE ── */
 .recipe-view { display: none; }
 .recipe-view.visible { display: block; }
-.recipe-back-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.recipe-back-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; padding-top: 0; }
 .recipe-back-btn { background: none; border: none; color: var(--green); cursor: pointer; font-family: Syne,sans-serif; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
 .recipe-view-title { font-size: 16px; font-weight: 800; color: var(--text); }
 
@@ -937,11 +937,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <button class="todo-priority-btn" id="prio-medium" onclick="setDetailPriority('medium')" data-i18n="priorityMedium">Medium</button>
       <button class="todo-priority-btn" id="prio-high" onclick="setDetailPriority('high')" data-i18n="priorityHigh">High</button>
     </div>
-    <div class="todo-detail-actions">
-      <button class="todo-detail-save" onclick="saveTodoDetail()" data-i18n="todoDetailSave">Save</button>
-      <button class="todo-detail-delete" onclick="deleteTodoDetail()" data-i18n="todoDetailDelete">Delete</button>
     </div>
-  </div>
 
     <!-- Recipe view -->
     <div id="recipe-view" class="recipe-view">
@@ -955,7 +951,8 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
       <div id="recipe-content"></div>
     </div>
 
-</div>
+  </div><!-- end app-inner -->
+</div><!-- end app-screen -->
 
 <!-- Camera Scanner Modal -->
 <div class="camera-modal" id="camera-modal">
