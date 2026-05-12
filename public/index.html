@@ -845,18 +845,22 @@ footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: 
         <span data-i18n="btnGetStarted">Get started free</span>
       </a>
     </div>
-    <!-- Station waitlist email capture -->
+    <!-- Station waitlist email capture — Netlify Forms -->
     <div id="waitlist-form" style="margin-top:1.5rem;max-width:400px;margin-left:auto;margin-right:auto;">
       <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:10px;" data-i18n="waitlistLabel">Join the Station kit waitlist</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <input id="waitlist-email" type="email" data-i18n-placeholder="waitlistPlaceholder" placeholder="Your email address"
+      <form name="station-waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field"
+        onsubmit="handleWaitlistSubmit(event)"
+        style="display:flex;gap:8px;flex-wrap:wrap;">
+        <input type="hidden" name="form-name" value="station-waitlist">
+        <input type="hidden" name="bot-field">
+        <input id="waitlist-email" name="email" type="email" data-i18n-placeholder="waitlistPlaceholder" placeholder="Your email address"
           style="flex:1;min-width:0;height:46px;border:1.5px solid var(--border);border-radius:11px;padding:0 14px;font-family:'Syne',sans-serif;font-size:14px;color:var(--text);background:var(--bg2);outline:none;transition:border-color .15s;"
           onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'">
-        <button onclick="submitWaitlist()" id="waitlist-btn"
+        <button type="submit" id="waitlist-btn"
           style="height:46px;padding:0 20px;background:var(--green);color:#fff;border:none;border-radius:11px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;"
           onmouseover="this.style.background='var(--green-dark)'" onmouseout="this.style.background='var(--green)'"
           data-i18n="waitlistBtn">Join waitlist</button>
-      </div>
+      </form>
       <div id="waitlist-msg" style="display:none;margin-top:10px;font-size:13px;font-weight:700;color:var(--green);text-align:center;" data-i18n="waitlistSuccess">You're on the list! We'll be in touch.</div>
     </div>
     <p class="cta-small" data-i18n="ctaSmall">ReOrderly is currently in active development and early household testing.</p>
@@ -1175,7 +1179,8 @@ const _fbConfig = {
 const _fbApp = initializeApp(_fbConfig, 'splash');
 const _db = getFirestore(_fbApp);
 
-window.submitWaitlist = async function() {
+window.handleWaitlistSubmit = async function(e) {
+  e.preventDefault();
   const input = document.getElementById('waitlist-email');
   const btn = document.getElementById('waitlist-btn');
   const msg = document.getElementById('waitlist-msg');
@@ -1189,12 +1194,10 @@ window.submitWaitlist = async function() {
   btn.disabled = true;
   btn.textContent = '…';
   try {
-    await addDoc(collection(_db, 'waitlist'), {
-      email,
-      source: 'splash',
-      lang: splashLang,
-      submittedAt: new Date()
-    });
+    const formData = new FormData();
+    formData.append('form-name', 'station-waitlist');
+    formData.append('email', email);
+    await fetch('/', { method: 'POST', body: formData });
     input.style.display = 'none';
     btn.style.display = 'none';
     msg.style.display = 'block';
