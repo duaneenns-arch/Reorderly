@@ -871,7 +871,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
 
     <!-- Station view -->
-    <div id="station-view" class="todo-view" style="background:#0d0f0e;border-radius:16px;padding:1.5rem;margin-top:0.5rem;position:relative;overflow:hidden;">
+    <div id="station-view" class="todo-view" style="display:none;background:#0d0f0e;border-radius:16px;padding:1.5rem;margin-top:0.5rem;position:relative;overflow:hidden;">
       <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(ellipse at center,rgba(29,158,117,.12) 0%,transparent 65%);pointer-events:none;"></div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;position:relative;">
         <button onclick="showHomeScreen()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
@@ -2716,7 +2716,7 @@ window.showStationConnect = function() {
   document.getElementById('todo-view').classList.remove('visible');
   const rv = document.getElementById('recipe-view');
   if (rv) rv.classList.remove('visible');
-  document.getElementById('station-view').classList.add('visible');
+  document.getElementById('station-view').style.display = 'block';
   const statusEl = document.getElementById('station-status-text-screen');
   if (statusEl) {
     statusEl.innerHTML = currentUser
@@ -2725,7 +2725,7 @@ window.showStationConnect = function() {
   }
 };
 window.closeStationScreen = function() {
-  document.getElementById('station-view').classList.remove('visible');
+  document.getElementById('station-view').style.display = 'none';
   showHomeScreen();
 };
 window.closeStationConnect = function() {
