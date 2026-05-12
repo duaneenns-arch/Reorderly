@@ -436,7 +436,7 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
 #quagga-viewport canvas { display: none !important; }
 
 /* ── RECIPE MODULE ── */
-.recipe-view { display: none; margin-top: 0; }
+.recipe-view { display: none; margin-top: 1.25rem; }
 .recipe-view.visible { display: block; }
 .recipe-view-title { font-size: 16px; font-weight: 800; color: var(--text); }
 
@@ -942,18 +942,18 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     </div>
   </div><!-- end todo-detail-view -->
 
-  </div><!-- end app-inner -->
-
-  <!-- Recipe view — sibling of app-inner, outside todo-detail overlay -->
-  <div id="recipe-view" class="recipe-view" style="padding: 1.25rem 1rem 2rem; max-width: 460px; margin: 0 auto;">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
-      <button class="recipe-back-btn" onclick="showHomeScreen()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="btnBack">Back</span>
-      </button>
-      <div id="recipe-view-title" style="font-size:16px;font-weight:800;color:var(--text);" data-i18n="recipeBook">Recipe book</div>
+    <!-- Recipe view -->
+    <div id="recipe-view" class="recipe-view">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+        <button class="recipe-back-btn" onclick="showHomeScreen()" style="background:none;border:none;color:var(--green);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg><span data-i18n="btnBack">Back</span>
+        </button>
+        <div id="recipe-view-title" style="font-size:16px;font-weight:800;color:var(--text);" data-i18n="recipeBook">Recipe book</div>
+      </div>
+      <div id="recipe-content"></div>
     </div>
-    <div id="recipe-content"></div>
-  </div>
+
+  </div><!-- end app-inner -->
 </div><!-- end app-screen -->
 
 <!-- Camera Scanner Modal -->
