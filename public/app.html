@@ -556,7 +556,9 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- Guest bar — visible only in guest mode -->
     <div class="guest-bar" id="home-guest-bar">
       <div class="guest-bar-inner">
-        <div class="guest-label" data-i18n="guestMode">Guest mode</div>
+        <a href="https://reorderlysolutions.com" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text3);text-decoration:none;display:inline-flex;align-items:center;gap:3px;flex-shrink:0;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text3)'">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Site
+        </a>
         <div class="guest-btns">
           <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
           <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
@@ -791,11 +793,15 @@ input[type=text]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(
     <!-- Guest bar — visible only in guest mode -->
     <div class="guest-bar" id="app-guest-bar">
       <div class="guest-bar-inner">
-        <div class="guest-label" data-i18n="guestMode">Guest mode</div>
+        <a href="https://reorderlysolutions.com" style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text3);text-decoration:none;display:inline-flex;align-items:center;gap:3px;flex-shrink:0;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text3)'">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>Site
+        </a>
         <div class="guest-btns">
           <button class="guest-btn-signin" onclick="showAuthScreen()" data-i18n="guestSignIn">Sign in</button>
           <button class="guest-btn-create" onclick="showAuthScreen('create')" data-i18n="guestCreateAccount">Create free account</button>
         </div>
+      </div>
+    </div>
       </div>
     </div>
     <div class="header">

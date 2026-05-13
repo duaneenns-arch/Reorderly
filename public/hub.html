@@ -984,6 +984,11 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
         <div class="hdr-logo-text">ReOrderly</div>
         <div class="hdr-logo-sub">Station</div>
       </div>
+      <a href="https://reorderlysolutions.com" target="_blank" rel="noopener"
+        style="margin-left:10px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.35);text-decoration:none;display:inline-flex;align-items:center;gap:2px;transition:color .15s;"
+        onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">
+        ← Site
+      </a>
     </div>
     <div class="hdr-center" onclick="toggleClockMenu()">
       <div class="hdr-time" id="hdr-time">12:00 PM</div>
@@ -1376,7 +1381,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="about-logo">ReOrderly<span class="about-dot"></span></div>
     <div class="about-version">Version 3.1 · Station Hub</div>
     <div class="about-divider"></div>
-    <div class="about-text" data-i18n="aboutAffiliateBody">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
+    <div class="about-text" data-i18n="aboutAffiliateBody">ReOrderly has applied to participate in the Walmart affiliate program. If accepted, we may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
     <div class="about-text">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc.</div>
     <div class="about-text" data-i18n="walmartPriceNote">Product prices and availability are confirmed on Walmart.com.</div>
     <div class="about-divider"></div>
@@ -1558,6 +1563,7 @@ window.removePhoto = function(){};
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
 const fbApp = initializeApp({
@@ -2343,6 +2349,7 @@ window.closeAbout=()=>{
 };
 window.doSignOut=async()=>{
   try{
+    if(_photoUnsub){ _photoUnsub(); _photoUnsub = null; }
     await signOut(auth);
     toast(window.t('authSignedOut'));
   }catch(e){toast(window.t('authSignOutFailed'));}
@@ -3189,16 +3196,21 @@ let PHOTOS = [...DEFAULT_PHOTOS];
 let si=0,sa='a';
 const SETS=[{a:'pm-a',b:'pm-b'},{a:'pt-a',b:'pt-b'}];
 
-async function loadCustomPhotos(){
+let _photoUnsub = null;
+function loadCustomPhotos(){
   if(!cu) return;
-  try{
-    const s = await getDoc(doc(db,'users',cu.uid,'settings','photos'));
-    if(s.exists() && s.data().urls?.length){
-      PHOTOS = s.data().urls;
-      si = 0; sa = 'a';
-      initPhotos();
-    }
-  }catch(e){}
+  if(_photoUnsub) _photoUnsub(); // clean up any previous listener
+  _photoUnsub = onSnapshot(
+    doc(db,'users',cu.uid,'settings','photos'),
+    (s) => {
+      if(s.exists() && s.data().urls?.length){
+        PHOTOS = s.data().urls;
+        si = 0; sa = 'a';
+        initPhotos();
+      }
+    },
+    (e) => { console.error('Photo sync error:', e); }
+  );
 }
 
 async function saveCustomPhotos(urls){
