@@ -1224,6 +1224,11 @@ window.handleWaitlistSubmit = async function(e) {
       joinedAt: serverTimestamp(),
       source: 'station-kit-landing'
     });
+    await fetch('/.netlify/functions/notify-waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, joinedAt: new Date().toISOString() })
+    });
   } catch(err) { console.error('Firestore waitlist error:', err); }
   try {
     const formData = new FormData();
