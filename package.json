@@ -1,0 +1,13 @@
+{
+  "name": "reorderly-v4",
+  "version": "1.3.0",
+  "description": "ReOrderly V4 - compare Walmart search strategies",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemailer": "^6.9.13"
+  }
+}
