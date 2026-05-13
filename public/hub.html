@@ -1376,7 +1376,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
     <div class="about-logo">ReOrderly<span class="about-dot"></span></div>
     <div class="about-version">Version 3.1 · Station Hub</div>
     <div class="about-divider"></div>
-    <div class="about-text" data-i18n="aboutAffiliateBody">ReOrderly has applied to participate in the Walmart affiliate program. If accepted, we may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
+    <div class="about-text" data-i18n="aboutAffiliateBody">ReOrderly participates in the Walmart affiliate program. We may earn a commission when you make purchases through links in this app. This does not affect the price you pay.</div>
     <div class="about-text">ReOrderly is an independent app and is not owned by, operated by, or officially endorsed by Walmart. Walmart is a trademark of Walmart Inc.</div>
     <div class="about-text" data-i18n="walmartPriceNote">Product prices and availability are confirmed on Walmart.com.</div>
     <div class="about-divider"></div>
@@ -1558,6 +1558,7 @@ window.removePhoto = function(){};
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
 const fbApp = initializeApp({
   apiKey:"AIzaSyAp5R-BDrBSkAEpsDb_er2tl8MVas7Fm-U",
@@ -1569,6 +1570,7 @@ const fbApp = initializeApp({
 });
 const auth = getAuth(fbApp);
 const db = getFirestore(fbApp);
+const storage = getStorage(fbApp);
 const gProv = new GoogleAuthProvider();
 
 let cu = null, items = [], unsubList = null, lMode = 'in', libTab = 'usual', pinned = {};
@@ -3201,7 +3203,9 @@ async function loadCustomPhotos(){
 
 async function saveCustomPhotos(urls){
   if(!cu) return;
-  try{ await setDoc(doc(db,'users',cu.uid,'settings','photos'),{urls,updatedAt:new Date()}); }catch(e){}
+  try{
+    await setDoc(doc(db,'users',cu.uid,'settings','photos'),{urls,updatedAt:new Date()});
+  }catch(e){ console.error('saveCustomPhotos error',e); }
 }
 
 function setPhotoBackground(el, val){
@@ -3398,6 +3402,16 @@ function renderPhotoManager(){
 }
 
 window.removePhoto = async (i) => {
+  const photoUrl = PHOTOS[i];
+  // If it's a Firebase Storage URL, delete the file too
+  if(photoUrl && photoUrl.includes('firebasestorage') && auth.currentUser){
+    try{
+      const photoRef = ref(storage, photoUrl);
+      await deleteObject(photoRef);
+    }catch(e){
+      console.warn('Could not delete from storage:', e);
+    }
+  }
   PHOTOS.splice(i,1);
   if(!PHOTOS.length) PHOTOS = [...DEFAULT_PHOTOS];
   await saveCustomPhotos(PHOTOS);
@@ -3417,19 +3431,24 @@ window.resetPhotos = async () => {
 window.handlePhotoUpload = async (input) => {
   const files = Array.from(input.files);
   if(!files.length) return;
+  const cu = auth.currentUser;
+  if(!cu){ toast('Please sign in to upload photos'); return; }
   const statusEl = document.getElementById('photo-upload-status');
-  if(statusEl) statusEl.textContent = window.t('hubProcessing');
+  if(statusEl) statusEl.textContent = window.t('hubProcessing') || 'Uploading...';
+  // Remove default photos once user adds their own
+  if(PHOTOS.every(p=>DEFAULT_PHOTOS.includes(p))) PHOTOS = [];
   for(const file of files){
     if(!file.type.startsWith('image/')) continue;
-    const dataUrl = await new Promise((res,rej)=>{
-      const r = new FileReader();
-      r.onload = ()=>res(r.result);
-      r.onerror = rej;
-      r.readAsDataURL(file);
-    });
-    // Remove default photos once user adds their own
-    if(PHOTOS.every(p=>DEFAULT_PHOTOS.includes(p))) PHOTOS = [];
-    PHOTOS.push(dataUrl);
+    try{
+      const fileName = cu.uid + '_' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+      const storageRef = ref(storage, 'photos/' + cu.uid + '/' + fileName);
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+      PHOTOS.push(downloadURL);
+    }catch(e){
+      console.error('Photo upload error:', e);
+      toast('Upload failed — please try again');
+    }
   }
   await saveCustomPhotos(PHOTOS);
   startPhotoSlideshow();
